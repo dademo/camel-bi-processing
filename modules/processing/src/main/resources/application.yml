@@ -1,0 +1,19 @@
+quarkus:
+  arc:
+    unremovable-types: com.fasterxml.jackson.databind.ObjectMapper
+  datasource:
+    db-kind: postgresql
+    username: postgres
+    password: postgres
+    jdbc:
+      url: jdbc:postgresql://localhost:5432/bi
+      max-size: 16
+  hibernate-orm:
+    database:
+      generation: none
+  flyway:
+    schemas: 'public,dwh,dm_companies'
+    locations: 'db/migration'
+    create-schemas: true
+    clean-at-start: true
+    migrate-at-start: true

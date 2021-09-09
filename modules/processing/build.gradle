@@ -1,0 +1,52 @@
+// https://code.quarkus.io/?g=fr.dademo.bi&a=ape-code-integrator&b=GRADLE&e=rest-client&e=jdbc-postgresql&e=agroal&e=flyway&e=config-yaml&e=container-image-docker&e=org.apache.camel.quarkus%3Acamel-quarkus-core&e=org.apache.camel.quarkus%3Acamel-quarkus-bindy&e=org.apache.camel.quarkus%3Acamel-quarkus-csv&e=org.apache.camel.quarkus%3Acamel-quarkus-jpa&e=org.apache.camel.quarkus%3Acamel-quarkus-rest&e=org.apache.camel.quarkus%3Acamel-quarkus-sql&e=org.apache.camel.quarkus%3Acamel-quarkus-stream&e=org.apache.camel.quarkus%3Acamel-quarkus-zip-deflater&e=org.apache.camel.quarkus%3Acamel-quarkus-zipfile&e=org.apache.camel.quarkus%3Acamel-quarkus-rabbitmq
+plugins {
+    id 'java'
+    id 'io.quarkus'
+}
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.20'
+    annotationProcessor 'org.projectlombok:lombok:1.18.20'
+
+    implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
+    implementation enforcedPlatform("${quarkusPlatformGroupId}:quarkus-camel-bom:${quarkusPlatformVersion}")
+    implementation 'io.quarkus:quarkus-hibernate-orm'
+    implementation 'io.quarkus:quarkus-hibernate-validator'
+    implementation 'org.apache.camel.quarkus:camel-quarkus-core'
+    implementation 'org.apache.camel.quarkus:camel-quarkus-bindy'
+    implementation 'io.quarkus:quarkus-flyway'
+    implementation 'io.quarkus:quarkus-container-image-docker'
+    implementation 'org.apache.camel.quarkus:camel-quarkus-jpa'
+    implementation 'io.quarkus:quarkus-config-yaml'
+    implementation 'io.quarkus:quarkus-jackson'
+    implementation 'io.quarkus:quarkus-jdbc-postgresql'
+    implementation 'org.apache.camel.quarkus:camel-quarkus-csv'
+    implementation 'org.apache.camel.quarkus:camel-quarkus-jackson'
+    implementation 'org.apache.camel.quarkus:camel-quarkus-jsonpath'
+    implementation 'org.apache.camel.quarkus:camel-quarkus-stream'
+    implementation 'org.apache.camel.quarkus:camel-quarkus-zip-deflater'
+    implementation 'io.quarkus:quarkus-agroal'
+    implementation 'org.apache.camel.quarkus:camel-quarkus-sql'
+    implementation 'org.apache.camel.quarkus:camel-quarkus-zipfile'
+    implementation 'io.quarkus:quarkus-arc'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
+
+    testImplementation 'io.quarkus:quarkus-junit5'
+}
+
+group 'fr.dademo.bi'
+version '1.0.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-parameters'
+}
+
+compileTestJava {
+    options.encoding = 'UTF-8'
+}
