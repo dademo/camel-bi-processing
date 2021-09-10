@@ -1,7 +1,7 @@
 package fr.dademo.bi.companies.components.camel;
 
+import fr.dademo.bi.companies.components.camel.repositories.CachedHttpDataQuerierImpl;
 import fr.dademo.bi.companies.components.camel.repositories.HttpDataQuerier;
-import fr.dademo.bi.companies.components.camel.repositories.HttpDataQuerierImpl;
 import lombok.SneakyThrows;
 import okhttp3.OkHttpClient;
 import org.apache.camel.Exchange;
@@ -76,7 +76,7 @@ public class HttpConsumer extends DefaultConsumer {
     }
 
     private HttpDataQuerier getHttpDataQuerier() {
-        return new HttpDataQuerierImpl(buildOKHttpClient());
+        return new CachedHttpDataQuerierImpl(buildOKHttpClient(), endpoint.getUseLocalCache());
     }
 
     private OkHttpClient buildOKHttpClient() {

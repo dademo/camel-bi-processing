@@ -9,4 +9,6 @@ public interface HttpEndpointConfiguration {
     Long getCallTimeoutSecond();
 
     String getQueryParameters();
+
+    Boolean getUseLocalCache();
 }

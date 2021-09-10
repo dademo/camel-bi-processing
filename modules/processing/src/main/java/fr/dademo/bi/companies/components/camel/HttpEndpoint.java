@@ -15,7 +15,7 @@ import org.apache.camel.support.DefaultEndpoint;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
-@UriEndpoint(firstVersion = "1.0", scheme = "httpGet", title = "HttpGet", syntax = "httpGet:url", consumerOnly = true, consumerClass = HttpConsumer.class)
+@UriEndpoint(firstVersion = "1.0", scheme = "httpGet", title = "HttpGet", syntax = "httpGet:url", consumerOnly = true)
 public class HttpEndpoint extends DefaultEndpoint implements HttpEndpointConfiguration {
 
     @UriPath(description = "Path of resources")
@@ -26,10 +26,13 @@ public class HttpEndpoint extends DefaultEndpoint implements HttpEndpointConfigu
     private String queryParameters;
 
     @UriParam(description = "Connection timeout in seconds", defaultValue = "5")
-    private Long connectTimeoutSecond;
+    private Long connectTimeoutSecond = 5L;
 
     @UriParam(description = "Call timeout in seconds", defaultValue = "15")
-    private Long callTimeoutSecond;
+    private Long callTimeoutSecond = 15L;
+
+    @UriParam(description = "To use local cache", defaultValue = "true")
+    private Boolean useLocalCache = true;
 
 
     public HttpEndpoint(String endpointUri, String url, HttpComponent component) {

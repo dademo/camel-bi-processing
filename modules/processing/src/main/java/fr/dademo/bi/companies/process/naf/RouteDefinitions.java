@@ -8,16 +8,12 @@ import org.apache.camel.builder.RouteBuilder;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.sql.DataSource;
 
 @ApplicationScoped
 public class RouteDefinitions extends RouteBuilder {
 
     private static final String GROUV_FR_OPENDATA_APE_DATASET_URL = "https://data.iledefrance.fr/explore/dataset/nomenclature-dactivites-francaise-naf-rev-2-code-ape/download";
     private static final String GROUV_FR_OPENDATA_APE_DATASET_URL_QUERY_PARAMETERS = "format=json";
-
-    @Inject
-    DataSource dataSource;
 
     @Inject
     CamelContext camelContext;
