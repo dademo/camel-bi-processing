@@ -12,6 +12,11 @@ import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriPath;
 import org.apache.camel.support.DefaultEndpoint;
 
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
@@ -34,6 +39,12 @@ public class HttpEndpoint extends DefaultEndpoint implements HttpEndpointConfigu
     @UriParam(description = "To use local cache", defaultValue = "true")
     private Boolean useLocalCache = true;
 
+    @UriParam(description = "Cache expiration in seconds", defaultValue = "null")
+    private Long cacheExpirationSeconds = null;
+
+    @UriParam(description = "File hash urls to enable file validation (will be enabled if not null ; format: ${ALGORITHM}:${URL})", defaultValue = "[]")
+    private List<String> fileHashUrls = new ArrayList<>();
+
 
     public HttpEndpoint(String endpointUri, String url, HttpComponent component) {
         super(endpointUri, component);
@@ -53,5 +64,11 @@ public class HttpEndpoint extends DefaultEndpoint implements HttpEndpointConfigu
     @Override
     public boolean isSingleton() {
         return true;
+    }
+
+    public Optional<Duration> getCacheExpiration() {
+
+        return Optional.ofNullable(cacheExpirationSeconds)
+                .map(Duration::ofSeconds);
     }
 }

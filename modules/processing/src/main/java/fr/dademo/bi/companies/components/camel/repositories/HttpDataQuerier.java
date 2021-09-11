@@ -1,10 +1,28 @@
 package fr.dademo.bi.companies.components.camel.repositories;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.InputStream;
 import java.net.URL;
+import java.time.Duration;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Consumer;
 
 public interface HttpDataQuerier {
 
-    void basicQuery(URL queryUrl, Consumer<InputStream> resultConsumer);
+    default void basicQuery(@Nonnull URL queryUrl, @Nonnull Consumer<InputStream> resultConsumer) {
+        basicQuery(queryUrl, null, Collections.emptyList(), resultConsumer);
+    }
+
+    void basicQuery(@Nonnull URL queryUrl,
+                    @Nullable Duration expiration,
+                    @Nonnull List<HttpHashDefinition> fileHashUrlList,
+                    @Nonnull Consumer<InputStream> resultConsumer
+    );
+
+    byte[] basicQueryByte(
+            @Nonnull URL queryUrl,
+            @Nullable Duration expiration,
+            @Nonnull List<HttpHashDefinition> httpHashDefinitionList);
 }

@@ -2,6 +2,8 @@ package fr.dademo.bi.companies.components.camel;
 
 import fr.dademo.bi.companies.components.camel.repositories.CachedHttpDataQuerierImpl;
 import fr.dademo.bi.companies.components.camel.repositories.HttpDataQuerier;
+import fr.dademo.bi.companies.components.camel.repositories.HttpHashDefinition;
+import fr.dademo.bi.companies.components.camel.repositories.exceptions.HashSourceDefinitionException;
 import lombok.SneakyThrows;
 import okhttp3.OkHttpClient;
 import org.apache.camel.Exchange;
@@ -10,14 +12,19 @@ import org.apache.camel.support.DefaultConsumer;
 import org.jboss.logging.Logger;
 
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
+import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 
 public class HttpConsumer extends DefaultConsumer {
 
     private static final Logger LOGGER = Logger.getLogger(HttpConsumer.class);
+    private static final Pattern httpHashDefinitionPattern = Pattern.compile("^(?<algorithm>[A-Za-z0-9_-]+):(?<uri>.+)$");
 
     private final HttpEndpoint endpoint;
 
@@ -41,7 +48,12 @@ public class HttpConsumer extends DefaultConsumer {
     public void getResource(URL resourceUrl) {
 
         LOGGER.info("Fetching data");
-        getHttpDataQuerier().basicQuery(resourceUrl, this::consumeResult);
+        getHttpDataQuerier().basicQuery(
+                resourceUrl,
+                endpoint.getCacheExpiration().orElse(null),
+                getHttpHashDefinition(),
+                this::consumeResult
+        );
         LOGGER.info("Query performed");
         shutdown();
     }
@@ -93,5 +105,26 @@ public class HttpConsumer extends DefaultConsumer {
                 .ifPresent(okHttpClient::callTimeout);
 
         return okHttpClient.build();
+    }
+
+    private List<HttpHashDefinition> getHttpHashDefinition() {
+
+        return endpoint.getFileHashUrls().stream()
+                .map(this::toHttpHashDefinition)
+                .collect(Collectors.toList());
+    }
+
+    private HttpHashDefinition toHttpHashDefinition(String hashSourceDefinition) {
+
+        var matcher = httpHashDefinitionPattern.matcher(hashSourceDefinition);
+        if (!matcher.matches()) {
+            throw new HashSourceDefinitionException(hashSourceDefinition);
+        } else {
+            try {
+                return HttpHashDefinition.of(new URL(matcher.group("uri")), matcher.group("algorithm"));
+            } catch (MalformedURLException e) {
+                throw new HashSourceDefinitionException(hashSourceDefinition, e);
+            }
+        }
     }
 }

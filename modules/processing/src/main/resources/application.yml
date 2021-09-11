@@ -3,8 +3,8 @@ quarkus:
     unremovable-types: com.fasterxml.jackson.databind.ObjectMapper
   datasource:
     db-kind: postgresql
-    username: postgres
-    password: postgres
+    username: bi
+    password: bi
     jdbc:
       url: jdbc:postgresql://localhost:5432/bi
       max-size: 16
@@ -17,3 +17,7 @@ quarkus:
     create-schemas: true
     clean-at-start: true
     migrate-at-start: true
+  log:
+    category:
+      'fr.dademo.bi':
+        level: DEBUG
