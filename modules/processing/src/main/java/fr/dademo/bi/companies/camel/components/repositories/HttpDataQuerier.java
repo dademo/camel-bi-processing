@@ -1,4 +1,6 @@
-package fr.dademo.bi.companies.components.camel.repositories;
+package fr.dademo.bi.companies.camel.components.repositories;
+
+import fr.dademo.bi.companies.camel.components.repositories.entities.HttpHashDefinition;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

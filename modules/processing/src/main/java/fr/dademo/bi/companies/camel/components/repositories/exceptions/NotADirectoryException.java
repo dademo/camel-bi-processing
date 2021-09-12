@@ -1,4 +1,4 @@
-package fr.dademo.bi.companies.components.camel.repositories.exceptions;
+package fr.dademo.bi.companies.camel.components.repositories.exceptions;
 
 public class NotADirectoryException extends RuntimeException {
     public NotADirectoryException(String fileName) {

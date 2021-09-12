@@ -11,6 +11,8 @@ quarkus:
   hibernate-orm:
     database:
       generation: none
+    jdbc:
+      statement-batch-size: 10000
   flyway:
     schemas: 'public,dwh,dm_companies'
     locations: 'db/migration'
@@ -21,3 +23,19 @@ quarkus:
     category:
       'fr.dademo.bi':
         level: DEBUG
+      'org.flywaydb.core':
+        level: DEBUG
+      'okhttp3':
+        level: DEBUG
+      'camel_jobs':
+        level: DEBUG
+
+camel:
+  # You can use a hard FS instead of memory if processing consume too much
+  spool-directory: "${java.io.tmpdir}/camel/camel-tmp-#uuid#"
+  jobs:
+    naf:
+      enabled: true
+    companies-history:
+      enabled: true
+      batch-size: 100000

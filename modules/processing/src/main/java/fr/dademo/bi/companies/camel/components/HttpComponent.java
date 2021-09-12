@@ -1,4 +1,4 @@
-package fr.dademo.bi.companies.components.camel;
+package fr.dademo.bi.companies.camel.components;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;

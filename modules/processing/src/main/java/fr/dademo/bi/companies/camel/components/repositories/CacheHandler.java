@@ -1,15 +1,14 @@
-package fr.dademo.bi.companies.components.camel.repositories;
+package fr.dademo.bi.companies.camel.components.repositories;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.fasterxml.jackson.databind.type.CollectionType;
-import fr.dademo.bi.companies.components.camel.repositories.exceptions.HashMismatchException;
-import fr.dademo.bi.companies.components.camel.repositories.exceptions.MissingCachedFileException;
-import fr.dademo.bi.companies.components.camel.repositories.exceptions.NotADirectoryException;
-import lombok.Data;
+import fr.dademo.bi.companies.camel.components.repositories.entities.CachedFileDescription;
+import fr.dademo.bi.companies.camel.components.repositories.entities.HashDefinition;
+import fr.dademo.bi.companies.camel.components.repositories.exceptions.HashMismatchException;
+import fr.dademo.bi.companies.camel.components.repositories.exceptions.MissingCachedFileException;
+import fr.dademo.bi.companies.camel.components.repositories.exceptions.NotADirectoryException;
 import lombok.SneakyThrows;
-import lombok.Value;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.input.TeeInputStream;
 
@@ -25,7 +24,6 @@ import java.security.MessageDigest;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -136,11 +134,11 @@ public class CacheHandler {
 
     private synchronized void deleteFromCache(CachedFileDescription cachedFileDescription) {
 
-        LOGGER.debug(String.format("Removing cached file '%s'", cachedFileDescription.finalFileName));
+        LOGGER.debug(String.format("Removing cached file '%s'", cachedFileDescription.getFinalFileName()));
         withLockedLockFile(() -> {
 
             var lockFileFinalContent = readLockFile().stream()
-                    .filter(e -> e.finalFileName.equals(cachedFileDescription.finalFileName))
+                    .filter(e -> e.getFinalFileName().equals(cachedFileDescription.getFinalFileName()))
                     .collect(Collectors.toList());
 
             try {
@@ -263,38 +261,4 @@ public class CacheHandler {
         }
     }
 
-    @Data
-    @JsonIgnoreProperties({"valid"})
-    private static class CachedFileDescription {
-
-        private String inputFileIdentifier;
-        private String finalFileName;
-        private long validUntil;
-
-        public static CachedFileDescription of(@Nonnull String inputFileIdentifier,
-                                               @Nonnull String finalFileName,
-                                               @Nullable Duration expiration) {
-
-            var cachedFileDescription = new CachedFileDescription();
-
-            cachedFileDescription.setInputFileIdentifier(inputFileIdentifier);
-            cachedFileDescription.setFinalFileName(finalFileName);
-            cachedFileDescription.setValidUntil(Optional.ofNullable(expiration)
-                    .map(exp -> System.currentTimeMillis() + exp.toMillis())
-                    .orElse(0L));
-
-            return cachedFileDescription;
-        }
-
-        public boolean isValid() {
-            return validUntil <= 0 ||
-                    System.currentTimeMillis() > validUntil;
-        }
-    }
-
-    @Value(staticConstructor = "of")
-    public static class HashDefinition {
-        String hash;
-        String hashAlgorithm;
-    }
 }

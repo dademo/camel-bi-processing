@@ -1,4 +1,4 @@
-package fr.dademo.bi.companies.components.camel;
+package fr.dademo.bi.companies.camel.components;
 
 import java.time.Duration;
 import java.util.List;
@@ -8,9 +8,11 @@ public interface HttpEndpointConfiguration {
 
     String getUrl();
 
-    Long getConnectTimeoutSecond();
+    Long getConnectTimeoutSeconds();
 
-    Long getCallTimeoutSecond();
+    Long getCallReadTimeoutSeconds();
+
+    Long getCallTimeoutSeconds();
 
     String getQueryParameters();
 

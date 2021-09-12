@@ -1,4 +1,4 @@
-package fr.dademo.bi.companies.components.camel.repositories.exceptions;
+package fr.dademo.bi.companies.camel.components.repositories.exceptions;
 
 import okhttp3.Response;
 

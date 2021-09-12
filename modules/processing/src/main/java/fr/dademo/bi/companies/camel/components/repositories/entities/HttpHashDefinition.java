@@ -1,4 +1,4 @@
-package fr.dademo.bi.companies.components.camel.repositories;
+package fr.dademo.bi.companies.camel.components.repositories.entities;
 
 import lombok.Value;
 

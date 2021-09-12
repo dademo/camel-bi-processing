@@ -1,9 +1,11 @@
-package fr.dademo.bi.companies.components.camel.repositories;
+package fr.dademo.bi.companies.camel.components.repositories;
 
-import fr.dademo.bi.companies.components.camel.repositories.exceptions.FailedQueryException;
-import fr.dademo.bi.companies.components.camel.repositories.exceptions.HttpQueryException;
-import fr.dademo.bi.companies.components.camel.repositories.exceptions.MissingResultBodyException;
-import fr.dademo.bi.companies.components.camel.repositories.exceptions.UnexpectedRedirectResponseException;
+import fr.dademo.bi.companies.camel.components.repositories.entities.HashDefinition;
+import fr.dademo.bi.companies.camel.components.repositories.entities.HttpHashDefinition;
+import fr.dademo.bi.companies.camel.components.repositories.exceptions.FailedQueryException;
+import fr.dademo.bi.companies.camel.components.repositories.exceptions.HttpQueryException;
+import fr.dademo.bi.companies.camel.components.repositories.exceptions.MissingResultBodyException;
+import fr.dademo.bi.companies.camel.components.repositories.exceptions.UnexpectedRedirectResponseException;
 import lombok.SneakyThrows;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -30,7 +32,6 @@ public class CachedHttpDataQuerierImpl implements HttpDataQuerier {
 
     private static final Path CACHE_DIRECTORY_ROOT = Path.of(SystemUtils.getUserHome().getAbsolutePath(), ".cache", "camel-http");
 
-    @Nonnull
     private final OkHttpClient okHttpClient;
     private final CacheHandler cacheHandler;
 
@@ -134,9 +135,9 @@ public class CachedHttpDataQuerierImpl implements HttpDataQuerier {
     }
 
     @SneakyThrows
-    private CacheHandler.HashDefinition fileHashDefinitionFor(HttpHashDefinition httpHashDefinition) {
+    private HashDefinition fileHashDefinitionFor(HttpHashDefinition httpHashDefinition) {
 
-        return CacheHandler.HashDefinition.of(
+        return HashDefinition.of(
                 computeHash(
                         getHashComputerForAlgorithm(httpHashDefinition.getAlgorithm()),
                         new ByteArrayInputStream(basicQueryByte(httpHashDefinition.getResourceUrl(), null, Collections.emptyList()))),

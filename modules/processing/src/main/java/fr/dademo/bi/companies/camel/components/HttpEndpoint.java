@@ -1,4 +1,4 @@
-package fr.dademo.bi.companies.components.camel;
+package fr.dademo.bi.companies.camel.components;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -31,10 +31,13 @@ public class HttpEndpoint extends DefaultEndpoint implements HttpEndpointConfigu
     private String queryParameters;
 
     @UriParam(description = "Connection timeout in seconds", defaultValue = "5")
-    private Long connectTimeoutSecond = 5L;
+    private Long connectTimeoutSeconds = 5L;
 
-    @UriParam(description = "Call timeout in seconds", defaultValue = "15")
-    private Long callTimeoutSecond = 15L;
+    @UriParam(description = "Call read timeout in seconds", defaultValue = "10")
+    private Long callReadTimeoutSeconds = 10L;
+
+    @UriParam(description = "Call timeout in seconds", defaultValue = "0")
+    private Long callTimeoutSeconds = 0L;
 
     @UriParam(description = "To use local cache", defaultValue = "true")
     private Boolean useLocalCache = true;

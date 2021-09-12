@@ -1,11 +1,12 @@
-package fr.dademo.bi.companies.components.camel;
+package fr.dademo.bi.companies.camel.components;
 
-import fr.dademo.bi.companies.components.camel.repositories.CachedHttpDataQuerierImpl;
-import fr.dademo.bi.companies.components.camel.repositories.HttpDataQuerier;
-import fr.dademo.bi.companies.components.camel.repositories.HttpHashDefinition;
-import fr.dademo.bi.companies.components.camel.repositories.exceptions.HashSourceDefinitionException;
+import fr.dademo.bi.companies.camel.components.repositories.CachedHttpDataQuerierImpl;
+import fr.dademo.bi.companies.camel.components.repositories.HttpDataQuerier;
+import fr.dademo.bi.companies.camel.components.repositories.entities.HttpHashDefinition;
+import fr.dademo.bi.companies.camel.components.repositories.exceptions.HashSourceDefinitionException;
 import lombok.SneakyThrows;
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.support.DefaultConsumer;
@@ -43,6 +44,7 @@ public class HttpConsumer extends DefaultConsumer {
         var resourceUrl = new URL(endpoint.getUrl() + urlQueryParameters);
         super.doStart();
         getResource(resourceUrl);
+        doStop();
     }
 
     public void getResource(URL resourceUrl) {
@@ -55,7 +57,6 @@ public class HttpConsumer extends DefaultConsumer {
                 this::consumeResult
         );
         LOGGER.info("Query performed");
-        shutdown();
     }
 
     @SneakyThrows
@@ -93,14 +94,20 @@ public class HttpConsumer extends DefaultConsumer {
 
     private OkHttpClient buildOKHttpClient() {
 
-        var okHttpClient = new OkHttpClient.Builder();
+        var loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
+        var okHttpClient = new OkHttpClient.Builder()
+                .addInterceptor(loggingInterceptor);
 
-
-        Optional.ofNullable(endpoint.getConnectTimeoutSecond())
+        Optional.ofNullable(endpoint.getConnectTimeoutSeconds())
                 .map(Duration::ofSeconds)
                 .ifPresent(okHttpClient::connectTimeout);
 
-        Optional.ofNullable(endpoint.getCallTimeoutSecond())
+        Optional.ofNullable(endpoint.getCallReadTimeoutSeconds())
+                .map(Duration::ofSeconds)
+                .ifPresent(okHttpClient::readTimeout);
+
+        Optional.ofNullable(endpoint.getCallTimeoutSeconds())
                 .map(Duration::ofSeconds)
                 .ifPresent(okHttpClient::callTimeout);
 
