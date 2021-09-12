@@ -44,7 +44,6 @@ public class HttpConsumer extends DefaultConsumer {
         var resourceUrl = new URL(endpoint.getUrl() + urlQueryParameters);
         super.doStart();
         getResource(resourceUrl);
-        doStop();
     }
 
     public void getResource(URL resourceUrl) {

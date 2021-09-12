@@ -1,4 +1,4 @@
-package fr.dademo.bi.companies.process.companies_history.entities;
+package fr.dademo.bi.companies.process.stg.companies_history.entities;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.Getter;
@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @RegisterForReflection
 @CsvRecord(separator = ",")
 @Entity
-@Table(schema = "dwh", name = "fact_historical_companies")
+@Table(name = "fact_historical_companies")
 @Getter
 @Setter
 @NoArgsConstructor

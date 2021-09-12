@@ -11,6 +11,7 @@ import fr.dademo.bi.companies.camel.components.repositories.exceptions.NotADirec
 import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.input.TeeInputStream;
+import org.jboss.logging.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -30,11 +31,10 @@ import java.util.stream.Collectors;
 
 import static fr.dademo.bi.companies.tools.hash.HashTools.computeHash;
 import static fr.dademo.bi.companies.tools.hash.HashTools.getHashComputerForAlgorithm;
-import static org.jboss.logging.Logger.getLogger;
 
 public class CacheHandler {
 
-    private static final org.jboss.logging.Logger LOGGER = getLogger(CacheHandler.class);
+    private static final org.jboss.logging.Logger LOGGER = Logger.getLogger(CacheHandler.class);
     private static final String PREFIX = "bi-cache";
     private static final String LOCK_FILE_NAME = "index.lock";
     private static final String RESOURCES_DIRECTORY_NAME = "resources";

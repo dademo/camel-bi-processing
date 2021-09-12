@@ -1,4 +1,4 @@
-package fr.dademo.bi.companies.process.naf.entities;
+package fr.dademo.bi.companies.process.stg.naf.entities;
 
 
 import com.fasterxml.jackson.annotation.JsonAlias;
@@ -17,7 +17,7 @@ import java.util.Objects;
 
 @RegisterForReflection
 @Entity
-@Table(schema = "dwh", name = "fact_naf_codes")
+@Table(name = "fact_naf_codes")
 @Getter
 @Setter
 @NoArgsConstructor

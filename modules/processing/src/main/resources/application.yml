@@ -2,23 +2,74 @@ quarkus:
   arc:
     unremovable-types: com.fasterxml.jackson.databind.ObjectMapper
   datasource:
-    db-kind: postgresql
-    username: bi
-    password: bi
-    jdbc:
-      url: jdbc:postgresql://localhost:5432/bi
-      max-size: 16
+    stg:
+      db-kind: postgresql
+      username: bi_rw
+      password: bi_rw
+      jdbc:
+        pooling-enabled: true
+        url: jdbc:postgresql://localhost:5432/bi
+        max-size: 16
+      reactive: false
+    #dwh:
+    #  db-kind: postgresql
+    #  username: bi_rw
+    #  password: bi_rw
+    #  jdbc:
+    #    pooling-enabled: true
+    #    url: jdbc:postgresql://localhost:5432/bi
+    #    max-size: 16
+    #dm_companies:
+    #  db-kind: postgresql
+    #  username: bi_rw
+    #  password: bi_rw
+    #  jdbc:
+    #    pooling-enabled: true
+    #    url: jdbc:postgresql://localhost:5432/bi
+    #    max-size: 16
   hibernate-orm:
-    database:
-      generation: none
-    jdbc:
-      statement-batch-size: 10000
+    stg:
+      datasource: stg
+      database:
+        generation: none
+        default-schema: stg
+      jdbc:
+        statement-batch-size: 10000
+    #dwh:
+    #  datasource: dwh
+    #  database:
+    #    generation: none
+    #    default-schema: dwh
+    #dm_companies:
+    #  datasource: dm_companies
+    #  database:
+    #    generation: none
+    #    default-schema: dm_companies
   flyway:
-    schemas: 'public,dwh,dm_companies'
-    locations: 'db/migration'
-    create-schemas: true
-    clean-at-start: true
-    migrate-at-start: true
+    stg:
+      schemas: stg
+      locations: 'classpath:db/migration/stg'
+      create-schemas: false
+      clean-at-start: true
+      clean-disabled: false
+      migrate-at-start: true
+      baseline-on-migrate: true
+    #dwh:
+    #  schemas: dwh
+    #  locations: 'classpath:db/migration/dwh'
+    #  create-schemas: false
+    #  clean-at-start: true
+    #  clean-disabled: false
+    #  migrate-at-start: true
+    #  baseline-on-migrate: true
+    #dm_companies:
+    #  schemas: dm_companies
+    #  locations: 'classpath:db/migration/dm_companies'
+    #  create-schemas: false
+    #  clean-at-start: true
+    #  clean-disabled: false
+    #  migrate-at-start: true
+    #  baseline-on-migrate: true
   log:
     category:
       'fr.dademo.bi':
@@ -37,5 +88,5 @@ camel:
     naf:
       enabled: true
     companies-history:
-      enabled: true
+      enabled: false
       batch-size: 100000
