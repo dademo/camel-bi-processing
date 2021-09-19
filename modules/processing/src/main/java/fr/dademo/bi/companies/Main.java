@@ -1,19 +1,17 @@
 package fr.dademo.bi.companies;
 
-import fr.dademo.bi.companies.camel.components.HttpComponent;
-import fr.dademo.bi.companies.process.stg.companies_history.CompaniesHistoryRouteDefinitions;
-import fr.dademo.bi.companies.process.stg.naf.NafJobRouteDefinitions;
+import fr.dademo.bi.companies.tools.batch.job_configuration.JobProvider;
+import io.quarkiverse.jberet.runtime.QuarkusJobOperator;
 import io.quarkus.runtime.Quarkus;
 import io.quarkus.runtime.QuarkusApplication;
 import io.quarkus.runtime.annotations.QuarkusMain;
 import lombok.SneakyThrows;
-import org.apache.camel.CamelContext;
-import org.apache.camel.quarkus.core.CamelRuntime;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.jberet.runtime.JobExecutionImpl;
 import org.jboss.logging.Logger;
 
 import javax.inject.Inject;
-import java.util.Arrays;
+import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 @QuarkusMain
 public class Main {
@@ -25,55 +23,23 @@ public class Main {
     public static class App implements QuarkusApplication {
 
         private static final Logger LOGGER = Logger.getLogger(App.class);
-
-        @Inject
-        CamelContext camelContext;
-
-        @Inject
-        CamelRuntime camelRuntime;
-
-        @Inject
-        @ConfigProperty(name = "camel.spool-directory", defaultValue = "${java.io.tmpdir}/camel/camel-tmp-#uuid#")
-        String spoolDirectory = "${java.io.tmpdir}/camel/camel-tmp-#uuid#";
+        private static final long CHECK_SLEEP_MILLIS = 50;
 
         // Tasks to run
         @Inject
-        NafJobRouteDefinitions nafJobRouteDefinitions;
+        QuarkusJobOperator jobOperator;
 
         @Inject
-        CompaniesHistoryRouteDefinitions companiesHistoryRouteDefinitions;
+        JobProvider applicationJobProvider;
 
         @Override
+        @SneakyThrows
         public int run(String... args) {
 
-            LOGGER.info("Bootstraping application");
-            // https://developers.redhat.com/articles/2021/05/17/integrating-systems-apache-camel-and-quarkus-red-hat-openshift
-            camelContext.addComponent(HttpComponent.COMPONENT_NAME, new HttpComponent(camelContext));
+            var jobId = jobOperator.start(applicationJobProvider.getJob(), new Properties());
+            ((JobExecutionImpl) jobOperator.getJobExecution(jobId)).awaitTermination(0L, TimeUnit.SECONDS);
 
-            camelContext.getStreamCachingStrategy().setSpoolDirectory(spoolDirectory);
-
-            camelContext.setAutoStartup(false);
-
-            camelRuntime.start(args);
-            LOGGER.info("Application is ready");
-
-            LOGGER.info("Starting all jobs for jobs to end");
-            Arrays.asList(
-                    nafJobRouteDefinitions,
-                    companiesHistoryRouteDefinitions
-            ).forEach(this::startIfEnabled);
-            LOGGER.info("Waiting for jobs to end");
-
-            return camelRuntime.waitForExit();
-        }
-
-        @SneakyThrows
-        private void startIfEnabled(AppJobRouteBuilder appJobRouteBuilder) {
-
-            if (appJobRouteBuilder.isEnabled()) {
-                LOGGER.info(String.format("Starting route %s", appJobRouteBuilder.getRouteId()));
-                camelContext.getRouteController().startRoute(appJobRouteBuilder.getRouteId());
-            }
+            return 0;
         }
     }
 }

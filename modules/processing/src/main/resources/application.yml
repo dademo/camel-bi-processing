@@ -81,12 +81,10 @@ quarkus:
       'camel_jobs':
         level: DEBUG
 
-camel:
-  # You can use a hard FS instead of memory if processing consume too much
-  spool-directory: "${java.io.tmpdir}/camel/camel-tmp-#uuid#"
-  jobs:
-    naf:
-      enabled: true
-    companies-history:
-      enabled: false
-      batch-size: 100000
+# You can use a hard FS instead of memory if processing consume too much
+jobs:
+  naf:
+    enabled: false
+  companies-history:
+    enabled: true
+    batch-size: 100000
