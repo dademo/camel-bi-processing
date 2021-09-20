@@ -30,7 +30,6 @@ public class NafWriter implements ItemWriter {
 
     @Override
     public void close() {
-
     }
 
     public void writeItems(List<Object> items) {

@@ -13,12 +13,12 @@ import javax.batch.api.chunk.ItemReader;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.Optional;
 
 import static fr.dademo.bi.companies.jobs.stg.companies_history.entities.CompanyHistory.*;
 
@@ -33,7 +33,10 @@ public class CompaniesHistoryReader implements ItemReader {
     @Inject
     HttpDataQuerier httpDataQuerier;
 
-    private Iterator<CSVRecord> iterator;
+    ZipArchiveInputStream archiveInputStream;
+    ArchiveEntry archiveEntry;
+
+    private Iterator<CSVRecord> iterator = Collections.emptyIterator();
 
     @Override
     public void open(Serializable checkpoint) throws Exception {
@@ -41,43 +44,53 @@ public class CompaniesHistoryReader implements ItemReader {
         LOGGER.info("Reading values");
         // Querying for values
         var queryUrl = new URL(DATASET_URL);
-        httpDataQuerier.basicQuery(queryUrl, this::consumeResultStream);
-        LOGGER.info("Parsed values");
+
+        archiveInputStream = new ZipArchiveInputStream(httpDataQuerier.basicQuery(queryUrl));
     }
 
     @Override
     public void close() throws Exception {
-
+        archiveInputStream.close();
     }
 
     @Override
     public Object readItem() throws Exception {
 
-        return iterator.hasNext() ?
-                iterator.next() :
-                null;
+        return nextItem().orElse(null);
+    }
+
+    @SneakyThrows
+    private Optional<CSVRecord> nextItem() {
+
+        if (iterator.hasNext()) {
+            return Optional.of(iterator.next());
+        } else {
+            while (true) {
+                if ((archiveEntry = archiveInputStream.getNextEntry()) != null) {
+                    if (!archiveEntry.isDirectory()) {
+                        iterator = getCsvStreamIterator();
+                        if (iterator.hasNext()) {
+                            return Optional.of(iterator.next());
+                        }
+                    }
+                } else {
+                    return Optional.empty();
+                }
+            }
+        }
+    }
+
+    @SneakyThrows
+    private Iterator<CSVRecord> getCsvStreamIterator() {
+
+        return csvFormat()
+                .parse(new InputStreamReader(archiveInputStream))
+                .iterator();
     }
 
     @Override
     public Serializable checkpointInfo() throws Exception {
         return null;
-    }
-
-    @SneakyThrows
-    private void consumeResultStream(InputStream inputStream) {
-
-        var csvRecordEntries = new ArrayList<CSVRecord>();
-        ArchiveEntry archiveEntry;
-        try (var archiveInputStream = new ZipArchiveInputStream(inputStream)) {
-            while ((archiveEntry = archiveInputStream.getNextEntry()) != null) {
-                if (!archiveEntry.isDirectory()) {
-                    csvFormat()
-                            .parse(new InputStreamReader(archiveInputStream))
-                            .forEach(csvRecordEntries::add);
-                }
-            }
-        }
-        iterator = csvRecordEntries.iterator();
     }
 
     private CSVFormat csvFormat() {
@@ -87,6 +100,7 @@ public class CompaniesHistoryReader implements ItemReader {
                 .setSkipHeaderRecord(true)
                 .setDelimiter(",")
                 .setRecordSeparator("\n")
+                .setNullString("")
                 .build();
     }
 

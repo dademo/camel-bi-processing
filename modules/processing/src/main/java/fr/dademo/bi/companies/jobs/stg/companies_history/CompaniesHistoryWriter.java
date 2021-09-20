@@ -29,11 +29,14 @@ public class CompaniesHistoryWriter implements ItemWriter {
 
     @Override
     public void close() throws Exception {
-
     }
 
     public void writeItems(List<Object> items) throws Exception {
+
         LOGGER.info(String.format("Writing %d items", items.size()));
+        items.forEach(entityManager::merge);
+        LOGGER.info("Flushing");
+        entityManager.flush();
     }
 
     @Override

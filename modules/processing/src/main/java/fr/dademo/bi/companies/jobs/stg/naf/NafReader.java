@@ -39,8 +39,13 @@ public class NafReader implements ItemReader {
         LOGGER.info("Reading values");
         // Querying for values
         var queryUrl = new URL(DATASET_URL + "?" + DATASET_URL_QUERY_PARAMETERS);
-        httpDataQuerier.basicQuery(queryUrl, this::consumeResultStream);
-        LOGGER.info("Parsed values");
+
+        iterator = MAPPER.<List<NafDefinitionContainer>>readValue(
+                httpDataQuerier.basicQuery(queryUrl),
+                MAPPER
+                        .getTypeFactory()
+                        .constructCollectionType(List.class, NafDefinitionContainer.class)
+        ).iterator();
     }
 
     @Override

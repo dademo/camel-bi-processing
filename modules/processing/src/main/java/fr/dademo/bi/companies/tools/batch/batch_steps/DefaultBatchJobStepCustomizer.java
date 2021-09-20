@@ -14,7 +14,7 @@ public class DefaultBatchJobStepCustomizer implements BatchJobStepCustomizer {
     public static final int DEFAULT_TIME_LIMIT = -1;
     public static final int DEFAULT_RETRY_LIMIT = 0;
     public static final int DEFAULT_SKIP_LIMIT = 0;
-    public static final int DEFAULT_CHUNK_SIZE = 1000;
+    public static final int DEFAULT_CHUNK_SIZE = 100000;
 
     private int startLimit = DEFAULT_START_LIMIT;
     private int retryLimit = DEFAULT_TIME_LIMIT;

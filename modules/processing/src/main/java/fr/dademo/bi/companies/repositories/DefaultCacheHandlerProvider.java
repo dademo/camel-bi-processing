@@ -30,7 +30,7 @@ public class DefaultCacheHandlerProvider implements CacheHandlerProvider {
     public CacheHandler getCacheHandler() {
 
         if (getHttpCacheEnabled()) {
-            return new CacheHandler(getCacheDirectoryRoot());
+            return new CacheHandlerImpl(getCacheDirectoryRoot());
         } else {
             return null;
         }

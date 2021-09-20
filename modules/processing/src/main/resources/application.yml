@@ -84,7 +84,7 @@ quarkus:
 # You can use a hard FS instead of memory if processing consume too much
 jobs:
   naf:
-    enabled: false
+    enabled: true
   companies-history:
     enabled: true
     batch-size: 100000
