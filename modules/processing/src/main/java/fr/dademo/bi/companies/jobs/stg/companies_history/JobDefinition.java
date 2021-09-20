@@ -1,6 +1,6 @@
 package fr.dademo.bi.companies.jobs.stg.companies_history;
 
-import fr.dademo.bi.companies.tools.batch.batch_steps.BaseChunkBatchStep;
+import fr.dademo.bi.companies.tools.batch.batch_steps.BaseChunkJob;
 import lombok.Getter;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
@@ -10,10 +10,10 @@ import javax.inject.Named;
 
 
 @ApplicationScoped
-@Named(BatchJobStep.COMPANIES_HISTORY_JOB_STEP_NAME)
-public class BatchJobStep extends BaseChunkBatchStep {
+@Named(JobDefinition.COMPANIES_HISTORY_JOB_NAME)
+public class JobDefinition extends BaseChunkJob {
 
-    public static final String COMPANIES_HISTORY_JOB_STEP_NAME = "stg_companies_history";
+    public static final String COMPANIES_HISTORY_JOB_NAME = "stg_companies_history";
     public static final String PERSISTENCE_UNIT_NAME = "stg";
 
     @Getter
@@ -40,7 +40,7 @@ public class BatchJobStep extends BaseChunkBatchStep {
 
     @Nonnull
     @Override
-    public String getJobStepName() {
-        return COMPANIES_HISTORY_JOB_STEP_NAME;
+    public String getJobName() {
+        return COMPANIES_HISTORY_JOB_NAME;
     }
 }

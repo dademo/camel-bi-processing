@@ -1,7 +1,7 @@
 package fr.dademo.bi.companies.jobs.stg.naf;
 
 import fr.dademo.bi.companies.repositories.HttpDataQuerier;
-import fr.dademo.bi.companies.tools.batch.batch_steps.BaseChunkBatchStep;
+import fr.dademo.bi.companies.tools.batch.batch_steps.BaseChunkJob;
 import lombok.Getter;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
@@ -12,10 +12,10 @@ import javax.inject.Named;
 
 
 @ApplicationScoped
-@Named(BatchJobStep.NAF_JOB_STEP_NAME)
-public class BatchJobStep extends BaseChunkBatchStep {
+@Named(JobDefinition.NAF_JOB_NAME)
+public class JobDefinition extends BaseChunkJob {
 
-    public static final String NAF_JOB_STEP_NAME = "stg_naf";
+    public static final String NAF_JOB_NAME = "stg_naf";
     public static final String PERSISTENCE_UNIT_NAME = "stg";
 
     @Inject
@@ -45,7 +45,7 @@ public class BatchJobStep extends BaseChunkBatchStep {
 
     @Nonnull
     @Override
-    public String getJobStepName() {
-        return NAF_JOB_STEP_NAME;
+    public String getJobName() {
+        return NAF_JOB_NAME;
     }
 }

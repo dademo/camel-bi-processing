@@ -11,7 +11,7 @@ import javax.persistence.EntityManager;
 import java.io.Serializable;
 import java.util.List;
 
-import static fr.dademo.bi.companies.jobs.stg.companies_history.BatchJobStep.PERSISTENCE_UNIT_NAME;
+import static fr.dademo.bi.companies.jobs.stg.companies_history.JobDefinition.PERSISTENCE_UNIT_NAME;
 
 @Dependent
 @Named(CompaniesHistoryWriter.BEAN_NAME)

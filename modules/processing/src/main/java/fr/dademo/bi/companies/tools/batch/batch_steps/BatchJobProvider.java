@@ -1,13 +1,13 @@
 package fr.dademo.bi.companies.tools.batch.batch_steps;
 
-import org.jberet.job.model.Step;
+import org.jberet.job.model.Job;
 
 import javax.annotation.Nonnull;
 
-public interface BatchJobStepProvider {
+public interface BatchJobProvider {
 
     boolean isEnabled();
 
     @Nonnull
-    Step getJobStep();
+    Job getJob();
 }
