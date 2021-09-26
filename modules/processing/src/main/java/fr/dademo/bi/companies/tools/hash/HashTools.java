@@ -19,18 +19,17 @@ public final class HashTools {
     @SneakyThrows
     public static String computeHash(MessageDigest hashComputer, InputStream in) {
 
-        var buffer = new byte[4096];
-        int read = 0;
+        var buffer = new byte[1048576];
+        int read;
 
         try (in) {
-            while (read != -1) {
-                read = in.read(buffer);
+            while ((read = in.read(buffer)) != -1) {
                 hashComputer.update(buffer, 0, read);
             }
         }
 
         return DatatypeConverter
-                .printHexBinary(hashComputer.digest(hashComputer.digest()))
+                .printHexBinary(hashComputer.digest())
                 .toUpperCase();
     }
 }

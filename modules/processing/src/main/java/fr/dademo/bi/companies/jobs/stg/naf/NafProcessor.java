@@ -1,21 +1,30 @@
 package fr.dademo.bi.companies.jobs.stg.naf;
 
+import fr.dademo.bi.companies.jobs.stg.naf.entities.NafDefinition;
 import fr.dademo.bi.companies.jobs.stg.naf.entities.NafDefinitionContainer;
-import org.jboss.logging.Logger;
+import org.jeasy.batch.core.processor.RecordProcessor;
+import org.jeasy.batch.core.record.GenericRecord;
+import org.jeasy.batch.core.record.Header;
+import org.jeasy.batch.core.record.Record;
 
-import javax.batch.api.chunk.ItemProcessor;
-import javax.enterprise.context.Dependent;
-import javax.inject.Named;
+import javax.enterprise.context.ApplicationScoped;
+import java.time.LocalDateTime;
 
-@Dependent
-@Named(NafProcessor.BEAN_NAME)
-public class NafProcessor implements ItemProcessor {
-
-    public static final String BEAN_NAME = "NafProcessor";
-    private static final Logger LOGGER = Logger.getLogger(NafProcessor.class);
+@ApplicationScoped
+public class NafProcessor implements RecordProcessor<NafDefinitionContainer, NafDefinition> {
 
     @Override
-    public Object processItem(Object item) throws Exception {
-        return ((NafDefinitionContainer) item).getFields();
+    public Record<NafDefinition> processRecord(Record<NafDefinitionContainer> item) {
+        return toRecord(item.getHeader(), item.getPayload().getFields());
+    }
+
+    private Record<NafDefinition> toRecord(Header sourceHeader, NafDefinition payload) {
+        return new GenericRecord<>(
+                new Header(
+                        sourceHeader.getNumber(),
+                        sourceHeader.getSource(),
+                        LocalDateTime.now()),
+                payload
+        );
     }
 }

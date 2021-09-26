@@ -1,6 +1,6 @@
 package fr.dademo.bi.companies;
 
-import fr.dademo.bi.companies.tools.batch.batch_steps.BatchJobProvider;
+import fr.dademo.bi.companies.tools.batch.job.BatchJobProvider;
 import fr.dademo.bi.companies.tools.batch.job_configuration.OrderedJobsProvider;
 
 import javax.annotation.Nonnull;
@@ -11,7 +11,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static fr.dademo.bi.companies.jobs.stg.companies_history.JobDefinition.COMPANIES_HISTORY_JOB_NAME;
+import static fr.dademo.bi.companies.jobs.stg.company.JobDefinition.COMPANY_JOB_NAME;
+import static fr.dademo.bi.companies.jobs.stg.company_history.JobDefinition.COMPANY_HISTORY_JOB_NAME;
+import static fr.dademo.bi.companies.jobs.stg.company_inheritance.JobDefinition.COMPANY_INHERITANCE_JOB_NAME;
 import static fr.dademo.bi.companies.jobs.stg.naf.JobDefinition.NAF_JOB_NAME;
 
 @ApplicationScoped
@@ -22,18 +24,28 @@ public class AppJobsProvider implements OrderedJobsProvider {
     BatchJobProvider nafJobSteps;
 
     @Inject
-    @Named(COMPANIES_HISTORY_JOB_NAME)
-    BatchJobProvider companiesHistoryJobSteps;
+    @Named(COMPANY_JOB_NAME)
+    BatchJobProvider companyJobSteps;
+
+    @Inject
+    @Named(COMPANY_HISTORY_JOB_NAME)
+    BatchJobProvider companyHistoryJobSteps;
+
+    @Inject
+    @Named(COMPANY_INHERITANCE_JOB_NAME)
+    BatchJobProvider companyInheritanceJobSteps;
 
 
     @Nonnull
     @Override
-    public List<BatchJobProvider> getJobProviderss() {
+    public List<BatchJobProvider> getJobProviders() {
         return Stream.of(
                         nafJobSteps,
-                        companiesHistoryJobSteps
+                        companyJobSteps,
+                        companyHistoryJobSteps,
+                        companyInheritanceJobSteps
                 )
                 .filter(BatchJobProvider::isEnabled)
-                .collect(Collectors.toList());
+                .collect(Collectors.toUnmodifiableList());
     }
 }

@@ -1,6 +1,6 @@
-package fr.dademo.bi.companies.tools.batch.batch_steps;
+package fr.dademo.bi.companies.tools.batch.job;
 
-import org.jberet.job.model.Job;
+import org.jeasy.batch.core.job.Job;
 
 import javax.annotation.Nonnull;
 

@@ -3,29 +3,31 @@ package fr.dademo.bi.companies.jobs.stg.naf;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.dademo.bi.companies.jobs.stg.naf.entities.NafDefinitionContainer;
 import fr.dademo.bi.companies.repositories.HttpDataQuerier;
-import lombok.SneakyThrows;
 import org.jboss.logging.Logger;
+import org.jeasy.batch.core.reader.RecordReader;
+import org.jeasy.batch.core.record.GenericRecord;
+import org.jeasy.batch.core.record.Header;
+import org.jeasy.batch.core.record.Record;
 
-import javax.batch.api.chunk.ItemReader;
-import javax.enterprise.context.Dependent;
+import javax.annotation.Nullable;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.inject.Named;
-import java.io.InputStream;
-import java.io.Serializable;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
-@Dependent
-@Named(NafReader.BEAN_NAME)
-public class NafReader implements ItemReader {
+@ApplicationScoped
+public class NafReader implements RecordReader<NafDefinitionContainer> {
 
-    public static final String BEAN_NAME = "NafReader";
     private static final Logger LOGGER = Logger.getLogger(NafReader.class);
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     private static final String DATASET_URL = "https://data.iledefrance.fr/explore/dataset/nomenclature-dactivites-francaise-naf-rev-2-code-ape/download";
     private static final String DATASET_URL_QUERY_PARAMETERS = "format=json";
+
+    private final AtomicLong recordNumber = new AtomicLong(0L);
 
     @Inject
     HttpDataQuerier httpDataQuerier;
@@ -34,7 +36,7 @@ public class NafReader implements ItemReader {
 
     //@SneakyThrows
     @Override
-    public void open(Serializable checkpoint) throws Exception {
+    public void open() throws Exception {
 
         LOGGER.info("Reading values");
         // Querying for values
@@ -49,31 +51,20 @@ public class NafReader implements ItemReader {
     }
 
     @Override
-    public void close() throws Exception {
-        // Nothing
+    public synchronized Record<NafDefinitionContainer> readRecord() {
+        return iterator.hasNext() ? toRecord(iterator.next()) : null;
     }
 
-    @Override
-    public Object readItem() throws Exception {
-
-        return iterator.hasNext() ?
-                iterator.next() :
-                null;
+    private Record<NafDefinitionContainer> toRecord(NafDefinitionContainer item) {
+        return new GenericRecord<>(generateHeader(recordNumber.getAndIncrement()), item);
     }
 
-    @Override
-    public Serializable checkpointInfo() throws Exception {
-        return null;
-    }
+    private Header generateHeader(@Nullable Long recordNumber) {
 
-    @SneakyThrows
-    private void consumeResultStream(InputStream inputStream) {
-
-        iterator = MAPPER.<List<NafDefinitionContainer>>readValue(
-                inputStream,
-                MAPPER
-                        .getTypeFactory()
-                        .constructCollectionType(List.class, NafDefinitionContainer.class)
-        ).iterator();
+        return new Header(
+                recordNumber,
+                DATASET_URL + "?" + DATASET_URL_QUERY_PARAMETERS,
+                LocalDateTime.now()
+        );
     }
 }

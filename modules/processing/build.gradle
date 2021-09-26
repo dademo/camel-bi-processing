@@ -19,7 +19,7 @@ dependencies {
     implementation 'io.quarkus:quarkus-hibernate-orm'
     implementation 'io.quarkus:quarkus-hibernate-validator'
     implementation 'io.quarkus:quarkus-container-image-docker'
-    implementation 'io.quarkiverse.jberet:quarkus-jberet:1.0.0'
+    implementation 'org.jeasy:easy-batch-core:7.0.2'
     // Other libraries
     implementation 'com.squareup.okhttp3:okhttp:4.9.1'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.1'

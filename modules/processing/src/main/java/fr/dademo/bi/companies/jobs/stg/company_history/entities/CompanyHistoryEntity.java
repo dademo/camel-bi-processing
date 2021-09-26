@@ -1,4 +1,4 @@
-package fr.dademo.bi.companies.jobs.stg.companies_history.entities;
+package fr.dademo.bi.companies.jobs.stg.company_history.entities;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.*;
@@ -10,13 +10,13 @@ import java.time.LocalDate;
 
 @RegisterForReflection
 @Entity
-@Table(name = "fact_historical_companies")
+@Table(name = "company_history")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CompanyHistory {
+public class CompanyHistoryEntity {
 
     public static final String FIELD_SIREN = "siren";
     public static final String FIELD_NIC = "nic";

@@ -1,18 +1,19 @@
 package fr.dademo.bi.companies;
 
-import fr.dademo.bi.companies.tools.batch.batch_steps.BatchJobProvider;
+import fr.dademo.bi.companies.tools.batch.job.BatchJobProvider;
 import fr.dademo.bi.companies.tools.batch.job_configuration.OrderedJobsProvider;
-import io.quarkiverse.jberet.runtime.QuarkusJobOperator;
 import io.quarkus.runtime.Quarkus;
 import io.quarkus.runtime.QuarkusApplication;
 import io.quarkus.runtime.annotations.QuarkusMain;
 import lombok.SneakyThrows;
-import org.apache.commons.lang3.time.DurationFormatUtils;
-import org.jberet.runtime.JobExecutionImpl;
 import org.jboss.logging.Logger;
+import org.jeasy.batch.core.job.JobExecutor;
+import org.jeasy.batch.core.job.JobMetrics;
+import org.jeasy.batch.core.job.JobReport;
 
 import javax.inject.Inject;
-import java.util.Properties;
+import java.time.format.DateTimeFormatter;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 @QuarkusMain
@@ -29,41 +30,91 @@ public class Main {
 
         // Tasks to run
         @Inject
-        QuarkusJobOperator jobOperator;
+        JobExecutor jobExecutor;
 
         @Inject
         OrderedJobsProvider orderedJobsProvider;
+
 
         @Override
         @SneakyThrows
         public int run(String... args) {
 
-            orderedJobsProvider.getJobProviderss().forEach(this::runJob);
+            try {
+                orderedJobsProvider.getJobProviders().stream()
+                        .map(this::runJob)
+                        .map(this::waitForJobToComplete)
+                        .forEach(this::handleJobResult);
+            } finally {
+                jobExecutor.awaitTermination(0L, TimeUnit.SECONDS);
+                jobExecutor.shutdown();
+            }
 
             return 0;
         }
 
         @SneakyThrows
-        public void runJob(BatchJobProvider jobProvider) {
+        private Future<JobReport> runJob(BatchJobProvider jobProvider) {
 
             var job = jobProvider.getJob();
 
-            LOGGER.info(String.format("Running job %s", job.getId()));
+            LOGGER.info(String.format("Running job %s", job.getName()));
+            return jobExecutor.submit(job);
+        }
 
-            var jobId = jobOperator.start(job, new Properties());
+        @SneakyThrows
+        private JobReport waitForJobToComplete(Future<JobReport> jobReportFuture) {
+            LOGGER.info("Waiting for job to end");
+            return jobReportFuture.get();
+        }
 
-            LOGGER.info(String.format("Job %s started with id %d", job.getId(), jobId));
-            LOGGER.info("Waiting for the job to end");
+        private void handleJobResult(JobReport jobReport) {
 
-            ((JobExecutionImpl) jobOperator.getJobExecution(jobId)).awaitTermination(0L, TimeUnit.SECONDS);
+            switch (jobReport.getStatus()) {
+                case COMPLETED:
+                    LOGGER.info(String.format("Job '%s' completed (%s)%n" +
+                                    "%s",
+                            jobReport.getJobName(),
+                            jobReport.getStatus().name(),
+                            formatJobMetrics(jobReport.getMetrics())
+                    ));
+                    persistJobResult(jobReport);
+                    break;
+                case FAILED:
+                case ABORTED:
+                    LOGGER.warn(String.format("Job '%s' stopped (%s)%n" +
+                                    "%s%n" +
+                                    "Exception: %s",
+                            jobReport.getJobName(),
+                            jobReport.getStatus().name(),
+                            formatJobMetrics(jobReport.getMetrics()),
+                            jobReport.getLastError().getLocalizedMessage()
+                    ));
+                    persistJobResult(jobReport);
+                    break;
+                default:
+                    LOGGER.warn(String.format("Unhandled job state (%s)", jobReport.getStatus().name()));
+            }
+        }
 
-            var jobExecution = jobOperator.getJobExecution(jobId);
-            LOGGER.info(String.format("Job %s ended with status %s and exit code %s (duration: %s)",
-                    job.getId(),
-                    jobExecution.getBatchStatus().toString(),
-                    jobExecution.getExitStatus(),
-                    DurationFormatUtils.formatDuration(jobExecution.getEndTime().getTime() - jobExecution.getStartTime().getTime(), "HH:mm:ss")
-            ));
+        private String formatJobMetrics(JobMetrics jobMetrics) {
+
+            return String.format(
+                    "Started on %s, ended on %s (duration: %s)%n" +
+                            "Read: %d%n" +
+                            "Write: %d%n" +
+                            "Errors: %d",
+                    jobMetrics.getStartTime().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                    jobMetrics.getEndTime().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                    jobMetrics.getDuration().toString(),
+                    jobMetrics.getReadCount(),
+                    jobMetrics.getWriteCount(),
+                    jobMetrics.getErrorCount()
+            );
+        }
+
+        private void persistJobResult(JobReport jobReport) {
+            // TODO
         }
     }
 }

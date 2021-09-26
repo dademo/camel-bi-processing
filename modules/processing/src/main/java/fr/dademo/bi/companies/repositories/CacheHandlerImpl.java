@@ -171,7 +171,7 @@ public class CacheHandlerImpl implements CacheHandler {
         var expectedHash = hashDefinition.getHash();
 
         if (!computedDigest.equals(expectedHash)) {
-            throw new HashMismatchException(inputFileIdentifier, computedDigest, expectedHash);
+            throw new HashMismatchException(inputFileIdentifier, expectedHash, computedDigest);
         }
     }
 
@@ -214,7 +214,7 @@ public class CacheHandlerImpl implements CacheHandler {
     }
 
     @SneakyThrows
-    private <T> T withLockedLockFile(Supplier<T> onLockAcquired) {
+    private synchronized <T> T withLockedLockFile(Supplier<T> onLockAcquired) {
 
         // Locking index file
         try (var fileChannel = FileChannel.open(

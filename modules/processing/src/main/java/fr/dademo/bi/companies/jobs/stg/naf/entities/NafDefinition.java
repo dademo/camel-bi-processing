@@ -17,7 +17,7 @@ import java.util.Objects;
 
 @RegisterForReflection
 @Entity
-@Table(name = "fact_naf_codes")
+@Table(name = "naf_codes")
 @Getter
 @Setter
 @NoArgsConstructor
