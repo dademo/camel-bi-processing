@@ -1,21 +1,16 @@
-package fr.dademo.bi.companies.jobs.stg.company_inheritance.entities;
+package fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel;
 
-import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.*;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@RegisterForReflection
-@Entity
-@Table(name = "company_inheritance")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CompanyInheritanceEntity {
+public class CompanyInheritance {
 
     public static final String FIELD_COMPANY_PREDECESSOR_SIREN = "siretEtablissementPredecesseur";
     public static final String FIELD_COMPANY_SUCCESSOR_SIREN = "siretEtablissementSuccesseur";
@@ -32,25 +27,10 @@ public class CompanyInheritanceEntity {
             FIELD_COMPANY_PROCESSING_DATE,
     };
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "field_company_predecessor_siren", nullable = false)
     private String companyPredecessorSiren;
-
-    @Column(name = "field_company_successor_siren", nullable = false)
     private String companySuccessorSiren;
-
-    @Column(name = "field_company_succession_date", nullable = false)
     private LocalDate companySuccessionDate;
-
-    @Column(name = "field_company_headquarter_change", nullable = false)
     private Boolean companyHeaderChanged;
-
-    @Column(name = "field_company_economical_continuity", nullable = false)
     private Boolean companyEconomicalContinuity;
-
-    @Column(name = "field_company_processing_date", nullable = false)
     private LocalDateTime companyProcessingTimestamp;
 }

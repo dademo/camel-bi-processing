@@ -11,6 +11,10 @@ quarkus:
         url: jdbc:postgresql://localhost:5432/bi
         max-size: 16
       reactive: false
+    #  jooq:
+    #    stg:
+    #      dialect: postgresql
+    #      datasource: stg
     #dwh:
     #  db-kind: postgresql
     #  username: bi_rw
@@ -74,17 +78,22 @@ quarkus:
     category:
       'fr.dademo.bi':
         level: DEBUG
+      'fr.dademo.bi.companies.tools':
+        level: TRACE
+        min-level: TRACE
       'org.flywaydb.core':
         level: DEBUG
+      'org.jooq.Constants':
+        level: WARNING
       'okhttp3':
         level: DEBUG
 # You can use a hard FS instead of memory if processing consume too much
 jobs:
   naf:
-    enabled: false
+    enabled: true
     batch-size: 100000
   company:
-    enabled: true
+    enabled: false
     batch-size: 100000
   company-history:
     enabled: false

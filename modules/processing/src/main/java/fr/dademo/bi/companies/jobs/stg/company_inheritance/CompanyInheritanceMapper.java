@@ -1,6 +1,6 @@
 package fr.dademo.bi.companies.jobs.stg.company_inheritance;
 
-import fr.dademo.bi.companies.jobs.stg.company_inheritance.entities.CompanyInheritanceEntity;
+import fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel.CompanyInheritance;
 import org.apache.commons.csv.CSVRecord;
 import org.jboss.logging.Logger;
 import org.jeasy.batch.core.mapper.RecordMapper;
@@ -12,16 +12,16 @@ import javax.enterprise.context.ApplicationScoped;
 import java.time.LocalDateTime;
 
 @ApplicationScoped
-public class CompanyInheritanceMapper implements RecordMapper<CSVRecord, CompanyInheritanceEntity> {
+public class CompanyInheritanceMapper implements RecordMapper<CSVRecord, CompanyInheritance> {
 
     private static final Logger LOGGER = Logger.getLogger(CompanyInheritanceMapper.class);
 
     @Override
-    public Record<CompanyInheritanceEntity> processRecord(Record<CSVRecord> item) {
-        return toRecord(item.getHeader(), mappedToCompanyInheritanceEntity(item.getPayload()));
+    public Record<CompanyInheritance> processRecord(Record<CSVRecord> item) {
+        return toRecord(item.getHeader(), mappedToCompanyInheritance(item.getPayload()));
     }
 
-    private Record<CompanyInheritanceEntity> toRecord(Header sourceHeader, CompanyInheritanceEntity payload) {
+    private Record<CompanyInheritance> toRecord(Header sourceHeader, CompanyInheritance payload) {
         return new GenericRecord<>(
                 new Header(
                         sourceHeader.getNumber(),
@@ -31,9 +31,9 @@ public class CompanyInheritanceMapper implements RecordMapper<CSVRecord, Company
         );
     }
 
-    private CompanyInheritanceEntity mappedToCompanyInheritanceEntity(CSVRecord csvRecord) {
+    private CompanyInheritance mappedToCompanyInheritance(CSVRecord csvRecord) {
 
-        return CompanyInheritanceEntity.builder()
+        return CompanyInheritance.builder()
                 // TODO
                 .build();
     }

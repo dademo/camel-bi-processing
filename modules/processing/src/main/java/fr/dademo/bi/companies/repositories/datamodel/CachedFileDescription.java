@@ -1,4 +1,4 @@
-package fr.dademo.bi.companies.repositories.entities;
+package fr.dademo.bi.companies.repositories.datamodel;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;

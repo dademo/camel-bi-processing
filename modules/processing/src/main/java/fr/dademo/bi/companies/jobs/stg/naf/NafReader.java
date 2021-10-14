@@ -1,7 +1,7 @@
 package fr.dademo.bi.companies.jobs.stg.naf;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.dademo.bi.companies.jobs.stg.naf.entities.NafDefinitionContainer;
+import fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinitionContainer;
 import fr.dademo.bi.companies.repositories.HttpDataQuerier;
 import org.jboss.logging.Logger;
 import org.jeasy.batch.core.reader.RecordReader;

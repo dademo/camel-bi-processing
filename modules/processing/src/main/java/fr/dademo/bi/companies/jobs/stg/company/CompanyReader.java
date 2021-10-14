@@ -1,7 +1,7 @@
 package fr.dademo.bi.companies.jobs.stg.company;
 
 import fr.dademo.bi.companies.repositories.HttpDataQuerier;
-import fr.dademo.bi.companies.repositories.entities.HashDefinition;
+import fr.dademo.bi.companies.repositories.datamodel.HashDefinition;
 import lombok.SneakyThrows;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
@@ -24,7 +24,7 @@ import java.util.Iterator;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static fr.dademo.bi.companies.jobs.stg.company.entities.CompanyEntity.HEADER;
+import static fr.dademo.bi.companies.jobs.stg.company.datamodel.Company.HEADER;
 
 @ApplicationScoped
 public class CompanyReader implements RecordReader<CSVRecord> {

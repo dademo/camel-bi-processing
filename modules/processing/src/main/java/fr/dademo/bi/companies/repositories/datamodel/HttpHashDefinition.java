@@ -1,4 +1,4 @@
-package fr.dademo.bi.companies.repositories.entities;
+package fr.dademo.bi.companies.repositories.datamodel;
 
 import lombok.SneakyThrows;
 import lombok.Value;

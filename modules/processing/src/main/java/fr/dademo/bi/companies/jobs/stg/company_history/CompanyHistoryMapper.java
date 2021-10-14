@@ -1,8 +1,7 @@
 package fr.dademo.bi.companies.jobs.stg.company_history;
 
-import fr.dademo.bi.companies.jobs.stg.company_history.entities.CompanyHistoryEntity;
+import fr.dademo.bi.companies.jobs.stg.company_history.datamodel.CompanyHistory;
 import org.apache.commons.csv.CSVRecord;
-import org.jboss.logging.Logger;
 import org.jeasy.batch.core.mapper.RecordMapper;
 import org.jeasy.batch.core.record.GenericRecord;
 import org.jeasy.batch.core.record.Header;
@@ -11,21 +10,19 @@ import org.jeasy.batch.core.record.Record;
 import javax.enterprise.context.ApplicationScoped;
 import java.time.LocalDateTime;
 
-import static fr.dademo.bi.companies.jobs.stg.company_history.entities.CompanyHistoryEntity.*;
+import static fr.dademo.bi.companies.jobs.stg.company_history.datamodel.CompanyHistory.*;
 import static fr.dademo.bi.companies.tools.batch.mapper.BatchMapperTools.fromBoolean;
 import static fr.dademo.bi.companies.tools.batch.mapper.BatchMapperTools.toLocalDate;
 
 @ApplicationScoped
-public class CompanyHistoryMapper implements RecordMapper<CSVRecord, CompanyHistoryEntity> {
-
-    private static final Logger LOGGER = Logger.getLogger(CompanyHistoryMapper.class);
+public class CompanyHistoryMapper implements RecordMapper<CSVRecord, CompanyHistory> {
 
     @Override
-    public Record<CompanyHistoryEntity> processRecord(Record<CSVRecord> item) {
-        return toRecord(item.getHeader(), mappedToCompanyHistoryEntity(item.getPayload()));
+    public Record<CompanyHistory> processRecord(Record<CSVRecord> item) {
+        return toRecord(item.getHeader(), mappedToCompanyHistory(item.getPayload()));
     }
 
-    private Record<CompanyHistoryEntity> toRecord(Header sourceHeader, CompanyHistoryEntity payload) {
+    private Record<CompanyHistory> toRecord(Header sourceHeader, CompanyHistory payload) {
         return new GenericRecord<>(
                 new Header(
                         sourceHeader.getNumber(),
@@ -35,9 +32,9 @@ public class CompanyHistoryMapper implements RecordMapper<CSVRecord, CompanyHist
         );
     }
 
-    private CompanyHistoryEntity mappedToCompanyHistoryEntity(CSVRecord csvRecord) {
+    private CompanyHistory mappedToCompanyHistory(CSVRecord csvRecord) {
 
-        return CompanyHistoryEntity.builder()
+        return CompanyHistory.builder()
                 .siren(csvRecord.get(FIELD_SIREN))
                 .nic(csvRecord.get(FIELD_NIC))
                 .siret(csvRecord.get(FIELD_SIRET))

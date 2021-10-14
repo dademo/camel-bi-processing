@@ -1,15 +1,13 @@
-package fr.dademo.bi.companies.jobs.stg.naf.entities;
+package fr.dademo.bi.companies.jobs.stg.naf.datamodel;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
-import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@RegisterForReflection
-@NoArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
 public class NafDefinitionContainer {
 
     @JsonAlias("datasetid")

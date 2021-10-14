@@ -1,6 +1,6 @@
 package fr.dademo.bi.companies.jobs.stg.company;
 
-import fr.dademo.bi.companies.jobs.stg.company.entities.CompanyEntity;
+import fr.dademo.bi.companies.jobs.stg.company.datamodel.Company;
 import fr.dademo.bi.companies.tools.batch.job.BaseChunkJob;
 import lombok.Getter;
 import org.apache.commons.csv.CSVRecord;
@@ -17,7 +17,7 @@ import javax.inject.Named;
 
 @ApplicationScoped
 @Named(JobDefinition.COMPANY_JOB_NAME)
-public class JobDefinition extends BaseChunkJob<CSVRecord, CompanyEntity> {
+public class JobDefinition extends BaseChunkJob<CSVRecord, Company> {
 
     public static final String COMPANY_JOB_NAME = "stg_company";
     public static final String PERSISTENCE_UNIT_NAME = "stg";
@@ -54,13 +54,13 @@ public class JobDefinition extends BaseChunkJob<CSVRecord, CompanyEntity> {
 
     @Nonnull
     @Override
-    public RecordMapper<CSVRecord, CompanyEntity> getRecordProcessor() {
+    public RecordMapper<CSVRecord, Company> getRecordProcessor() {
         return companyMapper;
     }
 
     @Nonnull
     @Override
-    public RecordWriter<CompanyEntity> getRecordWriter() {
+    public RecordWriter<Company> getRecordWriter() {
         return companyWriter;
     }
 }

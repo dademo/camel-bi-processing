@@ -1,23 +1,15 @@
-package fr.dademo.bi.companies.jobs.stg.naf.entities;
+package fr.dademo.bi.companies.jobs.stg.naf.datamodel;
 
 
 import com.fasterxml.jackson.annotation.JsonAlias;
-import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
-@RegisterForReflection
-@Entity
-@Table(name = "naf_codes")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -25,20 +17,15 @@ public class NafDefinition {
 
     @NotNull
     @NotBlank
-    @Id
-    @Column(name = "naf_code", nullable = false, unique = true, length = 5)
     @JsonAlias("code_naf")
     private String nafCode;
 
-    @Column(name = "title", length = Integer.MAX_VALUE)
     @JsonAlias("intitule_naf")
     private String title;
 
-    @Column(name = "title_65", length = 65)
     @JsonAlias("intitule_naf_65")
     private String title65;
 
-    @Column(name = "title_40", length = 40)
     @JsonAlias("intitule_naf_40")
     private String title40;
 

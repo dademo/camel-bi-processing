@@ -1,6 +1,6 @@
 package fr.dademo.bi.companies.repositories;
 
-import fr.dademo.bi.companies.repositories.entities.HashDefinition;
+import fr.dademo.bi.companies.repositories.datamodel.HashDefinition;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

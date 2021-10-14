@@ -1,7 +1,7 @@
 package fr.dademo.bi.companies.repositories;
 
-import fr.dademo.bi.companies.repositories.entities.HashDefinition;
-import fr.dademo.bi.companies.repositories.entities.HttpHashDefinition;
+import fr.dademo.bi.companies.repositories.datamodel.HashDefinition;
+import fr.dademo.bi.companies.repositories.datamodel.HttpHashDefinition;
 import lombok.SneakyThrows;
 
 import javax.annotation.Nonnull;

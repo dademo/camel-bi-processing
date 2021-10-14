@@ -1,7 +1,6 @@
 DROP TABLE IF EXISTS COMPANY_HISTORY CASCADE;
 
 CREATE TABLE COMPANY_HISTORY (
-    ID                                          SERIAL PRIMARY KEY NOT NULL,
     SIREN                                       VARCHAR(9) NOT NULL,
     NIC                                         VARCHAR(5) NOT NULL,
     SIRET                                       VARCHAR(14) NOT NULL,
@@ -9,11 +8,11 @@ CREATE TABLE COMPANY_HISTORY (
     BEGIN_DATE                                  DATE,
     INSTITUTION_ADMINISTRATIVE_STATE            VARCHAR(1),
     INSTITUTION_ADMINISTRATIVE_STATE_CHANGE     BOOLEAN,
-    INSTITUTION_1_NAME                          TEXT,
-    INSTITUTION_2_NAME                          TEXT,
-    INSTITUTION_3_NAME                          TEXT,
+    INSTITUTION_1_NAME                          VARCHAR(50),
+    INSTITUTION_2_NAME                          VARCHAR(50),
+    INSTITUTION_3_NAME                          VARCHAR(50),
     INSTITUTION_NAME_CHANGE                     BOOLEAN,
-    INSTITUTION_USUAL_NAME                      TEXT,
+    INSTITUTION_USUAL_NAME                      VARCHAR(100),
     INSTITUTION_USUAL_NAME_CHANGE               BOOLEAN,
     INSTITUTION_PRIMARY_ACTIVITY                VARCHAR(6),
     INSTITUTION_PRIMARY_ACTIVITY_NOMENCLATURE   VARCHAR(8),

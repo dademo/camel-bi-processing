@@ -1,7 +1,6 @@
 DROP TABLE IF EXISTS COMPANY;
 
 CREATE TABLE COMPANY (
-    ID                                          SERIAL PRIMARY KEY NOT NULL,
     SIREN                                       VARCHAR(9) NOT NULL,
     NIC                                         VARCHAR(5) NOT NULL,
     SIRET                                       VARCHAR(14) NOT NULL,

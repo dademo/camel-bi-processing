@@ -1,6 +1,6 @@
 package fr.dademo.bi.companies.repositories;
 
-import fr.dademo.bi.companies.repositories.entities.HashDefinition;
+import fr.dademo.bi.companies.repositories.datamodel.HashDefinition;
 import fr.dademo.bi.companies.repositories.exceptions.FailedQueryException;
 import fr.dademo.bi.companies.repositories.exceptions.MissingResultBodyException;
 import fr.dademo.bi.companies.repositories.exceptions.UnexpectedRedirectResponseException;

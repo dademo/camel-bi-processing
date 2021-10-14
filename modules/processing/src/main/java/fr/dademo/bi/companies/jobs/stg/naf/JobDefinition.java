@@ -1,7 +1,7 @@
 package fr.dademo.bi.companies.jobs.stg.naf;
 
-import fr.dademo.bi.companies.jobs.stg.naf.entities.NafDefinition;
-import fr.dademo.bi.companies.jobs.stg.naf.entities.NafDefinitionContainer;
+import fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinition;
+import fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinitionContainer;
 import fr.dademo.bi.companies.tools.batch.job.BaseChunkJob;
 import lombok.Getter;
 import org.eclipse.microprofile.config.inject.ConfigProperty;

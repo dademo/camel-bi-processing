@@ -1,8 +1,7 @@
 package fr.dademo.bi.companies.jobs.stg.company;
 
-import fr.dademo.bi.companies.jobs.stg.company.entities.CompanyEntity;
+import fr.dademo.bi.companies.jobs.stg.company.datamodel.Company;
 import org.apache.commons.csv.CSVRecord;
-import org.jboss.logging.Logger;
 import org.jeasy.batch.core.mapper.RecordMapper;
 import org.jeasy.batch.core.record.GenericRecord;
 import org.jeasy.batch.core.record.Header;
@@ -11,20 +10,18 @@ import org.jeasy.batch.core.record.Record;
 import javax.enterprise.context.ApplicationScoped;
 import java.time.LocalDateTime;
 
-import static fr.dademo.bi.companies.jobs.stg.company.entities.CompanyEntity.*;
+import static fr.dademo.bi.companies.jobs.stg.company.datamodel.Company.*;
 import static fr.dademo.bi.companies.tools.batch.mapper.BatchMapperTools.*;
 
 @ApplicationScoped
-public class CompanyMapper implements RecordMapper<CSVRecord, CompanyEntity> {
-
-    private static final Logger LOGGER = Logger.getLogger(CompanyMapper.class);
+public class CompanyMapper implements RecordMapper<CSVRecord, Company> {
 
     @Override
-    public Record<CompanyEntity> processRecord(Record<CSVRecord> item) {
-        return toRecord(item.getHeader(), mappedToCompanyHistoryEntity(item.getPayload()));
+    public Record<Company> processRecord(Record<CSVRecord> item) {
+        return toRecord(item.getHeader(), mappedToCompanyHistory(item.getPayload()));
     }
 
-    private Record<CompanyEntity> toRecord(Header sourceHeader, CompanyEntity payload) {
+    private Record<Company> toRecord(Header sourceHeader, Company payload) {
         return new GenericRecord<>(
                 new Header(
                         sourceHeader.getNumber(),
@@ -34,9 +31,9 @@ public class CompanyMapper implements RecordMapper<CSVRecord, CompanyEntity> {
         );
     }
 
-    private CompanyEntity mappedToCompanyHistoryEntity(CSVRecord csvRecord) {
+    private Company mappedToCompanyHistory(CSVRecord csvRecord) {
 
-        return CompanyEntity.builder()
+        return Company.builder()
                 .siren(csvRecord.get(FIELD_SIREN))
                 .nic(csvRecord.get(FIELD_NIC))
                 .siret(csvRecord.get(FIELD_SIRET))
