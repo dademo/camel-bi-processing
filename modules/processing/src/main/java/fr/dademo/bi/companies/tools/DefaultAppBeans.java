@@ -61,7 +61,7 @@ public class DefaultAppBeans {
     @ApplicationScoped
     public OkHttpClient okHttpClient() {
 
-        var loggingInterceptor = new HttpLoggingInterceptor();
+        final var loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
 
         return new OkHttpClient.Builder()

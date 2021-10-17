@@ -53,7 +53,7 @@ public abstract class HttpDataQuerier {
             @Nullable Duration expiration,
             @Nonnull List<HashDefinition> hashDefinitionList) {
 
-        var byteArrayBuilder = new ByteArrayOutputStream();
+        final var byteArrayBuilder = new ByteArrayOutputStream();
 
         basicQuery(queryUrl,
                 expiration,

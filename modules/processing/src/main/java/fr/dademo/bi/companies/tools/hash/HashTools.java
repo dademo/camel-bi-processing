@@ -19,7 +19,7 @@ public final class HashTools {
     @SneakyThrows
     public static String computeHash(MessageDigest hashComputer, InputStream in) {
 
-        var buffer = new byte[1048576];
+        final var buffer = new byte[1048576];
         int read;
 
         try (in) {

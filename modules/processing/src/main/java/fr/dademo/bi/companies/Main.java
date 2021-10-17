@@ -26,7 +26,6 @@ public class Main {
     public static class App implements QuarkusApplication {
 
         private static final Logger LOGGER = Logger.getLogger(App.class);
-        private static final long CHECK_SLEEP_MILLIS = 50;
 
         // Tasks to run
         @Inject
@@ -56,7 +55,7 @@ public class Main {
         @SneakyThrows
         private Future<JobReport> runJob(BatchJobProvider jobProvider) {
 
-            var job = jobProvider.getJob();
+            final var job = jobProvider.getJob();
 
             LOGGER.info(String.format("Running job %s", job.getName()));
             return jobExecutor.submit(job);

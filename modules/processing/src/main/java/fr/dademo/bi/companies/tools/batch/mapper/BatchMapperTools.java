@@ -12,14 +12,14 @@ import java.util.Optional;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class BatchMapperTools {
 
-    public static Boolean fromBoolean(@Nullable String str) {
+    public static Boolean toBoolean(@Nullable String str) {
 
         return Optional.ofNullable(str)
                 .map(Boolean::parseBoolean)
                 .orElse(null);
     }
 
-    public static Integer fromInteger(@Nullable String str) {
+    public static Integer toInteger(@Nullable String str) {
 
         return Optional.ofNullable(str)
                 .map(Integer::parseInt)

@@ -1,7 +1,7 @@
 package fr.dademo.bi.companies.jobs.stg.company;
 
 import fr.dademo.bi.companies.repositories.HttpDataQuerier;
-import fr.dademo.bi.companies.repositories.datamodel.HashDefinition;
+import fr.dademo.bi.companies.services.DataGouvFrHashGetter;
 import lombok.SneakyThrows;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
@@ -23,20 +23,25 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import static fr.dademo.bi.companies.jobs.stg.company.datamodel.Company.HEADER;
+import static fr.dademo.bi.companies.jobs.stg.company.datamodel.Company.CSV_HEADER_COMPANY;
 
 @ApplicationScoped
 public class CompanyReader implements RecordReader<CSVRecord> {
 
     private static final Logger LOGGER = Logger.getLogger(CompanyReader.class);
+    private static final String DATASET_NAME = "base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret";
     private static final String DATASET_URL = "https://files.data.gouv.fr/insee-sirene/StockEtablissement_utf8.zip";
-    private static final String DATASET_SHA256 = "E9C1E3991154938979885E39EAD0A08BC1480345751A4C510160C81EAB6F327B";
 
     private final AtomicLong recordNumber = new AtomicLong(0L);
 
     @Inject
     HttpDataQuerier httpDataQuerier;
+
+    @Inject
+    DataGouvFrHashGetter dataGouvFrHashGetter;
 
     private ZipArchiveInputStream archiveInputStream;
     private Iterator<CSVRecord> iterator = Collections.emptyIterator();
@@ -46,11 +51,15 @@ public class CompanyReader implements RecordReader<CSVRecord> {
 
         LOGGER.info("Reading values");
         // Querying for values
-        var queryUrl = new URL(DATASET_URL);
+        final var queryUrl = new URL(DATASET_URL);
 
-        archiveInputStream = new ZipArchiveInputStream(httpDataQuerier.basicQuery(queryUrl, Collections.singletonList(
-                HashDefinition.of(DATASET_SHA256, "SHA-256")
-        )));
+        archiveInputStream = new ZipArchiveInputStream(httpDataQuerier.basicQuery(
+                queryUrl,
+                Stream.of(dataGouvFrHashGetter.hashDefinitionOfDataSetResourceByUrl(DATASET_NAME, DATASET_URL, false))
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .collect(Collectors.toList())
+        ));
     }
 
     @Override
@@ -80,7 +89,7 @@ public class CompanyReader implements RecordReader<CSVRecord> {
     }
 
     @SneakyThrows
-    private synchronized Optional<CSVRecord> nextItem() {
+    private synchronized Optional<CSVRecord> nextItem() {   // NOSONAR
 
         if (iterator.hasNext()) {
             return Optional.of(iterator.next());
@@ -112,7 +121,7 @@ public class CompanyReader implements RecordReader<CSVRecord> {
     private CSVFormat csvFormat() {
 
         return CSVFormat.DEFAULT.builder()
-                .setHeader(HEADER)
+                .setHeader(CSV_HEADER_COMPANY)
                 .setSkipHeaderRecord(true)
                 .setDelimiter(",")
                 .setRecordSeparator("\n")

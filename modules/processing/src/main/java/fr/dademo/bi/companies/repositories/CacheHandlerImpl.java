@@ -61,7 +61,7 @@ public class CacheHandlerImpl implements CacheHandler {
     @SneakyThrows
     public boolean hasCachedInputStream(@Nonnull String inputFileIdentifier) {
 
-        var cachedFileDescription = withLockedLockFile(
+        final var cachedFileDescription = withLockedLockFile(
                 () -> readLockFile()
                         .stream().filter(
                                 e -> inputFileIdentifier.equals(e.getInputFileIdentifier())
@@ -102,8 +102,8 @@ public class CacheHandlerImpl implements CacheHandler {
 
         LOGGER.debug(String.format("Storing input stream in cache for identifier '%s'", inputFileIdentifier));
         // Writing body to a temp file
-        var tempFilePath = Files.createTempFile(PREFIX, "");
-        var cachedFile = new FileOutputStream(tempFilePath.toFile());
+        final var tempFilePath = Files.createTempFile(PREFIX, "");
+        final var cachedFile = new FileOutputStream(tempFilePath.toFile());
         return new CachedInputStreamWrapper(
                 new TeeInputStream(inputStream, cachedFile),
                 () -> {
@@ -115,10 +115,19 @@ public class CacheHandlerImpl implements CacheHandler {
                         persistCache(tempFilePath, inputFileIdentifier, expiration);
                     } catch (IOException e) {
                         throw new UncheckedIOException(e);
+                    } finally {
+                        LOGGER.debug(String.format("Cleaning working dir for identifier '%s'", inputFileIdentifier));
+                        cleanTempFile(tempFilePath, inputFileIdentifier);
                     }
                 });
+    }
 
+    @SneakyThrows
+    private void cleanTempFile(Path tempFilePath, String inputFileIdentifier) {
 
+        LOGGER.debug(String.format("Removing file '%s' for identifier '%s'", tempFilePath, inputFileIdentifier));
+        final var deleted = Files.deleteIfExists(tempFilePath);
+        LOGGER.debug(String.format("File '%s' for identifier '%s' %s deleted", tempFilePath, inputFileIdentifier, deleted ? "" : "not"));
     }
 
     private List<CachedFileDescription> lockFileMapUsingDirectory() {
@@ -143,7 +152,7 @@ public class CacheHandlerImpl implements CacheHandler {
         LOGGER.debug(String.format("Removing cached file '%s'", cachedFileDescription.getFinalFileName()));
         withLockedLockFile(() -> {
 
-            var lockFileFinalContent = readLockFile().stream()
+            final var lockFileFinalContent = readLockFile().stream()
                     .filter(e -> e.getFinalFileName().equals(cachedFileDescription.getFinalFileName()))
                     .collect(Collectors.toList());
 
@@ -164,11 +173,11 @@ public class CacheHandlerImpl implements CacheHandler {
     @SneakyThrows
     private void validateFileHash(String inputFileIdentifier, Path filePath, HashDefinition hashDefinition) {
 
-        var computedDigest = computeHash(
+        final var computedDigest = computeHash(
                 getHashComputerForAlgorithm(hashDefinition.getHashAlgorithm()),
                 new FileInputStream(filePath.toFile())
         );
-        var expectedHash = hashDefinition.getHash();
+        final var expectedHash = hashDefinition.getHash();
 
         if (!computedDigest.equals(expectedHash)) {
             throw new HashMismatchException(inputFileIdentifier, expectedHash, computedDigest);
@@ -181,13 +190,13 @@ public class CacheHandlerImpl implements CacheHandler {
                                            Duration expiration) {
 
         LOGGER.debug(String.format("Final persisting cached identifier '%s'", inputFileIdentifier));
-        var finalFileName = DatatypeConverter
+        final var finalFileName = DatatypeConverter
                 .printHexBinary(HASH_COMPUTER.digest(inputFileIdentifier.getBytes()))
                 .toUpperCase();
 
         withLockedLockFile(
                 () -> {
-                    var lockFileContent = lockFileMapUsingDirectory();
+                    final var lockFileContent = lockFileMapUsingDirectory();
                     lockFileContent.add(CachedFileDescription.of(inputFileIdentifier, finalFileName, expiration));
 
                     try {
@@ -259,7 +268,7 @@ public class CacheHandlerImpl implements CacheHandler {
 
     private void ensureCacheDirectoryResourcesExists() {
 
-        var cacheDirectoryResourcesName = Path.of(cacheDirectoryRoot.toString(), RESOURCES_DIRECTORY_NAME);
+        final var cacheDirectoryResourcesName = Path.of(cacheDirectoryRoot.toString(), RESOURCES_DIRECTORY_NAME);
         if (!Files.exists(cacheDirectoryResourcesName)) {
             cacheDirectoryResourcesName.toFile().mkdirs();
         } else if (!Files.isDirectory(cacheDirectoryResourcesName)) {

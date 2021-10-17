@@ -1,4 +1,4 @@
-# ape-code-integrator Project
+# company-information-integrator Project
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 

@@ -77,12 +77,12 @@ public class CachedHttpDataQuerierImpl extends HttpDataQuerier {
     @SneakyThrows
     private InputStream getQuery(URL queryUrl) {
 
-        var request = new Request.Builder()
+        final var request = new Request.Builder()
                 .url(queryUrl)
                 .get()
                 .build();
 
-        var response = okHttpClient.newCall(request).execute();
+        final var response = okHttpClient.newCall(request).execute();
         if (!response.isSuccessful()) {
             throw new FailedQueryException(response);
         }

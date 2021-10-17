@@ -20,7 +20,7 @@ public class CachedFileDescription {
                                            @Nonnull String finalFileName,
                                            @Nullable Duration expiration) {
 
-        var cachedFileDescription = new CachedFileDescription();
+        final var cachedFileDescription = new CachedFileDescription();
 
         cachedFileDescription.setInputFileIdentifier(inputFileIdentifier);
         cachedFileDescription.setFinalFileName(finalFileName);
