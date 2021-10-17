@@ -5,8 +5,8 @@ plugins {
 }
 
 dependencies {
-    compileOnly 'org.projectlombok:lombok:1.18.20'
-    annotationProcessor 'org.projectlombok:lombok:1.18.20'
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
     implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
     implementation enforcedPlatform("${quarkusPlatformGroupId}:quarkus-camel-bom:${quarkusPlatformVersion}")
@@ -16,21 +16,20 @@ dependencies {
     implementation 'io.quarkus:quarkus-jdbc-postgresql'
     implementation 'io.quarkus:quarkus-flyway'
     implementation 'io.quarkus:quarkus-config-yaml'
-    //implementation 'io.quarkus:quarkus-hibernate-orm'
+    implementation 'io.quarkus:quarkus-hibernate-orm'
     implementation 'io.quarkus:quarkus-hibernate-validator'
     implementation 'io.quarkus:quarkus-container-image-docker'
-    implementation 'org.jeasy:easy-batch-core:7.0.2'
+    implementation "org.jeasy:easy-batch-core:${jeasyVersion}"
     //
-    //implementation 'io.quarkiverse.jooq:quarkus-jooq:0.2.2'
-    implementation 'org.jooq:jooq:3.15.3'
+    implementation "org.jooq:jooq:${jooqVersion}"
     // Other libraries
-    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.1'
-    implementation 'org.apache.commons:commons-lang3:3.12.0'
-    implementation 'org.apache.commons:commons-csv:1.9.0'
-    implementation 'org.apache.commons:commons-compress:1.21'
-    implementation 'commons-io:commons-io:2.11.0'
-    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+    implementation "com.squareup.okhttp3:okhttp:${okHttpVersion}"
+    implementation "com.squareup.okhttp3:logging-interceptor:${okHttpVersion}"
+    implementation "org.apache.commons:commons-lang3:${apacheCommonsLang3Version}"
+    implementation "org.apache.commons:commons-csv:${apacheCommonsCsvVersion}"
+    implementation "org.apache.commons:commons-compress:${apacheCommonsCompressVersion}"
+    implementation "commons-io:commons-io:${apacheCommonsIOVersion}"
+    implementation "com.google.code.findbugs:jsr305:${findBugsJsr305Version}"
 
     testImplementation 'io.quarkus:quarkus-junit5'
 }

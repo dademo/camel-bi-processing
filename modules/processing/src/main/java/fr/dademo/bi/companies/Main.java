@@ -1,5 +1,6 @@
 package fr.dademo.bi.companies;
 
+import fr.dademo.bi.companies.services.BatchExecutionServiceImpl;
 import fr.dademo.bi.companies.tools.batch.job.BatchJobProvider;
 import fr.dademo.bi.companies.tools.batch.job_configuration.OrderedJobsProvider;
 import io.quarkus.runtime.Quarkus;
@@ -33,6 +34,9 @@ public class Main {
 
         @Inject
         OrderedJobsProvider orderedJobsProvider;
+
+        @Inject
+        BatchExecutionServiceImpl batchExecutionService;
 
 
         @Override
@@ -113,7 +117,7 @@ public class Main {
         }
 
         private void persistJobResult(JobReport jobReport) {
-            // TODO
+            batchExecutionService.saveExecution(jobReport);
         }
     }
 }
