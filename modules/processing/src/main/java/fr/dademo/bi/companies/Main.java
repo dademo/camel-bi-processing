@@ -44,7 +44,7 @@ public class Main {
         public int run(String... args) {
 
             try {
-                orderedJobsProvider.getJobProviders().stream()
+                orderedJobsProvider.getJobProviders().parallelStream()
                         .map(this::runJob)
                         .map(this::waitForJobToComplete)
                         .forEach(this::handleJobResult);

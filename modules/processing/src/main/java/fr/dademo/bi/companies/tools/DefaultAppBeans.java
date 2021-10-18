@@ -17,12 +17,12 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 import java.time.Duration;
 
-import static fr.dademo.bi.companies.jobs.stg.naf.JobDefinition.PERSISTENCE_UNIT_NAME;
 
 public class DefaultAppBeans {
 
+    public static final String STG_PERSISTENCE_UNIT_NAME = "stg";
     public static final String STG_DSL_CONTEXT = "stgDslContext";
-    public static final String STG_DSL_CONTEXT_DIALECT_PROVIDER = STG_DSL_CONTEXT + "contextProvider";
+    public static final String STG_DSL_CONTEXT_DIALECT_PROVIDER = STG_DSL_CONTEXT + "ContextProvider";
 
     @ConfigProperty(name = "http.connectTimeoutSeconds", defaultValue = "5")
     Long connectTimeoutSeconds;
@@ -35,13 +35,13 @@ public class DefaultAppBeans {
 
     @ApplicationScoped
     @Named(STG_DSL_CONTEXT_DIALECT_PROVIDER)
-    public DatabaseSQLDialectProvider stgSqlDialectProvider(@DataSource(PERSISTENCE_UNIT_NAME) AgroalDataSource dataSource) {
+    public DatabaseSQLDialectProvider stgSqlDialectProvider(@DataSource(STG_PERSISTENCE_UNIT_NAME) AgroalDataSource dataSource) {
         return new DatabaseSQLDialectProvider(dataSource);
     }
 
     @ApplicationScoped
     @Named(STG_DSL_CONTEXT)
-    public DSLContext stgDslContext(@DataSource(PERSISTENCE_UNIT_NAME) AgroalDataSource dataSource,
+    public DSLContext stgDslContext(@DataSource(STG_PERSISTENCE_UNIT_NAME) AgroalDataSource dataSource,
                                     @Named(STG_DSL_CONTEXT_DIALECT_PROVIDER) DatabaseSQLDialectProvider sqlDialectProvider) {
 
         return DSL.using(

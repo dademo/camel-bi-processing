@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
@@ -39,6 +40,13 @@ public class DataGouvFrHashGetterImpl implements DataGouvFrHashGetter {
     private static final String HEADER_LOCATION = "Location";
     private static final int MAX_REDIRECT_COUNT = 5;
     private static final ObjectMapper MAPPER = new ObjectMapper();
+
+    private static final Map<String, String> WELL_KNOWN_ALGORITHMS = Map.ofEntries(
+            Map.entry("SHA1", "SHA-1"),
+            Map.entry("SHA256", "SHA-256"),
+            Map.entry("SHA384", "SHA-384"),
+            Map.entry("SHA512", "SHA-512")
+    );
 
     @Inject
     OkHttpClient okHttpClient;
@@ -142,8 +150,17 @@ public class DataGouvFrHashGetterImpl implements DataGouvFrHashGetter {
 
         return HashDefinition.of(
                 dataSetResourceChecksumDefinition.getValue(),
-                dataSetResourceChecksumDefinition.getType()
+                normalizedHashAlgorithmName(dataSetResourceChecksumDefinition.getType())
         );
+    }
+
+    private String normalizedHashAlgorithmName(String original) {
+
+        return WELL_KNOWN_ALGORITHMS.entrySet().stream()
+                .filter(def -> original.equalsIgnoreCase(def.getKey()))
+                .findFirst()
+                .map(Map.Entry::getValue)
+                .orElse(original);
     }
 
     @SneakyThrows

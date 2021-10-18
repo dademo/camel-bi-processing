@@ -47,7 +47,7 @@ public class NafReader implements RecordReader<NafDefinitionContainer> {
     public void open() throws Exception {
 
         LOGGER.info("Reading values");
-        // Querying for values
+
         final var queryUrl = new URL(DATASET_URL + "?" + DATASET_URL_QUERY_PARAMETERS);
 
         iterator = MAPPER.<List<NafDefinitionContainer>>readValue(

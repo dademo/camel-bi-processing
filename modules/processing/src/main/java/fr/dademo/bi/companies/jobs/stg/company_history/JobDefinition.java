@@ -20,11 +20,14 @@ import javax.inject.Named;
 public class JobDefinition extends BaseChunkJob<CSVRecord, CompanyHistory> {
 
     public static final String COMPANY_HISTORY_JOB_NAME = "stg_company_history";
-    public static final String PERSISTENCE_UNIT_NAME = "stg";
 
     @Getter
     @ConfigProperty(name = "jobs.company-history.enabled", defaultValue = "false")
     boolean enabled = false;
+
+    @Getter
+    @ConfigProperty(name = "jobs.company-history.batch-size", defaultValue = "100000")
+    int batchSize = 100000;
 
     @Inject
     CompanyHistoryReader companyHistoryReader;
@@ -39,11 +42,6 @@ public class JobDefinition extends BaseChunkJob<CSVRecord, CompanyHistory> {
     @Override
     public String getJobName() {
         return COMPANY_HISTORY_JOB_NAME;
-    }
-
-    @Override
-    public int getBatchSize() {
-        return 100000;
     }
 
     @Nonnull

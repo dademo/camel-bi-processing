@@ -30,7 +30,7 @@ public class CompanyInheritanceWriter implements RecordWriter<CompanyInheritance
     @Override
     public void writeRecords(Batch<CompanyInheritance> batch) {
 
-        LOGGER.info(String.format("Writing %d naf definition documents", batch.size()));
+        LOGGER.info(String.format("Writing %d company inheritance documents", batch.size()));
 
         final var batchInsertStatement = dslContext.batch(dslContext.insertInto(COMPANY_INHERITANCE,
                 COMPANY_INHERITANCE.FIELD_COMPANY_PREDECESSOR_SIREN,
@@ -48,7 +48,7 @@ public class CompanyInheritanceWriter implements RecordWriter<CompanyInheritance
 
         final var batchResult = batchInsertStatement.execute();
         if (batchResult.length > 0) {
-            final var totalUpdated = Arrays.stream(batchResult).sum();
+            final int totalUpdated = Arrays.stream(batchResult).sum();
             LOGGER.info(String.format("%d rows affected", totalUpdated));
         } else {
             LOGGER.error("An error occurred while running batch");

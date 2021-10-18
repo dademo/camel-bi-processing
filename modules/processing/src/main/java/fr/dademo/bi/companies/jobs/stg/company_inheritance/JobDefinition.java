@@ -20,11 +20,14 @@ import javax.inject.Named;
 public class JobDefinition extends BaseChunkJob<CSVRecord, CompanyInheritance> {
 
     public static final String COMPANY_INHERITANCE_JOB_NAME = "stg_companies_inheritance";
-    public static final String PERSISTENCE_UNIT_NAME = "stg";
 
     @Getter
     @ConfigProperty(name = "jobs.company-inheritance.enabled", defaultValue = "false")
     boolean enabled = false;
+
+    @Getter
+    @ConfigProperty(name = "jobs.company-inheritance.batch-size", defaultValue = "100000")
+    int batchSize = 100000;
 
     @Inject
     CompanyInheritanceReader companyInheritanceReader;
@@ -39,11 +42,6 @@ public class JobDefinition extends BaseChunkJob<CSVRecord, CompanyInheritance> {
     @Override
     public String getJobName() {
         return COMPANY_INHERITANCE_JOB_NAME;
-    }
-
-    @Override
-    public int getBatchSize() {
-        return 100000;
     }
 
     @Nonnull

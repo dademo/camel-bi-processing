@@ -26,7 +26,7 @@ public class CompanyTable extends CustomTable<CompanyRecord> {
     public final TableField<CompanyRecord, String> FIELD_COMPANY_STAFF_NUMBER_RANGE = createField(name("company_staff_number_range"), SQLDataType.VARCHAR(2), this);
     public final TableField<CompanyRecord, Integer> FIELD_COMPANY_STAFF_NUMBER_YEAR = createField(name("company_staff_number_year"), SQLDataType.INTEGER, this);
     public final TableField<CompanyRecord, String> FIELD_COMPANY_PRINCIPAL_REGISTERED_ACTIVITY = createField(name("company_principal_registered_activity"), SQLDataType.VARCHAR(6), this);
-    public final TableField<CompanyRecord, LocalDateTime> FIELD_COMPANY_LAST_PROCESSING = createField(name("company_last_processing"), SQLDataType.LOCALDATETIME, this);
+    public final TableField<CompanyRecord, LocalDateTime> FIELD_COMPANY_LAST_PROCESSING_DATE = createField(name("company_last_processing_date"), SQLDataType.LOCALDATETIME, this);
     public final TableField<CompanyRecord, Boolean> FIELD_COMPANY_IS_HEADQUARTERS = createField(name("company_is_headquarters"), SQLDataType.BOOLEAN, this);
     public final TableField<CompanyRecord, Integer> FIELD_COMPANY_PERIOD_COUNT = createField(name("company_period_count"), SQLDataType.INTEGER, this);
     public final TableField<CompanyRecord, String> FIELD_COMPANY_ADDRESS_COMPLEMENT = createField(name("company_address_complement"), SQLDataType.VARCHAR(38), this);

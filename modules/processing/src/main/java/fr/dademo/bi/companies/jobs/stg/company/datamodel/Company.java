@@ -22,7 +22,7 @@ public class Company {
     public static final String CSV_FIELD_COMPANY_COMPANY_STAFF_NUMBER_RANGE = "trancheEffectifsEtablissement";
     public static final String CSV_FIELD_COMPANY_COMPANY_STAFF_NUMBER_YEAR = "anneeEffectifsEtablissement";
     public static final String CSV_FIELD_COMPANY_COMPANY_PRINCIPAL_REGISTERED_ACTIVITY = "activitePrincipaleRegistreMetiersEtablissement";
-    public static final String CSV_FIELD_COMPANY_COMPANY_LAST_PROCESSING = "dateDernierTraitementEtablissement";
+    public static final String CSV_FIELD_COMPANY_COMPANY_LAST_PROCESSING_DATE = "dateDernierTraitementEtablissement";
     public static final String CSV_FIELD_COMPANY_COMPANY_IS_HEADQUARTERS = "etablissementSiege";
     public static final String CSV_FIELD_COMPANY_COMPANY_PERIOD_COUNT = "nombrePeriodesEtablissement";
     public static final String CSV_FIELD_COMPANY_COMPANY_ADDRESS_COMPLEMENT = "complementAdresseEtablissement";
@@ -71,7 +71,7 @@ public class Company {
             CSV_FIELD_COMPANY_COMPANY_STAFF_NUMBER_RANGE,
             CSV_FIELD_COMPANY_COMPANY_STAFF_NUMBER_YEAR,
             CSV_FIELD_COMPANY_COMPANY_PRINCIPAL_REGISTERED_ACTIVITY,
-            CSV_FIELD_COMPANY_COMPANY_LAST_PROCESSING,
+            CSV_FIELD_COMPANY_COMPANY_LAST_PROCESSING_DATE,
             CSV_FIELD_COMPANY_COMPANY_IS_HEADQUARTERS,
             CSV_FIELD_COMPANY_COMPANY_PERIOD_COUNT,
             CSV_FIELD_COMPANY_COMPANY_ADDRESS_COMPLEMENT,

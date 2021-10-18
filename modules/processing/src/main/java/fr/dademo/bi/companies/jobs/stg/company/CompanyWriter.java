@@ -32,7 +32,7 @@ public class CompanyWriter implements RecordWriter<Company> {
     @Override
     public void writeRecords(Batch<Company> batch) {
 
-        LOGGER.info(String.format("Writing %d naf definition documents", batch.size()));
+        LOGGER.info(String.format("Writing %d company documents", batch.size()));
 
         final var batchInsertStatement = dslContext.batch(dslContext.insertInto(COMPANY,
                 COMPANY.FIELD_SIREN,
@@ -43,7 +43,7 @@ public class CompanyWriter implements RecordWriter<Company> {
                 COMPANY.FIELD_COMPANY_STAFF_NUMBER_RANGE,
                 COMPANY.FIELD_COMPANY_STAFF_NUMBER_YEAR,
                 COMPANY.FIELD_COMPANY_PRINCIPAL_REGISTERED_ACTIVITY,
-                COMPANY.FIELD_COMPANY_LAST_PROCESSING,
+                COMPANY.FIELD_COMPANY_LAST_PROCESSING_DATE,
                 COMPANY.FIELD_COMPANY_IS_HEADQUARTERS,
                 COMPANY.FIELD_COMPANY_PERIOD_COUNT,
                 COMPANY.FIELD_COMPANY_ADDRESS_COMPLEMENT,
@@ -95,7 +95,7 @@ public class CompanyWriter implements RecordWriter<Company> {
 
         final var batchResult = batchInsertStatement.execute();
         if (batchResult.length > 0) {
-            final var totalUpdated = Arrays.stream(batchResult).sum();
+            final int totalUpdated = Arrays.stream(batchResult).sum();
             LOGGER.info(String.format("%d rows affected", totalUpdated));
         } else {
             LOGGER.error("An error occurred while running batch");

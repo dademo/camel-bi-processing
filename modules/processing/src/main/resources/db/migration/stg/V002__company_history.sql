@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS COMPANY_HISTORY CASCADE;
 
-CREATE TABLE COMPANY_HISTORY (
+CREATE UNLOGGED TABLE COMPANY_HISTORY (
     SIREN                                       VARCHAR(9) NOT NULL,
     NIC                                         VARCHAR(5) NOT NULL,
     SIRET                                       VARCHAR(14) NOT NULL,

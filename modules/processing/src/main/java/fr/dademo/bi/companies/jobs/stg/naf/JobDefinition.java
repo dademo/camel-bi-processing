@@ -20,11 +20,14 @@ import javax.inject.Named;
 public class JobDefinition extends BaseChunkJob<NafDefinitionContainer, NafDefinition> {
 
     public static final String NAF_JOB_NAME = "stg_naf";
-    public static final String PERSISTENCE_UNIT_NAME = "stg";
 
     @Getter
     @ConfigProperty(name = "jobs.naf.enabled", defaultValue = "false")
     boolean enabled = false;
+
+    @Getter
+    @ConfigProperty(name = "jobs.naf.batch-size", defaultValue = "1000")
+    int batchSize = 1000;
 
     @Inject
     NafReader nafReader;
@@ -39,11 +42,6 @@ public class JobDefinition extends BaseChunkJob<NafDefinitionContainer, NafDefin
     @Override
     public String getJobName() {
         return NAF_JOB_NAME;
-    }
-
-    @Override
-    public int getBatchSize() {
-        return 1000;
     }
 
     @Nonnull

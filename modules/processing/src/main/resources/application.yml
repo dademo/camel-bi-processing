@@ -108,7 +108,7 @@ quarkus:
 jobs:
   naf:
     enabled: true
-    batch-size: 100000
+    batch-size: 1000
   company:
     enabled: false
     batch-size: 100000
@@ -117,4 +117,10 @@ jobs:
     batch-size: 100000
   company-inheritance:
     enabled: false
+    batch-size: 100000
+  company-legal:
+    enabled: true
+    batch-size: 100000
+  company-legal-history:
+    enabled: true
     batch-size: 100000

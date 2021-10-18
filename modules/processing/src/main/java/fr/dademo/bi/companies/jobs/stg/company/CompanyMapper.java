@@ -42,7 +42,7 @@ public class CompanyMapper implements RecordMapper<CSVRecord, Company> {
                 .companyStaffNumberRange(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_STAFF_NUMBER_RANGE))
                 .companyStaffNumberYear(toInteger(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_STAFF_NUMBER_YEAR)))
                 .companyPrincipalRegisteredActivity(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_PRINCIPAL_REGISTERED_ACTIVITY))
-                .companyLastProcessingTimestamp(toLocalDateTime(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_LAST_PROCESSING)))
+                .companyLastProcessingTimestamp(toLocalDateTime(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_LAST_PROCESSING_DATE)))
                 .companyIsHeadquarters(toBoolean(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_IS_HEADQUARTERS)))
                 .companyPeriodCount(toInteger(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_PERIOD_COUNT)))
                 .companyAddressComplement(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_ADDRESS_COMPLEMENT))

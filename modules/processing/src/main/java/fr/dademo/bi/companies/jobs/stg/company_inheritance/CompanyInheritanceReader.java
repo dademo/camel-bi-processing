@@ -50,7 +50,7 @@ public class CompanyInheritanceReader implements RecordReader<CSVRecord> {
     public void open() throws Exception {
 
         LOGGER.info("Reading values");
-        // Querying for values
+
         final var queryUrl = new URL(DATASET_URL);
 
         archiveInputStream = new ZipArchiveInputStream(httpDataQuerier.basicQuery(

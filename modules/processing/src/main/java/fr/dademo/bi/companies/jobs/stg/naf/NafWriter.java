@@ -57,7 +57,7 @@ public class NafWriter implements RecordWriter<NafDefinition> {
 
         final var batchResult = batchInsertStatement.execute();
         if (batchResult.length > 0) {
-            final var totalUpdated = Arrays.stream(batchResult).sum();
+            final int totalUpdated = Arrays.stream(batchResult).sum();
             LOGGER.info(String.format("%d rows affected", totalUpdated));
         } else {
             LOGGER.error("An error occurred while running batch");
