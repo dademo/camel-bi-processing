@@ -89,6 +89,11 @@ quarkus:
     #  clean-disabled: false
     #  migrate-at-start: true
     #  baseline-on-migrate: true
+  mongodb:
+    enabled: false
+    stg:
+      connection-string: mongodb://localhost:27017/stg
+
   log:
     category:
       'fr.dademo.bi':
@@ -105,22 +110,53 @@ quarkus:
       'org.hibernate.SQL':
         level: INFO
 
+amqp-host: localhost
+amqp-port: 5672
+amqp-username: my-username
+amqp-password: my-password
+kafka:
+  bootstrap:
+    servers: kafka:9092
+
+mp:
+  messaging:
+    outgoing:
+      naf:
+        connector: smallrye-amqp
+        topic: naf
+        durable: true
+        # connector: smallrye-kafka
+
 jobs:
   naf:
     enabled: true
     batch-size: 1000
+    writer-type: JDBC
   company:
     enabled: false
     batch-size: 100000
+    writer-type: NO_ACTION
   company-history:
     enabled: false
     batch-size: 100000
+    writer-type: NO_ACTION
   company-inheritance:
     enabled: false
     batch-size: 100000
+    writer-type: NO_ACTION
   company-legal:
-    enabled: true
+    enabled: false
     batch-size: 100000
+    writer-type: NO_ACTION
   company-legal-history:
+    enabled: false
+    batch-size: 100000
+    writer-type: NO_ACTION
+  association:
     enabled: true
     batch-size: 100000
+    writer-type: NO_ACTION
+  association-waldec:
+    enabled: true
+    batch-size: 100000
+    writer-type: NO_ACTION

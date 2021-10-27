@@ -1,5 +1,7 @@
 package fr.dademo.bi.companies.tools;
 
+import fr.dademo.bi.companies.tools.batch.writer.DefaultRecordWriterProvider;
+import fr.dademo.bi.companies.tools.batch.writer.RecordWriterProvider;
 import io.agroal.api.AgroalDataSource;
 import io.quarkus.agroal.DataSource;
 import io.quarkus.arc.DefaultBean;
@@ -55,6 +57,12 @@ public class DefaultAppBeans {
                         .withThrowExceptions(ThrowExceptions.THROW_ALL)
                         .withFetchWarnings(true)
         );
+    }
+
+    @DefaultBean
+    @ApplicationScoped
+    public RecordWriterProvider<Object> defaultRecordWriterProvider() {
+        return DefaultRecordWriterProvider.defaultInstance();
     }
 
     @DefaultBean

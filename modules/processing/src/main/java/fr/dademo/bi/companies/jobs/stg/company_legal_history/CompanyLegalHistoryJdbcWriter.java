@@ -2,10 +2,11 @@ package fr.dademo.bi.companies.jobs.stg.company_legal_history;
 
 import fr.dademo.bi.companies.jobs.stg.company_legal_history.datamodel.CompanyLegalHistory;
 import fr.dademo.bi.companies.tools.batch.writer.BatchWriterTools;
+import fr.dademo.bi.companies.tools.batch.writer.JdbcRecordWriter;
+import lombok.Getter;
 import org.jboss.logging.Logger;
 import org.jeasy.batch.core.record.Batch;
 import org.jeasy.batch.core.record.Record;
-import org.jeasy.batch.core.writer.RecordWriter;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 
@@ -19,12 +20,13 @@ import static fr.dademo.bi.companies.jobs.stg.company_legal_history.datamodel.Co
 import static fr.dademo.bi.companies.tools.DefaultAppBeans.STG_DSL_CONTEXT;
 
 @ApplicationScoped
-public class CompanyLegalHistoryWriter implements RecordWriter<CompanyLegalHistory> {
+public class CompanyLegalHistoryJdbcWriter implements JdbcRecordWriter<CompanyLegalHistory> {
 
-    private static final Logger LOGGER = Logger.getLogger(CompanyLegalHistoryWriter.class);
+    private static final Logger LOGGER = Logger.getLogger(CompanyLegalHistoryJdbcWriter.class);
 
     @Inject
     @Named(STG_DSL_CONTEXT)
+    @Getter
     DSLContext dslContext;
 
     @Override

@@ -48,7 +48,8 @@ CREATE UNLOGGED TABLE COMPANY (
     COMPANY_USUAL_NAME                          VARCHAR(100),
     COMPANY_ACTIVITY                            VARCHAR(6),
     COMPANY_PRINCIPAL_ACTIVITY_NAME             VARCHAR(8),
-    COMPANY_IS_EMPLOYER                         VARCHAR(1)
+    COMPANY_IS_EMPLOYER                         VARCHAR(1),
+    PRIMARY KEY (SIREN, NIC, SIRET)
 );
 
 CREATE INDEX ON COMPANY(SIREN);

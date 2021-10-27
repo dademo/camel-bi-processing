@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DataSetResourceChecksumDefinition {
+public class GouvFrDataSetResourceChecksumDefinition {
 
     @JsonAlias("type")
     private String type;

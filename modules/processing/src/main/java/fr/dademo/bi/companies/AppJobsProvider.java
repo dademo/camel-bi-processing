@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static fr.dademo.bi.companies.jobs.stg.association.JobDefinition.ASSOCIATION_JOB_NAME;
+import static fr.dademo.bi.companies.jobs.stg.association_waldec.JobDefinition.ASSOCIATION_WALDEC_JOB_NAME;
 import static fr.dademo.bi.companies.jobs.stg.company.JobDefinition.COMPANY_JOB_NAME;
 import static fr.dademo.bi.companies.jobs.stg.company_history.JobDefinition.COMPANY_HISTORY_JOB_NAME;
 import static fr.dademo.bi.companies.jobs.stg.company_inheritance.JobDefinition.COMPANY_INHERITANCE_JOB_NAME;
@@ -45,6 +47,14 @@ public class AppJobsProvider implements OrderedJobsProvider {
     @Named(COMPANY_LEGAL_HISTORY_JOB_NAME)
     BatchJobProvider companyLegalHistoryJobSteps;
 
+    @Inject
+    @Named(ASSOCIATION_JOB_NAME)
+    BatchJobProvider associationJobSteps;
+
+    @Inject
+    @Named(ASSOCIATION_WALDEC_JOB_NAME)
+    BatchJobProvider associationWaldecJobSteps;
+
 
     @Nonnull
     @Override
@@ -55,7 +65,9 @@ public class AppJobsProvider implements OrderedJobsProvider {
                         companyHistoryJobSteps,
                         companyInheritanceJobSteps,
                         companyLegalJobSteps,
-                        companyLegalHistoryJobSteps
+                        companyLegalHistoryJobSteps,
+                        associationJobSteps,
+                        associationWaldecJobSteps
                 )
                 .filter(BatchJobProvider::isEnabled)
                 .collect(Collectors.toUnmodifiableList());

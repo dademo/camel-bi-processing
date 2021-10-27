@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS COMPANY_LEGAL_UNIT_HISTORY;
 
 CREATE UNLOGGED TABLE COMPANY_LEGAL_UNIT_HISTORY (
-    SIREN                                                 VARCHAR(9),
+    SIREN                                                 VARCHAR(9) NOT NULL UNIQUE PRIMARY KEY,
     END_DATE                                              DATE,
     BEGIN_DATE                                            DATE,
     LEGAL_UNIT_ADMINISTRATIVE_STATE                       VARCHAR(1),

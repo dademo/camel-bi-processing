@@ -1,11 +1,14 @@
 package fr.dademo.bi.companies.services;
 
 import fr.dademo.bi.companies.repositories.datamodel.HashDefinition;
+import fr.dademo.bi.companies.services.datamodel.GouvFrDataSetDefinition;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
 
-public interface DataGouvFrHashGetter {
+public interface DataGouvFrDataSetTools {
+
+    Optional<GouvFrDataSetDefinition> getDataSetDefinition(@Nonnull String dataSetName);
 
     Optional<HashDefinition> hashDefinitionOfDataSetResourceByTitle(@Nonnull String dataSetName,
                                                                     @Nonnull String resourceTitle);

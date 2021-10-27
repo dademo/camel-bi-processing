@@ -18,6 +18,9 @@ dependencies {
     implementation 'io.quarkus:quarkus-config-yaml'
     implementation 'io.quarkus:quarkus-hibernate-orm'
     implementation 'io.quarkus:quarkus-hibernate-validator'
+    implementation 'io.quarkus:quarkus-mongodb-client'
+    implementation 'io.quarkus:quarkus-smallrye-reactive-messaging-amqp'
+    implementation 'io.quarkus:quarkus-smallrye-reactive-messaging-kafka'
     implementation 'io.quarkus:quarkus-container-image-docker'
     implementation "org.jeasy:easy-batch-core:${jeasyVersion}"
     //

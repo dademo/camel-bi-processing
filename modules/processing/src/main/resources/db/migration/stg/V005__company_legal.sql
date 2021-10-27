@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS COMPANY_LEGAL_UNIT;
 
 CREATE UNLOGGED TABLE COMPANY_LEGAL_UNIT (
-    SIREN                            VARCHAR(9) NOT NULL,
+    SIREN                            VARCHAR(9) NOT NULL UNIQUE PRIMARY KEY,
     DIFFUSION_STATUS                 VARCHAR(1),
     IS_PURGED                        BOOLEAN DEFAULT FALSE,
     CREATION_DATE                    DATE,

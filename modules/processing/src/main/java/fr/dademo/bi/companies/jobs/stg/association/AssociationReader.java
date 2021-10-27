@@ -1,4 +1,4 @@
-package fr.dademo.bi.companies.jobs.stg.company_history;
+package fr.dademo.bi.companies.jobs.stg.association;
 
 import fr.dademo.bi.companies.repositories.HttpDataQuerier;
 import fr.dademo.bi.companies.services.DataGouvFrDataSetTools;
@@ -26,14 +26,14 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static fr.dademo.bi.companies.jobs.stg.company_history.datamodel.CompanyHistory.CSV_HEADER_COMPANY_HISTORY;
+import static fr.dademo.bi.companies.jobs.stg.association.datamodel.Association.CSV_HEADER_ASSOCIATION;
 
 @ApplicationScoped
-public class CompanyHistoryReader implements RecordReader<CSVRecord> {
+public class AssociationReader implements RecordReader<CSVRecord> {
 
-    private static final Logger LOGGER = Logger.getLogger(CompanyHistoryReader.class);
-    private static final String DATASET_NAME = "base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret";
-    private static final String DATASET_URL = "https://files.data.gouv.fr/insee-sirene/StockEtablissementHistorique_utf8.zip";
+    private static final Logger LOGGER = Logger.getLogger(AssociationReader.class);
+    private static final String DATASET_NAME = "repertoire-national-des-associations";
+    private static final String DATASET_URL = "https://media.interieur.gouv.fr/rna/rna_import_20211001.zip";
 
     private final AtomicLong recordNumber = new AtomicLong(0L);
 
@@ -121,9 +121,9 @@ public class CompanyHistoryReader implements RecordReader<CSVRecord> {
     private CSVFormat csvFormat() {
 
         return CSVFormat.DEFAULT.builder()
-                .setHeader(CSV_HEADER_COMPANY_HISTORY)
+                .setHeader(CSV_HEADER_ASSOCIATION)
                 .setSkipHeaderRecord(true)
-                .setDelimiter(",")
+                .setDelimiter(";")
                 .setRecordSeparator("\n")
                 .setNullString("")
                 .build();

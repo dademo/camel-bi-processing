@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DataSetDefinition {
+public class GouvFrDataSetDefinition {
 
     @Nullable
     @JsonAlias("description")
@@ -28,5 +28,5 @@ public class DataSetDefinition {
     private String page;
 
     @JsonAlias("resources")
-    private List<DataSetResourceDefinition> resources;
+    private List<GouvFrDataSetResourceDefinition> resources;
 }

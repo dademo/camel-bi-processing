@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DataSetResourceDefinition {
+public class GouvFrDataSetResourceDefinition {
 
     @Nullable
     @JsonAlias("title")
@@ -44,7 +44,7 @@ public class DataSetResourceDefinition {
 
     @Nullable
     @JsonAlias("checksum")
-    private DataSetResourceChecksumDefinition checksum;
+    private GouvFrDataSetResourceChecksumDefinition checksum;
 
     @JsonAlias("created_at")
     private String createdAt;

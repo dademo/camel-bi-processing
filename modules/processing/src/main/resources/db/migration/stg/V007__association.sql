@@ -1,0 +1,80 @@
+DROP TABLE IF EXISTS ASSOCIATION;
+DROP TABLE IF EXISTS ASSOCIATION_WALDEC;
+
+CREATE UNLOGGED TABLE ASSOCIATION (
+    ID                      VARCHAR(14) NOT NULL UNIQUE PRIMARY KEY,
+    ID_EX                   VARCHAR(10),
+    SIRET                   VARCHAR(14),
+    GESTION                 VARCHAR(4),
+    CREATION_DATE           DATE,
+    PUBLICATION_DATE        DATE,
+    NATURE                  VARCHAR(1),
+    GROUPEMENT              VARCHAR(1),
+    TITLE                   VARCHAR(250),
+    OBJECT                  TEXT,
+    SOCIAL_OBJECT_1         VARCHAR(6),
+    SOCIAL_OBJECT_2         VARCHAR(6),
+    ADDRESS_1               VARCHAR(60),
+    ADDRESS_2               VARCHAR(60),
+    ADDRESS_3               VARCHAR(60),
+    ADDRESS_POSTAL_CODE     VARCHAR(5),
+    ADDRESS_CITY_LIBELLE    VARCHAR(45),
+    ADDRESS_INSEE_CODE      VARCHAR(5),
+    LEADER_CIVILITY         VARCHAR(2),
+    PHONE                   VARCHAR(10),
+    WEBSITE                 VARCHAR(64),
+    EMAIL                   VARCHAR(64),
+    OBSERVATION             VARCHAR(128),
+    POSITION                VARCHAR(1),
+    RUP_CODE                VARCHAR(11),
+    LAST_UPDATED            DATE
+);
+
+CREATE INDEX ON ASSOCIATION(ID);
+
+
+CREATE UNLOGGED TABLE ASSOCIATION_WALDEC (
+    ID                              VARCHAR(14) NOT NULL UNIQUE PRIMARY KEY,
+    ID_EX                           VARCHAR(10),
+    SIRET                           VARCHAR(14),
+    RUP_CODE                        VARCHAR(11),
+    GESTION                         VARCHAR(4),
+    CREATION_DATE                   DATE,
+    DECLARATION_DATE                DATE,
+    PUBLICATION_DATE                DATE,
+    DISSOLUTION_DATE                DATE,
+    NATURE                          VARCHAR(1),
+    GROUPEMENT                      VARCHAR(1),
+    TITLE                           VARCHAR(250),
+    TITLE_SHORT                     VARCHAR(38),
+    OBJECT                          TEXT,
+    SOCIAL_OBJECT_1                 VARCHAR(6),
+    SOCIAL_OBJECT_2                 VARCHAR(6),
+    ADDRESS_COMPLEMENT              VARCHAR(76),
+    ADDRESS_STREET_NUMBER           VARCHAR(5),
+    ADDRESS_REPETITION              VARCHAR(1),
+    ADDRESS_STREET_TYPE             VARCHAR(5),
+    ADDRESS_STREET_LIBELLE          VARCHAR(42),
+    ADDRESS_DISTRIBUTION            VARCHAR(38),
+    ADDRESS_POSTAL_CODE             VARCHAR(5),
+    ADDRESS_INSEE_CODE              VARCHAR(5),
+    ADDRESS_CITY_LIBELLE            VARCHAR(45),
+    GESTION_DECLARANT_SURNAME       VARCHAR(38),
+    GESTION_ADDRESS_COMPLEMENT_ID   VARCHAR(38),
+    GESTION_ADDRESS_COMPLEMENT_GEO  VARCHAR(38),
+    GESTION_ADDRESS_STREET_LIBELLE  VARCHAR(42),
+    GESTION_ADDRESS_DISTRIBUTION    VARCHAR(38),
+    GESTION_ADDRESS_POSTAL_CODE     VARCHAR(5),
+    GESTION_FORWARD                 VARCHAR(32),
+    GESTION_COUNTRY                 VARCHAR(38),
+    LEADER_CIVILITY                 VARCHAR(2),
+    PHONE                           VARCHAR(10),
+    WEBSITE                         VARCHAR(64),
+    EMAIL                           VARCHAR(64),
+    PUBLIC_WEBSITE                  VARCHAR(1),
+    OBSERVATION                     VARCHAR(255),
+    POSITION                        VARCHAR(1),
+    LAST_UPDATED                    DATE
+);
+
+CREATE INDEX ON ASSOCIATION_WALDEC(ID);

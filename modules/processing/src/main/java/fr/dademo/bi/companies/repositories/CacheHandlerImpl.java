@@ -176,8 +176,8 @@ public class CacheHandlerImpl implements CacheHandler {
         final var computedDigest = computeHash(
                 getHashComputerForAlgorithm(hashDefinition.getHashAlgorithm()),
                 new FileInputStream(filePath.toFile())
-        );
-        final var expectedHash = hashDefinition.getHash();
+        ).toUpperCase();
+        final var expectedHash = hashDefinition.getHash().toUpperCase();
 
         if (!computedDigest.equals(expectedHash)) {
             throw new HashMismatchException(inputFileIdentifier, expectedHash, computedDigest);

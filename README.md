@@ -1,4 +1,4 @@
-# company-information-integrator Project
+# associationWaldec-information-integrator Project
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 

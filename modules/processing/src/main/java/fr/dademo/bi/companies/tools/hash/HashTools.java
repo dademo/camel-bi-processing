@@ -28,8 +28,6 @@ public final class HashTools {
             }
         }
 
-        return DatatypeConverter
-                .printHexBinary(hashComputer.digest())
-                .toUpperCase();
+        return DatatypeConverter.printHexBinary(hashComputer.digest());
     }
 }

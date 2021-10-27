@@ -2,12 +2,13 @@ package fr.dademo.bi.companies.jobs.stg.company_legal_history;
 
 import fr.dademo.bi.companies.jobs.stg.company_legal_history.datamodel.CompanyLegalHistory;
 import fr.dademo.bi.companies.tools.batch.job.BaseChunkJob;
+import fr.dademo.bi.companies.tools.batch.writer.DefaultRecordWriterProvider;
+import fr.dademo.bi.companies.tools.batch.writer.RecordWriterProvider;
 import lombok.Getter;
 import org.apache.commons.csv.CSVRecord;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jeasy.batch.core.mapper.RecordMapper;
 import org.jeasy.batch.core.reader.RecordReader;
-import org.jeasy.batch.core.writer.RecordWriter;
 
 import javax.annotation.Nonnull;
 import javax.enterprise.context.ApplicationScoped;
@@ -29,6 +30,10 @@ public class JobDefinition extends BaseChunkJob<CSVRecord, CompanyLegalHistory> 
     @ConfigProperty(name = "jobs.company-legal-history.batch-size", defaultValue = "100000")
     int batchSize = 100000;
 
+    @Getter
+    @ConfigProperty(name = "jobs.company-legal-history.writer-type", defaultValue = "NO_ACTION")
+    String recordWriterTypeStr = "NO_ACTION";
+
     @Inject
     CompanyLegalHistoryReader companyLegalHistoryReader;
 
@@ -36,7 +41,7 @@ public class JobDefinition extends BaseChunkJob<CSVRecord, CompanyLegalHistory> 
     CompanyLegalHistoryMapper companyLegalHistoryMapper;
 
     @Inject
-    CompanyLegalHistoryWriter companyLegalHistoryWriter;
+    CompanyLegalHistoryJdbcWriter companyLegalHistoryJdbcWriter;
 
     @Nonnull
     @Override
@@ -58,7 +63,10 @@ public class JobDefinition extends BaseChunkJob<CSVRecord, CompanyLegalHistory> 
 
     @Nonnull
     @Override
-    public RecordWriter<CompanyLegalHistory> getRecordWriter() {
-        return companyLegalHistoryWriter;
+    protected RecordWriterProvider<CompanyLegalHistory> getRecordWriterProvider() {
+
+        return DefaultRecordWriterProvider.<CompanyLegalHistory>builder()
+                .jdbcRecordWriter(companyLegalHistoryJdbcWriter)
+                .build();
     }
 }

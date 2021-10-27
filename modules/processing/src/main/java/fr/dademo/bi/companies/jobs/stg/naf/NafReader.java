@@ -3,7 +3,7 @@ package fr.dademo.bi.companies.jobs.stg.naf;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinitionContainer;
 import fr.dademo.bi.companies.repositories.HttpDataQuerier;
-import fr.dademo.bi.companies.services.DataGouvFrHashGetter;
+import fr.dademo.bi.companies.services.DataGouvFrDataSetTools;
 import org.jboss.logging.Logger;
 import org.jeasy.batch.core.reader.RecordReader;
 import org.jeasy.batch.core.record.GenericRecord;
@@ -38,7 +38,7 @@ public class NafReader implements RecordReader<NafDefinitionContainer> {
     HttpDataQuerier httpDataQuerier;
 
     @Inject
-    DataGouvFrHashGetter dataGouvFrHashGetter;
+    DataGouvFrDataSetTools dataGouvFrDataSetTools;
 
     private Iterator<NafDefinitionContainer> iterator;
 
@@ -53,7 +53,7 @@ public class NafReader implements RecordReader<NafDefinitionContainer> {
         iterator = MAPPER.<List<NafDefinitionContainer>>readValue(
                 httpDataQuerier.basicQuery(
                         queryUrl,
-                        Stream.of(dataGouvFrHashGetter.hashDefinitionOfDataSetResourceByUrl(DATASET_NAME, DATASET_URL, false))
+                        Stream.of(dataGouvFrDataSetTools.hashDefinitionOfDataSetResourceByUrl(DATASET_NAME, DATASET_URL, false))
                                 .filter(Optional::isPresent)
                                 .map(Optional::get)
                                 .collect(Collectors.toList())

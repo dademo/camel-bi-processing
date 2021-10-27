@@ -1,7 +1,7 @@
 package fr.dademo.bi.companies.jobs.stg.company_legal;
 
 import fr.dademo.bi.companies.repositories.HttpDataQuerier;
-import fr.dademo.bi.companies.services.DataGouvFrHashGetter;
+import fr.dademo.bi.companies.services.DataGouvFrDataSetTools;
 import lombok.SneakyThrows;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
@@ -41,7 +41,7 @@ public class CompanyLegalReader implements RecordReader<CSVRecord> {
     HttpDataQuerier httpDataQuerier;
 
     @Inject
-    DataGouvFrHashGetter dataGouvFrHashGetter;
+    DataGouvFrDataSetTools dataGouvFrDataSetTools;
 
     private ZipArchiveInputStream archiveInputStream;
     private Iterator<CSVRecord> iterator = Collections.emptyIterator();
@@ -55,7 +55,7 @@ public class CompanyLegalReader implements RecordReader<CSVRecord> {
 
         archiveInputStream = new ZipArchiveInputStream(httpDataQuerier.basicQuery(
                 queryUrl,
-                Stream.of(dataGouvFrHashGetter.hashDefinitionOfDataSetResourceByUrl(DATASET_NAME, DATASET_URL, false))
+                Stream.of(dataGouvFrDataSetTools.hashDefinitionOfDataSetResourceByUrl(DATASET_NAME, DATASET_URL, false))
                         .filter(Optional::isPresent)
                         .map(Optional::get)
                         .collect(Collectors.toList())

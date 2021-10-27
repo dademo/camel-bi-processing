@@ -2,10 +2,11 @@ package fr.dademo.bi.companies.jobs.stg.company_inheritance;
 
 import fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel.CompanyInheritance;
 import fr.dademo.bi.companies.tools.batch.writer.BatchWriterTools;
+import fr.dademo.bi.companies.tools.batch.writer.JdbcRecordWriter;
+import lombok.Getter;
 import org.jboss.logging.Logger;
 import org.jeasy.batch.core.record.Batch;
 import org.jeasy.batch.core.record.Record;
-import org.jeasy.batch.core.writer.RecordWriter;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 
@@ -19,12 +20,13 @@ import static fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel.Comp
 import static fr.dademo.bi.companies.tools.DefaultAppBeans.STG_DSL_CONTEXT;
 
 @ApplicationScoped
-public class CompanyInheritanceWriter implements RecordWriter<CompanyInheritance> {
+public class CompanyInheritanceJdbcWriter implements JdbcRecordWriter<CompanyInheritance> {
 
-    private static final Logger LOGGER = Logger.getLogger(CompanyInheritanceWriter.class);
+    private static final Logger LOGGER = Logger.getLogger(CompanyInheritanceJdbcWriter.class);
 
     @Inject
     @Named(STG_DSL_CONTEXT)
+    @Getter
     DSLContext dslContext;
 
     @Override

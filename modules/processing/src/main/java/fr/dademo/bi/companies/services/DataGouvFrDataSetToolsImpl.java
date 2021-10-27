@@ -2,9 +2,9 @@ package fr.dademo.bi.companies.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.dademo.bi.companies.repositories.datamodel.HashDefinition;
-import fr.dademo.bi.companies.services.datamodel.DataSetDefinition;
-import fr.dademo.bi.companies.services.datamodel.DataSetResourceChecksumDefinition;
-import fr.dademo.bi.companies.services.datamodel.DataSetResourceDefinition;
+import fr.dademo.bi.companies.services.datamodel.GouvFrDataSetDefinition;
+import fr.dademo.bi.companies.services.datamodel.GouvFrDataSetResourceChecksumDefinition;
+import fr.dademo.bi.companies.services.datamodel.GouvFrDataSetResourceDefinition;
 import fr.dademo.bi.companies.services.exceptions.InvalidResponseException;
 import fr.dademo.bi.companies.services.exceptions.MissingLocationHeaderException;
 import fr.dademo.bi.companies.services.exceptions.ResourceNotFoundException;
@@ -32,9 +32,9 @@ import java.util.stream.Stream;
 
 @ApplicationScoped
 @DefaultBean
-public class DataGouvFrHashGetterImpl implements DataGouvFrHashGetter {
+public class DataGouvFrDataSetToolsImpl implements DataGouvFrDataSetTools {
 
-    private static final Logger LOGGER = Logger.getLogger(DataGouvFrHashGetterImpl.class);
+    private static final Logger LOGGER = Logger.getLogger(DataGouvFrDataSetToolsImpl.class);
 
     private static final String BASE_DATASET_API_URL = "https://www.data.gouv.fr/api/1/datasets";
     private static final String HEADER_LOCATION = "Location";
@@ -52,12 +52,23 @@ public class DataGouvFrHashGetterImpl implements DataGouvFrHashGetter {
     OkHttpClient okHttpClient;
 
     @Override
+    @SneakyThrows
+    public Optional<GouvFrDataSetDefinition> getDataSetDefinition(@Nonnull String dataSetName) {
+
+        return getQueryFollowsRedirect(
+                new URL(String.format("%s/%s/", BASE_DATASET_API_URL, dataSetName)),
+                0,
+                this::parseHttpResponse
+        );
+    }
+
+    @Override
     public Optional<HashDefinition> hashDefinitionOfDataSetResourceByTitle(@Nonnull String dataSetName,
                                                                            @Nonnull String resourceTitle) {
 
         LOGGER.debug(String.format("Getting data definition of resource `%s` for dataset `%s`", resourceTitle, dataSetName));
 
-        return queryAndParse(dataSetName)
+        return getDataSetDefinition(dataSetName)
                 .map(dataSetResourceDefinitions -> hashDefinitionByTitle(
                         dataSetResourceDefinitions,
                         dataSetName,
@@ -73,7 +84,7 @@ public class DataGouvFrHashGetterImpl implements DataGouvFrHashGetter {
 
         LOGGER.debug(String.format("Getting data definition of resource at url `%s` for dataset `%s`", resourceUrl, dataSetName));
 
-        return queryAndParse(dataSetName)
+        return getDataSetDefinition(dataSetName)
                 .map(dataSetResourceDefinitions -> hashDefinitionByUrl(
                         dataSetResourceDefinitions,
                         dataSetName,
@@ -83,7 +94,7 @@ public class DataGouvFrHashGetterImpl implements DataGouvFrHashGetter {
                 .orElseThrow(() -> ResourceNotFoundException.notFoundDataSet(dataSetName));
     }
 
-    private Optional<HashDefinition> hashDefinitionByTitle(@Nonnull DataSetDefinition dataSetDefinition,
+    private Optional<HashDefinition> hashDefinitionByTitle(@Nonnull GouvFrDataSetDefinition dataSetDefinition,
                                                            @Nonnull String dataSetName,
                                                            @Nonnull String resourceTitle) {
 
@@ -98,7 +109,7 @@ public class DataGouvFrHashGetterImpl implements DataGouvFrHashGetter {
                 .map(this::toHashDefinition);
     }
 
-    private Optional<HashDefinition> hashDefinitionByUrl(@Nonnull DataSetDefinition dataSetDefinition,
+    private Optional<HashDefinition> hashDefinitionByUrl(@Nonnull GouvFrDataSetDefinition dataSetDefinition,
                                                          @Nonnull String dataSetName,
                                                          @Nonnull String resourceUrl,
                                                          boolean compareUrlQuery) {
@@ -137,16 +148,16 @@ public class DataGouvFrHashGetterImpl implements DataGouvFrHashGetter {
         );
     }
 
-    private Optional<DataSetResourceDefinition> filteredDataSetResourceChecksumDefinition(
-            DataSetDefinition dataSetDefinition,
-            Predicate<DataSetResourceDefinition> predicate) {
+    private Optional<GouvFrDataSetResourceDefinition> filteredDataSetResourceChecksumDefinition(
+            GouvFrDataSetDefinition dataSetDefinition,
+            Predicate<GouvFrDataSetResourceDefinition> predicate) {
 
         return dataSetDefinition.getResources().stream()
                 .filter(predicate)
                 .findFirst();
     }
 
-    private HashDefinition toHashDefinition(DataSetResourceChecksumDefinition dataSetResourceChecksumDefinition) {
+    private HashDefinition toHashDefinition(GouvFrDataSetResourceChecksumDefinition dataSetResourceChecksumDefinition) {
 
         return HashDefinition.of(
                 dataSetResourceChecksumDefinition.getValue(),
@@ -161,16 +172,6 @@ public class DataGouvFrHashGetterImpl implements DataGouvFrHashGetter {
                 .findFirst()
                 .map(Map.Entry::getValue)
                 .orElse(original);
-    }
-
-    @SneakyThrows
-    private Optional<DataSetDefinition> queryAndParse(String dataSetName) {
-
-        return getQueryFollowsRedirect(
-                new URL(String.format("%s/%s/", BASE_DATASET_API_URL, dataSetName)),
-                0,
-                this::parseHttpResponse
-        );
     }
 
     @SneakyThrows
@@ -240,7 +241,7 @@ public class DataGouvFrHashGetterImpl implements DataGouvFrHashGetter {
     }
 
     @SneakyThrows
-    private DataSetDefinition parseHttpResponse(InputStream in) {
-        return MAPPER.readValue(in, DataSetDefinition.class);
+    private GouvFrDataSetDefinition parseHttpResponse(InputStream in) {
+        return MAPPER.readValue(in, GouvFrDataSetDefinition.class);
     }
 }

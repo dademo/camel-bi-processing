@@ -2,11 +2,12 @@ package fr.dademo.bi.companies.jobs.stg.naf;
 
 import fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinition;
 import fr.dademo.bi.companies.tools.batch.writer.BatchWriterTools;
+import fr.dademo.bi.companies.tools.batch.writer.JdbcRecordWriter;
+import lombok.Getter;
 import lombok.SneakyThrows;
 import org.jboss.logging.Logger;
 import org.jeasy.batch.core.record.Batch;
 import org.jeasy.batch.core.record.Record;
-import org.jeasy.batch.core.writer.RecordWriter;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.jooq.Field;
@@ -24,12 +25,13 @@ import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.name;
 
 @ApplicationScoped
-public class NafWriter implements RecordWriter<NafDefinition> {
+public class NafJdbcWriter implements JdbcRecordWriter<NafDefinition> {
 
-    private static final Logger LOGGER = Logger.getLogger(NafWriter.class);
+    private static final Logger LOGGER = Logger.getLogger(NafJdbcWriter.class);
 
     @Inject
     @Named(STG_DSL_CONTEXT)
+    @Getter
     DSLContext dslContext;
 
     @SneakyThrows
