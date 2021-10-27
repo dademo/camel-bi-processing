@@ -1,46 +1,39 @@
 package fr.dademo.bi.companies.jobs.stg.association;
 
+import fr.dademo.bi.companies.configuration.JobsConfiguration;
 import fr.dademo.bi.companies.jobs.stg.association.datamodel.Association;
 import fr.dademo.bi.companies.tools.batch.job.BaseChunkJob;
-import fr.dademo.bi.companies.tools.batch.writer.DefaultRecordWriterProvider;
-import fr.dademo.bi.companies.tools.batch.writer.RecordWriterProvider;
-import lombok.Getter;
 import org.apache.commons.csv.CSVRecord;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.jeasy.batch.core.mapper.RecordMapper;
-import org.jeasy.batch.core.reader.RecordReader;
+import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.ItemWriter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
 
-@ApplicationScoped
-@Named(JobDefinition.ASSOCIATION_JOB_NAME)
+@Component
+@Qualifier(JobDefinition.ASSOCIATION_JOB_NAME)
 public class JobDefinition extends BaseChunkJob<CSVRecord, Association> {
 
-    public static final String ASSOCIATION_JOB_NAME = "stg_association";
+    private static final String CONFIG_JOB_NAME = "association";
+    public static final String ASSOCIATION_JOB_NAME = "stg_" + CONFIG_JOB_NAME;
 
-    @Getter
-    @ConfigProperty(name = "jobs.association.enabled", defaultValue = "false")
-    boolean enabled = false;
+    @Autowired
+    private JobsConfiguration jobsConfiguration;
 
-    @Getter
-    @ConfigProperty(name = "jobs.association.batch-size", defaultValue = "100000")
-    int batchSize = 100000;
+    @Autowired
+    private AssociationReader associationReader;
+    @Autowired
+    private AssociationMapper associationMapper;
+    @Autowired
+    private AssociationJdbcWriter associationJdbcWriter;
 
-    @Getter
-    @ConfigProperty(name = "jobs.association.writer-type", defaultValue = "NO_ACTION")
-    String recordWriterTypeStr = "NO_ACTION";
-
-    @Inject
-    AssociationReader associationReader;
-
-    @Inject
-    AssociationMapper associationMapper;
-
-    @Inject
-    AssociationJdbcWriter associationJdbcWriter;
+    @Nonnull
+    protected JobsConfiguration.JobConfiguration getJobConfiguration() {
+        return jobsConfiguration.getJobConfigurationByName(CONFIG_JOB_NAME);
+    }
 
     @Nonnull
     @Override
@@ -50,22 +43,19 @@ public class JobDefinition extends BaseChunkJob<CSVRecord, Association> {
 
     @Nonnull
     @Override
-    public RecordReader<CSVRecord> getRecordReader() {
+    public ItemReader<CSVRecord> getItemReader() {
         return associationReader;
     }
 
     @Nonnull
     @Override
-    public RecordMapper<CSVRecord, Association> getRecordProcessor() {
+    public ItemProcessor<CSVRecord, Association> getItemProcessor() {
         return associationMapper;
     }
 
     @Nonnull
     @Override
-    protected RecordWriterProvider<Association> getRecordWriterProvider() {
-
-        return DefaultRecordWriterProvider.<Association>builder()
-                .jdbcRecordWriter(associationJdbcWriter)
-                .build();
+    protected ItemWriter<Association> getItemWriter() {
+        return associationJdbcWriter;
     }
 }

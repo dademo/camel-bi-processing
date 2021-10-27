@@ -1,40 +1,38 @@
 package fr.dademo.bi.companies.jobs.stg.association_waldec;
 
 import fr.dademo.bi.companies.jobs.stg.association_waldec.datamodel.AssociationWaldec;
-import fr.dademo.bi.companies.tools.batch.writer.BatchWriterTools;
-import fr.dademo.bi.companies.tools.batch.writer.JdbcRecordWriter;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.jboss.logging.Logger;
-import org.jeasy.batch.core.record.Batch;
-import org.jeasy.batch.core.record.Record;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
+import org.springframework.batch.item.ItemWriter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Consumer;
 
 import static fr.dademo.bi.companies.jobs.stg.association_waldec.datamodel.AssociationWaldecTable.ASSOCIATION_WALDEC;
 import static fr.dademo.bi.companies.tools.DefaultAppBeans.STG_DSL_CONTEXT;
 
-@ApplicationScoped
-public class AssociationWaldecJdbcWriter implements JdbcRecordWriter<AssociationWaldec> {
+@Component
+public class AssociationWaldecJdbcWriter implements ItemWriter<AssociationWaldec> {
 
     private static final Logger LOGGER = Logger.getLogger(AssociationWaldecJdbcWriter.class);
 
-    @Inject
-    @Named(STG_DSL_CONTEXT)
+    @Autowired
+    @Qualifier(STG_DSL_CONTEXT)
     @Getter
-    DSLContext dslContext;
+    private DSLContext dslContext;
 
     @SneakyThrows
     @Override
-    public void writeRecords(Batch<AssociationWaldec> batch) {
+    public void write(List<? extends AssociationWaldec> items) {
 
-        LOGGER.info(String.format("Writing %d company documents", batch.size()));
+        LOGGER.info(String.format("Writing %d company documents", items.size()));
 
         final var batchInsertStatement = dslContext.batch(dslContext.insertInto(ASSOCIATION_WALDEC,
                 ASSOCIATION_WALDEC.FIELD_ASSOCIATION_ID,
@@ -83,8 +81,7 @@ public class AssociationWaldecJdbcWriter implements JdbcRecordWriter<Association
                 null, null, null, null, null, null, null, null, null, null, null
         ));
 
-        BatchWriterTools.recordsStreamOfBatch(batch)
-                .map(Record::getPayload)
+        items.stream()
                 .map(this::companyBind)
                 .forEach(consumer -> consumer.accept(batchInsertStatement));
 
@@ -99,7 +96,7 @@ public class AssociationWaldecJdbcWriter implements JdbcRecordWriter<Association
 
     private Consumer<BatchBindStep> companyBind(AssociationWaldec associationWaldec) {
 
-        return batch -> batch.bind(
+        return items -> items.bind(
                 associationWaldec.getId(),
                 associationWaldec.getIdEx(),
                 associationWaldec.getSiret(),

@@ -8,46 +8,41 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.jboss.logging.Logger;
-import org.jeasy.batch.core.reader.RecordReader;
-import org.jeasy.batch.core.record.GenericRecord;
-import org.jeasy.batch.core.record.Header;
-import org.jeasy.batch.core.record.Record;
+import org.springframework.batch.core.annotation.AfterRead;
+import org.springframework.batch.core.annotation.BeforeRead;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import javax.annotation.Nullable;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static fr.dademo.bi.companies.jobs.stg.association.datamodel.Association.CSV_HEADER_ASSOCIATION;
 
-@ApplicationScoped
-public class AssociationReader implements RecordReader<CSVRecord> {
+@Component
+public class AssociationReader implements ItemReader<CSVRecord> {
 
     private static final Logger LOGGER = Logger.getLogger(AssociationReader.class);
     private static final String DATASET_NAME = "repertoire-national-des-associations";
     private static final String DATASET_URL = "https://media.interieur.gouv.fr/rna/rna_import_20211001.zip";
 
-    private final AtomicLong recordNumber = new AtomicLong(0L);
+    @Autowired
+    private HttpDataQuerier httpDataQuerier;
 
-    @Inject
-    HttpDataQuerier httpDataQuerier;
-
-    @Inject
-    DataGouvFrDataSetTools dataGouvFrDataSetTools;
+    @Autowired
+    private DataGouvFrDataSetTools dataGouvFrDataSetTools;
 
     private ZipArchiveInputStream archiveInputStream;
     private Iterator<CSVRecord> iterator = Collections.emptyIterator();
 
-    @Override
-    public void open() throws Exception {
+    @BeforeRead
+    @SneakyThrows
+    public void open() {
 
         LOGGER.info("Reading values");
 
@@ -62,30 +57,16 @@ public class AssociationReader implements RecordReader<CSVRecord> {
         ));
     }
 
-    @Override
-    public void close() throws Exception {
+    @AfterRead
+    @SneakyThrows
+    public void close() {
         archiveInputStream.close();
     }
 
     @Override
-    public Record<CSVRecord> readRecord() {
+    public CSVRecord read() {
 
-        return nextItem()
-                .map(this::toRecord)
-                .orElse(null);
-    }
-
-    private Record<CSVRecord> toRecord(CSVRecord item) {
-        return new GenericRecord<>(generateHeader(recordNumber.getAndIncrement()), item);
-    }
-
-    private Header generateHeader(@Nullable Long recordNumber) {
-
-        return new Header(
-                recordNumber,
-                DATASET_URL,
-                LocalDateTime.now()
-        );
+        return nextItem().orElse(null);
     }
 
     @SneakyThrows

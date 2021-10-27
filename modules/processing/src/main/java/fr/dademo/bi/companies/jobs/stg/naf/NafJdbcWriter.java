@@ -1,44 +1,39 @@
 package fr.dademo.bi.companies.jobs.stg.naf;
 
 import fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinition;
-import fr.dademo.bi.companies.tools.batch.writer.BatchWriterTools;
-import fr.dademo.bi.companies.tools.batch.writer.JdbcRecordWriter;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.jboss.logging.Logger;
-import org.jeasy.batch.core.record.Batch;
-import org.jeasy.batch.core.record.Record;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.jooq.Field;
+import org.springframework.batch.item.ItemWriter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Consumer;
 
 import static fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinitionTable.NAF_DEFINITION;
-import static fr.dademo.bi.companies.tools.DefaultAppBeans.STG_DSL_CONTEXT;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.name;
 
-@ApplicationScoped
-public class NafJdbcWriter implements JdbcRecordWriter<NafDefinition> {
+@Component
+public class NafJdbcWriter implements ItemWriter<NafDefinition> {
 
     private static final Logger LOGGER = Logger.getLogger(NafJdbcWriter.class);
 
-    @Inject
-    @Named(STG_DSL_CONTEXT)
+    @Autowired
     @Getter
-    DSLContext dslContext;
+    private DSLContext dslContext;
 
     @SneakyThrows
     @Override
-    public void writeRecords(Batch<NafDefinition> batch) {
+    public void write(List<? extends NafDefinition> items) {
 
-        LOGGER.info(String.format("Writing %d naf definition documents", batch.size()));
+        LOGGER.info(String.format("Writing %d naf definition documents", items.size()));
 
         final var batchInsertStatement = dslContext.batch(dslContext.insertInto(NAF_DEFINITION,
                         NAF_DEFINITION.FIELD_NAF_CODE,
@@ -52,8 +47,7 @@ public class NafJdbcWriter implements JdbcRecordWriter<NafDefinition> {
                 .set(NAF_DEFINITION.FIELD_TITLE_65, asExcludedField(NAF_DEFINITION.FIELD_TITLE_65))
                 .set(NAF_DEFINITION.FIELD_TITLE_40, asExcludedField(NAF_DEFINITION.FIELD_TITLE_40)));
 
-        BatchWriterTools.recordsStreamOfBatch(batch)
-                .map(Record::getPayload)
+        items.stream()
                 .map(this::nafDefinitionBind)
                 .forEach(consumer -> consumer.accept(batchInsertStatement));
 
@@ -68,7 +62,7 @@ public class NafJdbcWriter implements JdbcRecordWriter<NafDefinition> {
 
     private Consumer<BatchBindStep> nafDefinitionBind(NafDefinition nafDefinition) {
 
-        return batch -> batch.bind(
+        return items -> items.bind(
                 nafDefinition.getNafCode(),
                 nafDefinition.getTitle(),
                 nafDefinition.getTitle65(),

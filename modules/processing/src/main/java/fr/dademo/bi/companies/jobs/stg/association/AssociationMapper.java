@@ -3,36 +3,23 @@ package fr.dademo.bi.companies.jobs.stg.association;
 import fr.dademo.bi.companies.jobs.stg.association.datamodel.Association;
 import fr.dademo.bi.companies.tools.batch.mapper.BatchMapperTools;
 import org.apache.commons.csv.CSVRecord;
-import org.jeasy.batch.core.mapper.RecordMapper;
-import org.jeasy.batch.core.record.GenericRecord;
-import org.jeasy.batch.core.record.Header;
-import org.jeasy.batch.core.record.Record;
+import org.springframework.batch.item.ItemProcessor;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.enterprise.context.ApplicationScoped;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static fr.dademo.bi.companies.jobs.stg.association.datamodel.Association.*;
 import static fr.dademo.bi.companies.tools.batch.mapper.BatchMapperTools.toLocalDate;
 
-@ApplicationScoped
-public class AssociationMapper implements RecordMapper<CSVRecord, Association> {
+@Component
+public class AssociationMapper implements ItemProcessor<CSVRecord, Association> {
 
     @Override
-    public Record<Association> processRecord(Record<CSVRecord> item) {
-        return toRecord(item.getHeader(), mappedToCompanyHistory(item.getPayload()));
-    }
-
-    private Record<Association> toRecord(Header sourceHeader, Association payload) {
-        return new GenericRecord<>(
-                new Header(
-                        sourceHeader.getNumber(),
-                        sourceHeader.getSource(),
-                        LocalDateTime.now()),
-                payload
-        );
+    public Association process(@Nonnull CSVRecord item) {
+        return mappedToCompanyHistory(item);
     }
 
     private Association mappedToCompanyHistory(CSVRecord csvRecord) {

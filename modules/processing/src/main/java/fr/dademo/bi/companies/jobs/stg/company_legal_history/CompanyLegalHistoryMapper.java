@@ -2,34 +2,21 @@ package fr.dademo.bi.companies.jobs.stg.company_legal_history;
 
 import fr.dademo.bi.companies.jobs.stg.company_legal_history.datamodel.CompanyLegalHistory;
 import org.apache.commons.csv.CSVRecord;
-import org.jeasy.batch.core.mapper.RecordMapper;
-import org.jeasy.batch.core.record.GenericRecord;
-import org.jeasy.batch.core.record.Header;
-import org.jeasy.batch.core.record.Record;
+import org.springframework.batch.item.ItemProcessor;
+import org.springframework.stereotype.Component;
 
-import javax.enterprise.context.ApplicationScoped;
-import java.time.LocalDateTime;
+import javax.annotation.Nonnull;
 
 import static fr.dademo.bi.companies.jobs.stg.company_legal_history.datamodel.CompanyLegalHistory.*;
 import static fr.dademo.bi.companies.tools.batch.mapper.BatchMapperTools.toBoolean;
 import static fr.dademo.bi.companies.tools.batch.mapper.BatchMapperTools.toLocalDate;
 
-@ApplicationScoped
-public class CompanyLegalHistoryMapper implements RecordMapper<CSVRecord, CompanyLegalHistory> {
+@Component
+public class CompanyLegalHistoryMapper implements ItemProcessor<CSVRecord, CompanyLegalHistory> {
 
     @Override
-    public Record<CompanyLegalHistory> processRecord(Record<CSVRecord> item) {
-        return toRecord(item.getHeader(), mappedToCompanyHistory(item.getPayload()));
-    }
-
-    private Record<CompanyLegalHistory> toRecord(Header sourceHeader, CompanyLegalHistory payload) {
-        return new GenericRecord<>(
-                new Header(
-                        sourceHeader.getNumber(),
-                        sourceHeader.getSource(),
-                        LocalDateTime.now()),
-                payload
-        );
+    public CompanyLegalHistory process(@Nonnull CSVRecord item) {
+        return mappedToCompanyHistory(item);
     }
 
     private CompanyLegalHistory mappedToCompanyHistory(CSVRecord csvRecord) {

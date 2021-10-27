@@ -4,26 +4,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinitionContainer;
 import fr.dademo.bi.companies.repositories.HttpDataQuerier;
 import fr.dademo.bi.companies.services.DataGouvFrDataSetTools;
+import lombok.SneakyThrows;
 import org.jboss.logging.Logger;
-import org.jeasy.batch.core.reader.RecordReader;
-import org.jeasy.batch.core.record.GenericRecord;
-import org.jeasy.batch.core.record.Header;
-import org.jeasy.batch.core.record.Record;
+import org.springframework.batch.core.annotation.BeforeRead;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import javax.annotation.Nullable;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.net.URL;
-import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@ApplicationScoped
-public class NafReader implements RecordReader<NafDefinitionContainer> {
+@Component
+public class NafReader implements ItemReader<NafDefinitionContainer> {
 
     private static final Logger LOGGER = Logger.getLogger(NafReader.class);
     private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -32,19 +28,17 @@ public class NafReader implements RecordReader<NafDefinitionContainer> {
     private static final String DATASET_URL = "https://data.iledefrance.fr/explore/dataset/nomenclature-dactivites-francaise-naf-rev-2-code-ape/download";
     private static final String DATASET_URL_QUERY_PARAMETERS = "format=json";
 
-    private final AtomicLong recordNumber = new AtomicLong(0L);
+    @Autowired
+    private HttpDataQuerier httpDataQuerier;
 
-    @Inject
-    HttpDataQuerier httpDataQuerier;
-
-    @Inject
-    DataGouvFrDataSetTools dataGouvFrDataSetTools;
+    @Autowired
+    private DataGouvFrDataSetTools dataGouvFrDataSetTools;
 
     private Iterator<NafDefinitionContainer> iterator;
 
-    //@SneakyThrows
-    @Override
-    public void open() throws Exception {
+    @BeforeRead
+    @SneakyThrows
+    public void open() {
 
         LOGGER.info("Reading values");
 
@@ -65,20 +59,7 @@ public class NafReader implements RecordReader<NafDefinitionContainer> {
     }
 
     @Override
-    public synchronized Record<NafDefinitionContainer> readRecord() {
-        return iterator.hasNext() ? toRecord(iterator.next()) : null;
-    }
-
-    private Record<NafDefinitionContainer> toRecord(NafDefinitionContainer item) {
-        return new GenericRecord<>(generateHeader(recordNumber.getAndIncrement()), item);
-    }
-
-    private Header generateHeader(@Nullable Long recordNumber) {
-
-        return new Header(
-                recordNumber,
-                DATASET_URL + "?" + DATASET_URL_QUERY_PARAMETERS,
-                LocalDateTime.now()
-        );
+    public synchronized NafDefinitionContainer read() {
+        return iterator.hasNext() ? iterator.next() : null;
     }
 }

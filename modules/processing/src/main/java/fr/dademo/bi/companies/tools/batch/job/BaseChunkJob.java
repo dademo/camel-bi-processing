@@ -1,55 +1,63 @@
 package fr.dademo.bi.companies.tools.batch.job;
 
-import fr.dademo.bi.companies.tools.batch.RecordWriterType;
-import fr.dademo.bi.companies.tools.batch.writer.RecordWriterProvider;
-import org.jeasy.batch.core.job.Job;
-import org.jeasy.batch.core.job.JobBuilder;
-import org.jeasy.batch.core.processor.RecordProcessor;
-import org.jeasy.batch.core.reader.RecordReader;
+import fr.dademo.bi.companies.configuration.JobsConfiguration;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.ItemWriter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import javax.annotation.Nonnull;
-import java.util.function.Function;
 
 public abstract class BaseChunkJob<I, O> implements BatchJobProvider {
 
-    @Nonnull
-    protected abstract RecordReader<I> getRecordReader();
+    @Autowired
+    private JobBuilderFactory jobBuilderFactory;
+
+    @Autowired
+    private StepBuilderFactory stepBuilderFactory;
+
 
     @Nonnull
-    protected abstract RecordProcessor<I, O> getRecordProcessor();
-
-    @Nonnull
-    protected abstract RecordWriterProvider<O> getRecordWriterProvider();
-
-    @Nonnull
-    protected abstract String getRecordWriterTypeStr();
-
-    @Nonnull
-    protected RecordWriterType getRecordWriterType() {
-        return RecordWriterType.valueOf(getRecordWriterTypeStr());
-    }
+    protected abstract JobsConfiguration.JobConfiguration getJobConfiguration();
 
     @Nonnull
     protected abstract String getJobName();
 
-    protected abstract int getBatchSize();
+    @Nonnull
+    protected abstract ItemReader<I> getItemReader();
 
     @Nonnull
-    protected Function<JobBuilder<I, O>, JobBuilder<I, O>> getJobBuilderCustomizer() {
-        return jobBuilder -> jobBuilder;
-    }
+    protected abstract ItemProcessor<I, O> getItemProcessor();
 
     @Nonnull
+    protected abstract ItemWriter<O> getItemWriter();
+
+
+    @Nonnull
+    @Bean
     @Override
     public Job getJob() {
 
-        return getJobBuilderCustomizer()
-                .apply(new JobBuilder<I, O>()
-                        .named(getJobName())
-                        .reader(getRecordReader())
-                        .processor(getRecordProcessor())
-                        .writer(getRecordWriterProvider().getRecordWriter(getRecordWriterType()))
-                        .batchSize(getBatchSize())
-                ).build();
+        final var threadPoolExecutor = new ThreadPoolTaskExecutor();
+        threadPoolExecutor.setMaxPoolSize(getJobConfiguration().getMaxThreads());
+
+        final var step = stepBuilderFactory
+                .get(getJobName())
+                .<I, O>chunk(getJobConfiguration().getChunkSize())
+                .reader(getItemReader())
+                .processor(getItemProcessor())
+                .writer(getItemWriter())
+                .taskExecutor(threadPoolExecutor)
+                .build();
+
+        return jobBuilderFactory
+                .get(getJobName())
+                .start(step)
+                .build();
     }
 }

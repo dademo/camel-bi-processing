@@ -9,16 +9,16 @@ import fr.dademo.bi.companies.services.exceptions.InvalidResponseException;
 import fr.dademo.bi.companies.services.exceptions.MissingLocationHeaderException;
 import fr.dademo.bi.companies.services.exceptions.ResourceNotFoundException;
 import fr.dademo.bi.companies.services.exceptions.TooManyRedirectException;
-import io.quarkus.arc.DefaultBean;
 import lombok.SneakyThrows;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.ResponseBody;
 import org.jboss.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.integration.annotation.Default;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -30,8 +30,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-@ApplicationScoped
-@DefaultBean
+@Component
+@Default
 public class DataGouvFrDataSetToolsImpl implements DataGouvFrDataSetTools {
 
     private static final Logger LOGGER = Logger.getLogger(DataGouvFrDataSetToolsImpl.class);
@@ -48,8 +48,8 @@ public class DataGouvFrDataSetToolsImpl implements DataGouvFrDataSetTools {
             Map.entry("SHA512", "SHA-512")
     );
 
-    @Inject
-    OkHttpClient okHttpClient;
+    @Autowired
+    private OkHttpClient okHttpClient;
 
     @Override
     @SneakyThrows

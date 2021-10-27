@@ -1,47 +1,40 @@
 package fr.dademo.bi.companies.jobs.stg.company_legal_history;
 
+import fr.dademo.bi.companies.configuration.JobsConfiguration;
 import fr.dademo.bi.companies.jobs.stg.company_legal_history.datamodel.CompanyLegalHistory;
 import fr.dademo.bi.companies.tools.batch.job.BaseChunkJob;
-import fr.dademo.bi.companies.tools.batch.writer.DefaultRecordWriterProvider;
-import fr.dademo.bi.companies.tools.batch.writer.RecordWriterProvider;
-import lombok.Getter;
 import org.apache.commons.csv.CSVRecord;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.jeasy.batch.core.mapper.RecordMapper;
-import org.jeasy.batch.core.reader.RecordReader;
+import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.ItemWriter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
 
 
-@ApplicationScoped
-@Named(JobDefinition.COMPANY_LEGAL_HISTORY_JOB_NAME)
+@Component
+@Qualifier(JobDefinition.COMPANY_LEGAL_HISTORY_JOB_NAME)
 public class JobDefinition extends BaseChunkJob<CSVRecord, CompanyLegalHistory> {
 
-    public static final String COMPANY_LEGAL_HISTORY_JOB_NAME = "stg_company_legal_history";
+    private static final String CONFIG_JOB_NAME = "company_legal_history";
+    public static final String COMPANY_LEGAL_HISTORY_JOB_NAME = "stg_" + CONFIG_JOB_NAME;
 
-    @Getter
-    @ConfigProperty(name = "jobs.company-legal-history.enabled", defaultValue = "false")
-    boolean enabled = false;
+    @Autowired
+    private JobsConfiguration jobsConfiguration;
 
-    @Getter
-    @ConfigProperty(name = "jobs.company-legal-history.batch-size", defaultValue = "100000")
-    int batchSize = 100000;
+    @Autowired
+    private CompanyLegalHistoryReader companyLegalHistoryReader;
+    @Autowired
+    private CompanyLegalHistoryMapper companyLegalHistoryMapper;
+    @Autowired
+    private CompanyLegalHistoryJdbcWriter companyLegalHistoryJdbcWriter;
 
-    @Getter
-    @ConfigProperty(name = "jobs.company-legal-history.writer-type", defaultValue = "NO_ACTION")
-    String recordWriterTypeStr = "NO_ACTION";
-
-    @Inject
-    CompanyLegalHistoryReader companyLegalHistoryReader;
-
-    @Inject
-    CompanyLegalHistoryMapper companyLegalHistoryMapper;
-
-    @Inject
-    CompanyLegalHistoryJdbcWriter companyLegalHistoryJdbcWriter;
+    @Nonnull
+    protected JobsConfiguration.JobConfiguration getJobConfiguration() {
+        return jobsConfiguration.getJobConfigurationByName(CONFIG_JOB_NAME);
+    }
 
     @Nonnull
     @Override
@@ -51,22 +44,19 @@ public class JobDefinition extends BaseChunkJob<CSVRecord, CompanyLegalHistory> 
 
     @Nonnull
     @Override
-    public RecordReader<CSVRecord> getRecordReader() {
+    public ItemReader<CSVRecord> getItemReader() {
         return companyLegalHistoryReader;
     }
 
     @Nonnull
     @Override
-    public RecordMapper<CSVRecord, CompanyLegalHistory> getRecordProcessor() {
+    public ItemProcessor<CSVRecord, CompanyLegalHistory> getItemProcessor() {
         return companyLegalHistoryMapper;
     }
 
     @Nonnull
     @Override
-    protected RecordWriterProvider<CompanyLegalHistory> getRecordWriterProvider() {
-
-        return DefaultRecordWriterProvider.<CompanyLegalHistory>builder()
-                .jdbcRecordWriter(companyLegalHistoryJdbcWriter)
-                .build();
+    protected ItemWriter<CompanyLegalHistory> getItemWriter() {
+        return companyLegalHistoryJdbcWriter;
     }
 }

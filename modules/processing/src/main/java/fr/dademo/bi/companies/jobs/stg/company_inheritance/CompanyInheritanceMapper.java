@@ -2,33 +2,20 @@ package fr.dademo.bi.companies.jobs.stg.company_inheritance;
 
 import fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel.CompanyInheritance;
 import org.apache.commons.csv.CSVRecord;
-import org.jeasy.batch.core.mapper.RecordMapper;
-import org.jeasy.batch.core.record.GenericRecord;
-import org.jeasy.batch.core.record.Header;
-import org.jeasy.batch.core.record.Record;
+import org.springframework.batch.item.ItemProcessor;
+import org.springframework.stereotype.Component;
 
-import javax.enterprise.context.ApplicationScoped;
-import java.time.LocalDateTime;
+import javax.annotation.Nonnull;
 
 import static fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel.CompanyInheritance.*;
 import static fr.dademo.bi.companies.tools.batch.mapper.BatchMapperTools.*;
 
-@ApplicationScoped
-public class CompanyInheritanceMapper implements RecordMapper<CSVRecord, CompanyInheritance> {
+@Component
+public class CompanyInheritanceMapper implements ItemProcessor<CSVRecord, CompanyInheritance> {
 
     @Override
-    public Record<CompanyInheritance> processRecord(Record<CSVRecord> item) {
-        return toRecord(item.getHeader(), mappedToCompanyInheritance(item.getPayload()));
-    }
-
-    private Record<CompanyInheritance> toRecord(Header sourceHeader, CompanyInheritance payload) {
-        return new GenericRecord<>(
-                new Header(
-                        sourceHeader.getNumber(),
-                        sourceHeader.getSource(),
-                        LocalDateTime.now()),
-                payload
-        );
+    public CompanyInheritance process(@Nonnull CSVRecord item) {
+        return mappedToCompanyInheritance(item);
     }
 
     private CompanyInheritance mappedToCompanyInheritance(CSVRecord csvRecord) {

@@ -1,40 +1,38 @@
 package fr.dademo.bi.companies.jobs.stg.association;
 
 import fr.dademo.bi.companies.jobs.stg.association.datamodel.Association;
-import fr.dademo.bi.companies.tools.batch.writer.BatchWriterTools;
-import fr.dademo.bi.companies.tools.batch.writer.JdbcRecordWriter;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.jboss.logging.Logger;
-import org.jeasy.batch.core.record.Batch;
-import org.jeasy.batch.core.record.Record;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
+import org.springframework.batch.item.ItemWriter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Consumer;
 
 import static fr.dademo.bi.companies.jobs.stg.association.datamodel.AssociationTable.ASSOCIATION;
 import static fr.dademo.bi.companies.tools.DefaultAppBeans.STG_DSL_CONTEXT;
 
-@ApplicationScoped
-public class AssociationJdbcWriter implements JdbcRecordWriter<Association> {
+@Component
+public class AssociationJdbcWriter implements ItemWriter<Association> {
 
     private static final Logger LOGGER = Logger.getLogger(AssociationJdbcWriter.class);
 
-    @Inject
-    @Named(STG_DSL_CONTEXT)
+    @Autowired
+    @Qualifier(STG_DSL_CONTEXT)
     @Getter
-    DSLContext dslContext;
+    private DSLContext dslContext;
 
     @SneakyThrows
     @Override
-    public void writeRecords(Batch<Association> batch) {
+    public void write(List<? extends Association> items) {
 
-        LOGGER.info(String.format("Writing %d association documents", batch.size()));
+        LOGGER.info(String.format("Writing %d association documents", items.size()));
 
         final var batchInsertStatement = dslContext.batch(dslContext.insertInto(ASSOCIATION,
                 ASSOCIATION.FIELD_ASSOCIATION_ID,
@@ -66,8 +64,7 @@ public class AssociationJdbcWriter implements JdbcRecordWriter<Association> {
         ).values((String) null, null, null, null, null, null, null, null, null, null, null, null,
                 null, null, null, null, null, null, null, null, null, null, null, null, null, null));
 
-        BatchWriterTools.recordsStreamOfBatch(batch)
-                .map(Record::getPayload)
+        items.stream()
                 .map(this::companyBind)
                 .forEach(consumer -> consumer.accept(batchInsertStatement));
 
@@ -82,7 +79,7 @@ public class AssociationJdbcWriter implements JdbcRecordWriter<Association> {
 
     private Consumer<BatchBindStep> companyBind(Association association) {
 
-        return batch -> batch.bind(
+        return items -> items.bind(
                 association.getId(),
                 association.getIdEx(),
                 association.getSiret(),

@@ -1,47 +1,40 @@
 package fr.dademo.bi.companies.jobs.stg.company_legal;
 
+import fr.dademo.bi.companies.configuration.JobsConfiguration;
 import fr.dademo.bi.companies.jobs.stg.company_legal.datamodel.CompanyLegal;
 import fr.dademo.bi.companies.tools.batch.job.BaseChunkJob;
-import fr.dademo.bi.companies.tools.batch.writer.DefaultRecordWriterProvider;
-import fr.dademo.bi.companies.tools.batch.writer.RecordWriterProvider;
-import lombok.Getter;
 import org.apache.commons.csv.CSVRecord;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.jeasy.batch.core.mapper.RecordMapper;
-import org.jeasy.batch.core.reader.RecordReader;
+import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.ItemWriter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
 
 
-@ApplicationScoped
-@Named(JobDefinition.COMPANY_LEGAL_JOB_NAME)
+@Component
+@Qualifier(JobDefinition.COMPANY_LEGAL_JOB_NAME)
 public class JobDefinition extends BaseChunkJob<CSVRecord, CompanyLegal> {
 
-    public static final String COMPANY_LEGAL_JOB_NAME = "stg_company_legal";
+    private static final String CONFIG_JOB_NAME = "company_legal";
+    public static final String COMPANY_LEGAL_JOB_NAME = "stg_" + CONFIG_JOB_NAME;
 
-    @Getter
-    @ConfigProperty(name = "jobs.company-legal.enabled", defaultValue = "false")
-    boolean enabled = false;
+    @Autowired
+    private JobsConfiguration jobsConfiguration;
 
-    @Getter
-    @ConfigProperty(name = "jobs.company-legal.batch-size", defaultValue = "100000")
-    int batchSize = 100000;
+    @Autowired
+    private CompanyLegalReader companyLegalReader;
+    @Autowired
+    private CompanyLegalMapper companyLegalMapper;
+    @Autowired
+    private CompanyLegalJdbcWriter companyLegalJdbcWriter;
 
-    @Getter
-    @ConfigProperty(name = "jobs.company-legal.writer-type", defaultValue = "NO_ACTION")
-    String recordWriterTypeStr = "NO_ACTION";
-
-    @Inject
-    CompanyLegalReader companyLegalReader;
-
-    @Inject
-    CompanyLegalMapper companyLegalMapper;
-
-    @Inject
-    CompanyLegalJdbcWriter companyLegalJdbcWriter;
+    @Nonnull
+    protected JobsConfiguration.JobConfiguration getJobConfiguration() {
+        return jobsConfiguration.getJobConfigurationByName(CONFIG_JOB_NAME);
+    }
 
     @Nonnull
     @Override
@@ -51,22 +44,20 @@ public class JobDefinition extends BaseChunkJob<CSVRecord, CompanyLegal> {
 
     @Nonnull
     @Override
-    public RecordReader<CSVRecord> getRecordReader() {
+    public ItemReader<CSVRecord> getItemReader() {
         return companyLegalReader;
     }
 
     @Nonnull
     @Override
-    public RecordMapper<CSVRecord, CompanyLegal> getRecordProcessor() {
+    public ItemProcessor<CSVRecord, CompanyLegal> getItemProcessor() {
         return companyLegalMapper;
     }
 
     @Nonnull
     @Override
-    protected RecordWriterProvider<CompanyLegal> getRecordWriterProvider() {
+    protected ItemWriter<CompanyLegal> getItemWriter() {
 
-        return DefaultRecordWriterProvider.<CompanyLegal>builder()
-                .jdbcRecordWriter(companyLegalJdbcWriter)
-                .build();
+        return companyLegalJdbcWriter;
     }
 }

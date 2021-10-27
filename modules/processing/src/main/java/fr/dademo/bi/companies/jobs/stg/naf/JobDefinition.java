@@ -1,47 +1,37 @@
 package fr.dademo.bi.companies.jobs.stg.naf;
 
+import fr.dademo.bi.companies.configuration.JobsConfiguration;
 import fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinition;
 import fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinitionContainer;
 import fr.dademo.bi.companies.tools.batch.job.BaseChunkJob;
-import fr.dademo.bi.companies.tools.batch.writer.DefaultRecordWriterProvider;
-import fr.dademo.bi.companies.tools.batch.writer.RecordWriterProvider;
-import lombok.Getter;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.jeasy.batch.core.processor.RecordProcessor;
-import org.jeasy.batch.core.reader.RecordReader;
+import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.ItemWriter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
 
-
-@ApplicationScoped
-@Named(JobDefinition.NAF_JOB_NAME)
+@Component
 public class JobDefinition extends BaseChunkJob<NafDefinitionContainer, NafDefinition> {
 
-    public static final String NAF_JOB_NAME = "stg_naf";
+    private static final String CONFIG_JOB_NAME = "naf";
+    public static final String NAF_JOB_NAME = "stg_" + CONFIG_JOB_NAME;
 
-    @Getter
-    @ConfigProperty(name = "jobs.naf.enabled", defaultValue = "false")
-    boolean enabled = false;
+    @Autowired
+    private JobsConfiguration jobsConfiguration;
 
-    @Getter
-    @ConfigProperty(name = "jobs.naf.batch-size", defaultValue = "1000")
-    int batchSize = 1000;
+    @Autowired
+    private NafReader nafReader;
+    @Autowired
+    private NafProcessor nafProcessor;
+    @Autowired
+    private NafJdbcWriter nafJdbcWriter;
 
-    @Getter
-    @ConfigProperty(name = "jobs.naf.writer-type", defaultValue = "NO_ACTION")
-    String recordWriterTypeStr = "NO_ACTION";
-
-    @Inject
-    NafReader nafReader;
-
-    @Inject
-    NafProcessor nafProcessor;
-
-    @Inject
-    NafJdbcWriter nafJdbcWriter;
+    @Nonnull
+    protected JobsConfiguration.JobConfiguration getJobConfiguration() {
+        return jobsConfiguration.getJobConfigurationByName(CONFIG_JOB_NAME);
+    }
 
     @Nonnull
     @Override
@@ -51,22 +41,19 @@ public class JobDefinition extends BaseChunkJob<NafDefinitionContainer, NafDefin
 
     @Nonnull
     @Override
-    public RecordReader<NafDefinitionContainer> getRecordReader() {
+    public ItemReader<NafDefinitionContainer> getItemReader() {
         return nafReader;
     }
 
     @Nonnull
     @Override
-    public RecordProcessor<NafDefinitionContainer, NafDefinition> getRecordProcessor() {
+    public ItemProcessor<NafDefinitionContainer, NafDefinition> getItemProcessor() {
         return nafProcessor;
     }
 
     @Nonnull
     @Override
-    protected RecordWriterProvider<NafDefinition> getRecordWriterProvider() {
-
-        return DefaultRecordWriterProvider.<NafDefinition>builder()
-                .jdbcRecordWriter(nafJdbcWriter)
-                .build();
+    protected ItemWriter<NafDefinition> getItemWriter() {
+        return nafJdbcWriter;
     }
 }

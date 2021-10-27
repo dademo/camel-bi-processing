@@ -1,47 +1,40 @@
 package fr.dademo.bi.companies.jobs.stg.company_history;
 
+import fr.dademo.bi.companies.configuration.JobsConfiguration;
 import fr.dademo.bi.companies.jobs.stg.company_history.datamodel.CompanyHistory;
 import fr.dademo.bi.companies.tools.batch.job.BaseChunkJob;
-import fr.dademo.bi.companies.tools.batch.writer.DefaultRecordWriterProvider;
-import fr.dademo.bi.companies.tools.batch.writer.RecordWriterProvider;
-import lombok.Getter;
 import org.apache.commons.csv.CSVRecord;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.jeasy.batch.core.mapper.RecordMapper;
-import org.jeasy.batch.core.reader.RecordReader;
+import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.ItemWriter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
 
 
-@ApplicationScoped
-@Named(JobDefinition.COMPANY_HISTORY_JOB_NAME)
+@Component
+@Qualifier(JobDefinition.COMPANY_HISTORY_JOB_NAME)
 public class JobDefinition extends BaseChunkJob<CSVRecord, CompanyHistory> {
 
-    public static final String COMPANY_HISTORY_JOB_NAME = "stg_company_history";
+    private static final String CONFIG_JOB_NAME = "company_history";
+    public static final String COMPANY_HISTORY_JOB_NAME = "stg_" + CONFIG_JOB_NAME;
 
-    @Getter
-    @ConfigProperty(name = "jobs.company-history.enabled", defaultValue = "false")
-    boolean enabled = false;
+    @Autowired
+    private JobsConfiguration jobsConfiguration;
 
-    @Getter
-    @ConfigProperty(name = "jobs.company-history.batch-size", defaultValue = "100000")
-    int batchSize = 100000;
+    @Autowired
+    private CompanyHistoryReader companyHistoryReader;
+    @Autowired
+    private CompanyHistoryMapper companyHistoryMapper;
+    @Autowired
+    private CompanyHistoryJdbcWriter companyHistoryJdbcWriter;
 
-    @Getter
-    @ConfigProperty(name = "jobs.company-history.writer-type", defaultValue = "NO_ACTION")
-    String recordWriterTypeStr = "NO_ACTION";
-
-    @Inject
-    CompanyHistoryReader companyHistoryReader;
-
-    @Inject
-    CompanyHistoryMapper companyHistoryMapper;
-
-    @Inject
-    CompanyHistoryJdbcWriter companyHistoryJdbcWriter;
+    @Nonnull
+    protected JobsConfiguration.JobConfiguration getJobConfiguration() {
+        return jobsConfiguration.getJobConfigurationByName(CONFIG_JOB_NAME);
+    }
 
     @Nonnull
     @Override
@@ -51,22 +44,19 @@ public class JobDefinition extends BaseChunkJob<CSVRecord, CompanyHistory> {
 
     @Nonnull
     @Override
-    public RecordReader<CSVRecord> getRecordReader() {
+    public ItemReader<CSVRecord> getItemReader() {
         return companyHistoryReader;
     }
 
     @Nonnull
     @Override
-    public RecordMapper<CSVRecord, CompanyHistory> getRecordProcessor() {
+    public ItemProcessor<CSVRecord, CompanyHistory> getItemProcessor() {
         return companyHistoryMapper;
     }
 
     @Nonnull
     @Override
-    protected RecordWriterProvider<CompanyHistory> getRecordWriterProvider() {
-
-        return DefaultRecordWriterProvider.<CompanyHistory>builder()
-                .jdbcRecordWriter(companyHistoryJdbcWriter)
-                .build();
+    protected ItemWriter<CompanyHistory> getItemWriter() {
+        return companyHistoryJdbcWriter;
     }
 }

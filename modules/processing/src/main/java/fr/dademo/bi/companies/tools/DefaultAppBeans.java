@@ -1,50 +1,44 @@
 package fr.dademo.bi.companies.tools;
 
-import fr.dademo.bi.companies.tools.batch.writer.DefaultRecordWriterProvider;
-import fr.dademo.bi.companies.tools.batch.writer.RecordWriterProvider;
-import io.agroal.api.AgroalDataSource;
-import io.quarkus.agroal.DataSource;
-import io.quarkus.arc.DefaultBean;
+import fr.dademo.bi.companies.configuration.HttpConfiguration;
+import fr.dademo.bi.companies.tools.batch.writer.NoActionBatchWriter;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.jeasy.batch.core.job.JobExecutor;
 import org.jooq.DSLContext;
 import org.jooq.conf.Settings;
 import org.jooq.conf.StatementType;
 import org.jooq.conf.ThrowExceptions;
 import org.jooq.impl.DSL;
+import org.springframework.batch.item.ItemWriter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.integration.annotation.Default;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
+import javax.sql.DataSource;
 import java.time.Duration;
+
+import static fr.dademo.bi.companies.beans.DataSources.STG_DATASOURCE_BEAN_NAME;
 
 
 public class DefaultAppBeans {
 
-    public static final String STG_PERSISTENCE_UNIT_NAME = "stg";
     public static final String STG_DSL_CONTEXT = "stgDslContext";
     public static final String STG_DSL_CONTEXT_DIALECT_PROVIDER = STG_DSL_CONTEXT + "ContextProvider";
 
-    @ConfigProperty(name = "http.connectTimeoutSeconds", defaultValue = "5")
-    Long connectTimeoutSeconds;
+    @Autowired
+    private HttpConfiguration httpConfiguration;
 
-    @ConfigProperty(name = "http.callReadTimeoutSeconds", defaultValue = "10")
-    Long callReadTimeoutSeconds;
-
-    @ConfigProperty(name = "http.callTimeoutSeconds", defaultValue = "0")
-    Long callTimeoutSeconds;
-
-    @ApplicationScoped
-    @Named(STG_DSL_CONTEXT_DIALECT_PROVIDER)
-    public DatabaseSQLDialectProvider stgSqlDialectProvider(@DataSource(STG_PERSISTENCE_UNIT_NAME) AgroalDataSource dataSource) {
+    @Bean
+    @Qualifier(STG_DSL_CONTEXT_DIALECT_PROVIDER)
+    public DatabaseSQLDialectProvider stgSqlDialectProvider(@Qualifier(STG_DATASOURCE_BEAN_NAME) DataSource dataSource) {
         return new DatabaseSQLDialectProvider(dataSource);
     }
 
-    @ApplicationScoped
-    @Named(STG_DSL_CONTEXT)
-    public DSLContext stgDslContext(@DataSource(STG_PERSISTENCE_UNIT_NAME) AgroalDataSource dataSource,
-                                    @Named(STG_DSL_CONTEXT_DIALECT_PROVIDER) DatabaseSQLDialectProvider sqlDialectProvider) {
+    @Bean
+    @Qualifier(STG_DSL_CONTEXT)
+    public DSLContext stgDslContext(@Qualifier(STG_DATASOURCE_BEAN_NAME) DataSource dataSource,
+                                    @Qualifier(STG_DSL_CONTEXT_DIALECT_PROVIDER) DatabaseSQLDialectProvider sqlDialectProvider) {
 
         return DSL.using(
                 dataSource,
@@ -59,14 +53,14 @@ public class DefaultAppBeans {
         );
     }
 
-    @DefaultBean
-    @ApplicationScoped
-    public RecordWriterProvider<Object> defaultRecordWriterProvider() {
-        return DefaultRecordWriterProvider.defaultInstance();
+    @Bean
+    @Default
+    private ItemWriter<?> defaultItemWriter() {
+        return NoActionBatchWriter.INSTANCE;
     }
 
-    @DefaultBean
-    @ApplicationScoped
+    @Default
+    @Bean
     public OkHttpClient okHttpClient() {
 
         final var loggingInterceptor = new HttpLoggingInterceptor();
@@ -74,15 +68,9 @@ public class DefaultAppBeans {
 
         return new OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
-                .connectTimeout(Duration.ofSeconds(connectTimeoutSeconds))
-                .readTimeout(Duration.ofSeconds(callReadTimeoutSeconds))
-                .callTimeout(Duration.ofSeconds(callTimeoutSeconds))
+                .connectTimeout(Duration.ofSeconds(httpConfiguration.getConnectTimeoutSeconds()))
+                .readTimeout(Duration.ofSeconds(httpConfiguration.getCallReadTimeoutSeconds()))
+                .callTimeout(Duration.ofSeconds(httpConfiguration.getCallTimeoutSeconds()))
                 .build();
-    }
-
-    @DefaultBean
-    @ApplicationScoped
-    public JobExecutor jobExecutor() {
-        return new JobExecutor();
     }
 }

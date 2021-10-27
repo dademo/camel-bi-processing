@@ -1,38 +1,36 @@
 package fr.dademo.bi.companies.jobs.stg.company_legal;
 
 import fr.dademo.bi.companies.jobs.stg.company_legal.datamodel.CompanyLegal;
-import fr.dademo.bi.companies.tools.batch.writer.BatchWriterTools;
-import fr.dademo.bi.companies.tools.batch.writer.JdbcRecordWriter;
 import lombok.Getter;
 import org.jboss.logging.Logger;
-import org.jeasy.batch.core.record.Batch;
-import org.jeasy.batch.core.record.Record;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
+import org.springframework.batch.item.ItemWriter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Consumer;
 
 import static fr.dademo.bi.companies.jobs.stg.company_legal.datamodel.CompanyLegalTable.COMPANY_LEGAL;
 import static fr.dademo.bi.companies.tools.DefaultAppBeans.STG_DSL_CONTEXT;
 
-@ApplicationScoped
-public class CompanyLegalJdbcWriter implements JdbcRecordWriter<CompanyLegal> {
+@Component
+public class CompanyLegalJdbcWriter implements ItemWriter<CompanyLegal> {
 
     private static final Logger LOGGER = Logger.getLogger(CompanyLegalJdbcWriter.class);
 
-    @Inject
-    @Named(STG_DSL_CONTEXT)
+    @Autowired
+    @Qualifier(STG_DSL_CONTEXT)
     @Getter
-    DSLContext dslContext;
+    private DSLContext dslContext;
 
     @Override
-    public void writeRecords(Batch<CompanyLegal> batch) {
+    public void write(List<? extends CompanyLegal> items) {
 
-        LOGGER.info(String.format("Writing %d company legal documents", batch.size()));
+        LOGGER.info(String.format("Writing %d company legal documents", items.size()));
 
         final var batchInsertStatement = dslContext.batch(dslContext.insertInto(COMPANY_LEGAL,
                 COMPANY_LEGAL.FIELD_COMPANY_LEGAL_UNIT_SIREN,
@@ -74,8 +72,7 @@ public class CompanyLegalJdbcWriter implements JdbcRecordWriter<CompanyLegal> {
                 null, null, null, null, null, null, null, null
         ));
 
-        BatchWriterTools.recordsStreamOfBatch(batch)
-                .map(Record::getPayload)
+        items.stream()
                 .map(this::companyHistoryBind)
                 .forEach(consumer -> consumer.accept(batchInsertStatement));
 
@@ -90,7 +87,7 @@ public class CompanyLegalJdbcWriter implements JdbcRecordWriter<CompanyLegal> {
 
     private Consumer<BatchBindStep> companyHistoryBind(CompanyLegal companyLegal) {
 
-        return batch -> batch.bind(
+        return items -> items.bind(
                 companyLegal.getSiren(),
                 companyLegal.getDiffusionStatus(),
                 companyLegal.getIsPurged(),

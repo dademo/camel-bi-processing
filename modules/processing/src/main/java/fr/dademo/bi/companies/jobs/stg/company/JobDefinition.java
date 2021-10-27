@@ -1,47 +1,40 @@
 package fr.dademo.bi.companies.jobs.stg.company;
 
+import fr.dademo.bi.companies.configuration.JobsConfiguration;
 import fr.dademo.bi.companies.jobs.stg.company.datamodel.Company;
 import fr.dademo.bi.companies.tools.batch.job.BaseChunkJob;
-import fr.dademo.bi.companies.tools.batch.writer.DefaultRecordWriterProvider;
-import fr.dademo.bi.companies.tools.batch.writer.RecordWriterProvider;
-import lombok.Getter;
 import org.apache.commons.csv.CSVRecord;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.jeasy.batch.core.mapper.RecordMapper;
-import org.jeasy.batch.core.reader.RecordReader;
+import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.ItemWriter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
 
 
-@ApplicationScoped
-@Named(JobDefinition.COMPANY_JOB_NAME)
+@Component
+@Qualifier(JobDefinition.COMPANY_JOB_NAME)
 public class JobDefinition extends BaseChunkJob<CSVRecord, Company> {
 
-    public static final String COMPANY_JOB_NAME = "stg_company";
+    private static final String CONFIG_JOB_NAME = "company";
+    public static final String COMPANY_JOB_NAME = "stg_" + CONFIG_JOB_NAME;
 
-    @Getter
-    @ConfigProperty(name = "jobs.company.enabled", defaultValue = "false")
-    boolean enabled = false;
+    @Autowired
+    private JobsConfiguration jobsConfiguration;
 
-    @Getter
-    @ConfigProperty(name = "jobs.company.batch-size", defaultValue = "100000")
-    int batchSize = 100000;
+    @Autowired
+    private CompanyReader companyReader;
+    @Autowired
+    private CompanyMapper companyMapper;
+    @Autowired
+    private CompanyJdbcWriter companyJdbcWriter;
 
-    @Getter
-    @ConfigProperty(name = "jobs.company.writer-type", defaultValue = "NO_ACTION")
-    String recordWriterTypeStr = "NO_ACTION";
-
-    @Inject
-    CompanyReader companyReader;
-
-    @Inject
-    CompanyMapper companyMapper;
-
-    @Inject
-    CompanyJdbcWriter companyJdbcWriter;
+    @Nonnull
+    protected JobsConfiguration.JobConfiguration getJobConfiguration() {
+        return jobsConfiguration.getJobConfigurationByName(CONFIG_JOB_NAME);
+    }
 
     @Nonnull
     @Override
@@ -51,22 +44,19 @@ public class JobDefinition extends BaseChunkJob<CSVRecord, Company> {
 
     @Nonnull
     @Override
-    public RecordReader<CSVRecord> getRecordReader() {
+    public ItemReader<CSVRecord> getItemReader() {
         return companyReader;
     }
 
     @Nonnull
     @Override
-    public RecordMapper<CSVRecord, Company> getRecordProcessor() {
+    public ItemProcessor<CSVRecord, Company> getItemProcessor() {
         return companyMapper;
     }
 
     @Nonnull
     @Override
-    protected RecordWriterProvider<Company> getRecordWriterProvider() {
-
-        return DefaultRecordWriterProvider.<Company>builder()
-                .jdbcRecordWriter(companyJdbcWriter)
-                .build();
+    protected ItemWriter<Company> getItemWriter() {
+        return companyJdbcWriter;
     }
 }

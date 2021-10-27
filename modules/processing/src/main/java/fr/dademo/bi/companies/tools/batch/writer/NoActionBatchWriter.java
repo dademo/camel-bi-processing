@@ -1,12 +1,20 @@
 package fr.dademo.bi.companies.tools.batch.writer;
 
-import org.jeasy.batch.core.record.Batch;
-import org.jeasy.batch.core.writer.RecordWriter;
 
-public final class NoActionBatchWriter<T> implements RecordWriter<T> {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.springframework.batch.item.ItemWriter;
+
+import javax.annotation.Nonnull;
+import java.util.List;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class NoActionBatchWriter<T> implements ItemWriter<T> {
+
+    public static final NoActionBatchWriter<Object> INSTANCE = new NoActionBatchWriter<>();
 
     @Override
-    public void writeRecords(Batch<T> batch) {
+    public void write(@Nonnull List<? extends T> items) {
         // Nothing to do
     }
 }

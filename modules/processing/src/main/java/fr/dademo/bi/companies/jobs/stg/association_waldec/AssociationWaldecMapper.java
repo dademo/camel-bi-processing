@@ -2,33 +2,20 @@ package fr.dademo.bi.companies.jobs.stg.association_waldec;
 
 import fr.dademo.bi.companies.jobs.stg.association_waldec.datamodel.AssociationWaldec;
 import org.apache.commons.csv.CSVRecord;
-import org.jeasy.batch.core.mapper.RecordMapper;
-import org.jeasy.batch.core.record.GenericRecord;
-import org.jeasy.batch.core.record.Header;
-import org.jeasy.batch.core.record.Record;
+import org.springframework.batch.item.ItemProcessor;
+import org.springframework.stereotype.Component;
 
-import javax.enterprise.context.ApplicationScoped;
-import java.time.LocalDateTime;
+import javax.annotation.Nonnull;
 
 import static fr.dademo.bi.companies.jobs.stg.association_waldec.datamodel.AssociationWaldec.*;
 import static fr.dademo.bi.companies.tools.batch.mapper.BatchMapperTools.toLocalDate;
 
-@ApplicationScoped
-public class AssociationWaldecMapper implements RecordMapper<CSVRecord, AssociationWaldec> {
+@Component
+public class AssociationWaldecMapper implements ItemProcessor<CSVRecord, AssociationWaldec> {
 
     @Override
-    public Record<AssociationWaldec> processRecord(Record<CSVRecord> item) {
-        return toRecord(item.getHeader(), mappedToCompanyHistory(item.getPayload()));
-    }
-
-    private Record<AssociationWaldec> toRecord(Header sourceHeader, AssociationWaldec payload) {
-        return new GenericRecord<>(
-                new Header(
-                        sourceHeader.getNumber(),
-                        sourceHeader.getSource(),
-                        LocalDateTime.now()),
-                payload
-        );
+    public AssociationWaldec process(@Nonnull CSVRecord item) {
+        return mappedToCompanyHistory(item);
     }
 
     private AssociationWaldec mappedToCompanyHistory(CSVRecord csvRecord) {

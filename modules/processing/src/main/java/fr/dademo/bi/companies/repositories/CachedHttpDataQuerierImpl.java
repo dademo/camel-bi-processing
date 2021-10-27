@@ -4,18 +4,18 @@ import fr.dademo.bi.companies.repositories.datamodel.HashDefinition;
 import fr.dademo.bi.companies.repositories.exceptions.FailedQueryException;
 import fr.dademo.bi.companies.repositories.exceptions.MissingResultBodyException;
 import fr.dademo.bi.companies.repositories.exceptions.UnexpectedRedirectResponseException;
-import io.quarkus.arc.DefaultBean;
 import lombok.SneakyThrows;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import org.apache.commons.lang3.SystemUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.integration.annotation.Default;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Path;
@@ -23,8 +23,8 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 
-@DefaultBean
-@ApplicationScoped
+@Default
+@Component
 public class CachedHttpDataQuerierImpl extends HttpDataQuerier {
 
     private static final Path CACHE_DIRECTORY_ROOT = Path.of(SystemUtils.getUserHome().getAbsolutePath(), ".cache", "quarkus-http");
@@ -32,8 +32,8 @@ public class CachedHttpDataQuerierImpl extends HttpDataQuerier {
     private final OkHttpClient okHttpClient;
     private final CacheHandler cacheHandler;
 
-    @Inject
-    public CachedHttpDataQuerierImpl(@Nonnull OkHttpClient okHttpClient, @Nonnull CacheHandlerProvider cacheHandlerProvider) {
+
+    public CachedHttpDataQuerierImpl(@Autowired @Nonnull OkHttpClient okHttpClient, @Autowired @Nonnull CacheHandlerProvider cacheHandlerProvider) {
         this(okHttpClient, cacheHandlerProvider.getCacheHandler());
     }
 

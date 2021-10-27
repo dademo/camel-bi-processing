@@ -1,46 +1,39 @@
 package fr.dademo.bi.companies.jobs.stg.association_waldec;
 
+import fr.dademo.bi.companies.configuration.JobsConfiguration;
 import fr.dademo.bi.companies.jobs.stg.association_waldec.datamodel.AssociationWaldec;
 import fr.dademo.bi.companies.tools.batch.job.BaseChunkJob;
-import fr.dademo.bi.companies.tools.batch.writer.DefaultRecordWriterProvider;
-import fr.dademo.bi.companies.tools.batch.writer.RecordWriterProvider;
-import lombok.Getter;
 import org.apache.commons.csv.CSVRecord;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.jeasy.batch.core.mapper.RecordMapper;
-import org.jeasy.batch.core.reader.RecordReader;
+import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.ItemWriter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
 
-@ApplicationScoped
-@Named(JobDefinition.ASSOCIATION_WALDEC_JOB_NAME)
+@Component
+@Qualifier(JobDefinition.ASSOCIATION_WALDEC_JOB_NAME)
 public class JobDefinition extends BaseChunkJob<CSVRecord, AssociationWaldec> {
 
-    public static final String ASSOCIATION_WALDEC_JOB_NAME = "stg_association_waldec";
+    private static final String CONFIG_JOB_NAME = "association_waldec";
+    public static final String ASSOCIATION_WALDEC_JOB_NAME = "stg_" + CONFIG_JOB_NAME;
 
-    @Getter
-    @ConfigProperty(name = "jobs.association-waldec.enabled", defaultValue = "false")
-    boolean enabled = false;
+    @Autowired
+    private JobsConfiguration jobsConfiguration;
 
-    @Getter
-    @ConfigProperty(name = "jobs.association-waldec.batch-size", defaultValue = "100000")
-    int batchSize = 100000;
+    @Autowired
+    private AssociationWaldecReader associationWaldecReader;
+    @Autowired
+    private AssociationWaldecMapper associationWaldecMapper;
+    @Autowired
+    private AssociationWaldecJdbcWriter associationWaldecJdbcWriter;
 
-    @Getter
-    @ConfigProperty(name = "jobs.association-waldec.writer-type", defaultValue = "NO_ACTION")
-    String recordWriterTypeStr = "NO_ACTION";
-
-    @Inject
-    AssociationWaldecReader associationWaldecReader;
-
-    @Inject
-    AssociationWaldecMapper associationWaldecMapper;
-
-    @Inject
-    AssociationWaldecJdbcWriter associationWaldecJdbcWriter;
+    @Nonnull
+    protected JobsConfiguration.JobConfiguration getJobConfiguration() {
+        return jobsConfiguration.getJobConfigurationByName(CONFIG_JOB_NAME);
+    }
 
     @Nonnull
     @Override
@@ -50,22 +43,19 @@ public class JobDefinition extends BaseChunkJob<CSVRecord, AssociationWaldec> {
 
     @Nonnull
     @Override
-    public RecordReader<CSVRecord> getRecordReader() {
+    public ItemReader<CSVRecord> getItemReader() {
         return associationWaldecReader;
     }
 
     @Nonnull
     @Override
-    public RecordMapper<CSVRecord, AssociationWaldec> getRecordProcessor() {
+    public ItemProcessor<CSVRecord, AssociationWaldec> getItemProcessor() {
         return associationWaldecMapper;
     }
 
     @Nonnull
     @Override
-    protected RecordWriterProvider<AssociationWaldec> getRecordWriterProvider() {
-
-        return DefaultRecordWriterProvider.<AssociationWaldec>builder()
-                .jdbcRecordWriter(associationWaldecJdbcWriter)
-                .build();
+    protected ItemWriter<AssociationWaldec> getItemWriter() {
+        return associationWaldecJdbcWriter;
     }
 }

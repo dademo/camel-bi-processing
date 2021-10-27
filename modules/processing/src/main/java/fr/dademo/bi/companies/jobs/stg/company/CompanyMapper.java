@@ -2,33 +2,20 @@ package fr.dademo.bi.companies.jobs.stg.company;
 
 import fr.dademo.bi.companies.jobs.stg.company.datamodel.Company;
 import org.apache.commons.csv.CSVRecord;
-import org.jeasy.batch.core.mapper.RecordMapper;
-import org.jeasy.batch.core.record.GenericRecord;
-import org.jeasy.batch.core.record.Header;
-import org.jeasy.batch.core.record.Record;
+import org.springframework.batch.item.ItemProcessor;
+import org.springframework.stereotype.Component;
 
-import javax.enterprise.context.ApplicationScoped;
-import java.time.LocalDateTime;
+import javax.annotation.Nonnull;
 
 import static fr.dademo.bi.companies.jobs.stg.company.datamodel.Company.*;
 import static fr.dademo.bi.companies.tools.batch.mapper.BatchMapperTools.*;
 
-@ApplicationScoped
-public class CompanyMapper implements RecordMapper<CSVRecord, Company> {
+@Component
+public class CompanyMapper implements ItemProcessor<CSVRecord, Company> {
 
     @Override
-    public Record<Company> processRecord(Record<CSVRecord> item) {
-        return toRecord(item.getHeader(), mappedToCompanyHistory(item.getPayload()));
-    }
-
-    private Record<Company> toRecord(Header sourceHeader, Company payload) {
-        return new GenericRecord<>(
-                new Header(
-                        sourceHeader.getNumber(),
-                        sourceHeader.getSource(),
-                        LocalDateTime.now()),
-                payload
-        );
+    public Company process(@Nonnull CSVRecord item) {
+        return mappedToCompanyHistory(item);
     }
 
     private Company mappedToCompanyHistory(CSVRecord csvRecord) {

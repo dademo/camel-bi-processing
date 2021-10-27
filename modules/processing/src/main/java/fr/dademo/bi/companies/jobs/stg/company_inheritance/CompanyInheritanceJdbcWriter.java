@@ -1,38 +1,36 @@
 package fr.dademo.bi.companies.jobs.stg.company_inheritance;
 
 import fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel.CompanyInheritance;
-import fr.dademo.bi.companies.tools.batch.writer.BatchWriterTools;
-import fr.dademo.bi.companies.tools.batch.writer.JdbcRecordWriter;
 import lombok.Getter;
 import org.jboss.logging.Logger;
-import org.jeasy.batch.core.record.Batch;
-import org.jeasy.batch.core.record.Record;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
+import org.springframework.batch.item.ItemWriter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Consumer;
 
 import static fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel.CompanyInheritanceTable.COMPANY_INHERITANCE;
 import static fr.dademo.bi.companies.tools.DefaultAppBeans.STG_DSL_CONTEXT;
 
-@ApplicationScoped
-public class CompanyInheritanceJdbcWriter implements JdbcRecordWriter<CompanyInheritance> {
+@Component
+public class CompanyInheritanceJdbcWriter implements ItemWriter<CompanyInheritance> {
 
     private static final Logger LOGGER = Logger.getLogger(CompanyInheritanceJdbcWriter.class);
 
-    @Inject
-    @Named(STG_DSL_CONTEXT)
+    @Autowired
+    @Qualifier(STG_DSL_CONTEXT)
     @Getter
     DSLContext dslContext;
 
     @Override
-    public void writeRecords(Batch<CompanyInheritance> batch) {
+    public void write(List<? extends CompanyInheritance> items) {
 
-        LOGGER.info(String.format("Writing %d company inheritance documents", batch.size()));
+        LOGGER.info(String.format("Writing %d company inheritance documents", items.size()));
 
         final var batchInsertStatement = dslContext.batch(dslContext.insertInto(COMPANY_INHERITANCE,
                 COMPANY_INHERITANCE.FIELD_COMPANY_PREDECESSOR_SIREN,
@@ -43,8 +41,7 @@ public class CompanyInheritanceJdbcWriter implements JdbcRecordWriter<CompanyInh
                 COMPANY_INHERITANCE.FIELD_COMPANY_PROCESSING_DATE
         ).values((String) null, null, null, null, null, null));
 
-        BatchWriterTools.recordsStreamOfBatch(batch)
-                .map(Record::getPayload)
+        items.stream()
                 .map(this::companyInheritanceBind)
                 .forEach(consumer -> consumer.accept(batchInsertStatement));
 
@@ -59,7 +56,7 @@ public class CompanyInheritanceJdbcWriter implements JdbcRecordWriter<CompanyInh
 
     private Consumer<BatchBindStep> companyInheritanceBind(CompanyInheritance companyInheritance) {
 
-        return batch -> batch.bind(
+        return items -> items.bind(
                 companyInheritance.getCompanyPredecessorSiren(),
                 companyInheritance.getCompanySuccessorSiren(),
                 companyInheritance.getCompanySuccessionDate(),

@@ -1,13 +1,13 @@
 package fr.dademo.bi.companies.tools.batch.job;
 
-import org.jeasy.batch.core.job.Job;
+import org.springframework.batch.core.Job;
+import org.springframework.context.annotation.Bean;
 
 import javax.annotation.Nonnull;
 
 public interface BatchJobProvider {
 
-    boolean isEnabled();
-
     @Nonnull
+    @Bean
     Job getJob();
 }
