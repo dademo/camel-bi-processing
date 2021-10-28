@@ -32,60 +32,59 @@ spring:
     #  clean-disabled: false
     #  migrate-at-start: true
     #  baseline-on-migrate: true
-  log:
-    category:
-      'fr.dademo.bi':
-        level: DEBUG
-      'fr.dademo.bi.companies.tools':
-        level: TRACE
-        min-level: TRACE
-      'org.flywaydb.core':
-        level: DEBUG
-      'org.jooq.Constants':
-        level: WARNING
-      'okhttp3':
-        level: DEBUG
 
-datasource:
+logging:
+  level:
+    'org.springframework': DEBUG
+    'fr.dademo.bi': DEBUG
+    'fr.dademo.bi.companies.tools': TRACE
+    'org.flywaydb.core': DEBUG
+    'org.jooq.Constants': WARN
+    'okhttp3': DEBUG
+
+datasources:
   jdbc:
     stg:
+      enabled: false
       url: jdbc:postgresql://localhost:5432/bi
       username: bi_rw
       password: bi_rw
   mongodb:
-    enabled: false
-    connection-string: mongodb://localhost:27017/stg
+    stg:
+      enabled: false
+      connection-string: mongodb://localhost:27017/stg
 
-jobs:
-  naf:
-    enabled: true
-    batch-size: 1000
-    writer-type: JDBC
-  company:
-    enabled: false
-    batch-size: 100000
-    writer-type: NO_ACTION
-  company-history:
-    enabled: false
-    batch-size: 100000
-    writer-type: NO_ACTION
-  company-inheritance:
-    enabled: false
-    batch-size: 100000
-    writer-type: NO_ACTION
-  company-legal:
-    enabled: false
-    batch-size: 100000
-    writer-type: NO_ACTION
-  company-legal-history:
-    enabled: false
-    batch-size: 100000
-    writer-type: NO_ACTION
-  association:
-    enabled: true
-    batch-size: 100000
-    writer-type: NO_ACTION
-  association-waldec:
-    enabled: true
-    batch-size: 100000
-    writer-type: NO_ACTION
+batch:
+  jobs:
+    naf:
+      enabled: true
+      batch-size: 1000
+      writer-type: JDBC
+    company:
+      enabled: false
+      batch-size: 100000
+      writer-type: NO_ACTION
+    company-history:
+      enabled: false
+      batch-size: 100000
+      writer-type: NO_ACTION
+    company-inheritance:
+      enabled: false
+      batch-size: 100000
+      writer-type: NO_ACTION
+    company-legal:
+      enabled: false
+      batch-size: 100000
+      writer-type: NO_ACTION
+    company-legal-history:
+      enabled: false
+      batch-size: 100000
+      writer-type: NO_ACTION
+    association:
+      enabled: true
+      batch-size: 100000
+      writer-type: NO_ACTION
+    association-waldec:
+      enabled: true
+      batch-size: 100000
+      writer-type: NO_ACTION

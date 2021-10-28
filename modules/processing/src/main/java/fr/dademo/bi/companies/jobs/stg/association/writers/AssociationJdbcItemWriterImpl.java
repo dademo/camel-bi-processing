@@ -1,27 +1,32 @@
-package fr.dademo.bi.companies.jobs.stg.association;
+package fr.dademo.bi.companies.jobs.stg.association.writers;
 
+import fr.dademo.bi.companies.jobs.stg.association.AssociationItemWriter;
 import fr.dademo.bi.companies.jobs.stg.association.datamodel.Association;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.jboss.logging.Logger;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
-import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static fr.dademo.bi.companies.beans.BeanValues.*;
 import static fr.dademo.bi.companies.jobs.stg.association.datamodel.AssociationTable.ASSOCIATION;
-import static fr.dademo.bi.companies.tools.DefaultAppBeans.STG_DSL_CONTEXT;
 
 @Component
-public class AssociationJdbcWriter implements ItemWriter<Association> {
+@ConditionalOnProperty(
+        value = CONFIG_DATASOURCE_JDBC + "." + STG_DATASOURCE_NAME + "." + CONFIG_ENABLED,
+        havingValue = "true"
+)
+public class AssociationJdbcItemWriterImpl implements AssociationItemWriter {
 
-    private static final Logger LOGGER = Logger.getLogger(AssociationJdbcWriter.class);
+    private static final Logger LOGGER = Logger.getLogger(AssociationJdbcItemWriterImpl.class);
 
     @Autowired
     @Qualifier(STG_DSL_CONTEXT)

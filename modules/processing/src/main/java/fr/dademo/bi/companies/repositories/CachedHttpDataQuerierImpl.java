@@ -10,9 +10,6 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import org.apache.commons.lang3.SystemUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.integration.annotation.Default;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -23,8 +20,6 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 
-@Default
-@Component
 public class CachedHttpDataQuerierImpl extends HttpDataQuerier {
 
     private static final Path CACHE_DIRECTORY_ROOT = Path.of(SystemUtils.getUserHome().getAbsolutePath(), ".cache", "quarkus-http");
@@ -33,7 +28,7 @@ public class CachedHttpDataQuerierImpl extends HttpDataQuerier {
     private final CacheHandler cacheHandler;
 
 
-    public CachedHttpDataQuerierImpl(@Autowired @Nonnull OkHttpClient okHttpClient, @Autowired @Nonnull CacheHandlerProvider cacheHandlerProvider) {
+    public CachedHttpDataQuerierImpl(@Nonnull OkHttpClient okHttpClient, @Nonnull CacheHandlerProvider cacheHandlerProvider) {
         this(okHttpClient, cacheHandlerProvider.getCacheHandler());
     }
 

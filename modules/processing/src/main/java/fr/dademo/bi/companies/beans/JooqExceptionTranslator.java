@@ -1,13 +1,15 @@
-package fr.dademo.bi.companies.tools;
+package fr.dademo.bi.companies.beans;
 
 import org.jooq.ExecuteContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DefaultExecuteListener;
 import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
 import org.springframework.jdbc.support.SQLExceptionTranslator;
+import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
+@Component
 public class JooqExceptionTranslator extends DefaultExecuteListener {
 
     @Override

@@ -19,9 +19,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Component
-public class NafReader implements ItemReader<NafDefinitionContainer> {
+public class NafDefinitionReader implements ItemReader<NafDefinitionContainer> {
 
-    private static final Logger LOGGER = Logger.getLogger(NafReader.class);
+    private static final Logger LOGGER = Logger.getLogger(NafDefinitionReader.class);
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     private static final String DATASET_NAME = "nomenclature-dactivites-francaise-naf-rev-2-code-ape";

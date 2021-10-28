@@ -1,26 +1,31 @@
-package fr.dademo.bi.companies.jobs.stg.company_legal_history;
+package fr.dademo.bi.companies.jobs.stg.company_legal_history.writers;
 
+import fr.dademo.bi.companies.jobs.stg.company_legal_history.CompanyLegalHistoryWriter;
 import fr.dademo.bi.companies.jobs.stg.company_legal_history.datamodel.CompanyLegalHistory;
 import lombok.Getter;
 import org.jboss.logging.Logger;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
-import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static fr.dademo.bi.companies.beans.BeanValues.*;
 import static fr.dademo.bi.companies.jobs.stg.company_legal_history.datamodel.CompanyLegalHistoryTable.COMPANY_LEGAL_HISTORY;
-import static fr.dademo.bi.companies.tools.DefaultAppBeans.STG_DSL_CONTEXT;
 
 @Component
-public class CompanyLegalHistoryJdbcWriter implements ItemWriter<CompanyLegalHistory> {
+@ConditionalOnProperty(
+        value = CONFIG_DATASOURCE_JDBC + "." + STG_DATASOURCE_NAME + "." + CONFIG_ENABLED,
+        havingValue = "true"
+)
+public class CompanyLegalHistoryJdbcWriterImpl implements CompanyLegalHistoryWriter {
 
-    private static final Logger LOGGER = Logger.getLogger(CompanyLegalHistoryJdbcWriter.class);
+    private static final Logger LOGGER = Logger.getLogger(CompanyLegalHistoryJdbcWriterImpl.class);
 
     @Autowired
     @Qualifier(STG_DSL_CONTEXT)

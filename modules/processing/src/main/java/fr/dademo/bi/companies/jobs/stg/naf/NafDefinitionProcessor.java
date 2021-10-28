@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Nonnull;
 
 @Component
-public class NafProcessor implements ItemProcessor<NafDefinitionContainer, NafDefinition> {
+public class NafDefinitionProcessor implements ItemProcessor<NafDefinitionContainer, NafDefinition> {
 
     @Override
     public NafDefinition process(@Nonnull NafDefinitionContainer item) {

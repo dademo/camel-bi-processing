@@ -18,34 +18,17 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import javax.annotation.Nonnull;
 import javax.sql.DataSource;
 
+import static fr.dademo.bi.companies.beans.BeanValues.*;
+
 @Configuration
 public class DataSources {
-
-    public static final String DEFAULT_SPRING_APPLICATION_NAME = "JAVA_SPRING";
-    // Config
-    public static final String CONFIG_DATASOURCE_BASE = "datasources";
-    public static final String CONFIG_DATASOURCE_JDBC = CONFIG_DATASOURCE_BASE + ".jdbc";
-    public static final String CONFIG_DATASOURCE_MONGODB = CONFIG_DATASOURCE_BASE + ".mongodb";
-
-    public static final String DATASOURCE_CONFIG = "datasource";
-    public static final String MONGO_CLIENT_CONFIG = "mongoClient";
-    public static final String MONGO_TEMPLATE_CONFIG = "mongoTemplate";
-    // DataSources
-    public static final String STG_DATASOURCE_NAME = "stg";
-    // Beans
-    public static final String STG_DATASOURCE_BEAN_NAME = DATASOURCE_CONFIG + "_" + STG_DATASOURCE_NAME;
-    public static final String STG_MONGO_CLIENT_CONFIG_BEAN_NAME = MONGO_CLIENT_CONFIG + "_" + STG_DATASOURCE_NAME;
-    public static final String STG_MONGO_TEMPLATE_CONFIG_BEAN_NAME = MONGO_TEMPLATE_CONFIG + "_" + STG_DATASOURCE_NAME;
-
-    public static final String STG_DSL_CONTEXT = "stgDslContext";
-    public static final String STG_DSL_CONTEXT_DIALECT_PROVIDER = STG_DSL_CONTEXT + "ContextProvider";
 
     @Autowired
     private DataSourcesConfiguration dataSourcesConfiguration;
 
     @Bean(STG_DATASOURCE_BEAN_NAME)
     @ConditionalOnProperty(
-            value = CONFIG_DATASOURCE_JDBC + "." + STG_DATASOURCE_NAME,
+            value = CONFIG_DATASOURCE_JDBC + "." + STG_DATASOURCE_NAME + "." + CONFIG_ENABLED,
             havingValue = "true"
     )
     public DataSource stgDataSource() {
@@ -54,7 +37,7 @@ public class DataSources {
 
     @Bean(STG_MONGO_CLIENT_CONFIG_BEAN_NAME)
     @ConditionalOnProperty(
-            value = CONFIG_DATASOURCE_MONGODB + "." + STG_DATASOURCE_NAME,
+            value = CONFIG_DATASOURCE_MONGODB + "." + STG_DATASOURCE_NAME + "." + CONFIG_ENABLED,
             havingValue = "true"
     )
     public MongoClient stgMongoClient() {
@@ -63,7 +46,7 @@ public class DataSources {
 
     @Bean(STG_MONGO_TEMPLATE_CONFIG_BEAN_NAME)
     @ConditionalOnProperty(
-            value = CONFIG_DATASOURCE_MONGODB + "." + STG_DATASOURCE_NAME,
+            value = CONFIG_DATASOURCE_MONGODB + "." + STG_DATASOURCE_NAME + "." + CONFIG_ENABLED,
             havingValue = "true"
     )
     public MongoTemplate stgMongoTemplate(@Autowired MongoClient mongoClient) {

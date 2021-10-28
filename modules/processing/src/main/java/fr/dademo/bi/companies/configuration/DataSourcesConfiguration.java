@@ -10,11 +10,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.Nonnull;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 @Configuration
-@ConfigurationProperties(prefix = "datasources.jdbc")
+@ConfigurationProperties(prefix = "datasources")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,10 +25,10 @@ public class DataSourcesConfiguration {
     private static final String MONGODB_TYPE = "MongoDB";
 
     @Nonnull
-    private Map<String, JDBCDataSourceConfiguration> jdbc;
+    private Map<String, JDBCDataSourceConfiguration> jdbc = new HashMap<>();
 
     @Nonnull
-    private Map<String, MongoDBClientConfiguration> mongodb;
+    private Map<String, MongoDBClientConfiguration> mongodb = new HashMap<>();
 
     public JDBCDataSourceConfiguration getJDBCDataSourceConfigurationByName(@Nonnull String dataSourceName) {
         return configurationByName(jdbc, dataSourceName, JDBC_TYPE);

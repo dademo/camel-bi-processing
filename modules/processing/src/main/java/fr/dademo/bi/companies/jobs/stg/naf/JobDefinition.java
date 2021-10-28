@@ -1,6 +1,6 @@
 package fr.dademo.bi.companies.jobs.stg.naf;
 
-import fr.dademo.bi.companies.configuration.JobsConfiguration;
+import fr.dademo.bi.companies.configuration.BatchConfiguration;
 import fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinition;
 import fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinitionContainer;
 import fr.dademo.bi.companies.tools.batch.job.BaseChunkJob;
@@ -12,25 +12,26 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
 
-@Component
+@Component(JobDefinition.NAF_JOB_NAME)
 public class JobDefinition extends BaseChunkJob<NafDefinitionContainer, NafDefinition> {
 
     private static final String CONFIG_JOB_NAME = "naf";
-    public static final String NAF_JOB_NAME = "stg_" + CONFIG_JOB_NAME;
+    private static final String NORMALIZED_CONFIG_JOB_NAME = "naf";
+    public static final String NAF_JOB_NAME = "stg_" + NORMALIZED_CONFIG_JOB_NAME;
 
     @Autowired
-    private JobsConfiguration jobsConfiguration;
+    private BatchConfiguration batchConfiguration;
 
     @Autowired
-    private NafReader nafReader;
+    private NafDefinitionReader nafDefinitionReader;
     @Autowired
-    private NafProcessor nafProcessor;
+    private NafDefinitionProcessor nafDefinitionProcessor;
     @Autowired
-    private NafJdbcWriter nafJdbcWriter;
+    private NafDefinitionWriter nafDefinitionWriter;
 
     @Nonnull
-    protected JobsConfiguration.JobConfiguration getJobConfiguration() {
-        return jobsConfiguration.getJobConfigurationByName(CONFIG_JOB_NAME);
+    protected BatchConfiguration.JobConfiguration getJobConfiguration() {
+        return batchConfiguration.getJobConfigurationByName(CONFIG_JOB_NAME);
     }
 
     @Nonnull
@@ -42,18 +43,18 @@ public class JobDefinition extends BaseChunkJob<NafDefinitionContainer, NafDefin
     @Nonnull
     @Override
     public ItemReader<NafDefinitionContainer> getItemReader() {
-        return nafReader;
+        return nafDefinitionReader;
     }
 
     @Nonnull
     @Override
     public ItemProcessor<NafDefinitionContainer, NafDefinition> getItemProcessor() {
-        return nafProcessor;
+        return nafDefinitionProcessor;
     }
 
     @Nonnull
     @Override
     protected ItemWriter<NafDefinition> getItemWriter() {
-        return nafJdbcWriter;
+        return nafDefinitionWriter;
     }
 }

@@ -1,27 +1,32 @@
-package fr.dademo.bi.companies.jobs.stg.company;
+package fr.dademo.bi.companies.jobs.stg.company.writers;
 
+import fr.dademo.bi.companies.jobs.stg.company.CompanyItemWriter;
 import fr.dademo.bi.companies.jobs.stg.company.datamodel.Company;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.jboss.logging.Logger;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
-import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static fr.dademo.bi.companies.beans.BeanValues.*;
 import static fr.dademo.bi.companies.jobs.stg.company.datamodel.CompanyTable.COMPANY;
-import static fr.dademo.bi.companies.tools.DefaultAppBeans.STG_DSL_CONTEXT;
 
 @Component
-public class CompanyJdbcWriter implements ItemWriter<Company> {
+@ConditionalOnProperty(
+        value = CONFIG_DATASOURCE_JDBC + "." + STG_DATASOURCE_NAME + "." + CONFIG_ENABLED,
+        havingValue = "true"
+)
+public class CompanyJdbcItemWriterImpl implements CompanyItemWriter {
 
-    private static final Logger LOGGER = Logger.getLogger(CompanyJdbcWriter.class);
+    private static final Logger LOGGER = Logger.getLogger(CompanyJdbcItemWriterImpl.class);
 
     @Autowired
     @Qualifier(STG_DSL_CONTEXT)

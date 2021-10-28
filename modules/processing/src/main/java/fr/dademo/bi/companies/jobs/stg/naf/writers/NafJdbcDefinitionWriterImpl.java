@@ -1,5 +1,6 @@
-package fr.dademo.bi.companies.jobs.stg.naf;
+package fr.dademo.bi.companies.jobs.stg.naf.writers;
 
+import fr.dademo.bi.companies.jobs.stg.naf.NafDefinitionWriter;
 import fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinition;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -7,8 +8,9 @@ import org.jboss.logging.Logger;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.jooq.Field;
-import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
@@ -16,16 +18,22 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static fr.dademo.bi.companies.beans.BeanValues.*;
 import static fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinitionTable.NAF_DEFINITION;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.name;
 
 @Component
-public class NafJdbcWriter implements ItemWriter<NafDefinition> {
+@ConditionalOnProperty(
+        value = CONFIG_DATASOURCE_JDBC + "." + STG_DATASOURCE_NAME + "." + CONFIG_ENABLED,
+        havingValue = "true"
+)
+public class NafJdbcDefinitionWriterImpl implements NafDefinitionWriter {
 
-    private static final Logger LOGGER = Logger.getLogger(NafJdbcWriter.class);
+    private static final Logger LOGGER = Logger.getLogger(NafJdbcDefinitionWriterImpl.class);
 
     @Autowired
+    @Qualifier(STG_DSL_CONTEXT)
     @Getter
     private DSLContext dslContext;
 
