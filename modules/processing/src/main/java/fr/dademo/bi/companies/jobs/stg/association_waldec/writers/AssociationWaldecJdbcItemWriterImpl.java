@@ -4,9 +4,10 @@ import fr.dademo.bi.companies.jobs.stg.association_waldec.AssociationWaldecItemW
 import fr.dademo.bi.companies.jobs.stg.association_waldec.datamodel.AssociationWaldec;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import org.jboss.logging.Logger;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -17,16 +18,17 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static fr.dademo.bi.companies.beans.BeanValues.*;
+import static fr.dademo.bi.companies.jobs.stg.association_waldec.JobDefinition.ASSOCIATION_WALDEC_CONFIG_JOB_NAME;
 import static fr.dademo.bi.companies.jobs.stg.association_waldec.datamodel.AssociationWaldecTable.ASSOCIATION_WALDEC;
 
 @Component
 @ConditionalOnProperty(
-        value = CONFIG_DATASOURCE_JDBC + "." + STG_DATASOURCE_NAME + "." + CONFIG_ENABLED,
-        havingValue = "true"
+        value = CONFIG_JOBS_BASE + "." + ASSOCIATION_WALDEC_CONFIG_JOB_NAME + "." + CONFIG_WRITER_TYPE,
+        havingValue = CONFIG_JDBC_TYPE
 )
 public class AssociationWaldecJdbcItemWriterImpl implements AssociationWaldecItemWriter {
 
-    private static final Logger LOGGER = Logger.getLogger(AssociationWaldecJdbcItemWriterImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AssociationWaldecJdbcItemWriterImpl.class);
 
     @Autowired
     @Qualifier(STG_DSL_CONTEXT)
@@ -37,7 +39,7 @@ public class AssociationWaldecJdbcItemWriterImpl implements AssociationWaldecIte
     @Override
     public void write(List<? extends AssociationWaldec> items) {
 
-        LOGGER.info(String.format("Writing %d company documents", items.size()));
+        LOGGER.info("Writing {} company documents", items.size());
 
         final var batchInsertStatement = dslContext.batch(dslContext.insertInto(ASSOCIATION_WALDEC,
                 ASSOCIATION_WALDEC.FIELD_ASSOCIATION_ID,
@@ -93,7 +95,7 @@ public class AssociationWaldecJdbcItemWriterImpl implements AssociationWaldecIte
         final var batchResult = batchInsertStatement.execute();
         if (batchResult.length > 0) {
             final int totalUpdated = Arrays.stream(batchResult).sum();
-            LOGGER.info(String.format("%d rows affected", totalUpdated));
+            LOGGER.info("{} rows affected", totalUpdated);
         } else {
             LOGGER.error("An error occurred while running batch");
         }

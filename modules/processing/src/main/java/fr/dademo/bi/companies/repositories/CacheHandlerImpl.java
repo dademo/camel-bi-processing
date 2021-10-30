@@ -11,7 +11,8 @@ import fr.dademo.bi.companies.repositories.exceptions.NotADirectoryException;
 import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.input.TeeInputStream;
-import org.jboss.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -33,7 +34,7 @@ import static fr.dademo.bi.companies.tools.hash.HashTools.getHashComputerForAlgo
 
 public class CacheHandlerImpl implements CacheHandler {
 
-    private static final org.jboss.logging.Logger LOGGER = Logger.getLogger(CacheHandlerImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CacheHandlerImpl.class);
     private static final String PREFIX = "bi-cache";
     private static final String LOCK_FILE_NAME = "index.lock";
     private static final String RESOURCES_DIRECTORY_NAME = "resources";
@@ -78,7 +79,7 @@ public class CacheHandlerImpl implements CacheHandler {
     @SneakyThrows
     public InputStream readFromCachedInputStream(@Nonnull String inputFileIdentifier) {
 
-        LOGGER.debug(String.format("Reading on local cache for identifier '%s'", inputFileIdentifier));
+        LOGGER.debug("Reading on local cache for identifier `{}`", inputFileIdentifier);
         Path cachedFilePath = withLockedLockFile(
                 () -> Path.of(
                         cacheDirectoryRoot.toString(),
@@ -100,7 +101,7 @@ public class CacheHandlerImpl implements CacheHandler {
                                         @Nullable Duration expiration,
                                         @Nonnull List<HashDefinition> hashProvider) {
 
-        LOGGER.debug(String.format("Storing input stream in cache for identifier '%s'", inputFileIdentifier));
+        LOGGER.debug("Storing input stream in cache for identifier `{}`", inputFileIdentifier);
         // Writing body to a temp file
         final var tempFilePath = Files.createTempFile(PREFIX, "");
         final var cachedFile = new FileOutputStream(tempFilePath.toFile());
@@ -116,7 +117,7 @@ public class CacheHandlerImpl implements CacheHandler {
                     } catch (IOException e) {
                         throw new UncheckedIOException(e);
                     } finally {
-                        LOGGER.debug(String.format("Cleaning working dir for identifier '%s'", inputFileIdentifier));
+                        LOGGER.debug("Cleaning working dir for identifier `{}`", inputFileIdentifier);
                         cleanTempFile(tempFilePath, inputFileIdentifier);
                     }
                 });
@@ -125,9 +126,9 @@ public class CacheHandlerImpl implements CacheHandler {
     @SneakyThrows
     private void cleanTempFile(Path tempFilePath, String inputFileIdentifier) {
 
-        LOGGER.debug(String.format("Removing file '%s' for identifier '%s'", tempFilePath, inputFileIdentifier));
+        LOGGER.debug("Removing file `{}` for identifier `{}` if existing", tempFilePath, inputFileIdentifier);
         final var deleted = Files.deleteIfExists(tempFilePath);
-        LOGGER.debug(String.format("File '%s' for identifier '%s' %s deleted", tempFilePath, inputFileIdentifier, deleted ? "" : "not"));
+        LOGGER.debug("File '{}' for identifier `{}` {} deleted", tempFilePath, inputFileIdentifier, deleted ? "" : "not");
     }
 
     private List<CachedFileDescription> lockFileMapUsingDirectory() {
@@ -149,7 +150,7 @@ public class CacheHandlerImpl implements CacheHandler {
 
     private synchronized void deleteFromCache(CachedFileDescription cachedFileDescription) {
 
-        LOGGER.debug(String.format("Removing cached file '%s'", cachedFileDescription.getFinalFileName()));
+        LOGGER.debug("Removing cached file `{}`", cachedFileDescription.getFinalFileName());
         withLockedLockFile(() -> {
 
             final var lockFileFinalContent = readLockFile().stream()
@@ -189,7 +190,7 @@ public class CacheHandlerImpl implements CacheHandler {
                                            String inputFileIdentifier,
                                            Duration expiration) {
 
-        LOGGER.debug(String.format("Final persisting cached identifier '%s'", inputFileIdentifier));
+        LOGGER.debug("Final persisting cached identifier `{}`", inputFileIdentifier);
         final var finalFileName = DatatypeConverter
                 .printHexBinary(HASH_COMPUTER.digest(inputFileIdentifier.getBytes()))
                 .toUpperCase();

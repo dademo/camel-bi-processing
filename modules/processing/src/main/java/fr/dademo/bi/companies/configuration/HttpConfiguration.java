@@ -14,23 +14,23 @@ import java.io.File;
 import java.nio.file.Path;
 
 @Configuration
-@ConfigurationProperties(prefix = "jobs")
+@ConfigurationProperties(prefix = "http")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class HttpConfiguration {
 
     @Min(0)
-    private long connectTimeoutSeconds;
+    private long connectTimeoutSeconds = 0;
 
     @Min(0)
-    private long callReadTimeoutSeconds;
+    private long callReadTimeoutSeconds = 0;
 
     @Min(0)
-    private long callTimeoutSeconds;
+    private long callTimeoutSeconds = 0;
 
     @Nullable
-    private CacheConfiguration cacheConfiguration;
+    private CacheConfiguration cacheConfiguration = new CacheConfiguration();
 
     @Data
     @NoArgsConstructor

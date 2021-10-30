@@ -8,7 +8,7 @@ public final class InvalidResponseException extends RuntimeException {
     private final int code;
 
     public InvalidResponseException(final int code) {
-        super("Invalid service response received");
+        super(String.format("Invalid service response received (got %d)", code));
         this.code = code;
     }
 }

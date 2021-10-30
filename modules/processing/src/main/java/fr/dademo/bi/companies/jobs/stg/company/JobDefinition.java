@@ -16,9 +16,9 @@ import javax.annotation.Nonnull;
 @Component(JobDefinition.COMPANY_JOB_NAME)
 public class JobDefinition extends BaseChunkJob<CSVRecord, Company> {
 
-    private static final String CONFIG_JOB_NAME = "company";
-    private static final String NORMALIZED_CONFIG_JOB_NAME = "company";
-    public static final String COMPANY_JOB_NAME = "stg_" + NORMALIZED_CONFIG_JOB_NAME;
+    public static final String COMPANY_CONFIG_JOB_NAME = "company";
+    public static final String COMPANY_NORMALIZED_CONFIG_JOB_NAME = "company";
+    public static final String COMPANY_JOB_NAME = "stg_" + COMPANY_NORMALIZED_CONFIG_JOB_NAME;
 
     @Autowired
     private BatchConfiguration batchConfiguration;
@@ -32,7 +32,7 @@ public class JobDefinition extends BaseChunkJob<CSVRecord, Company> {
 
     @Nonnull
     protected BatchConfiguration.JobConfiguration getJobConfiguration() {
-        return batchConfiguration.getJobConfigurationByName(CONFIG_JOB_NAME);
+        return batchConfiguration.getJobConfigurationByName(COMPANY_CONFIG_JOB_NAME);
     }
 
     @Nonnull

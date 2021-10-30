@@ -3,9 +3,10 @@ package fr.dademo.bi.companies.jobs.stg.company_legal.writers;
 import fr.dademo.bi.companies.jobs.stg.company_legal.CompanyLegalWriter;
 import fr.dademo.bi.companies.jobs.stg.company_legal.datamodel.CompanyLegal;
 import lombok.Getter;
-import org.jboss.logging.Logger;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -16,16 +17,17 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static fr.dademo.bi.companies.beans.BeanValues.*;
+import static fr.dademo.bi.companies.jobs.stg.company_legal.JobDefinition.COMPANY_LEGAL_CONFIG_JOB_NAME;
 import static fr.dademo.bi.companies.jobs.stg.company_legal.datamodel.CompanyLegalTable.COMPANY_LEGAL;
 
 @Component
 @ConditionalOnProperty(
-        value = CONFIG_DATASOURCE_JDBC + "." + STG_DATASOURCE_NAME + "." + CONFIG_ENABLED,
-        havingValue = "true"
+        value = CONFIG_JOBS_BASE + "." + COMPANY_LEGAL_CONFIG_JOB_NAME + "." + CONFIG_WRITER_TYPE,
+        havingValue = CONFIG_JDBC_TYPE
 )
 public class CompanyLegalJdbcWriterImpl implements CompanyLegalWriter {
 
-    private static final Logger LOGGER = Logger.getLogger(CompanyLegalJdbcWriterImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CompanyLegalJdbcWriterImpl.class);
 
     @Autowired
     @Qualifier(STG_DSL_CONTEXT)
@@ -35,7 +37,7 @@ public class CompanyLegalJdbcWriterImpl implements CompanyLegalWriter {
     @Override
     public void write(List<? extends CompanyLegal> items) {
 
-        LOGGER.info(String.format("Writing %d company legal documents", items.size()));
+        LOGGER.info("Writing {} company legal documents", items.size());
 
         final var batchInsertStatement = dslContext.batch(dslContext.insertInto(COMPANY_LEGAL,
                 COMPANY_LEGAL.FIELD_COMPANY_LEGAL_UNIT_SIREN,
@@ -84,7 +86,7 @@ public class CompanyLegalJdbcWriterImpl implements CompanyLegalWriter {
         final var batchResult = batchInsertStatement.execute();
         if (batchResult.length > 0) {
             final int totalUpdated = Arrays.stream(batchResult).sum();
-            LOGGER.info(String.format("%d rows affected", totalUpdated));
+            LOGGER.info("{} rows affected", totalUpdated);
         } else {
             LOGGER.error("An error occurred while running batch");
         }

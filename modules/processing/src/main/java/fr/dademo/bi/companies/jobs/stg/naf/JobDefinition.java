@@ -15,9 +15,9 @@ import javax.annotation.Nonnull;
 @Component(JobDefinition.NAF_JOB_NAME)
 public class JobDefinition extends BaseChunkJob<NafDefinitionContainer, NafDefinition> {
 
-    private static final String CONFIG_JOB_NAME = "naf";
-    private static final String NORMALIZED_CONFIG_JOB_NAME = "naf";
-    public static final String NAF_JOB_NAME = "stg_" + NORMALIZED_CONFIG_JOB_NAME;
+    public static final String NAF_CONFIG_JOB_NAME = "naf";
+    public static final String NAF_NORMALIZED_CONFIG_JOB_NAME = "naf";
+    public static final String NAF_JOB_NAME = "stg_" + NAF_NORMALIZED_CONFIG_JOB_NAME;
 
     @Autowired
     private BatchConfiguration batchConfiguration;
@@ -31,7 +31,7 @@ public class JobDefinition extends BaseChunkJob<NafDefinitionContainer, NafDefin
 
     @Nonnull
     protected BatchConfiguration.JobConfiguration getJobConfiguration() {
-        return batchConfiguration.getJobConfigurationByName(CONFIG_JOB_NAME);
+        return batchConfiguration.getJobConfigurationByName(NAF_CONFIG_JOB_NAME);
     }
 
     @Nonnull

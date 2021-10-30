@@ -4,9 +4,10 @@ import fr.dademo.bi.companies.jobs.stg.association.AssociationItemWriter;
 import fr.dademo.bi.companies.jobs.stg.association.datamodel.Association;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import org.jboss.logging.Logger;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -17,16 +18,17 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static fr.dademo.bi.companies.beans.BeanValues.*;
+import static fr.dademo.bi.companies.jobs.stg.association.JobDefinition.ASSOCIATION_CONFIG_JOB_NAME;
 import static fr.dademo.bi.companies.jobs.stg.association.datamodel.AssociationTable.ASSOCIATION;
 
 @Component
 @ConditionalOnProperty(
-        value = CONFIG_DATASOURCE_JDBC + "." + STG_DATASOURCE_NAME + "." + CONFIG_ENABLED,
-        havingValue = "true"
+        value = CONFIG_JOBS_BASE + "." + ASSOCIATION_CONFIG_JOB_NAME + "." + CONFIG_WRITER_TYPE,
+        havingValue = CONFIG_JDBC_TYPE
 )
 public class AssociationJdbcItemWriterImpl implements AssociationItemWriter {
 
-    private static final Logger LOGGER = Logger.getLogger(AssociationJdbcItemWriterImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AssociationJdbcItemWriterImpl.class);
 
     @Autowired
     @Qualifier(STG_DSL_CONTEXT)
@@ -37,7 +39,7 @@ public class AssociationJdbcItemWriterImpl implements AssociationItemWriter {
     @Override
     public void write(List<? extends Association> items) {
 
-        LOGGER.info(String.format("Writing %d association documents", items.size()));
+        LOGGER.info("Writing {} association documents", items.size());
 
         final var batchInsertStatement = dslContext.batch(dslContext.insertInto(ASSOCIATION,
                 ASSOCIATION.FIELD_ASSOCIATION_ID,
@@ -76,7 +78,7 @@ public class AssociationJdbcItemWriterImpl implements AssociationItemWriter {
         final var batchResult = batchInsertStatement.execute();
         if (batchResult.length > 0) {
             final int totalUpdated = Arrays.stream(batchResult).sum();
-            LOGGER.info(String.format("%d rows affected", totalUpdated));
+            LOGGER.info("{} rows affected", totalUpdated);
         } else {
             LOGGER.error("An error occurred while running batch");
         }

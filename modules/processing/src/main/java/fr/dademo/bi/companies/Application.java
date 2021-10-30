@@ -6,12 +6,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration;
+import org.springframework.boot.autoconfigure.couchbase.CouchbaseAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration;
+import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.autoconfigure.r2dbc.R2dbcAutoConfiguration;
 
 @SpringBootApplication(exclude = {
         R2dbcAutoConfiguration.class,
         DataSourceAutoConfiguration.class,
+        MongoAutoConfiguration.class,
+        CouchbaseAutoConfiguration.class,
+        KafkaAutoConfiguration.class,
+        RabbitAutoConfiguration.class,
 })
 @EnableBatchProcessing
 public class Application implements CommandLineRunner {

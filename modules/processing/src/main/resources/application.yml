@@ -35,12 +35,14 @@ spring:
 
 logging:
   level:
-    'org.springframework': DEBUG
+    'org.springframework': INFO
+    #'org.springframework': INFO
     'fr.dademo.bi': DEBUG
     'fr.dademo.bi.companies.tools': TRACE
     'org.flywaydb.core': DEBUG
     'org.jooq.Constants': WARN
-    'okhttp3': DEBUG
+    #'okhttp3': DEBUG
+    'okhttp3': INFO
 
 datasources:
   jdbc:
@@ -51,40 +53,49 @@ datasources:
       password: bi_rw
   mongodb:
     stg:
-      enabled: false
-      connection-string: mongodb://localhost:27017/stg
+      enabled: true
+      connection-string: mongodb://root:root@localhost:27017/stg
+      database: stg
 
 batch:
   jobs:
     naf:
       enabled: true
       batch-size: 1000
-      writer-type: JDBC
+      writer-type: MONGODB
+      max-threads: null
     company:
-      enabled: false
+      enabled: true
       batch-size: 100000
-      writer-type: NO_ACTION
+      writer-type: MONGODB
+      max-threads: null
     company-history:
       enabled: false
       batch-size: 100000
       writer-type: NO_ACTION
+      max-threads: null
     company-inheritance:
       enabled: false
       batch-size: 100000
       writer-type: NO_ACTION
+      max-threads: null
     company-legal:
       enabled: false
       batch-size: 100000
       writer-type: NO_ACTION
+      max-threads: null
     company-legal-history:
       enabled: false
       batch-size: 100000
       writer-type: NO_ACTION
+      max-threads: null
     association:
-      enabled: true
+      enabled: false
       batch-size: 100000
       writer-type: NO_ACTION
+      max-threads: null
     association-waldec:
-      enabled: true
+      enabled: false
       batch-size: 100000
       writer-type: NO_ACTION
+      max-threads: null

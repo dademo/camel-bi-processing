@@ -2,18 +2,19 @@ package fr.dademo.bi.companies.jobs.stg.association_waldec;
 
 import fr.dademo.bi.companies.repositories.HttpDataQuerier;
 import fr.dademo.bi.companies.services.DataGouvFrDataSetTools;
+import fr.dademo.bi.companies.tools.batch.reader.HttpItemStreamReaderSupport;
 import lombok.SneakyThrows;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
-import org.jboss.logging.Logger;
-import org.springframework.batch.core.annotation.AfterRead;
-import org.springframework.batch.core.annotation.BeforeRead;
-import org.springframework.batch.item.ItemReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.batch.item.ExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Nonnull;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Collections;
@@ -25,9 +26,9 @@ import java.util.stream.Stream;
 import static fr.dademo.bi.companies.jobs.stg.association_waldec.datamodel.AssociationWaldec.CSV_HEADER_ASSOCIATION_WALDEC;
 
 @Component
-public class AssociationWaldecReader implements ItemReader<CSVRecord> {
+public class AssociationWaldecReader extends HttpItemStreamReaderSupport<CSVRecord> {
 
-    private static final Logger LOGGER = Logger.getLogger(AssociationWaldecReader.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AssociationWaldecReader.class);
     private static final String DATASET_NAME = "repertoire-national-des-associations";
     private static final String DATASET_URL = "https://media.interieur.gouv.fr/rna/rna_waldec_20211001.zip";
 
@@ -40,9 +41,8 @@ public class AssociationWaldecReader implements ItemReader<CSVRecord> {
     private ZipArchiveInputStream archiveInputStream;
     private Iterator<CSVRecord> iterator = Collections.emptyIterator();
 
-    @BeforeRead
     @SneakyThrows
-    public void open() {
+    public void open(@Nonnull ExecutionContext executionContext) {
 
         LOGGER.info("Reading values");
 
@@ -57,7 +57,7 @@ public class AssociationWaldecReader implements ItemReader<CSVRecord> {
         ));
     }
 
-    @AfterRead
+    @Override
     @SneakyThrows
     public void close() {
         archiveInputStream.close();

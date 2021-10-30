@@ -4,10 +4,11 @@ import fr.dademo.bi.companies.jobs.stg.naf.NafDefinitionWriter;
 import fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinition;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import org.jboss.logging.Logger;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.jooq.Field;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -19,18 +20,19 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static fr.dademo.bi.companies.beans.BeanValues.*;
+import static fr.dademo.bi.companies.jobs.stg.naf.JobDefinition.NAF_CONFIG_JOB_NAME;
 import static fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinitionTable.NAF_DEFINITION;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.name;
 
 @Component
 @ConditionalOnProperty(
-        value = CONFIG_DATASOURCE_JDBC + "." + STG_DATASOURCE_NAME + "." + CONFIG_ENABLED,
-        havingValue = "true"
+        value = CONFIG_JOBS_BASE + "." + NAF_CONFIG_JOB_NAME + "." + CONFIG_WRITER_TYPE,
+        havingValue = CONFIG_JDBC_TYPE
 )
 public class NafJdbcDefinitionWriterImpl implements NafDefinitionWriter {
 
-    private static final Logger LOGGER = Logger.getLogger(NafJdbcDefinitionWriterImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(NafJdbcDefinitionWriterImpl.class);
 
     @Autowired
     @Qualifier(STG_DSL_CONTEXT)
@@ -41,7 +43,7 @@ public class NafJdbcDefinitionWriterImpl implements NafDefinitionWriter {
     @Override
     public void write(List<? extends NafDefinition> items) {
 
-        LOGGER.info(String.format("Writing %d naf definition documents", items.size()));
+        LOGGER.info("Writing {} naf definition documents", items.size());
 
         final var batchInsertStatement = dslContext.batch(dslContext.insertInto(NAF_DEFINITION,
                         NAF_DEFINITION.FIELD_NAF_CODE,
@@ -62,7 +64,7 @@ public class NafJdbcDefinitionWriterImpl implements NafDefinitionWriter {
         final var batchResult = batchInsertStatement.execute();
         if (batchResult.length > 0) {
             final int totalUpdated = Arrays.stream(batchResult).sum();
-            LOGGER.info(String.format("%d rows affected", totalUpdated));
+            LOGGER.info("{} rows affected", totalUpdated);
         } else {
             LOGGER.error("An error occurred while running batch");
         }

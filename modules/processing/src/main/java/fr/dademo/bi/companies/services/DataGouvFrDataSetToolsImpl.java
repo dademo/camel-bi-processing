@@ -13,7 +13,8 @@ import lombok.SneakyThrows;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.ResponseBody;
-import org.jboss.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.annotation.Default;
 import org.springframework.stereotype.Component;
@@ -34,7 +35,7 @@ import java.util.stream.Stream;
 @Default
 public class DataGouvFrDataSetToolsImpl implements DataGouvFrDataSetTools {
 
-    private static final Logger LOGGER = Logger.getLogger(DataGouvFrDataSetToolsImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DataGouvFrDataSetToolsImpl.class);
 
     private static final String BASE_DATASET_API_URL = "https://www.data.gouv.fr/api/1/datasets";
     private static final String HEADER_LOCATION = "Location";
@@ -66,7 +67,7 @@ public class DataGouvFrDataSetToolsImpl implements DataGouvFrDataSetTools {
     public Optional<HashDefinition> hashDefinitionOfDataSetResourceByTitle(@Nonnull String dataSetName,
                                                                            @Nonnull String resourceTitle) {
 
-        LOGGER.debug(String.format("Getting data definition of resource `%s` for dataset `%s`", resourceTitle, dataSetName));
+        LOGGER.debug("Getting data definition of resource `{}` for dataset `{}`", resourceTitle, dataSetName);
 
         return getDataSetDefinition(dataSetName)
                 .map(dataSetResourceDefinitions -> hashDefinitionByTitle(
@@ -82,7 +83,7 @@ public class DataGouvFrDataSetToolsImpl implements DataGouvFrDataSetTools {
                                                                          @Nonnull String resourceUrl,
                                                                          boolean compareUrlQuery) {
 
-        LOGGER.debug(String.format("Getting data definition of resource at url `%s` for dataset `%s`", resourceUrl, dataSetName));
+        LOGGER.debug("Getting data definition of resource at url `{}` for dataset `{}`", resourceUrl, dataSetName);
 
         return getDataSetDefinition(dataSetName)
                 .map(dataSetResourceDefinitions -> hashDefinitionByUrl(

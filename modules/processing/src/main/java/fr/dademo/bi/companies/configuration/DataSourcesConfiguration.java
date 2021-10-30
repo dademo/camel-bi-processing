@@ -30,19 +30,22 @@ public class DataSourcesConfiguration {
     @Nonnull
     private Map<String, MongoDBClientConfiguration> mongodb = new HashMap<>();
 
+    @Nonnull
     public JDBCDataSourceConfiguration getJDBCDataSourceConfigurationByName(@Nonnull String dataSourceName) {
         return configurationByName(jdbc, dataSourceName, JDBC_TYPE);
     }
 
+    @Nonnull
     public MongoDBClientConfiguration getMongoDBClientConfigurationByName(@Nonnull String dataSourceName) {
         return configurationByName(mongodb, dataSourceName, MONGODB_TYPE);
     }
 
+    @Nonnull
     private <T> T configurationByName(Map<String, T> configurationMap,
                                       @Nonnull String configurationKey,
-                                      @Nonnull String dataSourceType) {
+                                      @Nonnull String dataSourceTypeDescription) {
 
         return Optional.ofNullable(configurationMap.get(configurationKey))
-                .orElseThrow(MissingDataSourceConfigurationException.ofDataSource(dataSourceType, configurationKey));
+                .orElseThrow(MissingDataSourceConfigurationException.ofDataSource(dataSourceTypeDescription, configurationKey));
     }
 }

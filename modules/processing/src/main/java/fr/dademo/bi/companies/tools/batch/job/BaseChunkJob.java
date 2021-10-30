@@ -12,9 +12,11 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public abstract class BaseChunkJob<I, O> implements BatchJobProvider {
 
+    public static final int MAX_THREAD_POOL_QUEUE_SIZE_FACTOR = 5;
 
     @Autowired
     private JobBuilderFactory jobBuilderFactory;
@@ -50,10 +52,14 @@ public abstract class BaseChunkJob<I, O> implements BatchJobProvider {
                         .orElseGet(BatchConfiguration.JobConfiguration::getDefaultIsEnabled))) {
 
             final var threadPoolExecutor = new ThreadPoolTaskExecutor();
-            threadPoolExecutor.setMaxPoolSize(
-                    Optional.ofNullable(getJobConfiguration().getMaxThreads())
-                            .orElseGet(BatchConfiguration.JobConfiguration::getDefaultMaxThreads)
-            );
+            final int poolSize = Optional.ofNullable(getJobConfiguration().getMaxThreads())
+                    .orElseGet(BatchConfiguration.JobConfiguration::getDefaultMaxThreads);
+
+            threadPoolExecutor.setCorePoolSize(poolSize);
+            threadPoolExecutor.setMaxPoolSize(poolSize);
+            threadPoolExecutor.setQueueCapacity(poolSize * MAX_THREAD_POOL_QUEUE_SIZE_FACTOR);
+
+            threadPoolExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
             threadPoolExecutor.initialize();
 
             final var step = stepBuilderFactory
@@ -69,6 +75,7 @@ public abstract class BaseChunkJob<I, O> implements BatchJobProvider {
 
             return jobBuilderFactory
                     .get(getJobName())
+                    .preventRestart()
                     .start(step)
                     .build();
         } else {

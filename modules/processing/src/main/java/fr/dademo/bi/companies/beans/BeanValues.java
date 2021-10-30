@@ -13,6 +13,7 @@ public final class BeanValues {
 
     public static final String DEFAULT_SPRING_APPLICATION_NAME = "JAVA_SPRING";
     // Config
+    public static final String CONFIG_JOBS_BASE = "batch.jobs";
     public static final String CONFIG_DATASOURCE_BASE = "datasources";
     public static final String CONFIG_DATASOURCE_JDBC = CONFIG_DATASOURCE_BASE + ".jdbc";
     public static final String CONFIG_DATASOURCE_MONGODB = CONFIG_DATASOURCE_BASE + ".mongodb";
@@ -28,5 +29,11 @@ public final class BeanValues {
     public static final String STG_DSL_CONTEXT_DIALECT_PROVIDER = STG_DSL_CONTEXT + "ContextProvider";
 
     public static final String CONFIG_ENABLED = "enabled";
+    public static final String CONFIG_WRITER_TYPE = "writer-type";
+
+    // Types
+    public static final String CONFIG_NO_ACTION_TYPE = "NO_ACTION";
+    public static final String CONFIG_JDBC_TYPE = "JDBC";
+    public static final String CONFIG_MONGODB_TYPE = "MONGODB";
 
 }

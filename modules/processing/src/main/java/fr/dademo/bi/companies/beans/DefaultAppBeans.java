@@ -3,6 +3,7 @@ package fr.dademo.bi.companies.beans;
 import fr.dademo.bi.companies.configuration.HttpConfiguration;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.annotation.Default;
@@ -14,7 +15,7 @@ public class DefaultAppBeans {
 
     @Default
     @Bean
-    public OkHttpClient okHttpClient(HttpConfiguration httpConfiguration) {
+    public OkHttpClient okHttpClient(@Autowired HttpConfiguration httpConfiguration) {
 
         final var loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);

@@ -15,9 +15,9 @@ import javax.annotation.Nonnull;
 @Component(JobDefinition.ASSOCIATION_WALDEC_JOB_NAME)
 public class JobDefinition extends BaseChunkJob<CSVRecord, AssociationWaldec> {
 
-    private static final String CONFIG_JOB_NAME = "association-waldec";
-    private static final String NORMALIZED_CONFIG_JOB_NAME = "association_waldec";
-    public static final String ASSOCIATION_WALDEC_JOB_NAME = "stg_" + NORMALIZED_CONFIG_JOB_NAME;
+    public static final String ASSOCIATION_WALDEC_CONFIG_JOB_NAME = "association-waldec";
+    public static final String ASSOCIATION_WALDEC_NORMALIZED_CONFIG_JOB_NAME = "association_waldec";
+    public static final String ASSOCIATION_WALDEC_JOB_NAME = "stg_" + ASSOCIATION_WALDEC_NORMALIZED_CONFIG_JOB_NAME;
 
     @Autowired
     private BatchConfiguration batchConfiguration;
@@ -31,7 +31,7 @@ public class JobDefinition extends BaseChunkJob<CSVRecord, AssociationWaldec> {
 
     @Nonnull
     protected BatchConfiguration.JobConfiguration getJobConfiguration() {
-        return batchConfiguration.getJobConfigurationByName(CONFIG_JOB_NAME);
+        return batchConfiguration.getJobConfigurationByName(ASSOCIATION_WALDEC_CONFIG_JOB_NAME);
     }
 
     @Nonnull
