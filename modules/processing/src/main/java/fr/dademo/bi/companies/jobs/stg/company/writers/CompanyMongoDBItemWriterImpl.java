@@ -41,8 +41,10 @@ public class CompanyMongoDBItemWriterImpl implements CompanyItemWriter, ItemStre
     public void write(List<? extends Company> items) {
 
         LOGGER.info("Writing {} company documents", items.size());
-        items.forEach(item -> mongoTemplate.insert(item, COLLECTION_NAME));
-        LOGGER.info("{} items added", items.size());
+        final var result = mongoTemplate.getCollection(COLLECTION_NAME)
+                .withDocumentClass(Company.class)
+                .insertMany(items);
+        LOGGER.info("{} items added", result.getInsertedIds().size());
     }
 
     @Override

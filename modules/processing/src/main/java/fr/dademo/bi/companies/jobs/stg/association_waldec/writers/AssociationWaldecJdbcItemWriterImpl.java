@@ -31,7 +31,7 @@ public class AssociationWaldecJdbcItemWriterImpl implements AssociationWaldecIte
     private static final Logger LOGGER = LoggerFactory.getLogger(AssociationWaldecJdbcItemWriterImpl.class);
 
     @Autowired
-    @Qualifier(STG_DSL_CONTEXT)
+    @Qualifier(STG_DATASOURCE_DSL_CONTEXT_BEAN_NAME)
     @Getter
     private DSLContext dslContext;
 

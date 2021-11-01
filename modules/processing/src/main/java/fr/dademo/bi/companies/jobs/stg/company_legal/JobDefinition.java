@@ -24,11 +24,11 @@ public class JobDefinition extends BaseChunkJob<CSVRecord, CompanyLegal> {
     private BatchConfiguration batchConfiguration;
 
     @Autowired
-    private CompanyLegalReader companyLegalReader;
+    private CompanyLegalItemReader companyLegalItemReader;
     @Autowired
-    private CompanyLegalMapper companyLegalMapper;
+    private CompanyLegalItemMapper companyLegalItemMapper;
     @Autowired
-    private CompanyLegalWriter companyLegalWriter;
+    private CompanyLegalItemWriter companyLegalItemWriter;
 
     @Nonnull
     protected BatchConfiguration.JobConfiguration getJobConfiguration() {
@@ -44,19 +44,19 @@ public class JobDefinition extends BaseChunkJob<CSVRecord, CompanyLegal> {
     @Nonnull
     @Override
     public ItemReader<CSVRecord> getItemReader() {
-        return companyLegalReader;
+        return companyLegalItemReader;
     }
 
     @Nonnull
     @Override
     public ItemProcessor<CSVRecord, CompanyLegal> getItemProcessor() {
-        return companyLegalMapper;
+        return companyLegalItemMapper;
     }
 
     @Nonnull
     @Override
     protected ItemWriter<CompanyLegal> getItemWriter() {
 
-        return companyLegalWriter;
+        return companyLegalItemWriter;
     }
 }

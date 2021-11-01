@@ -24,9 +24,9 @@ public class JobDefinition extends BaseChunkJob<CSVRecord, CompanyHistory> {
     private BatchConfiguration batchConfiguration;
 
     @Autowired
-    private CompanyHistoryReader companyHistoryReader;
+    private CompanyHistoryItemReader companyHistoryItemReader;
     @Autowired
-    private CompanyHistoryMapper companyHistoryMapper;
+    private CompanyHistoryItemMapper companyHistoryItemMapper;
     @Autowired
     private CompanyHistoryItemWriter companyHistoryItemWriter;
 
@@ -44,13 +44,13 @@ public class JobDefinition extends BaseChunkJob<CSVRecord, CompanyHistory> {
     @Nonnull
     @Override
     public ItemReader<CSVRecord> getItemReader() {
-        return companyHistoryReader;
+        return companyHistoryItemReader;
     }
 
     @Nonnull
     @Override
     public ItemProcessor<CSVRecord, CompanyHistory> getItemProcessor() {
-        return companyHistoryMapper;
+        return companyHistoryItemMapper;
     }
 
     @Nonnull

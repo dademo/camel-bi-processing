@@ -23,9 +23,9 @@ public class JobDefinition extends BaseChunkJob<CSVRecord, AssociationWaldec> {
     private BatchConfiguration batchConfiguration;
 
     @Autowired
-    private AssociationWaldecReader associationWaldecReader;
+    private AssociationWaldecItemReader associationWaldecItemReader;
     @Autowired
-    private AssociationWaldecMapper associationWaldecMapper;
+    private AssociationWaldecItemMapper associationWaldecItemMapper;
     @Autowired
     private AssociationWaldecItemWriter associationWaldecItemWriter;
 
@@ -43,13 +43,13 @@ public class JobDefinition extends BaseChunkJob<CSVRecord, AssociationWaldec> {
     @Nonnull
     @Override
     public ItemReader<CSVRecord> getItemReader() {
-        return associationWaldecReader;
+        return associationWaldecItemReader;
     }
 
     @Nonnull
     @Override
     public ItemProcessor<CSVRecord, AssociationWaldec> getItemProcessor() {
-        return associationWaldecMapper;
+        return associationWaldecItemMapper;
     }
 
     @Nonnull

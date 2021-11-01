@@ -6,8 +6,9 @@ import org.jooq.SQLDialect;
 import javax.sql.DataSource;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.function.Supplier;
 
-public class DatabaseSQLDialectProvider {
+public class DatabaseSQLDialectProvider implements Supplier<SQLDialect> {
 
     private final DataSource dataSource;
     private SQLDialect cachedSqlDialect = null;

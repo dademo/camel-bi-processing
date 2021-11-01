@@ -2,14 +2,12 @@ package fr.dademo.bi.companies.repositories;
 
 import fr.dademo.bi.companies.configuration.HttpConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.integration.annotation.Default;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
 
 @Component
-@Default
 public class DefaultCacheHandlerProvider implements CacheHandlerProvider {
 
     @Autowired

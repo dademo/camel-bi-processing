@@ -23,11 +23,11 @@ public class JobDefinition extends BaseChunkJob<NafDefinitionContainer, NafDefin
     private BatchConfiguration batchConfiguration;
 
     @Autowired
-    private NafDefinitionReader nafDefinitionReader;
+    private NafDefinitionItemReader nafDefinitionItemReader;
     @Autowired
-    private NafDefinitionProcessor nafDefinitionProcessor;
+    private NafDefinitionItemProcessor nafDefinitionItemProcessor;
     @Autowired
-    private NafDefinitionWriter nafDefinitionWriter;
+    private NafDefinitionItemWriter nafDefinitionItemWriter;
 
     @Nonnull
     protected BatchConfiguration.JobConfiguration getJobConfiguration() {
@@ -43,18 +43,18 @@ public class JobDefinition extends BaseChunkJob<NafDefinitionContainer, NafDefin
     @Nonnull
     @Override
     public ItemReader<NafDefinitionContainer> getItemReader() {
-        return nafDefinitionReader;
+        return nafDefinitionItemReader;
     }
 
     @Nonnull
     @Override
     public ItemProcessor<NafDefinitionContainer, NafDefinition> getItemProcessor() {
-        return nafDefinitionProcessor;
+        return nafDefinitionItemProcessor;
     }
 
     @Nonnull
     @Override
     protected ItemWriter<NafDefinition> getItemWriter() {
-        return nafDefinitionWriter;
+        return nafDefinitionItemWriter;
     }
 }

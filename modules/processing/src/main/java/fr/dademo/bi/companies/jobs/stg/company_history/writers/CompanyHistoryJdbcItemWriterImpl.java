@@ -30,7 +30,7 @@ public class CompanyHistoryJdbcItemWriterImpl implements CompanyHistoryItemWrite
     private static final Logger LOGGER = LoggerFactory.getLogger(CompanyHistoryJdbcItemWriterImpl.class);
 
     @Autowired
-    @Qualifier(STG_DSL_CONTEXT)
+    @Qualifier(STG_DATASOURCE_DSL_CONTEXT_BEAN_NAME)
     @Getter
     private DSLContext dslContext;
 

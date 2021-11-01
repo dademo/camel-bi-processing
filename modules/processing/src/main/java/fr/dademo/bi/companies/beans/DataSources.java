@@ -9,6 +9,8 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import fr.dademo.bi.companies.configuration.DataSourcesConfiguration;
 import org.apache.logging.log4j.util.Strings;
+import org.bson.codecs.configuration.CodecRegistries;
+import org.bson.codecs.pojo.PojoCodecProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +19,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 
 import javax.annotation.Nonnull;
 import javax.sql.DataSource;
+import java.util.Optional;
 
 import static fr.dademo.bi.companies.beans.BeanValues.*;
 
@@ -26,13 +29,22 @@ public class DataSources {
     @Autowired
     private DataSourcesConfiguration dataSourcesConfiguration;
 
+    @Bean(BATCH_DATASOURCE_BEAN_NAME)
+    @ConditionalOnProperty(
+            value = CONFIG_DATASOURCE_JDBC + "." + BATCH_DATASOURCE_NAME + "." + CONFIG_ENABLED,
+            havingValue = "true"
+    )
+    public DataSource batchDataSource() {
+        return hikariDataSourceForConfiguration(BATCH_DATASOURCE_NAME);
+    }
+
     @Bean(STG_DATASOURCE_BEAN_NAME)
     @ConditionalOnProperty(
             value = CONFIG_DATASOURCE_JDBC + "." + STG_DATASOURCE_NAME + "." + CONFIG_ENABLED,
             havingValue = "true"
     )
     public DataSource stgDataSource() {
-        return dataSourceForConfiguration(STG_DATASOURCE_NAME);
+        return hikariDataSourceForConfiguration(STG_DATASOURCE_NAME);
     }
 
     @Bean(STG_MONGO_CLIENT_CONFIG_BEAN_NAME)
@@ -49,7 +61,7 @@ public class DataSources {
             value = CONFIG_DATASOURCE_MONGODB + "." + STG_DATASOURCE_NAME + "." + CONFIG_ENABLED,
             havingValue = "true"
     )
-    public MongoTemplate stgMongoTemplate(@Autowired MongoClient mongoClient) {
+    public MongoTemplate stgMongoTemplate(MongoClient mongoClient) {
 
         return new MongoTemplate(
                 mongoClient,
@@ -59,16 +71,19 @@ public class DataSources {
         );
     }
 
-    private DataSource dataSourceForConfiguration(@Nonnull String configurationName) {
+    private DataSource hikariDataSourceForConfiguration(@Nonnull String configurationName) {
 
-        final var config = dataSourcesConfiguration.getJDBCDataSourceConfigurationByName(configurationName);
+        final var configuration = dataSourcesConfiguration.getJDBCDataSourceConfigurationByName(configurationName);
         final var hikariConfig = new HikariConfig();
 
         hikariConfig.setAutoCommit(false);
-        hikariConfig.setJdbcUrl(config.getUrl());
-        hikariConfig.setUsername(config.getUsername());
-        hikariConfig.setPassword(config.getPassword());
-        hikariConfig.setConnectionTimeout(config.getConnectionTimeoutMS());
+        hikariConfig.setJdbcUrl(configuration.getUrl());
+        hikariConfig.setMinimumIdle(configuration.getMinimumIdle());
+        hikariConfig.setMaximumPoolSize(configuration.getMaximumPoolSize());
+        Optional.ofNullable(configuration.getUsername()).ifPresent(hikariConfig::setUsername);
+        Optional.ofNullable(configuration.getPassword()).ifPresent(hikariConfig::setPassword);
+        Optional.ofNullable(configuration.getDriverClassName()).ifPresent(hikariConfig::setDriverClassName);
+        hikariConfig.setConnectionTimeout(configuration.getConnectionTimeoutMS());
 
         return new HikariDataSource(hikariConfig);
     }
@@ -84,7 +99,11 @@ public class DataSources {
                 .applyConnectionString(new ConnectionString(configuration.getConnectionString()))
                 .applicationName(applicationName)
                 .writeConcern(configuration.getWriteConcern())
-                .readConcern(configuration.getReadConcern());
+                .readConcern(configuration.getReadConcern())
+                .codecRegistry(CodecRegistries.fromRegistries(
+                        MongoClientSettings.getDefaultCodecRegistry(),
+                        CodecRegistries.fromProviders(PojoCodecProvider.builder().automatic(true).build())
+                ));
 
         if (Strings.isNotBlank(configuration.getUsername()) &&
                 Strings.isNotBlank(configuration.getDatabase()) &&

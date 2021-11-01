@@ -24,11 +24,31 @@ public class BatchConfiguration {
     @Nonnull
     private Map<String, JobConfiguration> jobs = new HashMap<>();
 
+    @Nonnull
+    private BatchRepositoryConfiguration repository = new BatchRepositoryConfiguration();
+
 
     public JobConfiguration getJobConfigurationByName(@Nonnull String jobName) {
 
         return Optional.ofNullable(jobs.get(jobName))
                 .orElseThrow(MissingJobConfigurationException.ofJob(jobName));
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class BatchRepositoryConfiguration {
+
+        public static final String DEFAULT_TABLE_PREFIX = "BATCH_";
+
+        private boolean enabled = false;
+
+        @Nullable
+        private String tablePrefix;
+
+        public static String getDefaultTablePrefix() {
+            return DEFAULT_TABLE_PREFIX;
+        }
     }
 
     @Data

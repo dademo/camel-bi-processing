@@ -30,7 +30,7 @@ public class CompanyInheritanceJdbcItemWriterImpl implements CompanyInheritanceI
     private static final Logger LOGGER = LoggerFactory.getLogger(CompanyInheritanceJdbcItemWriterImpl.class);
 
     @Autowired
-    @Qualifier(STG_DSL_CONTEXT)
+    @Qualifier(STG_DATASOURCE_DSL_CONTEXT_BEAN_NAME)
     @Getter
     private DSLContext dslContext;
 

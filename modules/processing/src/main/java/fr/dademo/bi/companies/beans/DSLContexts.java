@@ -18,22 +18,31 @@ import static fr.dademo.bi.companies.beans.BeanValues.*;
 @Configuration
 public class DSLContexts {
 
-    @Bean(STG_DSL_CONTEXT_DIALECT_PROVIDER)
+    @Bean(BATCH_DATASOURCE_DIALECT_PROVIDER_BEAN_NAME)
     @ConditionalOnProperty(
-            value = CONFIG_DATASOURCE_JDBC + "." + STG_DATASOURCE_NAME,
+            value = CONFIG_DATASOURCE_JDBC + "." + BATCH_DATASOURCE_NAME + "." + CONFIG_ENABLED,
+            havingValue = "true"
+    )
+    public DatabaseSQLDialectProvider batchSqlDialectProvider(@Qualifier(BATCH_DATASOURCE_BEAN_NAME) DataSource dataSource) {
+        return new DatabaseSQLDialectProvider(dataSource);
+    }
+
+    @Bean(STG_DATASOURCE_DIALECT_PROVIDER_BEAN_NAME)
+    @ConditionalOnProperty(
+            value = CONFIG_DATASOURCE_JDBC + "." + STG_DATASOURCE_NAME + "." + CONFIG_ENABLED,
             havingValue = "true"
     )
     public DatabaseSQLDialectProvider stgSqlDialectProvider(@Qualifier(STG_DATASOURCE_BEAN_NAME) DataSource dataSource) {
         return new DatabaseSQLDialectProvider(dataSource);
     }
 
-    @Bean(STG_DSL_CONTEXT)
+    @Bean(STG_DATASOURCE_DSL_CONTEXT_BEAN_NAME)
     @ConditionalOnProperty(
-            value = CONFIG_DATASOURCE_JDBC + "." + STG_DATASOURCE_NAME,
+            value = CONFIG_DATASOURCE_JDBC + "." + STG_DATASOURCE_NAME + "." + CONFIG_ENABLED,
             havingValue = "true"
     )
     public DSLContext stgDslContext(@Qualifier(STG_DATASOURCE_BEAN_NAME) DataSource dataSource,
-                                    @Qualifier(STG_DSL_CONTEXT_DIALECT_PROVIDER) DatabaseSQLDialectProvider sqlDialectProvider) {
+                                    @Qualifier(STG_DATASOURCE_DIALECT_PROVIDER_BEAN_NAME) DatabaseSQLDialectProvider sqlDialectProvider) {
 
         return DSL.using(
                 dataSource,
