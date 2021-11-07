@@ -1,6 +1,8 @@
 package fr.dademo.bi.companies.jobs.stg.company_inheritance;
 
 import fr.dademo.bi.companies.repositories.HttpDataQuerier;
+import fr.dademo.bi.companies.repositories.file.identifier.DataGouvFrFileIdentifier;
+import fr.dademo.bi.companies.repositories.file.identifier.DataGouvFrFileIdentifierImpl;
 import fr.dademo.bi.companies.services.DataGouvFrDataSetTools;
 import fr.dademo.bi.companies.tools.batch.reader.HttpItemStreamReaderSupport;
 import lombok.SneakyThrows;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Iterator;
@@ -31,6 +34,18 @@ public class CompanyInheritanceItemReader extends HttpItemStreamReaderSupport<CS
     private static final Logger LOGGER = LoggerFactory.getLogger(CompanyInheritanceItemReader.class);
     private static final String DATASET_NAME = "base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret";
     private static final String DATASET_URL = "https://files.data.gouv.fr/insee-sirene/StockEtablissementLiensSuccession_utf8.zip";
+    private static final DataGouvFrFileIdentifier DATASET;
+
+    static {
+        try {
+            DATASET = DataGouvFrFileIdentifierImpl.builder()
+                    .dataSetName(DATASET_NAME)
+                    .baseUrl(new URL(DATASET_URL))
+                    .build();
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Autowired
     private HttpDataQuerier httpDataQuerier;
@@ -46,10 +61,8 @@ public class CompanyInheritanceItemReader extends HttpItemStreamReaderSupport<CS
 
         LOGGER.info("Reading values");
 
-        final var queryUrl = new URL(DATASET_URL);
-
         archiveInputStream = new ZipArchiveInputStream(httpDataQuerier.basicQuery(
-                queryUrl,
+                DATASET,
                 Stream.of(dataGouvFrDataSetTools.hashDefinitionOfDataSetResourceByUrl(DATASET_NAME, DATASET_URL, false))
                         .filter(Optional::isPresent)
                         .map(Optional::get)

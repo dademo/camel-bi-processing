@@ -22,8 +22,6 @@ import org.springframework.boot.autoconfigure.r2dbc.R2dbcAutoConfiguration;
         KafkaAutoConfiguration.class,
         RabbitAutoConfiguration.class,
         FlywayAutoConfiguration.class,
-        KafkaAutoConfiguration.class,
-        RabbitAutoConfiguration.class,
 })
 @EnableBatchProcessing
 public class Application implements CommandLineRunner {

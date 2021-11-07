@@ -30,3 +30,10 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: root
       ME_CONFIG_MONGODB_ENABLE_ADMIN: 'true'
       ME_CONFIG_MONGODB_URL: mongodb://root:root@mongodb:27017/
+
+  rabbitmq:
+    image: rabbitmq:3.9.8-management
+    restart: always
+    ports:
+      - 5672:5672
+      - 15672:15672

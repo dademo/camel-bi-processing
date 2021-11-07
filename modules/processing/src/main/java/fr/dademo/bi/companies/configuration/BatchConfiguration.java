@@ -1,6 +1,6 @@
 package fr.dademo.bi.companies.configuration;
 
-import fr.dademo.bi.companies.configuration.exceptions.MissingJobConfigurationException;
+import fr.dademo.bi.companies.configuration.exception.MissingJobConfigurationException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

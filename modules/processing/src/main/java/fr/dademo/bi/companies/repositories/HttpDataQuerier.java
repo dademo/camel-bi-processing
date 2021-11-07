@@ -2,61 +2,49 @@ package fr.dademo.bi.companies.repositories;
 
 import fr.dademo.bi.companies.repositories.datamodel.HashDefinition;
 import fr.dademo.bi.companies.repositories.datamodel.HttpHashDefinition;
+import fr.dademo.bi.companies.repositories.file.identifier.FileIdentifier;
 import lombok.SneakyThrows;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.net.URL;
-import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
 public abstract class HttpDataQuerier {
 
-    public abstract InputStream basicQuery(@Nonnull URL queryUrl,
-                                           @Nullable Duration expiration,
+    public abstract InputStream basicQuery(@Nonnull FileIdentifier<?> fileIdentifier,
                                            @Nonnull List<HashDefinition> httpHashDefinitionList);
 
 
-    public InputStream basicQuery(@Nonnull URL queryUrl) {
-        return basicQuery(queryUrl, null, Collections.emptyList());
+    public InputStream basicQuery(@Nonnull FileIdentifier<?> fileIdentifier) {
+        return basicQuery(fileIdentifier, Collections.emptyList());
     }
 
-    public InputStream basicQuery(@Nonnull URL queryUrl,
-                                  @Nonnull List<HashDefinition> hashDefinitionList) {
-        return basicQuery(queryUrl, null, hashDefinitionList);
-    }
-
-    public void basicQuery(@Nonnull URL queryUrl,
+    public void basicQuery(@Nonnull FileIdentifier<?> fileIdentifier,
                            @Nonnull Consumer<InputStream> resultConsumer) {
-        basicQuery(queryUrl, null, Collections.emptyList(), resultConsumer);
+        basicQuery(fileIdentifier, Collections.emptyList(), resultConsumer);
     }
 
-    public void basicQuery(@Nonnull URL queryUrl,
-                           @Nullable Duration expiration,
+    public void basicQuery(@Nonnull FileIdentifier<?> fileIdentifier,
                            @Nonnull List<HashDefinition> hashDefinitionList,
                            @Nonnull Consumer<InputStream> resultConsumer) {
 
         resultConsumer.accept(basicQuery(
-                queryUrl,
-                expiration,
+                fileIdentifier,
                 hashDefinitionList
         ));
     }
 
     @SneakyThrows
     public byte[] basicQueryByte(
-            @Nonnull URL queryUrl,
-            @Nullable Duration expiration,
+            @Nonnull FileIdentifier<?> fileIdentifier,
             @Nonnull List<HashDefinition> hashDefinitionList) {
 
         final var byteArrayBuilder = new ByteArrayOutputStream();
 
-        basicQuery(queryUrl,
-                expiration,
+        basicQuery(fileIdentifier,
                 hashDefinitionList
         ).transferTo(byteArrayBuilder);
 
@@ -69,8 +57,7 @@ public abstract class HttpDataQuerier {
         return HashDefinition.of(
                 httpHashDefinition.getHashFromAnswer(
                         basicQuery(
-                                httpHashDefinition.getResourceUrl(),
-                                null,
+                                httpHashDefinition.getFileIdentifier(),
                                 Collections.emptyList()
                         )),
                 httpHashDefinition.getAlgorithm()

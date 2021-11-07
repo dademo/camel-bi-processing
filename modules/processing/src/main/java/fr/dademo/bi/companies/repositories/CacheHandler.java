@@ -1,21 +1,19 @@
 package fr.dademo.bi.companies.repositories;
 
 import fr.dademo.bi.companies.repositories.datamodel.HashDefinition;
+import fr.dademo.bi.companies.repositories.file.identifier.FileIdentifier;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.InputStream;
-import java.time.Duration;
 import java.util.List;
 
 public interface CacheHandler {
 
-    boolean hasCachedInputStream(@Nonnull String inputFileIdentifier);
+    boolean hasCachedInputStream(@Nonnull FileIdentifier<?> fileIdentifier);
 
-    InputStream readFromCachedInputStream(@Nonnull String inputFileIdentifier);
+    InputStream readFromCachedInputStream(@Nonnull FileIdentifier<?> fileIdentifier);
 
     InputStream cacheInputStream(@Nonnull InputStream inputStream,
-                                 @Nonnull String inputFileIdentifier,
-                                 @Nullable Duration expiration,
+                                 @Nonnull FileIdentifier<?> fileIdentifier,
                                  @Nonnull List<HashDefinition> hashProvider);
 }

@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.annotation.Nullable;
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -49,6 +51,27 @@ public class GouvFrDataSetResourceDefinition {
     @JsonAlias("created_at")
     private String createdAt;
 
+    @JsonAlias("last_modified")
+    private String lastModified;
+
     @JsonAlias("published")
     private String published;
+
+    public LocalDateTime getCreatedAtLocalDateTime() {
+        return safeParseDate(createdAt);
+    }
+
+    public LocalDateTime getLastModifiedLocalDateTime() {
+        return safeParseDate(lastModified);
+    }
+
+    public LocalDateTime getPublishedLocalDateTime() {
+        return safeParseDate(published);
+    }
+
+    private LocalDateTime safeParseDate(String dateStr) {
+        return Optional.of(dateStr)
+                .map(LocalDateTime::parse)
+                .orElse(null);
+    }
 }

@@ -2,6 +2,11 @@ spring:
   batch:
     initialize-schema: always
 
+management:
+  metrics:
+    enable:
+      spring.integration: false
+
 flyway:
   migrations:
     batch:
@@ -51,41 +56,43 @@ batch:
   jobs:
     naf:
       enabled: true
-      batch-size: 1000
-      writer-type: MONGODB
+      chunk-size: 1000
+      writer-type: NO_ACTION
+      #writer-type: MONGODB
       max-threads: null
     company:
-      enabled: true
-      batch-size: 100000
-      writer-type: MONGODB
+      enabled: false
+      chunk-size: 100000
+      writer-type: NO_ACTION
+      #writer-type: MONGODB
       max-threads: null
     company-history:
       enabled: false
-      batch-size: 100000
+      chunk-size: 100000
       writer-type: NO_ACTION
       max-threads: null
     company-inheritance:
       enabled: false
-      batch-size: 100000
+      chunk-size: 100000
       writer-type: NO_ACTION
       max-threads: null
     company-legal:
       enabled: false
-      batch-size: 100000
+      chunk-size: 100000
       writer-type: NO_ACTION
       max-threads: null
     company-legal-history:
       enabled: false
-      batch-size: 100000
+      chunk-size: 100000
       writer-type: NO_ACTION
       max-threads: null
     association:
       enabled: false
-      batch-size: 100000
+      chunk-size: 100000
       writer-type: NO_ACTION
       max-threads: null
     association-waldec:
       enabled: false
-      batch-size: 100000
+      chunk-size: 100000
       writer-type: NO_ACTION
       max-threads: null

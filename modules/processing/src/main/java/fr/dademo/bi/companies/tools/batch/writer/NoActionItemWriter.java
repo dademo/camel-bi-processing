@@ -11,6 +11,7 @@ import java.util.List;
 public class NoActionItemWriter<T> implements ItemWriter<T> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NoActionItemWriter.class);
+
     boolean printWrite;
 
     public NoActionItemWriter() {

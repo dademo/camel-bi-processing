@@ -7,7 +7,7 @@ import org.apache.commons.lang3.SystemUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.io.File;
@@ -29,7 +29,7 @@ public class HttpConfiguration {
     @Min(0)
     private long callTimeoutSeconds = 0;
 
-    @Nullable
+    @Nonnull
     private CacheConfiguration cacheConfiguration = new CacheConfiguration();
 
     @Data
@@ -42,6 +42,7 @@ public class HttpConfiguration {
         @NotBlank
         private String directoryRoot = String.join(File.separator, SystemUtils.getUserHome().getAbsolutePath(), ".cache", "dev-http-cache");
 
+        @Nonnull
         public Path getDirectoryRootPath() {
             return Path.of(getDirectoryRoot());
         }

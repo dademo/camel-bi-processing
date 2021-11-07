@@ -2,7 +2,7 @@ package fr.dademo.bi.companies.configuration;
 
 import fr.dademo.bi.companies.configuration.data_sources.JDBCDataSourceConfiguration;
 import fr.dademo.bi.companies.configuration.data_sources.MongoDBClientConfiguration;
-import fr.dademo.bi.companies.configuration.exceptions.MissingDataSourceConfigurationException;
+import fr.dademo.bi.companies.configuration.exception.MissingDataSourceConfigurationException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

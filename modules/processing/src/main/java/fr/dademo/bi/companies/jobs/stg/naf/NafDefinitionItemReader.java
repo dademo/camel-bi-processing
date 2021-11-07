@@ -3,6 +3,8 @@ package fr.dademo.bi.companies.jobs.stg.naf;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinitionContainer;
 import fr.dademo.bi.companies.repositories.HttpDataQuerier;
+import fr.dademo.bi.companies.repositories.file.identifier.DataGouvFrFileIdentifier;
+import fr.dademo.bi.companies.repositories.file.identifier.DataGouvFrFileIdentifierImpl;
 import fr.dademo.bi.companies.services.DataGouvFrDataSetTools;
 import fr.dademo.bi.companies.tools.batch.reader.HttpItemStreamReaderSupport;
 import lombok.SneakyThrows;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
@@ -30,6 +33,19 @@ public class NafDefinitionItemReader extends HttpItemStreamReaderSupport<NafDefi
     private static final String DATASET_NAME = "nomenclature-dactivites-francaise-naf-rev-2-code-ape";
     private static final String DATASET_URL = "https://data.iledefrance.fr/explore/dataset/nomenclature-dactivites-francaise-naf-rev-2-code-ape/download";
     private static final String DATASET_URL_QUERY_PARAMETERS = "format=json";
+    private static final DataGouvFrFileIdentifier DATASET;
+
+    static {
+        try {
+            DATASET = DataGouvFrFileIdentifierImpl.builder()
+                    .dataSetName(DATASET_NAME)
+                    .baseUrl(new URL(DATASET_URL))
+                    .queryUrl(new URL(DATASET_URL + "?" + DATASET_URL_QUERY_PARAMETERS))
+                    .build();
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Autowired
     private HttpDataQuerier httpDataQuerier;
@@ -45,11 +61,9 @@ public class NafDefinitionItemReader extends HttpItemStreamReaderSupport<NafDefi
 
         LOGGER.info("Reading values");
 
-        final var queryUrl = new URL(DATASET_URL + "?" + DATASET_URL_QUERY_PARAMETERS);
-
         iterator = MAPPER.<List<NafDefinitionContainer>>readValue(
                 httpDataQuerier.basicQuery(
-                        queryUrl,
+                        DATASET,
                         Stream.of(dataGouvFrDataSetTools.hashDefinitionOfDataSetResourceByUrl(DATASET_NAME, DATASET_URL, false))
                                 .filter(Optional::isPresent)
                                 .map(Optional::get)

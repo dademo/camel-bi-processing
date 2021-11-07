@@ -1,6 +1,6 @@
 package fr.dademo.bi.companies.beans;
 
-import fr.dademo.bi.companies.beans.exceptions.MissingMigrationPathException;
+import fr.dademo.bi.companies.beans.exception.MissingMigrationPathException;
 import fr.dademo.bi.companies.configuration.FlywayMigrationsConfiguration;
 import fr.dademo.bi.companies.tools.DatabaseSQLDialectProvider;
 import org.flywaydb.core.Flyway;

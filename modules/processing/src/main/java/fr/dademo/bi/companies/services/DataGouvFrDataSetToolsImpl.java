@@ -5,10 +5,9 @@ import fr.dademo.bi.companies.repositories.datamodel.HashDefinition;
 import fr.dademo.bi.companies.services.datamodel.GouvFrDataSetDefinition;
 import fr.dademo.bi.companies.services.datamodel.GouvFrDataSetResourceChecksumDefinition;
 import fr.dademo.bi.companies.services.datamodel.GouvFrDataSetResourceDefinition;
-import fr.dademo.bi.companies.services.exceptions.InvalidResponseException;
-import fr.dademo.bi.companies.services.exceptions.MissingLocationHeaderException;
-import fr.dademo.bi.companies.services.exceptions.ResourceNotFoundException;
-import fr.dademo.bi.companies.services.exceptions.TooManyRedirectException;
+import fr.dademo.bi.companies.services.exception.InvalidResponseException;
+import fr.dademo.bi.companies.services.exception.ResourceNotFoundException;
+import fr.dademo.bi.companies.services.exception.TooManyRedirectException;
 import lombok.SneakyThrows;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -36,7 +35,6 @@ public class DataGouvFrDataSetToolsImpl implements DataGouvFrDataSetTools {
     private static final Logger LOGGER = LoggerFactory.getLogger(DataGouvFrDataSetToolsImpl.class);
 
     private static final String BASE_DATASET_API_URL = "https://www.data.gouv.fr/api/1/datasets";
-    private static final String HEADER_LOCATION = "Location";
     private static final int MAX_REDIRECT_COUNT = 5;
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -193,16 +191,6 @@ public class DataGouvFrDataSetToolsImpl implements DataGouvFrDataSetTools {
                 return Optional.ofNullable(response.body())
                         .map(ResponseBody::byteStream)
                         .map(responseBodyMapper);
-            }
-
-            if (response.isRedirect()) {
-                return getQueryFollowsRedirect(
-                        Optional.ofNullable(request.header(HEADER_LOCATION))
-                                .map(newLocation -> updateUrl(queryUrl, newLocation))
-                                .orElseThrow(MissingLocationHeaderException::new),
-                        redirectCount + 1,
-                        responseBodyMapper
-                );
             }
 
             throw new InvalidResponseException(response.code());
