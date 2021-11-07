@@ -1,8 +1,10 @@
 package fr.dademo.data.definitions.data_gouv_fr.dimensions;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.annotation.Nonnull;
@@ -10,6 +12,7 @@ import javax.annotation.Nonnull;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class DataGouvFrDataSetResourceChecksum {
 
     @Nonnull
@@ -19,7 +22,6 @@ public class DataGouvFrDataSetResourceChecksum {
     private String value;
 
     @AllArgsConstructor
-    @Getter
     public enum DataGouvFrDataSetResourceChecksumType {
         SHA1("sha1"),
         SHA2("sha2"),
@@ -28,5 +30,10 @@ public class DataGouvFrDataSetResourceChecksum {
         CRC("crc");
 
         private final String value;
+
+        @JsonValue
+        public String getValue() {
+            return value;
+        }
     }
 }

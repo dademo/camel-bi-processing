@@ -2,11 +2,11 @@ package fr.dademo.bi.companies.jobs.stg.naf;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinitionContainer;
-import fr.dademo.bi.companies.repositories.HttpDataQuerier;
-import fr.dademo.bi.companies.repositories.file.identifier.DataGouvFrFileIdentifier;
-import fr.dademo.bi.companies.repositories.file.identifier.DataGouvFrFileIdentifierImpl;
-import fr.dademo.bi.companies.services.DataGouvFrDataSetTools;
 import fr.dademo.bi.companies.tools.batch.reader.HttpItemStreamReaderSupport;
+import fr.dademo.data.definitions.data_gouv_fr.dimensions.DataGouvFrDataSetResource;
+import fr.dademo.data.helpers.data_gouv_fr.helpers.DataGouvFrFilterHelpers;
+import fr.dademo.data.helpers.data_gouv_fr.repository.DataGouvFrDataQuerierService;
+import fr.dademo.data.helpers.data_gouv_fr.repository.exception.ResourceNotFoundException;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,13 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component
 public class NafDefinitionItemReader extends HttpItemStreamReaderSupport<NafDefinitionContainer> {
@@ -30,28 +26,11 @@ public class NafDefinitionItemReader extends HttpItemStreamReaderSupport<NafDefi
     private static final Logger LOGGER = LoggerFactory.getLogger(NafDefinitionItemReader.class);
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    private static final String DATASET_NAME = "nomenclature-dactivites-francaise-naf-rev-2-code-ape";
-    private static final String DATASET_URL = "https://data.iledefrance.fr/explore/dataset/nomenclature-dactivites-francaise-naf-rev-2-code-ape/download";
-    private static final String DATASET_URL_QUERY_PARAMETERS = "format=json";
-    private static final DataGouvFrFileIdentifier DATASET;
-
-    static {
-        try {
-            DATASET = DataGouvFrFileIdentifierImpl.builder()
-                    .dataSetName(DATASET_NAME)
-                    .baseUrl(new URL(DATASET_URL))
-                    .queryUrl(new URL(DATASET_URL + "?" + DATASET_URL_QUERY_PARAMETERS))
-                    .build();
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    private static final String DATASET_TITLE = "nomenclature-dactivites-francaise-naf-rev-2-code-ape";
+    private static final String DATASET_RESOURCE_TITLE = "Export au format JSON";
 
     @Autowired
-    private HttpDataQuerier httpDataQuerier;
-
-    @Autowired
-    private DataGouvFrDataSetTools dataGouvFrDataSetTools;
+    private DataGouvFrDataQuerierService dataGouvFrDataQuerierService;
 
     private Iterator<NafDefinitionContainer> iterator;
 
@@ -59,16 +38,17 @@ public class NafDefinitionItemReader extends HttpItemStreamReaderSupport<NafDefi
     @Override
     public void open(@Nonnull ExecutionContext executionContext) {
 
-        LOGGER.info("Reading values");
+        LOGGER.info("Getting dataset definition");
+        final var dataGouvFrDataSet = dataGouvFrDataQuerierService.getDataSet(DATASET_TITLE);
+        final var dataGouvFrDataSetResource = dataGouvFrDataSet
+                .getResources().stream()
+                .filter(DataGouvFrFilterHelpers.fieldEquals(DataGouvFrDataSetResource::getTitle, DATASET_RESOURCE_TITLE))
+                .max(Comparator.comparing(DataGouvFrDataSetResource::dateTimeKeyExtractor))
+                .orElseThrow(() -> new ResourceNotFoundException(DATASET_RESOURCE_TITLE, dataGouvFrDataSet));
 
+        LOGGER.info("Reading values");
         iterator = MAPPER.<List<NafDefinitionContainer>>readValue(
-                httpDataQuerier.basicQuery(
-                        DATASET,
-                        Stream.of(dataGouvFrDataSetTools.hashDefinitionOfDataSetResourceByUrl(DATASET_NAME, DATASET_URL, false))
-                                .filter(Optional::isPresent)
-                                .map(Optional::get)
-                                .collect(Collectors.toList())
-                ),
+                dataGouvFrDataQuerierService.queryForStream(dataGouvFrDataSetResource),
                 MAPPER
                         .getTypeFactory()
                         .constructCollectionType(List.class, NafDefinitionContainer.class)

@@ -1,10 +1,10 @@
 package fr.dademo.tools.cache.repository;
 
+import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
+import fr.dademo.data.generic.stream_definitions.configuration.CacheConfiguration;
 import fr.dademo.tools.cache.data_model.CachedInputStreamIdentifier;
 import fr.dademo.tools.cache.repository.exception.MissingCachedInputStreamException;
 import fr.dademo.tools.cache.repository.support.CachedInputStreamWrapper;
-import fr.dademo.tools.stream_definitions.InputStreamIdentifier;
-import fr.dademo.tools.stream_definitions.configuration.CacheConfiguration;
 import fr.dademo.tools.tools.HashTools;
 import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
@@ -34,14 +34,19 @@ public class FileCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extends
     private static final MessageDigest HASH_COMPUTER = HashTools.getHashComputerForAlgorithm(HASH_ALGORITHM);
     private static final String TEMP_PREFIX = normalizedName(FileCacheRepositoryImpl.class.getName());
 
-    private static final String RESOURCES_DIRECTORY_NAME = "resources";
-
     @Autowired
-    private FileCacheLockRepository<T> fileCacheLockRepository;
-
+    private CacheLockRepository<T> cacheLockRepository;
 
     private static String normalizedName(String string) {
         return string.replace(File.separator, "_");
+    }
+
+    @Nonnull
+    @Override
+    public Optional<CachedInputStreamIdentifier<T>> getCachedInputStreamIdentifierOf(InputStreamIdentifier<?> inputStreamIdentifier) {
+        return cacheLockRepository.readLockFile().stream()
+                .filter(cachedInputStreamIdentifier -> cachedInputStreamIdentifier.getCachedIdentifier().equals(inputStreamIdentifier))
+                .findFirst();
     }
 
     @Override
@@ -49,15 +54,18 @@ public class FileCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extends
         return getCachedInputStreamIdentifierOf(fileIdentifier).isPresent();
     }
 
+    @Nonnull
     @Override
     public InputStream readFromCachedInputStream(@Nonnull T fileIdentifier) {
 
+        LOGGER.debug("Will read from cache for file `{}`", fileIdentifier.getDescription());
         return getCachedInputStreamIdentifierOf(fileIdentifier)
                 .map(this::getCachedFileOf)
                 .map(this::openFileInputStream)
                 .orElseThrow(() -> new MissingCachedInputStreamException(fileIdentifier));
     }
 
+    @Nonnull
     @Override
     @SuppressWarnings("java:S2095")
     public InputStream cacheInputStream(@Nonnull InputStream inputStream, @Nonnull T inputStreamIdentifier) throws IOException {
@@ -98,9 +106,9 @@ public class FileCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extends
         LOGGER.debug("Final persisting cached identifier `{}`", inputFileIdentifier.getDescription());
         final var cachedInputStreamIdentifier = buildCachedInputStreamIdentifier(inputFileIdentifier);
 
-        fileCacheLockRepository.withLockedLockFile(
+        cacheLockRepository.withLockedLockFile(
                 () -> {
-                    final var lockFileContent = fileCacheLockRepository.readLockFile();
+                    final var lockFileContent = cacheLockRepository.readLockFile();
                     lockFileContent.add(cachedInputStreamIdentifier);
                     final var finalCachedFileFile = getCacheConfiguration().getDirectoryRootPath()
                             .resolve(RESOURCES_DIRECTORY_NAME)
@@ -108,8 +116,10 @@ public class FileCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extends
                             .toFile();
 
                     try {
+                        LOGGER.debug("Moving cached file");
                         FileUtils.moveFile(tempCachedFile, finalCachedFileFile);
-                        fileCacheLockRepository.persistLockFile(lockFileContent);
+                        LOGGER.debug("Cached file moved");
+                        cacheLockRepository.persistLockFile(lockFileContent);
                     } catch (IOException e) {
                         // Cleaning
                         if (tempCachedFile.exists()) {
@@ -151,12 +161,6 @@ public class FileCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extends
 
     private String getCachedFinalFileName(T inputStreamIdentifier) {
         return HashTools.computeHashString(HASH_COMPUTER, inputStreamIdentifier.getDescription().getBytes());
-    }
-
-    private Optional<CachedInputStreamIdentifier<T>> getCachedInputStreamIdentifierOf(InputStreamIdentifier<?> inputStreamIdentifier) {
-        return fileCacheLockRepository.readLockFile().stream()
-                .filter(cachedInputStreamIdentifier -> cachedInputStreamIdentifier.getCachedIdentifier().equals(inputStreamIdentifier))
-                .findFirst();
     }
 
     private File getCachedFileOf(CachedInputStreamIdentifier<?> cachedInputStreamIdentifier) {

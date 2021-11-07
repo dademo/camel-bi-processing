@@ -14,9 +14,9 @@ java {
 }
 
 dependencies {
-    implementation project(':modules:dependencies:tools:http')
+    implementation project(':modules:dependencies:reader:http')
     implementation project(':modules:dependencies:tools:cache')
-    implementation project(':modules:dependencies:tools:http_cache')
+    implementation project(':modules:dependencies:reader:http_cache')
     implementation project(':modules:dependencies:tools:http_validators')
     implementation project(':modules:dependencies:tools:cache_validators')
     implementation project(':modules:dependencies:data:helpers:data_gouv_fr')
@@ -46,8 +46,6 @@ dependencies {
     // Other libraries
     implementation "com.zaxxer:HikariCP:${hikariCPVersion}"
     implementation "org.jooq:jooq:${jooqVersion}"
-    implementation "com.squareup.okhttp3:okhttp:${okHttpVersion}"
-    implementation "com.squareup.okhttp3:logging-interceptor:${okHttpVersion}"
     implementation "org.apache.commons:commons-lang3:${apacheCommonsLang3Version}"
     implementation "org.apache.commons:commons-csv:${apacheCommonsCsvVersion}"
     implementation "org.apache.commons:commons-compress:${apacheCommonsCompressVersion}"

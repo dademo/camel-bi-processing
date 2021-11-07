@@ -19,13 +19,10 @@ dependencies {
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
     // Other libraries
     implementation "commons-io:commons-io:${apacheCommonsIOVersion}"
     implementation "com.google.code.findbugs:jsr305:${findBugsJsr305Version}"
-
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 test {

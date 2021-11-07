@@ -1,8 +1,10 @@
 package fr.dademo.data.definitions.data_gouv_fr.dimensions;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.annotation.Nonnull;
@@ -12,6 +14,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class DataGouvFrDataSetSpatialCoverage {
 
     @Nullable
@@ -24,6 +27,7 @@ public class DataGouvFrDataSetSpatialCoverage {
     private List<String> zones;
 
     @Data
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class Geometry {
         @Nullable
         private String description;
@@ -35,7 +39,6 @@ public class DataGouvFrDataSetSpatialCoverage {
         private Geometry.GeometryType type;
 
         @AllArgsConstructor
-        @Getter
         public enum GeometryType {
             POINT("Point"),
             LINE_STRING("LineString"),
@@ -45,6 +48,11 @@ public class DataGouvFrDataSetSpatialCoverage {
             MULTI_POLYGON("MultiPolygon");
 
             private final String value;
+
+            @JsonValue
+            public String getValue() {
+                return value;
+            }
         }
     }
 }

@@ -18,14 +18,17 @@ flyway:
 
 logging:
   level:
-    #'org.springframework': DEBUG
-    'org.springframework': INFO
+    'org.springframework': DEBUG
+    #'org.springframework': INFO
     'fr.dademo.bi': DEBUG
-    'fr.dademo.bi.companies.tools': TRACE
+    'fr.dademo.tools': TRACE
     'org.flywaydb.core': DEBUG
     'org.jooq.Constants': WARN
     #'okhttp3': DEBUG
     'okhttp3': INFO
+
+cache:
+  enabled: true
 
 datasources:
   jdbc:

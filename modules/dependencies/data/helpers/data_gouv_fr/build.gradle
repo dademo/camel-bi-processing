@@ -15,11 +15,12 @@ java {
 }
 
 dependencies {
+    api project(':modules:dependencies:tools:generic_tools')
+    api project(':modules:dependencies:data:generic:stream_definitions')
     api project(':modules:dependencies:data:definitions:data_gouv_fr')
-    api project(':modules:dependencies:tools:http')
+    api project(':modules:dependencies:reader:http')
     api project(':modules:dependencies:tools:http_validators')
     api project(':modules:dependencies:tools:cache')
-    api project(':modules:dependencies:tools:generic_tools')
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
@@ -31,6 +32,7 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:${okHttpVersion}"
     implementation "com.fasterxml.jackson.core:jackson-core:${jacksonCoreVersion}"
     implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonCoreVersion}"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonCoreVersion}"
     implementation "com.google.code.findbugs:jsr305:${findBugsJsr305Version}"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

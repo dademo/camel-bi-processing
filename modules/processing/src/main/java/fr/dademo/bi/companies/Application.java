@@ -5,6 +5,7 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration;
 import org.springframework.boot.autoconfigure.couchbase.CouchbaseAutoConfiguration;
@@ -23,6 +24,7 @@ import org.springframework.boot.autoconfigure.r2dbc.R2dbcAutoConfiguration;
         RabbitAutoConfiguration.class,
         FlywayAutoConfiguration.class,
 })
+@ImportAutoConfiguration
 @EnableBatchProcessing
 public class Application implements CommandLineRunner {
 

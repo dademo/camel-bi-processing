@@ -1,10 +1,10 @@
 package fr.dademo.bi.companies.jobs.stg.company_inheritance;
 
-import fr.dademo.bi.companies.repositories.HttpDataQuerier;
-import fr.dademo.bi.companies.repositories.file.identifier.DataGouvFrFileIdentifier;
-import fr.dademo.bi.companies.repositories.file.identifier.DataGouvFrFileIdentifierImpl;
-import fr.dademo.bi.companies.services.DataGouvFrDataSetTools;
 import fr.dademo.bi.companies.tools.batch.reader.HttpItemStreamReaderSupport;
+import fr.dademo.data.definitions.data_gouv_fr.dimensions.DataGouvFrDataSetResource;
+import fr.dademo.data.helpers.data_gouv_fr.helpers.DataGouvFrFilterHelpers;
+import fr.dademo.data.helpers.data_gouv_fr.repository.DataGouvFrDataQuerierService;
+import fr.dademo.data.helpers.data_gouv_fr.repository.exception.ResourceNotFoundException;
 import lombok.SneakyThrows;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
@@ -18,13 +18,10 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel.CompanyInheritance.CSV_HEADER_COMPANY_INHERITANCE;
 
@@ -32,26 +29,11 @@ import static fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel.Comp
 public class CompanyInheritanceItemReader extends HttpItemStreamReaderSupport<CSVRecord> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CompanyInheritanceItemReader.class);
-    private static final String DATASET_NAME = "base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret";
-    private static final String DATASET_URL = "https://files.data.gouv.fr/insee-sirene/StockEtablissementLiensSuccession_utf8.zip";
-    private static final DataGouvFrFileIdentifier DATASET;
-
-    static {
-        try {
-            DATASET = DataGouvFrFileIdentifierImpl.builder()
-                    .dataSetName(DATASET_NAME)
-                    .baseUrl(new URL(DATASET_URL))
-                    .build();
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    private static final String DATASET_TITLE = "base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret";
+    private static final String DATA_TITLE_PREFIX = "Sirene : Fichier StockEtablissementLiensSuccession";
 
     @Autowired
-    private HttpDataQuerier httpDataQuerier;
-
-    @Autowired
-    private DataGouvFrDataSetTools dataGouvFrDataSetTools;
+    private DataGouvFrDataQuerierService dataGouvFrDataQuerierService;
 
     private Iterator<CSVRecord> iterator = Collections.emptyIterator();
     private ZipArchiveInputStream archiveInputStream;
@@ -59,15 +41,16 @@ public class CompanyInheritanceItemReader extends HttpItemStreamReaderSupport<CS
     @SneakyThrows
     public void open(@Nonnull ExecutionContext executionContext) {
 
-        LOGGER.info("Reading values");
+        LOGGER.info("Getting dataset definition");
+        final var dataGouvFrDataSet = dataGouvFrDataQuerierService.getDataSet(DATASET_TITLE);
+        final var dataGouvFrDataSetResource = dataGouvFrDataSet
+                .getResources().stream()
+                .filter(DataGouvFrFilterHelpers.fieldStartingWith(DataGouvFrDataSetResource::getTitle, DATA_TITLE_PREFIX))
+                .max(Comparator.comparing(DataGouvFrDataSetResource::dateTimeKeyExtractor))
+                .orElseThrow(() -> new ResourceNotFoundException(DATA_TITLE_PREFIX + "*", dataGouvFrDataSet));
 
-        archiveInputStream = new ZipArchiveInputStream(httpDataQuerier.basicQuery(
-                DATASET,
-                Stream.of(dataGouvFrDataSetTools.hashDefinitionOfDataSetResourceByUrl(DATASET_NAME, DATASET_URL, false))
-                        .filter(Optional::isPresent)
-                        .map(Optional::get)
-                        .collect(Collectors.toList())
-        ));
+        LOGGER.info("Reading values");
+        archiveInputStream = new ZipArchiveInputStream(dataGouvFrDataQuerierService.queryForStream(dataGouvFrDataSetResource));
     }
 
     @Override

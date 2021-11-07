@@ -2,8 +2,8 @@ package fr.dademo.data.helpers.data_gouv_fr.http.validators;
 
 import fr.dademo.data.definitions.data_gouv_fr.dimensions.DataGouvFrDataSetResource;
 import fr.dademo.data.definitions.data_gouv_fr.dimensions.DataGouvFrDataSetResourceChecksum;
-import fr.dademo.tools.http.data_model.HttpInputStreamIdentifier;
-import fr.dademo.tools.http.validators.HashValidator;
+import fr.dademo.reader.http.data_model.HttpInputStreamIdentifier;
+import fr.dademo.reader.http.validators.HashValidator;
 import fr.dademo.tools.tools.HashTools;
 
 import javax.annotation.Nonnull;

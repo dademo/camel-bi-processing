@@ -2,6 +2,8 @@ package fr.dademo.data.definitions.data_gouv_fr;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import fr.dademo.data.definitions.data_gouv_fr.dimensions.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +18,7 @@ import java.util.Map;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonIgnoreProperties({"owner", "quality", "extras"})
 public class DataGouvFrDataSet {
 
@@ -56,7 +59,7 @@ public class DataGouvFrDataSet {
     private List<DataGouvFrDataSetResource> communityResources;
 
     @Nullable
-    private List<DataGouvFrDataSetOrganization.DataGouvFrDataSetBadge> badges;
+    private List<DataGouvFrDataSetBadge> badges;
 
     @Nullable
     private Boolean featured;
@@ -88,6 +91,9 @@ public class DataGouvFrDataSet {
 
     @Nullable
     private List<String> tags;
+
+    @Nullable
+    private DataGouvFrDataSetOrganization organization;
 
     @Nullable
     private DataGouvFrDataSetTemporalCoverage temporalCoverage;

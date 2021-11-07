@@ -1,6 +1,6 @@
 package fr.dademo.tools.cache.repository.exception;
 
-import fr.dademo.tools.stream_definitions.InputStreamIdentifier;
+import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 
 public class MissingCachedInputStreamException extends RuntimeException {
 

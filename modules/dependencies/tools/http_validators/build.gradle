@@ -15,19 +15,16 @@ java {
 }
 
 dependencies {
-    api project(':modules:dependencies:tools:http')
     api project(':modules:dependencies:tools:generic_tools')
+    api project(':modules:dependencies:reader:http')
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
     // Other libraries
     implementation "org.apache.tika:tika-core:${apacheTikaVersion}"
     implementation "commons-io:commons-io:${apacheCommonsIOVersion}"
     implementation "com.google.code.findbugs:jsr305:${findBugsJsr305Version}"
-
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 test {

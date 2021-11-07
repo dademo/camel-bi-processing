@@ -10,10 +10,10 @@ rootProject.name = 'companies-bi-processing'
 
 // Sub-modules
 include 'modules:dependencies:tools:generic_tools'
-include 'modules:dependencies:tools:stream_definitions'
-include 'modules:dependencies:tools:http'
+include 'modules:dependencies:data:generic:stream_definitions'
+include 'modules:dependencies:reader:http'
 include 'modules:dependencies:tools:cache'
-include 'modules:dependencies:tools:http_cache'
+include 'modules:dependencies:reader:http_cache'
 include 'modules:dependencies:tools:http_validators'
 include 'modules:dependencies:tools:cache_validators'
 include 'modules:dependencies:data:definitions:data_gouv_fr'

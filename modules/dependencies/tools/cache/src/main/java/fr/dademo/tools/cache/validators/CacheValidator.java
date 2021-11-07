@@ -1,7 +1,7 @@
 package fr.dademo.tools.cache.validators;
 
+import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 import fr.dademo.tools.cache.data_model.CachedInputStreamIdentifier;
-import fr.dademo.tools.stream_definitions.InputStreamIdentifier;
 
 public interface CacheValidator<T extends InputStreamIdentifier<?>> {
 
