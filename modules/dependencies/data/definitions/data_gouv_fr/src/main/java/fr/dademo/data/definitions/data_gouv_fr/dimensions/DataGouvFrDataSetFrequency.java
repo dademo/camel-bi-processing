@@ -17,6 +17,7 @@ public enum DataGouvFrDataSetFrequency {
     THREE_TIMES_A_WEEK("threeTimesAWeek"),
     SEMI_WEEKLY("semiWeekly"),
     WEEKLY("weekly"),
+    MONTHLY("monthly"),
     BIMONTHLY("bimonthly"),
     QUARTERLY("quarterly"),
     THREE_TIMES_A_YEAR("threeTimesAYear"),
