@@ -61,7 +61,9 @@ public class QueryValidationContextImpl<T extends HttpInputStreamIdentifier> ext
     @SneakyThrows({InterruptedException.class, ExecutionException.class})
     public void close() throws IOException {
 
-        // We wait for all validators to end
+        // We close the delegate
+        delegate.close();
+        // ... and we complete all validators
         for (var validatorTask : validatorTasks) {
             try {
                 validatorTask.get();
@@ -73,8 +75,6 @@ public class QueryValidationContextImpl<T extends HttpInputStreamIdentifier> ext
                 }
             }
         }
-        // And we close the delegate
-        delegate.close();
     }
 
 

@@ -8,13 +8,23 @@ import org.apache.commons.codec.binary.Hex;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
+import java.util.Map;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HashTools {
 
+    private static final Map<String, String> WELL_KNOWN_ALGORITHMS = Map.of(
+            "MD5", "MD5",
+            "SHA1", "SHA-1",
+            "SHA256", "SHA-256",
+            "SHA512", "SHA-512",
+            "SHA3-256", "SHA3-256",
+            "SHA3-512", "SHA3-512"
+    );
+
     @SneakyThrows
     public static MessageDigest getHashComputerForAlgorithm(String algorithm) {
-        return MessageDigest.getInstance(algorithm);
+        return MessageDigest.getInstance(WELL_KNOWN_ALGORITHMS.getOrDefault(algorithm.toUpperCase(), algorithm));
     }
 
     public static byte[] computeHash(MessageDigest hashComputer, InputStream in) throws IOException {

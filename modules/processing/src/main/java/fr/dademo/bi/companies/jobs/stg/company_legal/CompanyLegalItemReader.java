@@ -30,7 +30,7 @@ public class CompanyLegalItemReader extends HttpItemStreamReaderSupport<CSVRecor
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CompanyLegalItemReader.class);
     private static final String DATASET_TITLE = "base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret";
-    private static final String DATA_TITLE_PREFIX = "Sirene : Fichier StockUniteLegale";
+    private static final String DATA_TITLE_PREFIX = "Sirene : Fichier StockUniteLegale ";
 
     @Autowired
     private DataGouvFrDataQuerierService dataGouvFrDataQuerierService;
@@ -56,12 +56,11 @@ public class CompanyLegalItemReader extends HttpItemStreamReaderSupport<CSVRecor
     @Override
     @SneakyThrows
     public void close() {
-        archiveInputStream.close();
+        Optional.ofNullable(archiveInputStream).ifPresent(this::sneakyClose);
     }
 
     @Override
     public CSVRecord read() {
-
         return nextItem().orElse(null);
     }
 

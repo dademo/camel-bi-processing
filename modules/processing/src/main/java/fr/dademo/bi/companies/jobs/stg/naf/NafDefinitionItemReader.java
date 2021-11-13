@@ -61,7 +61,7 @@ public class NafDefinitionItemReader extends HttpItemStreamReaderSupport<NafDefi
     }
 
     @Override
-    public synchronized NafDefinitionContainer read() {
+    public NafDefinitionContainer read() {
         return iterator.hasNext() ? iterator.next() : null;
     }
 }

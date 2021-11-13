@@ -32,7 +32,7 @@ public class AssociationWaldecItemReader extends HttpItemStreamReaderSupport<CSV
     private static final Logger LOGGER = LoggerFactory.getLogger(AssociationWaldecItemReader.class);
 
     private static final String DATASET_TITLE = "repertoire-national-des-associations";
-    private static final String DATA_TITLE_PREFIX = "Fichier Waldec";
+    private static final String DATA_TITLE_PREFIX = "Fichier Waldec ";
 
     @Autowired
     private DataGouvFrDataQuerierService dataGouvFrDataQuerierService;
@@ -58,12 +58,11 @@ public class AssociationWaldecItemReader extends HttpItemStreamReaderSupport<CSV
     @Override
     @SneakyThrows
     public void close() {
-        archiveInputStream.close();
+        Optional.ofNullable(archiveInputStream).ifPresent(this::sneakyClose);
     }
 
     @Override
     public CSVRecord read() {
-
         return nextItem().orElse(null);
     }
 

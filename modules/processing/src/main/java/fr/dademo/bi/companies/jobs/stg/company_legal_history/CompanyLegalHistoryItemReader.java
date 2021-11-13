@@ -28,7 +28,7 @@ import static fr.dademo.bi.companies.jobs.stg.company_legal_history.datamodel.Co
 @Component
 public class CompanyLegalHistoryItemReader extends HttpItemStreamReaderSupport<CSVRecord> {
 
-    private static final String DATA_TITLE_PREFIX = "Sirene : Fichier StockUniteLegaleHistorique";
+    private static final String DATA_TITLE_PREFIX = "Sirene : Fichier StockUniteLegaleHistorique ";
     private static final Logger LOGGER = LoggerFactory.getLogger(CompanyLegalHistoryItemReader.class);
     private static final String DATASET_TITLE = "base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret";
     @Autowired
@@ -55,12 +55,11 @@ public class CompanyLegalHistoryItemReader extends HttpItemStreamReaderSupport<C
     @Override
     @SneakyThrows
     public void close() {
-        archiveInputStream.close();
+        Optional.ofNullable(archiveInputStream).ifPresent(this::sneakyClose);
     }
 
     @Override
     public CSVRecord read() {
-
         return nextItem().orElse(null);
     }
 

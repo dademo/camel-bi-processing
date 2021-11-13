@@ -32,7 +32,7 @@ public class AssociationItemReader extends HttpItemStreamReaderSupport<CSVRecord
     private static final Logger LOGGER = LoggerFactory.getLogger(AssociationItemReader.class);
 
     private static final String DATASET_TITLE = "repertoire-national-des-associations";
-    private static final String DATA_TITLE_PREFIX = "Fichier Import";
+    private static final String DATA_TITLE_PREFIX = "Fichier Import ";
 
     @Autowired
     private DataGouvFrDataQuerierService dataGouvFrDataQuerierService;
@@ -58,12 +58,11 @@ public class AssociationItemReader extends HttpItemStreamReaderSupport<CSVRecord
     @Override
     @SneakyThrows
     public void close() {
-        archiveInputStream.close();
+        Optional.ofNullable(archiveInputStream).ifPresent(this::sneakyClose);
     }
 
     @Override
     public CSVRecord read() {
-
         return nextItem().orElse(null);
     }
 

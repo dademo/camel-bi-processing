@@ -56,12 +56,11 @@ public class CompanyHistoryItemReader extends HttpItemStreamReaderSupport<CSVRec
     @Override
     @SneakyThrows
     public void close() {
-        archiveInputStream.close();
+        Optional.ofNullable(archiveInputStream).ifPresent(this::sneakyClose);
     }
 
     @Override
     public CSVRecord read() {
-
         return nextItem().orElse(null);
     }
 

@@ -30,7 +30,7 @@ public class CompanyInheritanceItemReader extends HttpItemStreamReaderSupport<CS
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CompanyInheritanceItemReader.class);
     private static final String DATASET_TITLE = "base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret";
-    private static final String DATA_TITLE_PREFIX = "Sirene : Fichier StockEtablissementLiensSuccession";
+    private static final String DATA_TITLE_PREFIX = "Sirene : Fichier StockEtablissementLiensSuccession ";
 
     @Autowired
     private DataGouvFrDataQuerierService dataGouvFrDataQuerierService;
@@ -56,17 +56,16 @@ public class CompanyInheritanceItemReader extends HttpItemStreamReaderSupport<CS
     @Override
     @SneakyThrows
     public void close() {
-        archiveInputStream.close();
+        Optional.ofNullable(archiveInputStream).ifPresent(this::sneakyClose);
     }
 
     @Override
-    public synchronized CSVRecord read() {
-
+    public CSVRecord read() {
         return nextItem().orElse(null);
     }
 
     @SneakyThrows
-    private Optional<CSVRecord> nextItem() {    // NOSONAR
+    private synchronized Optional<CSVRecord> nextItem() {    // NOSONAR
 
         if (iterator.hasNext()) {
             return Optional.of(iterator.next());

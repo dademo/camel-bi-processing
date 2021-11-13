@@ -2,11 +2,6 @@ spring:
   batch:
     initialize-schema: always
 
-management:
-  metrics:
-    enable:
-      spring.integration: false
-
 flyway:
   migrations:
     batch:
@@ -18,12 +13,14 @@ flyway:
 
 logging:
   level:
-    'org.springframework': DEBUG
-    #'org.springframework': INFO
+    #'org.springframework': DEBUG
+    'org.springframework': INFO
     'fr.dademo.bi': DEBUG
     'fr.dademo.tools': TRACE
     'org.flywaydb.core': DEBUG
     'org.jooq.Constants': WARN
+    #'com.zaxxer.hikari': DEBUG
+    'com.zaxxer.hikari': INFO
     #'okhttp3': DEBUG
     'okhttp3': INFO
 
@@ -34,13 +31,18 @@ datasources:
   jdbc:
     batch:
       enabled: true
-      driver-class-name: org.sqlite.JDBC
-      url: "jdbc:sqlite:jobs.sqlite"
-      minimum-idle: 1
-      maximum-pool-size: 1
+      #driver-class-name: org.sqlite.JDBC
+      #url: "jdbc:sqlite:jobs.sqlite"
+      url: "jdbc:postgresql://localhost:5432/bi"
+      minimum-idle: 5
+      maximum-pool-size: 10
+      username: "bi_rw"
+      password: "bi_rw"
     stg:
       enabled: false
       url: jdbc:postgresql://localhost:5432/bi
+      minimum-idle: 5
+      maximum-pool-size: 100
       username: bi_rw
       password: bi_rw
   mongodb:
@@ -64,28 +66,28 @@ batch:
       #writer-type: MONGODB
       max-threads: null
     company:
-      enabled: false
+      enabled: true
       chunk-size: 100000
       writer-type: NO_ACTION
       #writer-type: MONGODB
       max-threads: null
     company-history:
-      enabled: false
+      enabled: true
       chunk-size: 100000
       writer-type: NO_ACTION
       max-threads: null
     company-inheritance:
-      enabled: false
+      enabled: true
       chunk-size: 100000
       writer-type: NO_ACTION
       max-threads: null
     company-legal:
-      enabled: false
+      enabled: true
       chunk-size: 100000
       writer-type: NO_ACTION
       max-threads: null
     company-legal-history:
-      enabled: false
+      enabled: true
       chunk-size: 100000
       writer-type: NO_ACTION
       max-threads: null
@@ -95,7 +97,7 @@ batch:
       writer-type: NO_ACTION
       max-threads: null
     association-waldec:
-      enabled: false
+      enabled: true
       chunk-size: 100000
       writer-type: NO_ACTION
       max-threads: null

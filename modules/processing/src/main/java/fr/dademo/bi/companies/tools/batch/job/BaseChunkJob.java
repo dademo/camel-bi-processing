@@ -51,6 +51,7 @@ public abstract class BaseChunkJob<I, O> implements BatchJobProvider {
                 Optional.ofNullable(getJobConfiguration().getEnabled())
                         .orElseGet(BatchConfiguration.JobConfiguration::getDefaultIsEnabled))) {
 
+            final var jobName = getJobName();
             final var threadPoolExecutor = new ThreadPoolTaskExecutor();
             final int poolSize = Optional.ofNullable(getJobConfiguration().getMaxThreads())
                     .orElseGet(BatchConfiguration.JobConfiguration::getDefaultMaxThreads);
@@ -58,12 +59,14 @@ public abstract class BaseChunkJob<I, O> implements BatchJobProvider {
             threadPoolExecutor.setCorePoolSize(poolSize);
             threadPoolExecutor.setMaxPoolSize(poolSize);
             threadPoolExecutor.setQueueCapacity(poolSize * MAX_THREAD_POOL_QUEUE_SIZE_FACTOR);
+            threadPoolExecutor.setDaemon(false);
+            threadPoolExecutor.setThreadNamePrefix(jobName);
 
             threadPoolExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
             threadPoolExecutor.initialize();
 
             final var step = stepBuilderFactory
-                    .get(getJobName())
+                    .get(jobName)
                     .<I, O>chunk(
                             Optional.ofNullable(getJobConfiguration().getChunkSize())
                                     .orElseGet(BatchConfiguration.JobConfiguration::getDefaultChunkSize))
@@ -74,7 +77,7 @@ public abstract class BaseChunkJob<I, O> implements BatchJobProvider {
                     .build();
 
             return jobBuilderFactory
-                    .get(getJobName())
+                    .get(jobName)
                     .preventRestart()
                     .start(step)
                     .build();
