@@ -35,16 +35,22 @@ public class CachedInputStreamWrapper extends InputStream {
     @Override
     public void close() throws IOException {
 
+        boolean isValidInputStream = true;
         try {
-            delegate.close();
+            try {
+                delegate.close();
+            } catch (Exception e) {
+                isValidInputStream = false;
+                throw e;
+            }
         } finally {
             // We MUST call this callback to clean values for example
-            this.callback.onClose();
+            this.callback.onClose(isValidInputStream);
         }
     }
 
     @FunctionalInterface
     public interface CloseCallback {
-        void onClose();
+        void onClose(boolean isValidInputStream);
     }
 }

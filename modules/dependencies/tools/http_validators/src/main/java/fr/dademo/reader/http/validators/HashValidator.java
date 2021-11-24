@@ -38,6 +38,5 @@ public class HashValidator<T extends InputStreamIdentifier<?>> implements InputS
         if (!expectedHexHash.equals(computedHash)) {
             throw new InputStreamHashValidationException(inputStreamIdentifier, expectedHexHash, computedHash);
         }
-
     }
 }

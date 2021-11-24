@@ -77,15 +77,19 @@ public class FileCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extends
 
         return CachedInputStreamWrapper.of(
                 new TeeInputStream(inputStream, cachedFile, true),
-                () -> {
-                    try {
-                        persistCache(tempCachedFile, inputStreamIdentifier);
-                    } finally {
-                        // In case of an error, we still clean the directories
-                        if (tempCachedFile.exists()) {
-                            LOGGER.debug("Cleaning working dir for identifier `{}`", inputStreamIdentifier.getDescription());
-                            deleteFile(tempCachedFile);
+                isValidInputStream -> {
+                    if (isValidInputStream) {
+                        try {
+                            persistCache(tempCachedFile, inputStreamIdentifier);
+                        } finally {
+                            // In case of an error, we still clean the directories
+                            if (tempCachedFile.exists()) {
+                                LOGGER.debug("Cleaning working dir for identifier `{}`", inputStreamIdentifier.getDescription());
+                                deleteFile(tempCachedFile);
+                            }
                         }
+                    } else {
+                        LOGGER.warn("Input stream is not valid and will not be persistedq");
                     }
                 });
     }
