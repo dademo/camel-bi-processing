@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.bi.companies.configuration;
 
 import lombok.AllArgsConstructor;
@@ -13,6 +19,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * @author dademo
+ */
 @Configuration
 @ConfigurationProperties(prefix = "flyway")
 @Data
@@ -27,7 +36,7 @@ public class FlywayMigrationsConfiguration {
     public MigrationConfiguration getMigrationByDataSourceName(@Nonnull String dataSourceName) {
 
         return Optional.ofNullable(migrations.get(dataSourceName))
-                .orElse(MigrationConfiguration.DEFAULT_MIGRATION_CONFIGURATION);
+            .orElse(MigrationConfiguration.DEFAULT_MIGRATION_CONFIGURATION);
     }
 
     @Data
@@ -44,11 +53,11 @@ public class FlywayMigrationsConfiguration {
 
         static {
             DEFAULT_MIGRATION_CONFIGURATION = MigrationConfiguration.builder()
-                    .enabled(getDefaultIsEnabled())
-                    .createSchemas(getDefaultCreateSchemas())
-                    .cleanDisabled(getDefaultCleanDisabled())
-                    .baselineOnMigrate(getDefaultBaselineOnMigrate())
-                    .build();
+                .enabled(getDefaultIsEnabled())
+                .createSchemas(getDefaultCreateSchemas())
+                .cleanDisabled(getDefaultCleanDisabled())
+                .baselineOnMigrate(getDefaultBaselineOnMigrate())
+                .build();
         }
 
         @Nullable

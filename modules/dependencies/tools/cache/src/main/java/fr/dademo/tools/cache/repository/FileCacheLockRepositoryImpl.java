@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.tools.cache.repository;
 
 import com.fasterxml.jackson.core.JacksonException;
@@ -21,6 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
+/**
+ * @author dademo
+ */
 @Repository
 class FileCacheLockRepositoryImpl<T extends InputStreamIdentifier<?>> extends FileCacheRepositoryBase implements CacheLockRepository<T> {
 
@@ -42,8 +51,8 @@ class FileCacheLockRepositoryImpl<T extends InputStreamIdentifier<?>> extends Fi
         if (lockFile.exists() && lockFile.length() > 0) {
             try {
                 return mapper.readValue(
-                        lockFile,
-                        collectionTypeDefinitionOfCachedInputStreamIdentifierDef()
+                    lockFile,
+                    collectionTypeDefinitionOfCachedInputStreamIdentifierDef()
                 );
             } catch (JacksonException ex) {
                 LOGGER.warn("Unable to read lock file");
@@ -67,8 +76,8 @@ class FileCacheLockRepositoryImpl<T extends InputStreamIdentifier<?>> extends Fi
         LOGGER.debug("Writing lock file");
         try {
             mapper.writeValue(
-                    lockFilePathUsingCacheDirectoryRoot().toFile(),
-                    lockFileContent
+                lockFilePathUsingCacheDirectoryRoot().toFile(),
+                lockFileContent
             );
         } catch (IOException e) {
             throw new UncheckedIOException(e);
@@ -92,9 +101,9 @@ class FileCacheLockRepositoryImpl<T extends InputStreamIdentifier<?>> extends Fi
 
         // Locking index file
         try (final var fileChannel = FileChannel.open(
-                lockFilePathUsingCacheDirectoryRoot(),
-                StandardOpenOption.CREATE,
-                StandardOpenOption.APPEND)) {
+            lockFilePathUsingCacheDirectoryRoot(),
+            StandardOpenOption.CREATE,
+            StandardOpenOption.APPEND)) {
 
             try (final var lock = fileChannel.lock()) {
                 return onLockAcquired.get();
@@ -109,6 +118,6 @@ class FileCacheLockRepositoryImpl<T extends InputStreamIdentifier<?>> extends Fi
     private CollectionType collectionTypeDefinitionOfCachedInputStreamIdentifierDef() {
 
         return mapper.getTypeFactory()
-                .constructCollectionType(List.class, CachedInputStreamIdentifier.class);
+            .constructCollectionType(List.class, CachedInputStreamIdentifier.class);
     }
 }

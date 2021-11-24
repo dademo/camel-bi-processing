@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.data.definitions.data_gouv_fr.dimensions;
 
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -11,6 +17,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
+/**
+ * @author dademo
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

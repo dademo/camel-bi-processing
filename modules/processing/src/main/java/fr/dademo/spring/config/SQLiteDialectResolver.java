@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.spring.config;
 
 import fr.dademo.spring.dialect.SQLiteDialect;
@@ -14,6 +20,9 @@ import java.sql.SQLException;
 import java.util.Locale;
 import java.util.Optional;
 
+/**
+ * @author dademo
+ */
 public class SQLiteDialectResolver implements DialectResolver.JdbcDialectProvider {
 
     @Nullable
@@ -30,6 +39,6 @@ public class SQLiteDialectResolver implements DialectResolver.JdbcDialectProvide
     @Nonnull
     public Optional<Dialect> getDialect(@Nonnull JdbcOperations operations) {
         return Optional.ofNullable(
-                operations.execute((ConnectionCallback<Dialect>) SQLiteDialectResolver::getDialect));
+            operations.execute((ConnectionCallback<Dialect>) SQLiteDialectResolver::getDialect));
     }
 }

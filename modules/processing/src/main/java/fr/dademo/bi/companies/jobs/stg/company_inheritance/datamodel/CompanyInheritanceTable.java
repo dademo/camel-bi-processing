@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel;
 
 import org.jooq.TableField;
@@ -11,12 +17,17 @@ import java.time.LocalDateTime;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.schema;
 
-@SuppressWarnings({"java:S110", "java:S116", "java:S2055"})
+/**
+ * @author dademo
+ */
+@SuppressWarnings({"java:S110", "java:S116", "java:S2055", "java:S2160"})
 public class CompanyInheritanceTable extends CustomTable<CompanyInheritanceRecord> {
 
     public static final CompanyInheritanceTable COMPANY_INHERITANCE = new CompanyInheritanceTable();
     public static final String TABLE_NAME = "company_inheritance";
     public static final String TABLE_NAMESPACE = "stg";
+
+    private static final long serialVersionUID = -6949326022038402452L;
 
     public final TableField<CompanyInheritanceRecord, String> FIELD_COMPANY_PREDECESSOR_SIREN = createField(name("company_predecessor_siren"), SQLDataType.VARCHAR(14), this);
     public final TableField<CompanyInheritanceRecord, String> FIELD_COMPANY_SUCCESSOR_SIREN = createField(name("company_successor_siren"), SQLDataType.VARCHAR(14), this);

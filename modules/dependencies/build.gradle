@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 plugins {
     id 'java'
 }
@@ -16,28 +22,28 @@ task generateDependenciesJavadoc(type: Javadoc) {
     source = sourceSets.main.allJava
 
     source = subprojects
-            .findAll({ it.plugins.hasPlugin('java') })
-            .collect({ it.sourceSets.main.allJava })
+        .findAll({ it.plugins.hasPlugin('java') })
+        .collect({ it.sourceSets.main.allJava })
     classpath = files(
-            subprojects
-                    .findAll({ it.plugins.hasPlugin('java') })
-                    .collect({ it.sourceSets.main.compileClasspath })
+        subprojects
+            .findAll({ it.plugins.hasPlugin('java') })
+            .collect({ it.sourceSets.main.compileClasspath })
     )
     options.links = [
-            'https://docs.oracle.com/en/java/javase/11/docs/api/',
-            'https://docs.spring.io/spring/docs/current/javadoc-api/',
-            'https://docs.spring.io/spring-boot/docs/current/api/',
-            'https://javadoc.io/doc/com.zaxxer/HikariCP/latest/',
-            'https://www.jooq.org/javadoc/latest/',
-            'https://javadoc.io/doc/com.squareup.okhttp3/okhttp/3.14.9/',
-            'https://javadoc.io/doc/org.apache.tika/tika-core/latest/',
-            'https://commons.apache.org/proper/commons-lang/apidocs/',
-            'https://commons.apache.org/proper/commons-io/apidocs/',
-            'https://commons.apache.org/proper/commons-csv/apidocs/',
-            'https://commons.apache.org/proper/commons-compress/apidocs/',
-            'https://commons.apache.org/proper/commons-codec/apidocs/',
-            'https://javadoc.io/doc/com.fasterxml.jackson.core/jackson-core/latest/',
-            'https://javadoc.io/doc/com.fasterxml.jackson.core/jackson-databind/latest/',
-            'https://javadoc.io/doc/com.google.code.findbugs/jsr305/latest/',
+        'https://docs.oracle.com/en/java/javase/11/docs/api/',
+        'https://docs.spring.io/spring/docs/current/javadoc-api/',
+        'https://docs.spring.io/spring-boot/docs/current/api/',
+        'https://javadoc.io/doc/com.zaxxer/HikariCP/latest/',
+        'https://www.jooq.org/javadoc/latest/',
+        'https://javadoc.io/doc/com.squareup.okhttp3/okhttp/3.14.9/',
+        'https://javadoc.io/doc/org.apache.tika/tika-core/latest/',
+        'https://commons.apache.org/proper/commons-lang/apidocs/',
+        'https://commons.apache.org/proper/commons-io/apidocs/',
+        'https://commons.apache.org/proper/commons-csv/apidocs/',
+        'https://commons.apache.org/proper/commons-compress/apidocs/',
+        'https://commons.apache.org/proper/commons-codec/apidocs/',
+        'https://javadoc.io/doc/com.fasterxml.jackson.core/jackson-core/latest/',
+        'https://javadoc.io/doc/com.fasterxml.jackson.core/jackson-databind/latest/',
+        'https://javadoc.io/doc/com.google.code.findbugs/jsr305/latest/',
     ]
 }

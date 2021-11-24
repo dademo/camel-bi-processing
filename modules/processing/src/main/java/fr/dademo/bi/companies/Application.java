@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.bi.companies;
 
 import fr.dademo.bi.companies.services.AppJobLauncher;
@@ -15,14 +21,17 @@ import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.autoconfigure.r2dbc.R2dbcAutoConfiguration;
 
+/**
+ * @author dademo
+ */
 @SpringBootApplication(exclude = {
-        R2dbcAutoConfiguration.class,
-        DataSourceAutoConfiguration.class,
-        MongoAutoConfiguration.class,
-        CouchbaseAutoConfiguration.class,
-        KafkaAutoConfiguration.class,
-        RabbitAutoConfiguration.class,
-        FlywayAutoConfiguration.class,
+    R2dbcAutoConfiguration.class,
+    DataSourceAutoConfiguration.class,
+    MongoAutoConfiguration.class,
+    CouchbaseAutoConfiguration.class,
+    KafkaAutoConfiguration.class,
+    RabbitAutoConfiguration.class,
+    FlywayAutoConfiguration.class,
 })
 @ImportAutoConfiguration
 @EnableBatchProcessing

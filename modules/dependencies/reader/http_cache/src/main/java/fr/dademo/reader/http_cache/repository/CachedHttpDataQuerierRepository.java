@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.reader.http_cache.repository;
 
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifierValidator;
@@ -13,6 +19,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+/**
+ * @author dademo
+ */
 public interface CachedHttpDataQuerierRepository extends HttpDataQuerierRepository {
 
     InputStream basicQuery(@Nonnull HttpInputStreamIdentifier httpInputStreamIdentifier,

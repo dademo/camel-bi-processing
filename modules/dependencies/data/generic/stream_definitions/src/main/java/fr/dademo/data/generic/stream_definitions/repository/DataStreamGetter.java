@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.data.generic.stream_definitions.repository;
 
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
@@ -9,6 +15,9 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * @author dademo
+ */
 public interface DataStreamGetter<T extends InputStreamIdentifier<?>> {
 
     InputStream getInputStream(@Nonnull T inputStreamIdentifier,

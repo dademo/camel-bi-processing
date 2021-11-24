@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.tools.cache.data_model.serializer;
 
 import com.fasterxml.jackson.core.JsonParser;
@@ -12,6 +18,9 @@ import java.io.IOException;
 import static fr.dademo.tools.cache.data_model.serializer.Constants.FIELD_SERIALIZED_CLASS;
 import static fr.dademo.tools.cache.data_model.serializer.Constants.FIELD_SERIALIZED_VALUE;
 
+/**
+ * @author dademo
+ */
 @SuppressWarnings("java:S2055")
 public class InputStreamIdentifierDeserializer extends StdDeserializer<InputStreamIdentifier<?>> {
 
@@ -36,8 +45,8 @@ public class InputStreamIdentifierDeserializer extends StdDeserializer<InputStre
         final var valueClass = defaultObjectMapper.readValue(treeNode.get(FIELD_SERIALIZED_CLASS).toString(), String.class);
 
         return (InputStreamIdentifier<?>) defaultObjectMapper.readValue(
-                treeNode.get(FIELD_SERIALIZED_VALUE).toString(),
-                Class.forName(valueClass)
+            treeNode.get(FIELD_SERIALIZED_VALUE).toString(),
+            Class.forName(valueClass)
         );
     }
 }

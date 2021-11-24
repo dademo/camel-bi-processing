@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.reader.http.repository.context;
 
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifierValidator;
@@ -15,6 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
+/**
+ * @author dademo
+ */
 public class QueryValidationContextImpl<T extends HttpInputStreamIdentifier> extends QueryValidationContext {
 
     @Nonnull
@@ -90,19 +99,19 @@ public class QueryValidationContextImpl<T extends HttpInputStreamIdentifier> ext
         final var teeInputStream = new TeeInputStream(inputStream, pipedOutputStream, true);
 
         this.validatorTasks.add(
-                this.validatorsExecutorService.submit(
-                        validatorCallableOf(
-                                streamToValidate,
-                                validator
-                        )
-                ));
+            this.validatorsExecutorService.submit(
+                validatorCallableOf(
+                    streamToValidate,
+                    validator
+                )
+            ));
 
         return teeInputStream;
     }
 
     private Callable<Void> validatorCallableOf(
-            @Nonnull InputStream inputStream,
-            @Nonnull InputStreamIdentifierValidator<HttpInputStreamIdentifier> validator) {
+        @Nonnull InputStream inputStream,
+        @Nonnull InputStreamIdentifierValidator<HttpInputStreamIdentifier> validator) {
 
         return () -> {
             validator.validate(httpInputStreamIdentifier, inputStream);

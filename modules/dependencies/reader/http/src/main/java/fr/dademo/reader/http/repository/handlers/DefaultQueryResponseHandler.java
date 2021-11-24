@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.reader.http.repository.handlers;
 
 import fr.dademo.reader.http.repository.HttpDataQuerierRepository;
@@ -10,6 +16,9 @@ import okhttp3.ResponseBody;
 import java.io.InputStream;
 import java.util.Optional;
 
+/**
+ * @author dademo
+ */
 public class DefaultQueryResponseHandler implements QueryResponseHandler {
 
     @Override
@@ -23,7 +32,7 @@ public class DefaultQueryResponseHandler implements QueryResponseHandler {
         }
 
         return Optional.ofNullable(response.body())
-                .map(ResponseBody::byteStream)
-                .orElseThrow(() -> new MissingResultBodyException(response));
+            .map(ResponseBody::byteStream)
+            .orElseThrow(() -> new MissingResultBodyException(response));
     }
 }

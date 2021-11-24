@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.bi.companies.services;
 
 import fr.dademo.bi.companies.tools.batch.job.BatchJobProvider;
@@ -13,6 +19,9 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * @author dademo
+ */
 @Service
 public class AppJobLauncherImpl implements AppJobLauncher {
 
@@ -26,9 +35,9 @@ public class AppJobLauncherImpl implements AppJobLauncher {
     public void runAll() {
 
         allBatchs.stream()
-                .map(BatchJobProvider::getJob)
-                .filter(Objects::nonNull)
-                .forEach(this::run);
+            .map(BatchJobProvider::getJob)
+            .filter(Objects::nonNull)
+            .forEach(this::run);
 
     }
 
@@ -39,7 +48,7 @@ public class AppJobLauncherImpl implements AppJobLauncher {
 
     private JobParameters getJobParameters() {
         return new JobParametersBuilder()
-                .addLong("startedAt", System.currentTimeMillis())
-                .toJobParameters();
+            .addLong("startedAt", System.currentTimeMillis())
+            .toJobParameters();
     }
 }

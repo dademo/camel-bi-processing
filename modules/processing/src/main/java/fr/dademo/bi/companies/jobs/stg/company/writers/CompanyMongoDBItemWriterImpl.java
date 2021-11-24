@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.bi.companies.jobs.stg.company.writers;
 
 import fr.dademo.bi.companies.jobs.stg.company.CompanyItemWriter;
@@ -21,10 +27,13 @@ import java.util.List;
 import static fr.dademo.bi.companies.beans.BeanValues.*;
 import static fr.dademo.bi.companies.jobs.stg.company.JobDefinition.COMPANY_CONFIG_JOB_NAME;
 
+/**
+ * @author dademo
+ */
 @Component
 @ConditionalOnProperty(
-        value = CONFIG_JOBS_BASE + "." + COMPANY_CONFIG_JOB_NAME + "." + CONFIG_WRITER_TYPE,
-        havingValue = CONFIG_MONGODB_TYPE
+    value = CONFIG_JOBS_BASE + "." + COMPANY_CONFIG_JOB_NAME + "." + CONFIG_WRITER_TYPE,
+    havingValue = CONFIG_MONGODB_TYPE
 )
 public class CompanyMongoDBItemWriterImpl implements CompanyItemWriter, ItemStreamWriter<Company> {
 
@@ -42,8 +51,8 @@ public class CompanyMongoDBItemWriterImpl implements CompanyItemWriter, ItemStre
 
         LOGGER.info("Writing {} company documents", items.size());
         final var result = mongoTemplate.getCollection(COLLECTION_NAME)
-                .withDocumentClass(Company.class)
-                .insertMany(items);
+            .withDocumentClass(Company.class)
+            .insertMany(items);
         LOGGER.info("{} items added", result.getInsertedIds().size());
     }
 

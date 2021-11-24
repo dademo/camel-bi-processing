@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.data.generic.stream_definitions.configuration;
 
 import lombok.AllArgsConstructor;
@@ -15,6 +21,9 @@ import java.nio.file.Path;
 
 import static fr.dademo.data.generic.stream_definitions.configuration.HttpConfiguration.CONFIGURATION_PREFIX;
 
+/**
+ * @author dademo
+ */
 @Configuration
 @ConfigurationProperties(prefix = CONFIGURATION_PREFIX)
 @Data

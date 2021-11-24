@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.bi.companies.jobs.stg.association.datamodel;
 
 import org.jooq.TableField;
@@ -10,12 +16,17 @@ import java.time.LocalDate;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.schema;
 
-@SuppressWarnings({"java:S110", "java:S116", "java:S2055"})
+/**
+ * @author dademo
+ */
+@SuppressWarnings({"java:S110", "java:S116", "java:S2055", "java:S2160"})
 public class AssociationTable extends CustomTable<AssociationRecord> {
 
     public static final AssociationTable ASSOCIATION = new AssociationTable();
     public static final String TABLE_NAME = "company";
     public static final String TABLE_NAMESPACE = "stg";
+
+    private static final long serialVersionUID = 2388048002240918898L;
 
     public final TableField<AssociationRecord, String> FIELD_SIREN = createField(name("siren"), SQLDataType.VARCHAR(9), this);
 
@@ -38,9 +49,7 @@ public class AssociationTable extends CustomTable<AssociationRecord> {
     public final TableField<AssociationRecord, String> FIELD_ASSOCIATION_ADDRESS_INSEE_CODE = createField(name("address_insee_code"), SQLDataType.VARCHAR(5), this);
     public final TableField<AssociationRecord, String> FIELD_ASSOCIATION_ADDRESS_CITY_LIBELLE = createField(name("address_city_libelle"), SQLDataType.VARCHAR(45), this);
     public final TableField<AssociationRecord, String> FIELD_ASSOCIATION_LEADER_CIVILITY = createField(name("leader_civility"), SQLDataType.VARCHAR(2), this);
-    //public final TableField<AssociationRecord, String> FIELD_ASSOCIATION_PHONE = createField(name("phone"), SQLDataType.VARCHAR(10), this);
     public final TableField<AssociationRecord, String> FIELD_ASSOCIATION_WEBSITE = createField(name("website"), SQLDataType.VARCHAR(64), this);
-    //public final TableField<AssociationRecord, String> FIELD_ASSOCIATION_EMAIL = createField(name("email"), SQLDataType.VARCHAR(64), this);
     public final TableField<AssociationRecord, String> FIELD_ASSOCIATION_OBSERVATION = createField(name("observation"), SQLDataType.VARCHAR(128), this);
     public final TableField<AssociationRecord, String> FIELD_ASSOCIATION_POSITION = createField(name("position"), SQLDataType.VARCHAR(1), this);
     public final TableField<AssociationRecord, String> FIELD_ASSOCIATION_RUP_CODE = createField(name("rup_code"), SQLDataType.VARCHAR(11), this);

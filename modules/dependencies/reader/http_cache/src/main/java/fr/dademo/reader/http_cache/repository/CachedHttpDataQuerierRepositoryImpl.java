@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.reader.http_cache.repository;
 
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
@@ -20,6 +26,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+/**
+ * @author dademo
+ */
 @ConditionalOnBean({CacheRepository.class, CacheLockRepository.class})
 @Repository
 public class CachedHttpDataQuerierRepositoryImpl extends BaseCachedHttpDataQuerierRepository implements CachedHttpDataQuerierRepository {
@@ -42,19 +51,19 @@ public class CachedHttpDataQuerierRepositoryImpl extends BaseCachedHttpDataQueri
 
         if (!isFlowAllowedToBeCached(httpInputStreamIdentifier)) {
             return performBasicQuery(
-                    httpInputStreamIdentifier, queryCustomizers,
-                    queryResponseHandler, httpStreamValidators
+                httpInputStreamIdentifier, queryCustomizers,
+                queryResponseHandler, httpStreamValidators
             );
         } else {
             if (isInputStreamCached(httpInputStreamIdentifier, cacheValidators)) {
                 return cacheRepository.readFromCachedInputStream(httpInputStreamIdentifier);
             } else {
                 return cacheRepository.cacheInputStream(
-                        performBasicQuery(
-                                httpInputStreamIdentifier, queryCustomizers,
-                                queryResponseHandler, httpStreamValidators
-                        ),
-                        httpInputStreamIdentifier
+                    performBasicQuery(
+                        httpInputStreamIdentifier, queryCustomizers,
+                        queryResponseHandler, httpStreamValidators
+                    ),
+                    httpInputStreamIdentifier
                 );
             }
         }
@@ -63,15 +72,15 @@ public class CachedHttpDataQuerierRepositoryImpl extends BaseCachedHttpDataQueri
     private boolean isFlowAllowedToBeCached(HttpInputStreamIdentifier httpInputStreamIdentifier) {
 
         return cacheFlowIgnoreCheckerList.stream()
-                .allMatch(cacheFlowIgnoreChecker -> cacheFlowIgnoreChecker.isFlowAllowedToBeCached(httpInputStreamIdentifier));
+            .allMatch(cacheFlowIgnoreChecker -> cacheFlowIgnoreChecker.isFlowAllowedToBeCached(httpInputStreamIdentifier));
     }
 
     private boolean isInputStreamCached(@Nonnull HttpInputStreamIdentifier httpInputStreamIdentifier,
                                         @Nonnull List<? extends CacheValidator<HttpInputStreamIdentifier>> cacheValidators) {
 
         return cacheRepository.getCachedInputStreamIdentifierOf(httpInputStreamIdentifier)
-                .map(cachedInputStreamIdentifier -> allValidatorsValidateCachedInputStream(cachedInputStreamIdentifier, cacheValidators))
-                .orElse(false);
+            .map(cachedInputStreamIdentifier -> allValidatorsValidateCachedInputStream(cachedInputStreamIdentifier, cacheValidators))
+            .orElse(false);
     }
 
     private boolean allValidatorsValidateCachedInputStream(CachedInputStreamIdentifier<HttpInputStreamIdentifier> cachedInputStreamIdentifier,

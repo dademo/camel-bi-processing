@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.reader.http.repository;
 
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifierValidator;
@@ -13,6 +19,9 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * @author dademo
+ */
 public interface HttpDataQuerierRepository extends DataStreamGetter<HttpInputStreamIdentifier> {
 
     InputStream basicQuery(@Nonnull HttpInputStreamIdentifier httpInputStreamIdentifier,
@@ -26,17 +35,17 @@ public interface HttpDataQuerierRepository extends DataStreamGetter<HttpInputStr
     }
 
     default byte[] basicQueryByte(
-            @Nonnull HttpInputStreamIdentifier httpInputStreamIdentifier,
-            @Nonnull List<QueryCustomizer> queryCustomizers,
-            @Nullable QueryResponseHandler queryResponseHandler,
-            @Nonnull List<? extends InputStreamIdentifierValidator<HttpInputStreamIdentifier>> httpStreamValidators) throws IOException {
+        @Nonnull HttpInputStreamIdentifier httpInputStreamIdentifier,
+        @Nonnull List<QueryCustomizer> queryCustomizers,
+        @Nullable QueryResponseHandler queryResponseHandler,
+        @Nonnull List<? extends InputStreamIdentifierValidator<HttpInputStreamIdentifier>> httpStreamValidators) throws IOException {
 
         final var byteArrayBuilder = new ByteArrayOutputStream();
 
         basicQuery(httpInputStreamIdentifier,
-                queryCustomizers,
-                queryResponseHandler,
-                httpStreamValidators
+            queryCustomizers,
+            queryResponseHandler,
+            httpStreamValidators
         ).transferTo(byteArrayBuilder);
 
         return byteArrayBuilder.toByteArray();

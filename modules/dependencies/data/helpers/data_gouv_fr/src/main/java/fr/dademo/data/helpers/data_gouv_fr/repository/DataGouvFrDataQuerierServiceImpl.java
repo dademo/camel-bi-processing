@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.data.helpers.data_gouv_fr.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,6 +34,9 @@ import java.util.stream.Stream;
 
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 
+/**
+ * @author dademo
+ */
 @SuppressWarnings("java:S1075")
 @Service
 public class DataGouvFrDataQuerierServiceImpl extends BaseDataGouvFrDataQuerierServiceImpl implements DataGouvFrDataQuerierService {
@@ -47,8 +56,8 @@ public class DataGouvFrDataQuerierServiceImpl extends BaseDataGouvFrDataQuerierS
     public DataGouvFrDataSetPage listDataSets(@Nullable DataGouvFrMetadataServiceMetadataQueryOptions queryOptions) throws IOException {
 
         return mapper.readValue(
-                httpDataQuerierRepository.basicQuery(getInputStreamIdentifierForDataSetQuery(queryOptions)),
-                DataGouvFrDataSetPage.class
+            httpDataQuerierRepository.basicQuery(getInputStreamIdentifierForDataSetQuery(queryOptions)),
+            DataGouvFrDataSetPage.class
         );
     }
 
@@ -58,8 +67,8 @@ public class DataGouvFrDataQuerierServiceImpl extends BaseDataGouvFrDataQuerierS
 
         try {
             return mapper.readValue(
-                    httpDataQuerierRepository.basicQuery(getInputStreamIdentifierForDataSetGet(dataSetTitle)),
-                    DataGouvFrDataSet.class
+                httpDataQuerierRepository.basicQuery(getInputStreamIdentifierForDataSetGet(dataSetTitle)),
+                DataGouvFrDataSet.class
             );
         } catch (FailedQueryException e) {
             if (e.getQueryResponse().code() == HTTP_NOT_FOUND) {
@@ -76,13 +85,13 @@ public class DataGouvFrDataQuerierServiceImpl extends BaseDataGouvFrDataQuerierS
                                       @Nonnull List<? extends DataGouvFrInputStreamValidator> inputStreamIdentifierValidators) throws IOException {
 
         return httpDataQuerierRepository.basicQuery(
-                getInputStreamIdentifierForDataSetResource(dataGouvFrDataSetResource),
-                Collections.emptyList(),
-                null,
-                Stream.concat(
-                        DataGouvFrInputStreamValidator.of(dataGouvFrDataSetResource).stream(),
-                        inputStreamIdentifierValidators.stream()
-                ).collect(Collectors.toList())
+            getInputStreamIdentifierForDataSetResource(dataGouvFrDataSetResource),
+            Collections.emptyList(),
+            null,
+            Stream.concat(
+                DataGouvFrInputStreamValidator.of(dataGouvFrDataSetResource).stream(),
+                inputStreamIdentifierValidators.stream()
+            ).collect(Collectors.toList())
         );
     }
 
@@ -91,9 +100,9 @@ public class DataGouvFrDataQuerierServiceImpl extends BaseDataGouvFrDataQuerierS
     protected URL buildQueryUsingOptions(@Nullable DataGouvFrMetadataServiceMetadataQueryOptions queryOptions) {
 
         final var urlBuilder = new HttpUrl.Builder()
-                .scheme(DATA_SET_URL_SCHEME)
-                .host(DATA_SET_URL_HOST)
-                .addPathSegment(DATA_SET_URL_PATH);
+            .scheme(DATA_SET_URL_SCHEME)
+            .host(DATA_SET_URL_HOST)
+            .addPathSegment(DATA_SET_URL_PATH);
 
         Optional.ofNullable(queryOptions).ifPresent(options -> options.applyParametersToUrlBuilder(urlBuilder));
 
@@ -105,30 +114,30 @@ public class DataGouvFrDataQuerierServiceImpl extends BaseDataGouvFrDataQuerierS
     protected URL buildQueryForDataSet(@Nonnull String dataSetTitle) {
 
         return new HttpUrl.Builder()
-                .scheme(DATA_SET_URL_SCHEME)
-                .host(DATA_SET_URL_HOST)
-                .addPathSegments(DATA_SET_URL_PATH)
-                .addPathSegment(dataSetTitle)
-                .build()
-                .url();
+            .scheme(DATA_SET_URL_SCHEME)
+            .host(DATA_SET_URL_HOST)
+            .addPathSegments(DATA_SET_URL_PATH)
+            .addPathSegment(dataSetTitle)
+            .build()
+            .url();
     }
 
     @Nonnull
     private HttpInputStreamIdentifier getInputStreamIdentifierForDataSetQuery(@Nullable DataGouvFrMetadataServiceMetadataQueryOptions queryOptions) {
 
         return HttpInputStreamIdentifier.builder()
-                .url(buildQueryUsingOptions(queryOptions))
-                .method("GET")
-                .build();
+            .url(buildQueryUsingOptions(queryOptions))
+            .method("GET")
+            .build();
     }
 
     @Nonnull
     private HttpInputStreamIdentifier getInputStreamIdentifierForDataSetGet(@Nonnull String dataSetTitle) {
 
         return HttpInputStreamIdentifier.builder()
-                .url(buildQueryForDataSet(dataSetTitle))
-                .method("GET")
-                .build();
+            .url(buildQueryForDataSet(dataSetTitle))
+            .method("GET")
+            .build();
     }
 
     @SneakyThrows
@@ -136,8 +145,8 @@ public class DataGouvFrDataQuerierServiceImpl extends BaseDataGouvFrDataQuerierS
     private HttpInputStreamIdentifier getInputStreamIdentifierForDataSetResource(DataGouvFrDataSetResource dataGouvFrDataSetResource) {
 
         return HttpInputStreamIdentifier.builder()
-                .url(new URL(dataGouvFrDataSetResource.getUrl()))
-                .method("GET")
-                .build();
+            .url(new URL(dataGouvFrDataSetResource.getUrl()))
+            .method("GET")
+            .build();
     }
 }

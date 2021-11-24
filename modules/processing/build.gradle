@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 // https://start.spring.io/#!type=gradle-project&language=java&platformVersion=2.5.6&packaging=jar&jvmVersion=11&groupId=fr.dademo&artifactId=bi.companies&name=bi.companies&description=BI%20analysis%20using%20french%20government%20Open%20Data&packageName=fr.dademo.bi.companies&dependencies=devtools,lombok,configuration-processor,jdbc,data-jdbc,flyway,mariadb,postgresql,data-mongodb,data-couchbase,amqp,kafka,batch,validation,testcontainers,influx,cloud-stream
 plugins {
     id 'org.springframework.boot' version "${springBootVersion}"

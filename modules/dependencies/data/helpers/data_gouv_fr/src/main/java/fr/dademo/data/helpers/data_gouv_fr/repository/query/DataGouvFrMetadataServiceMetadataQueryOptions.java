@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.data.helpers.data_gouv_fr.repository.query;
 
 import lombok.AllArgsConstructor;
@@ -13,6 +19,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author dademo
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -84,7 +93,7 @@ public class DataGouvFrMetadataServiceMetadataQueryOptions {
         parameters.put("page_size", Optional.ofNullable(pageSize).map(Object::toString).orElse(""));
 
         parameters.entrySet().stream()
-                .filter(kv -> Strings.isNotEmpty(kv.getValue()))
-                .forEach(kv -> queryBuilder.addQueryParameter(kv.getKey(), kv.getValue()));
+            .filter(kv -> Strings.isNotEmpty(kv.getValue()))
+            .forEach(kv -> queryBuilder.addQueryParameter(kv.getKey(), kv.getValue()));
     }
 }

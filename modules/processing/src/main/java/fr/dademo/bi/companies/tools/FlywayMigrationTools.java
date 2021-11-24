@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.bi.companies.tools;
 
 import lombok.AccessLevel;
@@ -11,6 +17,9 @@ import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+/**
+ * @author dademo
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class FlywayMigrationTools {
 
@@ -19,8 +28,8 @@ public final class FlywayMigrationTools {
     public static void applyMigration(Flyway flyway) {
 
         final var migrationLocations = Arrays.stream(flyway.getConfiguration().getLocations())
-                .map(Location::toString)
-                .collect(Collectors.joining(", "));
+            .map(Location::toString)
+            .collect(Collectors.joining(", "));
 
         LOGGER.info("Applying migration using classpath `{}`", migrationLocations);
 
@@ -30,11 +39,11 @@ public final class FlywayMigrationTools {
         migrateResult.migrations.forEach(FlywayMigrationTools::debugMigrateOutput);
 
         LOGGER.info("Applied `{}` migration from `{}` to `{}` on database `{}` on schema `{}`",
-                migrateResult.migrationsExecuted,
-                migrateResult.initialSchemaVersion,
-                migrateResult.targetSchemaVersion,
-                migrateResult.database,
-                migrateResult.schemaName
+            migrateResult.migrationsExecuted,
+            migrateResult.initialSchemaVersion,
+            migrateResult.targetSchemaVersion,
+            migrateResult.database,
+            migrateResult.schemaName
         );
     }
 
@@ -45,11 +54,11 @@ public final class FlywayMigrationTools {
     private static void debugMigrateOutput(MigrateOutput migrateOutput) {
 
         LOGGER.debug("{}:{} : {}:{}, took {} milliseconds",
-                migrateOutput.filepath,
-                migrateOutput.type,
-                migrateOutput.description,
-                migrateOutput.version,
-                migrateOutput.executionTime
+            migrateOutput.filepath,
+            migrateOutput.type,
+            migrateOutput.description,
+            migrateOutput.version,
+            migrateOutput.executionTime
         );
     }
 }

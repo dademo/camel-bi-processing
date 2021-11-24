@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.reader.http.beans;
 
 import fr.dademo.data.generic.stream_definitions.configuration.HttpConfiguration;
@@ -11,6 +17,9 @@ import org.springframework.context.annotation.Configuration;
 
 import java.time.Duration;
 
+/**
+ * @author dademo
+ */
 @Configuration
 public class DefaultHttpReaderBeans {
 
@@ -22,11 +31,11 @@ public class DefaultHttpReaderBeans {
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
 
         return new OkHttpClient.Builder()
-                .addInterceptor(loggingInterceptor)
-                .connectTimeout(Duration.ofSeconds(httpConfiguration.getConnectTimeoutSeconds()))
-                .readTimeout(Duration.ofSeconds(httpConfiguration.getCallReadTimeoutSeconds()))
-                .callTimeout(Duration.ofSeconds(httpConfiguration.getCallTimeoutSeconds()))
-                .build();
+            .addInterceptor(loggingInterceptor)
+            .connectTimeout(Duration.ofSeconds(httpConfiguration.getConnectTimeoutSeconds()))
+            .readTimeout(Duration.ofSeconds(httpConfiguration.getCallReadTimeoutSeconds()))
+            .callTimeout(Duration.ofSeconds(httpConfiguration.getCallTimeoutSeconds()))
+            .build();
     }
 
     @Bean

@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.tools.cache.repository;
 
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
@@ -22,9 +28,12 @@ import java.security.MessageDigest;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+/**
+ * @author dademo
+ */
 @ConditionalOnProperty(
-        value = CacheConfiguration.CONFIGURATION_PREFIX + ".enabled",
-        havingValue = "true"
+    value = CacheConfiguration.CONFIGURATION_PREFIX + ".enabled",
+    havingValue = "true"
 )
 @Repository
 public class FileCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extends FileCacheRepositoryBase implements CacheRepository<T> {
@@ -45,8 +54,8 @@ public class FileCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extends
     @Override
     public Optional<CachedInputStreamIdentifier<T>> getCachedInputStreamIdentifierOf(InputStreamIdentifier<?> inputStreamIdentifier) {
         return cacheLockRepository.readLockFile().stream()
-                .filter(cachedInputStreamIdentifier -> cachedInputStreamIdentifier.getCachedIdentifier().equals(inputStreamIdentifier))
-                .findFirst();
+            .filter(cachedInputStreamIdentifier -> cachedInputStreamIdentifier.getCachedIdentifier().equals(inputStreamIdentifier))
+            .findFirst();
     }
 
     @Override
@@ -60,9 +69,9 @@ public class FileCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extends
 
         LOGGER.debug("Will read from cache for file `{}`", fileIdentifier.getDescription());
         return getCachedInputStreamIdentifierOf(fileIdentifier)
-                .map(this::getCachedFileOf)
-                .map(this::openFileInputStream)
-                .orElseThrow(() -> new MissingCachedInputStreamException(fileIdentifier));
+            .map(this::getCachedFileOf)
+            .map(this::openFileInputStream)
+            .orElseThrow(() -> new MissingCachedInputStreamException(fileIdentifier));
     }
 
     @Nonnull
@@ -76,22 +85,22 @@ public class FileCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extends
         final var cachedFile = new FileOutputStream(tempCachedFile);
 
         return CachedInputStreamWrapper.of(
-                new TeeInputStream(inputStream, cachedFile, true),
-                isValidInputStream -> {
-                    if (isValidInputStream) {
-                        try {
-                            persistCache(tempCachedFile, inputStreamIdentifier);
-                        } finally {
-                            // In case of an error, we still clean the directories
-                            if (tempCachedFile.exists()) {
-                                LOGGER.debug("Cleaning working dir for identifier `{}`", inputStreamIdentifier.getDescription());
-                                deleteFile(tempCachedFile);
-                            }
+            new TeeInputStream(inputStream, cachedFile, true),
+            isValidInputStream -> {
+                if (isValidInputStream) {
+                    try {
+                        persistCache(tempCachedFile, inputStreamIdentifier);
+                    } finally {
+                        // In case of an error, we still clean the directories
+                        if (tempCachedFile.exists()) {
+                            LOGGER.debug("Cleaning working dir for identifier `{}`", inputStreamIdentifier.getDescription());
+                            deleteFile(tempCachedFile);
                         }
-                    } else {
-                        LOGGER.warn("Input stream is not valid and will not be persistedq");
                     }
-                });
+                } else {
+                    LOGGER.warn("Input stream is not valid and will not be persistedq");
+                }
+            });
     }
 
     @Override
@@ -99,8 +108,8 @@ public class FileCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extends
 
         LOGGER.info("Removing stream {}", inputStreamIdentifier);
         getCachedInputStreamIdentifierOf(inputStreamIdentifier)
-                .map(this::getCachedFileOf)
-                .ifPresent(this::deleteFile);
+            .map(this::getCachedFileOf)
+            .ifPresent(this::deleteFile);
         LOGGER.info("Removed file {}", "");
     }
 
@@ -111,32 +120,32 @@ public class FileCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extends
         final var cachedInputStreamIdentifier = buildCachedInputStreamIdentifier(inputFileIdentifier);
 
         cacheLockRepository.withLockedLockFile(
-                () -> {
-                    final var lockFileContent = cacheLockRepository.readLockFile();
-                    lockFileContent.add(cachedInputStreamIdentifier);
-                    final var finalCachedFileFile = getCacheConfiguration().getDirectoryRootPath()
-                            .resolve(RESOURCES_DIRECTORY_NAME)
-                            .resolve(cachedInputStreamIdentifier.getFileName())
-                            .toFile();
+            () -> {
+                final var lockFileContent = cacheLockRepository.readLockFile();
+                lockFileContent.add(cachedInputStreamIdentifier);
+                final var finalCachedFileFile = getCacheConfiguration().getDirectoryRootPath()
+                    .resolve(RESOURCES_DIRECTORY_NAME)
+                    .resolve(cachedInputStreamIdentifier.getFileName())
+                    .toFile();
 
-                    try {
-                        LOGGER.debug("Moving cached file");
-                        FileUtils.moveFile(tempCachedFile, finalCachedFileFile);
-                        LOGGER.debug("Cached file moved");
-                        cacheLockRepository.persistLockFile(lockFileContent);
-                    } catch (IOException e) {
-                        // Cleaning
-                        if (tempCachedFile.exists()) {
-                            LOGGER.debug("Removing cache file `{}`", tempCachedFile.getAbsolutePath());
-                            deleteFile(tempCachedFile);
-                        }
-                        if (finalCachedFileFile.exists()) {
-                            LOGGER.debug("Removing cache file `{}`", finalCachedFileFile.getAbsolutePath());
-                            deleteFile(finalCachedFileFile);
-                        }
-                        throw new UncheckedIOException(e);
+                try {
+                    LOGGER.debug("Moving cached file");
+                    FileUtils.moveFile(tempCachedFile, finalCachedFileFile);
+                    LOGGER.debug("Cached file moved");
+                    cacheLockRepository.persistLockFile(lockFileContent);
+                } catch (IOException e) {
+                    // Cleaning
+                    if (tempCachedFile.exists()) {
+                        LOGGER.debug("Removing cache file `{}`", tempCachedFile.getAbsolutePath());
+                        deleteFile(tempCachedFile);
                     }
+                    if (finalCachedFileFile.exists()) {
+                        LOGGER.debug("Removing cache file `{}`", finalCachedFileFile.getAbsolutePath());
+                        deleteFile(finalCachedFileFile);
+                    }
+                    throw new UncheckedIOException(e);
                 }
+            }
         );
     }
 
@@ -157,10 +166,10 @@ public class FileCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extends
     private CachedInputStreamIdentifier<T> buildCachedInputStreamIdentifier(T inputStreamIdentifier) {
 
         return CachedInputStreamIdentifier.<T>builder()
-                .timestamp(LocalDateTime.now())
-                .cachedIdentifier(inputStreamIdentifier)
-                .fileName(getCachedFinalFileName(inputStreamIdentifier))
-                .build();
+            .timestamp(LocalDateTime.now())
+            .cachedIdentifier(inputStreamIdentifier)
+            .fileName(getCachedFinalFileName(inputStreamIdentifier))
+            .build();
     }
 
     private String getCachedFinalFileName(T inputStreamIdentifier) {
@@ -170,8 +179,8 @@ public class FileCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extends
     private File getCachedFileOf(CachedInputStreamIdentifier<?> cachedInputStreamIdentifier) {
 
         return getCacheConfiguration().getDirectoryRootPath()
-                .resolve(RESOURCES_DIRECTORY_NAME)
-                .resolve(cachedInputStreamIdentifier.getFileName())
-                .toFile();
+            .resolve(RESOURCES_DIRECTORY_NAME)
+            .resolve(cachedInputStreamIdentifier.getFileName())
+            .toFile();
     }
 }

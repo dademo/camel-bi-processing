@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.bi.companies.beans;
 
 import com.mongodb.ConnectionString;
@@ -23,6 +29,9 @@ import java.util.Optional;
 
 import static fr.dademo.bi.companies.beans.BeanValues.*;
 
+/**
+ * @author dademo
+ */
 @Configuration
 public class DataSources {
 
@@ -31,8 +40,8 @@ public class DataSources {
 
     @Bean(BATCH_DATASOURCE_BEAN_NAME)
     @ConditionalOnProperty(
-            value = CONFIG_DATASOURCE_JDBC + "." + BATCH_DATASOURCE_NAME + "." + CONFIG_ENABLED,
-            havingValue = "true"
+        value = CONFIG_DATASOURCE_JDBC + "." + BATCH_DATASOURCE_NAME + "." + CONFIG_ENABLED,
+        havingValue = "true"
     )
     public DataSource batchDataSource() {
         return hikariDataSourceForConfiguration(BATCH_DATASOURCE_NAME);
@@ -40,8 +49,8 @@ public class DataSources {
 
     @Bean(STG_DATASOURCE_BEAN_NAME)
     @ConditionalOnProperty(
-            value = CONFIG_DATASOURCE_JDBC + "." + STG_DATASOURCE_NAME + "." + CONFIG_ENABLED,
-            havingValue = "true"
+        value = CONFIG_DATASOURCE_JDBC + "." + STG_DATASOURCE_NAME + "." + CONFIG_ENABLED,
+        havingValue = "true"
     )
     public DataSource stgDataSource() {
         return hikariDataSourceForConfiguration(STG_DATASOURCE_NAME);
@@ -49,8 +58,8 @@ public class DataSources {
 
     @Bean(STG_MONGO_CLIENT_CONFIG_BEAN_NAME)
     @ConditionalOnProperty(
-            value = CONFIG_DATASOURCE_MONGODB + "." + STG_DATASOURCE_NAME + "." + CONFIG_ENABLED,
-            havingValue = "true"
+        value = CONFIG_DATASOURCE_MONGODB + "." + STG_DATASOURCE_NAME + "." + CONFIG_ENABLED,
+        havingValue = "true"
     )
     public MongoClient stgMongoClient() {
         return MongoClients.create(mongoClientSettingsForConfiguration(STG_DATASOURCE_NAME));
@@ -58,16 +67,16 @@ public class DataSources {
 
     @Bean(STG_MONGO_TEMPLATE_CONFIG_BEAN_NAME)
     @ConditionalOnProperty(
-            value = CONFIG_DATASOURCE_MONGODB + "." + STG_DATASOURCE_NAME + "." + CONFIG_ENABLED,
-            havingValue = "true"
+        value = CONFIG_DATASOURCE_MONGODB + "." + STG_DATASOURCE_NAME + "." + CONFIG_ENABLED,
+        havingValue = "true"
     )
     public MongoTemplate stgMongoTemplate(MongoClient mongoClient) {
 
         return new MongoTemplate(
-                mongoClient,
-                dataSourcesConfiguration
-                        .getMongoDBClientConfigurationByName(STG_DATASOURCE_NAME)
-                        .getDatabase()
+            mongoClient,
+            dataSourcesConfiguration
+                .getMongoDBClientConfigurationByName(STG_DATASOURCE_NAME)
+                .getDatabase()
         );
     }
 
@@ -96,18 +105,18 @@ public class DataSources {
 
         final var configuration = dataSourcesConfiguration.getMongoDBClientConfigurationByName(configurationName);
         final var mongoClientSettingsBuilder = MongoClientSettings.builder()
-                .applyConnectionString(new ConnectionString(configuration.getConnectionString()))
-                .applicationName(applicationName)
-                .writeConcern(configuration.getWriteConcern())
-                .readConcern(configuration.getReadConcern())
-                .codecRegistry(CodecRegistries.fromRegistries(
-                        MongoClientSettings.getDefaultCodecRegistry(),
-                        CodecRegistries.fromProviders(PojoCodecProvider.builder().automatic(true).build())
-                ));
+            .applyConnectionString(new ConnectionString(configuration.getConnectionString()))
+            .applicationName(applicationName)
+            .writeConcern(configuration.getWriteConcern())
+            .readConcern(configuration.getReadConcern())
+            .codecRegistry(CodecRegistries.fromRegistries(
+                MongoClientSettings.getDefaultCodecRegistry(),
+                CodecRegistries.fromProviders(PojoCodecProvider.builder().automatic(true).build())
+            ));
 
         if (Strings.isNotBlank(configuration.getUsername()) &&
-                Strings.isNotBlank(configuration.getDatabase()) &&
-                Strings.isNotBlank(configuration.getPassword())) {
+            Strings.isNotBlank(configuration.getDatabase()) &&
+            Strings.isNotBlank(configuration.getPassword())) {
             mongoClientSettingsBuilder.credential(MongoCredential.createCredential(configuration.getUsername(), configuration.getDatabase(), configuration.getPassword().toCharArray()));
         }
 

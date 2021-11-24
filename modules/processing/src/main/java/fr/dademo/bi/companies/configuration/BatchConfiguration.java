@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.bi.companies.configuration;
 
 import fr.dademo.bi.companies.configuration.exception.MissingJobConfigurationException;
@@ -14,6 +20,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * @author dademo
+ */
 @Configuration
 @ConfigurationProperties(prefix = "batch")
 @Data
@@ -31,7 +40,7 @@ public class BatchConfiguration {
     public JobConfiguration getJobConfigurationByName(@Nonnull String jobName) {
 
         return Optional.ofNullable(jobs.get(jobName))
-                .orElseThrow(MissingJobConfigurationException.ofJob(jobName));
+            .orElseThrow(MissingJobConfigurationException.ofJob(jobName));
     }
 
     @Data

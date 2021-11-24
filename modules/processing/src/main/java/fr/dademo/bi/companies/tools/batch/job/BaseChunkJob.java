@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.bi.companies.tools.batch.job;
 
 import fr.dademo.bi.companies.configuration.BatchConfiguration;
@@ -14,6 +20,9 @@ import javax.annotation.Nonnull;
 import java.util.Optional;
 import java.util.concurrent.ThreadPoolExecutor;
 
+/**
+ * @author dademo
+ */
 public abstract class BaseChunkJob<I, O> implements BatchJobProvider {
 
     public static final int MAX_THREAD_POOL_QUEUE_SIZE_FACTOR = 5;
@@ -48,13 +57,13 @@ public abstract class BaseChunkJob<I, O> implements BatchJobProvider {
     public Job getJob() {
 
         if (Boolean.TRUE.equals(
-                Optional.ofNullable(getJobConfiguration().getEnabled())
-                        .orElseGet(BatchConfiguration.JobConfiguration::getDefaultIsEnabled))) {
+            Optional.ofNullable(getJobConfiguration().getEnabled())
+                .orElseGet(BatchConfiguration.JobConfiguration::getDefaultIsEnabled))) {
 
             final var jobName = getJobName();
             final var threadPoolExecutor = new ThreadPoolTaskExecutor();
             final int poolSize = Optional.ofNullable(getJobConfiguration().getMaxThreads())
-                    .orElseGet(BatchConfiguration.JobConfiguration::getDefaultMaxThreads);
+                .orElseGet(BatchConfiguration.JobConfiguration::getDefaultMaxThreads);
 
             threadPoolExecutor.setCorePoolSize(poolSize);
             threadPoolExecutor.setMaxPoolSize(poolSize);
@@ -66,21 +75,21 @@ public abstract class BaseChunkJob<I, O> implements BatchJobProvider {
             threadPoolExecutor.initialize();
 
             final var step = stepBuilderFactory
-                    .get(jobName)
-                    .<I, O>chunk(
-                            Optional.ofNullable(getJobConfiguration().getChunkSize())
-                                    .orElseGet(BatchConfiguration.JobConfiguration::getDefaultChunkSize))
-                    .reader(getItemReader())
-                    .processor(getItemProcessor())
-                    .writer(getItemWriter())
-                    .taskExecutor(threadPoolExecutor)
-                    .build();
+                .get(jobName)
+                .<I, O>chunk(
+                    Optional.ofNullable(getJobConfiguration().getChunkSize())
+                        .orElseGet(BatchConfiguration.JobConfiguration::getDefaultChunkSize))
+                .reader(getItemReader())
+                .processor(getItemProcessor())
+                .writer(getItemWriter())
+                .taskExecutor(threadPoolExecutor)
+                .build();
 
             return jobBuilderFactory
-                    .get(jobName)
-                    .preventRestart()
-                    .start(step)
-                    .build();
+                .get(jobName)
+                .preventRestart()
+                .start(step)
+                .build();
         } else {
             return null;
         }

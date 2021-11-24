@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.tools.tools;
 
 import lombok.AccessLevel;
@@ -10,16 +16,19 @@ import java.io.InputStream;
 import java.security.MessageDigest;
 import java.util.Map;
 
+/**
+ * @author dademo
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HashTools {
 
     private static final Map<String, String> WELL_KNOWN_ALGORITHMS = Map.of(
-            "MD5", "MD5",
-            "SHA1", "SHA-1",
-            "SHA256", "SHA-256",
-            "SHA512", "SHA-512",
-            "SHA3-256", "SHA3-256",
-            "SHA3-512", "SHA3-512"
+        "MD5", "MD5",
+        "SHA1", "SHA-1",
+        "SHA256", "SHA-256",
+        "SHA512", "SHA-512",
+        "SHA3-256", "SHA3-256",
+        "SHA3-512", "SHA3-512"
     );
 
     @SneakyThrows

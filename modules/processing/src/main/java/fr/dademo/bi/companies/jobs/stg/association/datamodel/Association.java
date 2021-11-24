@@ -1,9 +1,18 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.bi.companies.jobs.stg.association.datamodel;
 
 import lombok.*;
 
 import java.time.LocalDate;
 
+/**
+ * @author dademo
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -30,41 +39,39 @@ public class Association {
     public static final String CSV_FIELD_ASSOCIATION_ADDRESS_CITY_LIBELLE = "libcom";
     public static final String CSV_FIELD_ASSOCIATION_ADDRESS_INSEE_CODE = "adrs_codeinsee";
     public static final String CSV_FIELD_ASSOCIATION_LEADER_CIVILITY = "dir_civilite";
-    //public static final String CSV_FIELD_ASSOCIATION_TELEPHONE = "telephone";
     public static final String CSV_FIELD_ASSOCIATION_WEBSITE = "siteweb";
-    //public static final String CSV_FIELD_ASSOCIATION_EMAIL = "email";
     public static final String CSV_FIELD_ASSOCIATION_OBSERVATION = "observation";
     public static final String CSV_FIELD_ASSOCIATION_POSITION = "position";
     public static final String CSV_FIELD_ASSOCIATION_RUP_CODE = "rup_mi";
     public static final String CSV_FIELD_ASSOCIATION_LAST_UPDATED = "maj_time";
 
     public static final String[] CSV_HEADER_ASSOCIATION = new String[]{ // NOSONAR
-            CSV_FIELD_ASSOCIATION_ID,
-            CSV_FIELD_ASSOCIATION_ID_EX,
-            CSV_FIELD_ASSOCIATION_SIRET,
-            CSV_FIELD_ASSOCIATION_GESTION,
-            CSV_FIELD_ASSOCIATION_CREATION_DATE,
-            CSV_FIELD_ASSOCIATION_PUBLICATION_DATE,
-            CSV_FIELD_ASSOCIATION_NATURE,
-            CSV_FIELD_ASSOCIATION_GROUPEMENT,
-            CSV_FIELD_ASSOCIATION_TITLE,
-            CSV_FIELD_ASSOCIATION_OBJECT,
-            CSV_FIELD_ASSOCIATION_SOCIAL_OBJECT_1,
-            CSV_FIELD_ASSOCIATION_SOCIAL_OBJECT_2,
-            CSV_FIELD_ASSOCIATION_ADDRESS_1,
-            CSV_FIELD_ASSOCIATION_ADDRESS_2,
-            CSV_FIELD_ASSOCIATION_ADDRESS_3,
-            CSV_FIELD_ASSOCIATION_ADDRESS_POSTAL_CODE,
-            CSV_FIELD_ASSOCIATION_ADDRESS_CITY_LIBELLE,
-            CSV_FIELD_ASSOCIATION_ADDRESS_INSEE_CODE,
-            CSV_FIELD_ASSOCIATION_LEADER_CIVILITY,
-            //CSV_FIELD_ASSOCIATION_TELEPHONE,
-            CSV_FIELD_ASSOCIATION_WEBSITE,
-            //CSV_FIELD_ASSOCIATION_EMAIL,
-            CSV_FIELD_ASSOCIATION_OBSERVATION,
-            CSV_FIELD_ASSOCIATION_POSITION,
-            CSV_FIELD_ASSOCIATION_RUP_CODE,
-            CSV_FIELD_ASSOCIATION_LAST_UPDATED,
+        CSV_FIELD_ASSOCIATION_ID,
+        CSV_FIELD_ASSOCIATION_ID_EX,
+        CSV_FIELD_ASSOCIATION_SIRET,
+        CSV_FIELD_ASSOCIATION_GESTION,
+        CSV_FIELD_ASSOCIATION_CREATION_DATE,
+        CSV_FIELD_ASSOCIATION_PUBLICATION_DATE,
+        CSV_FIELD_ASSOCIATION_NATURE,
+        CSV_FIELD_ASSOCIATION_GROUPEMENT,
+        CSV_FIELD_ASSOCIATION_TITLE,
+        CSV_FIELD_ASSOCIATION_OBJECT,
+        CSV_FIELD_ASSOCIATION_SOCIAL_OBJECT_1,
+        CSV_FIELD_ASSOCIATION_SOCIAL_OBJECT_2,
+        CSV_FIELD_ASSOCIATION_ADDRESS_1,
+        CSV_FIELD_ASSOCIATION_ADDRESS_2,
+        CSV_FIELD_ASSOCIATION_ADDRESS_3,
+        CSV_FIELD_ASSOCIATION_ADDRESS_POSTAL_CODE,
+        CSV_FIELD_ASSOCIATION_ADDRESS_CITY_LIBELLE,
+        CSV_FIELD_ASSOCIATION_ADDRESS_INSEE_CODE,
+        CSV_FIELD_ASSOCIATION_LEADER_CIVILITY,
+        //CSV_FIELD_ASSOCIATION_TELEPHONE,
+        CSV_FIELD_ASSOCIATION_WEBSITE,
+        //CSV_FIELD_ASSOCIATION_EMAIL,
+        CSV_FIELD_ASSOCIATION_OBSERVATION,
+        CSV_FIELD_ASSOCIATION_POSITION,
+        CSV_FIELD_ASSOCIATION_RUP_CODE,
+        CSV_FIELD_ASSOCIATION_LAST_UPDATED,
     };
 
     private String id;
@@ -86,9 +93,7 @@ public class Association {
     private String addressInseeCode;
     private String addressCityLibelle;
     private String leaderCivility;
-    //private String telephone;
     private String website;
-    //private String email;
     private String observation;
     private String position;
     private String rupCode;

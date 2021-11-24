@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.bi.companies.configuration;
 
 import fr.dademo.bi.companies.configuration.data_sources.JDBCDataSourceConfiguration;
@@ -14,6 +20,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * @author dademo
+ */
 @Configuration
 @ConfigurationProperties(prefix = "datasources")
 @Data
@@ -46,6 +55,6 @@ public class DataSourcesConfiguration {
                                       @Nonnull String dataSourceTypeDescription) {
 
         return Optional.ofNullable(configurationMap.get(configurationKey))
-                .orElseThrow(MissingDataSourceConfigurationException.ofDataSource(dataSourceTypeDescription, configurationKey));
+            .orElseThrow(MissingDataSourceConfigurationException.ofDataSource(dataSourceTypeDescription, configurationKey));
     }
 }

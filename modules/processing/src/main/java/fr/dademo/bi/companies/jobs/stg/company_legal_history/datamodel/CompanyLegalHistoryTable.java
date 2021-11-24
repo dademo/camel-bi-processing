@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.bi.companies.jobs.stg.company_legal_history.datamodel;
 
 import org.jooq.TableField;
@@ -10,13 +16,17 @@ import java.time.LocalDate;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.schema;
 
-@SuppressWarnings({"java:S110", "java:S116", "java:S2055"})
+/**
+ * @author dademo
+ */
+@SuppressWarnings({"java:S110", "java:S116", "java:S2055", "java:S2160"})
 public class CompanyLegalHistoryTable extends CustomTable<CompanyLegalHistoryRecord> {
 
     public static final CompanyLegalHistoryTable COMPANY_LEGAL_HISTORY = new CompanyLegalHistoryTable();
     public static final String TABLE_NAME = "company_legal_unit_history";
     public static final String TABLE_NAMESPACE = "stg";
 
+    private static final long serialVersionUID = 4298493080112132399L;
 
     public final TableField<CompanyLegalHistoryRecord, String> FIELD_COMPANY_LEGAL_HISTORY_SIREN = createField(name("siren"), SQLDataType.VARCHAR(9), this);
     public final TableField<CompanyLegalHistoryRecord, LocalDate> FIELD_COMPANY_LEGAL_HISTORY_END_DATE = createField(name("end_date"), SQLDataType.LOCALDATE, this);

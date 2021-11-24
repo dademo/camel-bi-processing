@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.reader.http.data_model;
 
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
@@ -8,6 +14,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.net.URL;
 
+/**
+ * @author dademo
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

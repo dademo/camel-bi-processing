@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.bi.companies.beans;
 
 import fr.dademo.bi.companies.beans.exception.MissingMigrationPathException;
@@ -21,45 +27,48 @@ import java.util.stream.Stream;
 
 import static fr.dademo.bi.companies.beans.BeanValues.*;
 
+/**
+ * @author dademo
+ */
 @Configuration
 public class FlywayMigrations {
 
     private static final String[][] STATIC_MIGRATION_PATHS_DEFINITION = new String[][]{
-            {"batch", "classpath:db/migration/batch"},
-            {"stg", "classpath:db/migration/stg"},
+        {"batch", "classpath:db/migration/batch"},
+        {"stg", "classpath:db/migration/stg"},
     };
     private static final Map<String, String> STATIC_MIGRATION_PATHS = Stream.of(STATIC_MIGRATION_PATHS_DEFINITION)
-            .collect(Collectors.toMap(kv -> kv[0], kv -> kv[1]));
+        .collect(Collectors.toMap(kv -> kv[0], kv -> kv[1]));
 
     @Bean(FLYWAY_BATCH_BEAN_NAME)
     @ConditionalOnProperty(
-            value = CONFIG_FLYWAY_MIGRATIONS + "." + BATCH_DATASOURCE_NAME + "." + CONFIG_ENABLED,
-            havingValue = "true"
+        value = CONFIG_FLYWAY_MIGRATIONS + "." + BATCH_DATASOURCE_NAME + "." + CONFIG_ENABLED,
+        havingValue = "true"
     )
     public Flyway batchFlywayMigration(@Qualifier(BATCH_DATASOURCE_BEAN_NAME) DataSource dataSource,
                                        @Qualifier(BATCH_DATASOURCE_DIALECT_PROVIDER_BEAN_NAME) DatabaseSQLDialectProvider databaseSQLDialectProvider,
                                        FlywayMigrationsConfiguration flywayMigrationsConfiguration) {
         return prepareMigration(
-                BATCH_DATASOURCE_NAME,
-                dataSource,
-                databaseSQLDialectProvider.get(),
-                flywayMigrationsConfiguration.getMigrationByDataSourceName(BATCH_DATASOURCE_NAME)
+            BATCH_DATASOURCE_NAME,
+            dataSource,
+            databaseSQLDialectProvider.get(),
+            flywayMigrationsConfiguration.getMigrationByDataSourceName(BATCH_DATASOURCE_NAME)
         );
     }
 
     @Bean(FLYWAY_BATCH_BEAN_NAME)
     @ConditionalOnProperty(
-            value = CONFIG_FLYWAY_MIGRATIONS + "." + STG_DATASOURCE_NAME + "." + CONFIG_ENABLED,
-            havingValue = "true"
+        value = CONFIG_FLYWAY_MIGRATIONS + "." + STG_DATASOURCE_NAME + "." + CONFIG_ENABLED,
+        havingValue = "true"
     )
     public Flyway stgFlywayMigration(@Qualifier(STG_DATASOURCE_BEAN_NAME) DataSource dataSource,
                                      @Qualifier(STG_DATASOURCE_DIALECT_PROVIDER_BEAN_NAME) DatabaseSQLDialectProvider databaseSQLDialectProvider,
                                      FlywayMigrationsConfiguration flywayMigrationsConfiguration) {
         return prepareMigration(
-                STG_DATASOURCE_NAME,
-                dataSource,
-                databaseSQLDialectProvider.get(),
-                flywayMigrationsConfiguration.getMigrationByDataSourceName(STG_DATASOURCE_NAME)
+            STG_DATASOURCE_NAME,
+            dataSource,
+            databaseSQLDialectProvider.get(),
+            flywayMigrationsConfiguration.getMigrationByDataSourceName(STG_DATASOURCE_NAME)
         );
     }
 
@@ -69,34 +78,34 @@ public class FlywayMigrations {
                                     FlywayMigrationsConfiguration.MigrationConfiguration migrationConfiguration) {
 
         return new FluentConfiguration()
-                .dataSource(dataSource)
-                .locations(
-                        Optional.ofNullable(STATIC_MIGRATION_PATHS.get(dataSourceName))
-                                .map(migrationBasePath -> resolvedMigrationPaths(sqlDialect, migrationBasePath))
-                                .orElseThrow(MissingMigrationPathException.ofDataSource(dataSourceName)))
-                .defaultSchema(migrationConfiguration.getSchema())
-                .createSchemas(
-                        Optional.ofNullable(migrationConfiguration.getCreateSchemas())
-                                .orElse(FlywayMigrationsConfiguration.MigrationConfiguration.getDefaultCreateSchemas()))
-                .cleanDisabled(
-                        Optional.ofNullable(migrationConfiguration.getCleanDisabled())
-                                .orElse(FlywayMigrationsConfiguration.MigrationConfiguration.getDefaultCleanDisabled()))
-                .baselineOnMigrate(
-                        Optional.ofNullable(migrationConfiguration.getBaselineOnMigrate())
-                                .orElse(FlywayMigrationsConfiguration.MigrationConfiguration.getDefaultBaselineOnMigrate()))
-                .target(MigrationVersion.LATEST)
-                .load();
+            .dataSource(dataSource)
+            .locations(
+                Optional.ofNullable(STATIC_MIGRATION_PATHS.get(dataSourceName))
+                    .map(migrationBasePath -> resolvedMigrationPaths(sqlDialect, migrationBasePath))
+                    .orElseThrow(MissingMigrationPathException.ofDataSource(dataSourceName)))
+            .defaultSchema(migrationConfiguration.getSchema())
+            .createSchemas(
+                Optional.ofNullable(migrationConfiguration.getCreateSchemas())
+                    .orElse(FlywayMigrationsConfiguration.MigrationConfiguration.getDefaultCreateSchemas()))
+            .cleanDisabled(
+                Optional.ofNullable(migrationConfiguration.getCleanDisabled())
+                    .orElse(FlywayMigrationsConfiguration.MigrationConfiguration.getDefaultCleanDisabled()))
+            .baselineOnMigrate(
+                Optional.ofNullable(migrationConfiguration.getBaselineOnMigrate())
+                    .orElse(FlywayMigrationsConfiguration.MigrationConfiguration.getDefaultBaselineOnMigrate()))
+            .target(MigrationVersion.LATEST)
+            .load();
     }
 
     private String[] resolvedMigrationPaths(SQLDialect sqlDialect, String basePath) {
 
         return Stream.of(
-                        Optional.of("shared"),
-                        Optional.ofNullable(mapSqlDialectToResource(sqlDialect))
-                ).filter(Optional::isPresent)
-                .map(Optional::get)
-                .map(v -> basePath.concat("/").concat(v))
-                .toArray(String[]::new);
+                Optional.of("shared"),
+                Optional.ofNullable(mapSqlDialectToResource(sqlDialect))
+            ).filter(Optional::isPresent)
+            .map(Optional::get)
+            .map(v -> basePath.concat("/").concat(v))
+            .toArray(String[]::new);
     }
 
     @Nullable

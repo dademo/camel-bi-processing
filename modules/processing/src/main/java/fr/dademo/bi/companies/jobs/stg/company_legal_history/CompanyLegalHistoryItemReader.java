@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.bi.companies.jobs.stg.company_legal_history;
 
 import fr.dademo.bi.companies.tools.batch.reader.HttpItemStreamReaderSupport;
@@ -25,6 +31,9 @@ import java.util.Optional;
 
 import static fr.dademo.bi.companies.jobs.stg.company_legal_history.datamodel.CompanyLegalHistory.CSV_HEADER_COMPANY_LEGAL_HISTORY;
 
+/**
+ * @author dademo
+ */
 @Component
 public class CompanyLegalHistoryItemReader extends HttpItemStreamReaderSupport<CSVRecord> {
 
@@ -43,10 +52,10 @@ public class CompanyLegalHistoryItemReader extends HttpItemStreamReaderSupport<C
         LOGGER.info("Getting dataset definition");
         final var dataGouvFrDataSet = dataGouvFrDataQuerierService.getDataSet(DATASET_TITLE);
         final var dataGouvFrDataSetResource = dataGouvFrDataSet
-                .getResources().stream()
-                .filter(DataGouvFrFilterHelpers.fieldStartingWith(DataGouvFrDataSetResource::getTitle, DATA_TITLE_PREFIX))
-                .max(Comparator.comparing(DataGouvFrDataSetResource::dateTimeKeyExtractor))
-                .orElseThrow(() -> new ResourceNotFoundException(DATA_TITLE_PREFIX + "*", dataGouvFrDataSet));
+            .getResources().stream()
+            .filter(DataGouvFrFilterHelpers.fieldStartingWith(DataGouvFrDataSetResource::getTitle, DATA_TITLE_PREFIX))
+            .max(Comparator.comparing(DataGouvFrDataSetResource::dateTimeKeyExtractor))
+            .orElseThrow(() -> new ResourceNotFoundException(DATA_TITLE_PREFIX + "*", dataGouvFrDataSet));
 
         LOGGER.info("Reading values");
         archiveInputStream = new ZipArchiveInputStream(dataGouvFrDataQuerierService.queryForStream(dataGouvFrDataSetResource));
@@ -89,18 +98,18 @@ public class CompanyLegalHistoryItemReader extends HttpItemStreamReaderSupport<C
     private Iterator<CSVRecord> getCsvStreamIterator() {
 
         return csvFormat()
-                .parse(new InputStreamReader(archiveInputStream))
-                .iterator();
+            .parse(new InputStreamReader(archiveInputStream))
+            .iterator();
     }
 
     private CSVFormat csvFormat() {
 
         return CSVFormat.DEFAULT.builder()
-                .setHeader(CSV_HEADER_COMPANY_LEGAL_HISTORY)
-                .setSkipHeaderRecord(true)
-                .setDelimiter(",")
-                .setRecordSeparator("\n")
-                .setNullString("")
-                .build();
+            .setHeader(CSV_HEADER_COMPANY_LEGAL_HISTORY)
+            .setSkipHeaderRecord(true)
+            .setDelimiter(",")
+            .setRecordSeparator("\n")
+            .setNullString("")
+            .build();
     }
 }

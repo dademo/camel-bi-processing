@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.bi.companies.jobs.stg.company_legal.datamodel;
 
 import org.jooq.TableField;
@@ -11,12 +17,17 @@ import java.time.LocalDateTime;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.schema;
 
-@SuppressWarnings({"java:S110", "java:S116", "java:S2055"})
+/**
+ * @author dademo
+ */
+@SuppressWarnings({"java:S110", "java:S116", "java:S2055", "java:S2160"})
 public class CompanyLegalTable extends CustomTable<CompanyLegalRecord> {
 
     public static final CompanyLegalTable COMPANY_LEGAL = new CompanyLegalTable();
     public static final String TABLE_NAME = "company_legal_unit";
     public static final String TABLE_NAMESPACE = "stg";
+
+    private static final long serialVersionUID = -6021744332544359613L;
 
     public final TableField<CompanyLegalRecord, String> FIELD_COMPANY_LEGAL_UNIT_SIREN = createField(name("siren"), SQLDataType.VARCHAR(9), this);
     public final TableField<CompanyLegalRecord, String> FIELD_COMPANY_LEGAL_UNIT_DIFFUSION_STATUS = createField(name("diffusion_status"), SQLDataType.VARCHAR(1), this);

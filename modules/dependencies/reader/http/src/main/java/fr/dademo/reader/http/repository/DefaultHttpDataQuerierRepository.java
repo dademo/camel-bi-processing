@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.reader.http.repository;
 
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifierValidator;
@@ -19,6 +25,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author dademo
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 public class DefaultHttpDataQuerierRepository implements HttpDataQuerierRepository {
@@ -33,9 +42,9 @@ public class DefaultHttpDataQuerierRepository implements HttpDataQuerierReposito
                                   @Nonnull List<? extends InputStreamIdentifierValidator<HttpInputStreamIdentifier>> httpStreamValidators) throws IOException {
 
         return performBasicQuery(httpInputStreamIdentifier,
-                queryCustomizers,
-                queryResponseHandler,
-                httpStreamValidators
+            queryCustomizers,
+            queryResponseHandler,
+            httpStreamValidators
         );
     }
 
@@ -44,10 +53,10 @@ public class DefaultHttpDataQuerierRepository implements HttpDataQuerierReposito
                                       @Nonnull List<? extends InputStreamIdentifierValidator<HttpInputStreamIdentifier>> streamValidators) throws IOException {
 
         return basicQuery(
-                inputStreamIdentifier,
-                Collections.emptyList(),
-                null,
-                streamValidators
+            inputStreamIdentifier,
+            Collections.emptyList(),
+            null,
+            streamValidators
         );
     }
 
@@ -57,10 +66,10 @@ public class DefaultHttpDataQuerierRepository implements HttpDataQuerierReposito
                                             @Nonnull List<? extends InputStreamIdentifierValidator<HttpInputStreamIdentifier>> httpStreamValidators) throws IOException {
 
         var request = new Request.Builder()
-                .url(httpInputStreamIdentifier.getUrl())
-                .method(httpInputStreamIdentifier.getMethod(),
-                        httpInputStreamIdentifier.getRequestBody()
-                );
+            .url(httpInputStreamIdentifier.getUrl())
+            .method(httpInputStreamIdentifier.getMethod(),
+                httpInputStreamIdentifier.getRequestBody()
+            );
 
         for (final var queryCustomizer : queryCustomizers) {
             request = queryCustomizer.customizeRequest(request);
@@ -69,14 +78,14 @@ public class DefaultHttpDataQuerierRepository implements HttpDataQuerierReposito
         final var response = okHttpClient.newCall(request.build()).execute();
 
         final var inputStream = Optional.ofNullable(queryResponseHandler)
-                .orElseGet(DefaultQueryResponseHandler::new)
-                .handleResponse(response, this);
+            .orElseGet(DefaultQueryResponseHandler::new)
+            .handleResponse(response, this);
 
         if (!httpStreamValidators.isEmpty()) {
             return new QueryValidationContextImpl<>(
-                    inputStream,
-                    httpInputStreamIdentifier,
-                    httpStreamValidators
+                inputStream,
+                httpInputStreamIdentifier,
+                httpStreamValidators
             );
         } else {
             return inputStream;

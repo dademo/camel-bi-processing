@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.reader.http.validators.exception;
 
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
@@ -6,13 +12,16 @@ import lombok.Getter;
 
 import javax.annotation.Nonnull;
 
+/**
+ * @author dademo
+ */
 @Getter
 public class InputStreamMimeValidationException extends InputStreamIdentifierValidationException {
 
     private static final long serialVersionUID = -1046499253110187995L;
 
     @Nonnull
-    private final InputStreamIdentifier<?> inputStreamIdentifier;
+    private final transient InputStreamIdentifier<?> inputStreamIdentifier;
 
     @Nonnull
     private final String expectedMime;
@@ -25,9 +34,9 @@ public class InputStreamMimeValidationException extends InputStreamIdentifierVal
                                               @Nonnull String computedMime) {
 
         super(String.format("Error handing flow `%s`. Expected mime `%s`, got `%s`",
-                inputStreamIdentifier.getVerboseDescription(),
-                expectedMime,
-                computedMime
+            inputStreamIdentifier.getVerboseDescription(),
+            expectedMime,
+            computedMime
         ));
         this.inputStreamIdentifier = inputStreamIdentifier;
         this.expectedMime = expectedMime;
@@ -40,11 +49,11 @@ public class InputStreamMimeValidationException extends InputStreamIdentifierVal
                                               @Nonnull Throwable throwable) {
 
         super(String.format("Error handing flow `%s`. Expected hash `%s`, got `%s`",
-                        inputStreamIdentifier.getVerboseDescription(),
-                        expectedMime,
-                        computedMime
-                ),
-                throwable
+                inputStreamIdentifier.getVerboseDescription(),
+                expectedMime,
+                computedMime
+            ),
+            throwable
         );
         this.inputStreamIdentifier = inputStreamIdentifier;
         this.expectedMime = expectedMime;

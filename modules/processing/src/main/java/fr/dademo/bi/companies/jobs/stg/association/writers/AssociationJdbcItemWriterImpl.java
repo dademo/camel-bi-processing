@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.bi.companies.jobs.stg.association.writers;
 
 import fr.dademo.bi.companies.jobs.stg.association.AssociationItemWriter;
@@ -21,10 +27,13 @@ import static fr.dademo.bi.companies.beans.BeanValues.*;
 import static fr.dademo.bi.companies.jobs.stg.association.JobDefinition.ASSOCIATION_CONFIG_JOB_NAME;
 import static fr.dademo.bi.companies.jobs.stg.association.datamodel.AssociationTable.ASSOCIATION;
 
+/**
+ * @author dademo
+ */
 @Component
 @ConditionalOnProperty(
-        value = CONFIG_JOBS_BASE + "." + ASSOCIATION_CONFIG_JOB_NAME + "." + CONFIG_WRITER_TYPE,
-        havingValue = CONFIG_JDBC_TYPE
+    value = CONFIG_JOBS_BASE + "." + ASSOCIATION_CONFIG_JOB_NAME + "." + CONFIG_WRITER_TYPE,
+    havingValue = CONFIG_JDBC_TYPE
 )
 public class AssociationJdbcItemWriterImpl implements AssociationItemWriter {
 
@@ -42,38 +51,38 @@ public class AssociationJdbcItemWriterImpl implements AssociationItemWriter {
         LOGGER.info("Writing {} association documents", items.size());
 
         final var batchInsertStatement = dslContext.batch(dslContext.insertInto(ASSOCIATION,
-                ASSOCIATION.FIELD_ASSOCIATION_ID,
-                ASSOCIATION.FIELD_ASSOCIATION_ID_EX,
-                ASSOCIATION.FIELD_ASSOCIATION_SIRET,
-                ASSOCIATION.FIELD_ASSOCIATION_GESTION,
-                ASSOCIATION.FIELD_ASSOCIATION_CREATION_DATE,
-                ASSOCIATION.FIELD_ASSOCIATION_PUBLICATION_DATE,
-                ASSOCIATION.FIELD_ASSOCIATION_NATURE,
-                ASSOCIATION.FIELD_ASSOCIATION_GROUPEMENT,
-                ASSOCIATION.FIELD_ASSOCIATION_TITLE,
-                ASSOCIATION.FIELD_ASSOCIATION_OBJECT,
-                ASSOCIATION.FIELD_ASSOCIATION_SOCIAL_OBJECT_1,
-                ASSOCIATION.FIELD_ASSOCIATION_SOCIAL_OBJECT_2,
-                ASSOCIATION.FIELD_ASSOCIATION_ADDRESS_1,
-                ASSOCIATION.FIELD_ASSOCIATION_ADDRESS_2,
-                ASSOCIATION.FIELD_ASSOCIATION_ADDRESS_3,
-                ASSOCIATION.FIELD_ASSOCIATION_ADDRESS_POSTAL_CODE,
-                ASSOCIATION.FIELD_ASSOCIATION_ADDRESS_INSEE_CODE,
-                ASSOCIATION.FIELD_ASSOCIATION_ADDRESS_CITY_LIBELLE,
-                ASSOCIATION.FIELD_ASSOCIATION_LEADER_CIVILITY,
-                //ASSOCIATION.FIELD_ASSOCIATION_PHONE,
-                ASSOCIATION.FIELD_ASSOCIATION_WEBSITE,
-                //ASSOCIATION.FIELD_ASSOCIATION_EMAIL,
-                ASSOCIATION.FIELD_ASSOCIATION_OBSERVATION,
-                ASSOCIATION.FIELD_ASSOCIATION_POSITION,
-                ASSOCIATION.FIELD_ASSOCIATION_RUP_CODE,
-                ASSOCIATION.FIELD_ASSOCIATION_LAST_UPDATED
+            ASSOCIATION.FIELD_ASSOCIATION_ID,
+            ASSOCIATION.FIELD_ASSOCIATION_ID_EX,
+            ASSOCIATION.FIELD_ASSOCIATION_SIRET,
+            ASSOCIATION.FIELD_ASSOCIATION_GESTION,
+            ASSOCIATION.FIELD_ASSOCIATION_CREATION_DATE,
+            ASSOCIATION.FIELD_ASSOCIATION_PUBLICATION_DATE,
+            ASSOCIATION.FIELD_ASSOCIATION_NATURE,
+            ASSOCIATION.FIELD_ASSOCIATION_GROUPEMENT,
+            ASSOCIATION.FIELD_ASSOCIATION_TITLE,
+            ASSOCIATION.FIELD_ASSOCIATION_OBJECT,
+            ASSOCIATION.FIELD_ASSOCIATION_SOCIAL_OBJECT_1,
+            ASSOCIATION.FIELD_ASSOCIATION_SOCIAL_OBJECT_2,
+            ASSOCIATION.FIELD_ASSOCIATION_ADDRESS_1,
+            ASSOCIATION.FIELD_ASSOCIATION_ADDRESS_2,
+            ASSOCIATION.FIELD_ASSOCIATION_ADDRESS_3,
+            ASSOCIATION.FIELD_ASSOCIATION_ADDRESS_POSTAL_CODE,
+            ASSOCIATION.FIELD_ASSOCIATION_ADDRESS_INSEE_CODE,
+            ASSOCIATION.FIELD_ASSOCIATION_ADDRESS_CITY_LIBELLE,
+            ASSOCIATION.FIELD_ASSOCIATION_LEADER_CIVILITY,
+            //ASSOCIATION.FIELD_ASSOCIATION_PHONE,
+            ASSOCIATION.FIELD_ASSOCIATION_WEBSITE,
+            //ASSOCIATION.FIELD_ASSOCIATION_EMAIL,
+            ASSOCIATION.FIELD_ASSOCIATION_OBSERVATION,
+            ASSOCIATION.FIELD_ASSOCIATION_POSITION,
+            ASSOCIATION.FIELD_ASSOCIATION_RUP_CODE,
+            ASSOCIATION.FIELD_ASSOCIATION_LAST_UPDATED
         ).values((String) null, null, null, null, null, null, null, null, null, null, null, null,
-                null, null, null, null, null, null, null, null, null, null, null, null, null, null));
+            null, null, null, null, null, null, null, null, null, null, null, null, null, null));
 
         items.stream()
-                .map(this::companyBind)
-                .forEach(consumer -> consumer.accept(batchInsertStatement));
+            .map(this::companyBind)
+            .forEach(consumer -> consumer.accept(batchInsertStatement));
 
         final var batchResult = batchInsertStatement.execute();
         if (batchResult.length > 0) {
@@ -87,32 +96,32 @@ public class AssociationJdbcItemWriterImpl implements AssociationItemWriter {
     private Consumer<BatchBindStep> companyBind(Association association) {
 
         return items -> items.bind(
-                association.getId(),
-                association.getIdEx(),
-                association.getSiret(),
-                association.getGestion(),
-                association.getCreationDate(),
-                association.getPublicationDate(),
-                association.getNature(),
-                association.getGroupement(),
-                association.getTitle(),
-                association.getObject(),
-                association.getSocialObject1(),
-                association.getSocialObject2(),
-                association.getAddress1(),
-                association.getAddress2(),
-                association.getAddress3(),
-                association.getAddressPostalCode(),
-                association.getAddressInseeCode(),
-                association.getAddressCityLibelle(),
-                association.getLeaderCivility(),
-                //association.getTelephone(),
-                association.getWebsite(),
-                //association.getEmail(),
-                association.getObservation(),
-                association.getPosition(),
-                association.getRupCode(),
-                association.getLastUpdated()
+            association.getId(),
+            association.getIdEx(),
+            association.getSiret(),
+            association.getGestion(),
+            association.getCreationDate(),
+            association.getPublicationDate(),
+            association.getNature(),
+            association.getGroupement(),
+            association.getTitle(),
+            association.getObject(),
+            association.getSocialObject1(),
+            association.getSocialObject2(),
+            association.getAddress1(),
+            association.getAddress2(),
+            association.getAddress3(),
+            association.getAddressPostalCode(),
+            association.getAddressInseeCode(),
+            association.getAddressCityLibelle(),
+            association.getLeaderCivility(),
+            //association.getTelephone(),
+            association.getWebsite(),
+            //association.getEmail(),
+            association.getObservation(),
+            association.getPosition(),
+            association.getRupCode(),
+            association.getLastUpdated()
         );
     }
 }

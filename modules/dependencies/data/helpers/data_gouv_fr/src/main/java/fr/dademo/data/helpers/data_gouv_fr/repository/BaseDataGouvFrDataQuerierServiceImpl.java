@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.data.helpers.data_gouv_fr.repository;
 
 import fr.dademo.data.definitions.data_gouv_fr.DataGouvFrDataSet;
@@ -10,6 +16,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 
+/**
+ * @author dademo
+ */
 public abstract class BaseDataGouvFrDataQuerierServiceImpl implements DataGouvFrDataQuerierService {
 
     @Override
@@ -24,10 +33,10 @@ public abstract class BaseDataGouvFrDataQuerierServiceImpl implements DataGouvFr
     public InputStream queryForStream(@Nonnull DataGouvFrDataSet dataSet, @Nonnull String resourceTitle) throws IOException {
 
         return queryForStream(dataSet
-                .getResources().stream()
-                .filter(resource -> resourceTitle.equals(resource.getTitle()))
-                .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException(resourceTitle, dataSet))
+            .getResources().stream()
+            .filter(resource -> resourceTitle.equals(resource.getTitle()))
+            .findFirst()
+            .orElseThrow(() -> new ResourceNotFoundException(resourceTitle, dataSet))
         );
     }
 
@@ -36,10 +45,10 @@ public abstract class BaseDataGouvFrDataQuerierServiceImpl implements DataGouvFr
     public InputStream queryForStream(@Nonnull DataGouvFrDataSetResource dataGouvFrDataSetResource) throws IOException {
 
         return queryForStream(
-                dataGouvFrDataSetResource,
-                DataGouvFrInputStreamValidator.of(dataGouvFrDataSetResource)
-                        .map(Collections::singletonList)
-                        .orElse(Collections.emptyList())
+            dataGouvFrDataSetResource,
+            DataGouvFrInputStreamValidator.of(dataGouvFrDataSetResource)
+                .map(Collections::singletonList)
+                .orElse(Collections.emptyList())
         );
     }
 }

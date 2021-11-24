@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.bi.companies.tools;
 
 import lombok.SneakyThrows;
@@ -8,6 +14,9 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+/**
+ * @author dademo
+ */
 public class DatabaseSQLDialectProvider implements Supplier<SQLDialect> {
 
     private final DataSource dataSource;
@@ -20,7 +29,7 @@ public class DatabaseSQLDialectProvider implements Supplier<SQLDialect> {
     public SQLDialect get() {
 
         return Optional.ofNullable(cachedSqlDialect)
-                .orElseGet(this::getAndCacheSqlDialect);
+            .orElseGet(this::getAndCacheSqlDialect);
     }
 
     // https://stackoverflow.com/questions/9320200/inline-blob-binary-data-types-in-sql-jdbc/58736912#58736912
@@ -30,9 +39,9 @@ public class DatabaseSQLDialectProvider implements Supplier<SQLDialect> {
         try (var connection = dataSource.getConnection()) {
             final var databaseProductName = connection.getMetaData().getDatabaseProductName().toLowerCase();
             cachedSqlDialect = Arrays.stream(SQLDialect.values())
-                    .filter(v -> !v.getNameLC().isBlank())
-                    .filter(v -> databaseProductName.startsWith(v.getNameLC()))
-                    .findFirst().orElse(SQLDialect.DEFAULT);
+                .filter(v -> !v.getNameLC().isBlank())
+                .filter(v -> databaseProductName.startsWith(v.getNameLC()))
+                .findFirst().orElse(SQLDialect.DEFAULT);
             return cachedSqlDialect;
         }
     }

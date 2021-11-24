@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.bi.companies.jobs.stg.naf.writers;
 
 import fr.dademo.bi.companies.jobs.stg.naf.NafDefinitionItemWriter;
@@ -25,10 +31,13 @@ import static fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinitionTable.N
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.name;
 
+/**
+ * @author dademo
+ */
 @Component
 @ConditionalOnProperty(
-        value = CONFIG_JOBS_BASE + "." + NAF_CONFIG_JOB_NAME + "." + CONFIG_WRITER_TYPE,
-        havingValue = CONFIG_JDBC_TYPE
+    value = CONFIG_JOBS_BASE + "." + NAF_CONFIG_JOB_NAME + "." + CONFIG_WRITER_TYPE,
+    havingValue = CONFIG_JDBC_TYPE
 )
 public class NafJdbcDefinitionItemWriterImpl implements NafDefinitionItemWriter {
 
@@ -46,20 +55,20 @@ public class NafJdbcDefinitionItemWriterImpl implements NafDefinitionItemWriter 
         LOGGER.info("Writing {} naf definition documents", items.size());
 
         final var batchInsertStatement = dslContext.batch(dslContext.insertInto(NAF_DEFINITION,
-                        NAF_DEFINITION.FIELD_NAF_CODE,
-                        NAF_DEFINITION.FIELD_TITLE,
-                        NAF_DEFINITION.FIELD_TITLE_65,
-                        NAF_DEFINITION.FIELD_TITLE_40
-                ).values((String) null, null, null, null)
-                .onConflict(NAF_DEFINITION.FIELD_NAF_CODE)
-                .doUpdate()
-                .set(NAF_DEFINITION.FIELD_TITLE, asExcludedField(NAF_DEFINITION.FIELD_TITLE))
-                .set(NAF_DEFINITION.FIELD_TITLE_65, asExcludedField(NAF_DEFINITION.FIELD_TITLE_65))
-                .set(NAF_DEFINITION.FIELD_TITLE_40, asExcludedField(NAF_DEFINITION.FIELD_TITLE_40)));
+                NAF_DEFINITION.FIELD_NAF_CODE,
+                NAF_DEFINITION.FIELD_TITLE,
+                NAF_DEFINITION.FIELD_TITLE_65,
+                NAF_DEFINITION.FIELD_TITLE_40
+            ).values((String) null, null, null, null)
+            .onConflict(NAF_DEFINITION.FIELD_NAF_CODE)
+            .doUpdate()
+            .set(NAF_DEFINITION.FIELD_TITLE, asExcludedField(NAF_DEFINITION.FIELD_TITLE))
+            .set(NAF_DEFINITION.FIELD_TITLE_65, asExcludedField(NAF_DEFINITION.FIELD_TITLE_65))
+            .set(NAF_DEFINITION.FIELD_TITLE_40, asExcludedField(NAF_DEFINITION.FIELD_TITLE_40)));
 
         items.stream()
-                .map(this::nafDefinitionBind)
-                .forEach(consumer -> consumer.accept(batchInsertStatement));
+            .map(this::nafDefinitionBind)
+            .forEach(consumer -> consumer.accept(batchInsertStatement));
 
         final var batchResult = batchInsertStatement.execute();
         if (batchResult.length > 0) {
@@ -73,10 +82,10 @@ public class NafJdbcDefinitionItemWriterImpl implements NafDefinitionItemWriter 
     private Consumer<BatchBindStep> nafDefinitionBind(NafDefinition nafDefinition) {
 
         return items -> items.bind(
-                nafDefinition.getNafCode(),
-                nafDefinition.getTitle(),
-                nafDefinition.getTitle65(),
-                nafDefinition.getTitle40()
+            nafDefinition.getNafCode(),
+            nafDefinition.getTitle(),
+            nafDefinition.getTitle65(),
+            nafDefinition.getTitle40()
         );
     }
 

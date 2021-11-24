@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.data.definitions.data_gouv_fr.dimensions;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -16,6 +22,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+/**
+ * @author dademo
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -75,12 +84,12 @@ public class DataGouvFrDataSetResource {
 
     public static LocalDateTime dateTimeKeyExtractor(DataGouvFrDataSetResource v) {
         return Stream.of(
-                        v.getLastModified(),
-                        v.getPublished(),
-                        v.getCreatedAt()
-                ).filter(Objects::nonNull)
-                .findFirst()
-                .orElse(null);
+                v.getLastModified(),
+                v.getPublished(),
+                v.getCreatedAt()
+            ).filter(Objects::nonNull)
+            .findFirst()
+            .orElse(null);
     }
 
     @AllArgsConstructor

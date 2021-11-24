@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package fr.dademo.bi.companies.jobs.stg.naf;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,6 +26,9 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * @author dademo
+ */
 @Component
 public class NafDefinitionItemReader extends HttpItemStreamReaderSupport<NafDefinitionContainer> {
 
@@ -41,17 +50,17 @@ public class NafDefinitionItemReader extends HttpItemStreamReaderSupport<NafDefi
         LOGGER.info("Getting dataset definition");
         final var dataGouvFrDataSet = dataGouvFrDataQuerierService.getDataSet(DATASET_TITLE);
         final var dataGouvFrDataSetResource = dataGouvFrDataSet
-                .getResources().stream()
-                .filter(DataGouvFrFilterHelpers.fieldEquals(DataGouvFrDataSetResource::getTitle, DATASET_RESOURCE_TITLE))
-                .max(Comparator.comparing(DataGouvFrDataSetResource::dateTimeKeyExtractor))
-                .orElseThrow(() -> new ResourceNotFoundException(DATASET_RESOURCE_TITLE, dataGouvFrDataSet));
+            .getResources().stream()
+            .filter(DataGouvFrFilterHelpers.fieldEquals(DataGouvFrDataSetResource::getTitle, DATASET_RESOURCE_TITLE))
+            .max(Comparator.comparing(DataGouvFrDataSetResource::dateTimeKeyExtractor))
+            .orElseThrow(() -> new ResourceNotFoundException(DATASET_RESOURCE_TITLE, dataGouvFrDataSet));
 
         LOGGER.info("Reading values");
         iterator = MAPPER.<List<NafDefinitionContainer>>readValue(
-                dataGouvFrDataQuerierService.queryForStream(dataGouvFrDataSetResource),
-                MAPPER
-                        .getTypeFactory()
-                        .constructCollectionType(List.class, NafDefinitionContainer.class)
+            dataGouvFrDataQuerierService.queryForStream(dataGouvFrDataSetResource),
+            MAPPER
+                .getTypeFactory()
+                .constructCollectionType(List.class, NafDefinitionContainer.class)
         ).iterator();
     }
 
