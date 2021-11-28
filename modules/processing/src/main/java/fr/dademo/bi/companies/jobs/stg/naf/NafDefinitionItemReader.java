@@ -7,8 +7,8 @@
 package fr.dademo.bi.companies.jobs.stg.naf;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.dademo.batch.tools.batch.reader.UnidirectionalItemStreamReaderSupport;
 import fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinitionContainer;
-import fr.dademo.bi.companies.tools.batch.reader.HttpItemStreamReaderSupport;
 import fr.dademo.data.definitions.data_gouv_fr.dimensions.DataGouvFrDataSetResource;
 import fr.dademo.data.helpers.data_gouv_fr.helpers.DataGouvFrFilterHelpers;
 import fr.dademo.data.helpers.data_gouv_fr.repository.DataGouvFrDataQuerierService;
@@ -30,7 +30,7 @@ import java.util.List;
  * @author dademo
  */
 @Component
-public class NafDefinitionItemReader extends HttpItemStreamReaderSupport<NafDefinitionContainer> {
+public class NafDefinitionItemReader extends UnidirectionalItemStreamReaderSupport<NafDefinitionContainer> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NafDefinitionItemReader.class);
     private static final ObjectMapper MAPPER = new ObjectMapper();

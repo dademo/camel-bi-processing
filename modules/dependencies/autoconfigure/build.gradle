@@ -1,0 +1,64 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+plugins {
+    id 'org.springframework.boot' version "${springBootVersion}"
+    id 'io.spring.dependency-management' version "${springDependencyManagement}"
+    id 'java-library'
+    id 'jacoco'
+}
+
+group 'fr.dademo.autoconfigure'
+version '1.0.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+    withJavadocJar()
+    withSourcesJar()
+
+    registerFeature('toolsSupport') {
+        usingSourceSet(sourceSets.main)
+    }
+    registerFeature('cacheSupport') {
+        usingSourceSet(sourceSets.main)
+    }
+    registerFeature('httpSupport') {
+        usingSourceSet(sourceSets.main)
+    }
+    registerFeature('httpCacheSupport') {
+        usingSourceSet(sourceSets.main)
+    }
+    registerFeature('dataGouvFrSupport') {
+        usingSourceSet(sourceSets.main)
+    }
+    registerFeature('batchSupport') {
+        usingSourceSet(sourceSets.main)
+    }
+}
+
+dependencies {
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    implementation 'org.springframework.boot:spring-boot-starter'
+
+    // Generic modules
+    api project(':modules:dependencies:data:generic:stream_definitions')
+
+    // Custom modules
+    toolsSupportApi project(':modules:dependencies:tools:generic_tools')
+    cacheSupportApi project(':modules:dependencies:tools:cache')
+    httpSupportApi project(':modules:dependencies:reader:http')
+    httpCacheSupportApi project(':modules:dependencies:reader:http_cache')
+    dataGouvFrSupportApi project(':modules:dependencies:data:helpers:data_gouv_fr')
+    batchSupportApi project(':modules:dependencies:batch:batch_support')
+
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+test {
+    useJUnitPlatform()
+}

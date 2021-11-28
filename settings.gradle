@@ -30,4 +30,14 @@ include 'modules:dependencies:tools:http_validators'
 include 'modules:dependencies:tools:cache_validators'
 include 'modules:dependencies:data:definitions:data_gouv_fr'
 include 'modules:dependencies:data:helpers:data_gouv_fr'
+
+// Testing support
+include 'modules:dependencies:testing:batch:batch_testing_support'
+
+include 'modules:dependencies:batch:batch_configuration'
+include 'modules:dependencies:batch:batch_datasources:batch_jdbc'
+include 'modules:dependencies:batch:batch_datasources:batch_mongodb'
+include 'modules:dependencies:batch:batch_support'
+
+include 'modules:dependencies:autoconfigure'
 include 'modules:processing'

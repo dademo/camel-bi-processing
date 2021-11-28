@@ -6,7 +6,7 @@
 
 package fr.dademo.bi.companies;
 
-import fr.dademo.bi.companies.services.AppJobLauncher;
+import fr.dademo.batch.services.AppJobLauncher;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;

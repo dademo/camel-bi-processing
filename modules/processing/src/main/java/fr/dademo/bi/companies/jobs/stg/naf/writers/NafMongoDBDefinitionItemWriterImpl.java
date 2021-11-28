@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-import static fr.dademo.bi.companies.beans.BeanValues.*;
+import static fr.dademo.batch.beans.BeanValues.*;
 import static fr.dademo.bi.companies.jobs.stg.naf.JobDefinition.NAF_CONFIG_JOB_NAME;
 
 /**

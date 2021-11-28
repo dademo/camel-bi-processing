@@ -6,9 +6,9 @@
 
 package fr.dademo.bi.companies.jobs.stg.company_inheritance;
 
-import fr.dademo.bi.companies.configuration.BatchConfiguration;
+import fr.dademo.batch.configuration.BatchConfiguration;
+import fr.dademo.batch.tools.batch.job.BaseChunkJob;
 import fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel.CompanyInheritance;
-import fr.dademo.bi.companies.tools.batch.job.BaseChunkJob;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
@@ -27,7 +27,6 @@ public class JobDefinition extends BaseChunkJob<CSVRecord, CompanyInheritance> {
     public static final String COMPANY_INHERITANCE_CONFIG_JOB_NAME = "company-inheritance";
     public static final String COMPANY_INHERITANCE_NORMALIZED_CONFIG_JOB_NAME = "company_inheritance";
     public static final String COMPANY_INHERITANCE_JOB_NAME = "stg_" + COMPANY_INHERITANCE_NORMALIZED_CONFIG_JOB_NAME;
-
 
     @Autowired
     private BatchConfiguration batchConfiguration;

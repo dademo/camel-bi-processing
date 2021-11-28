@@ -9,4 +9,32 @@ allprojects {
         mavenCentral()
         mavenLocal()
     }
+
+    //plugins.withType(JacocoPlugin).whenPluginAdded {
+    //    it.jacocoTestReport {
+    //        xml.required = true
+    //        csv.required = false
+    //        //html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+    //    }
+    //}
+
+    afterEvaluate {
+
+        (project.tasks.withType(Test).findAll {it.enabled }).each {
+            it.finalizedBy jacocoTestReport
+        }
+
+
+        if (project.with { it.plugins.withType(JacocoPlugin) }) {
+            project.tasks.jacocoTestReport {
+                dependsOn test
+
+                reports {
+                    html.enabled true
+                    xml.enabled true
+                    csv.enabled false
+                }
+            }
+        }
+    }
 }

@@ -6,13 +6,13 @@
 
 package fr.dademo.bi.companies.jobs.stg.company_legal_history.writers;
 
+import fr.dademo.batch.tools.batch.writer.NoActionItemWriter;
 import fr.dademo.bi.companies.jobs.stg.company_legal_history.CompanyLegalHistoryItemWriter;
 import fr.dademo.bi.companies.jobs.stg.company_legal_history.datamodel.CompanyLegalHistory;
-import fr.dademo.bi.companies.tools.batch.writer.NoActionItemWriter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
-import static fr.dademo.bi.companies.beans.BeanValues.*;
+import static fr.dademo.batch.beans.BeanValues.*;
 import static fr.dademo.bi.companies.jobs.stg.company_legal_history.JobDefinition.COMPANY_LEGAL_HISTORY_CONFIG_JOB_NAME;
 
 /**

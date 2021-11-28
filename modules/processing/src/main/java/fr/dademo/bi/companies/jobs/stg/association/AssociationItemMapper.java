@@ -6,8 +6,8 @@
 
 package fr.dademo.bi.companies.jobs.stg.association;
 
+import fr.dademo.batch.tools.batch.mapper.BatchMapperTools;
 import fr.dademo.bi.companies.jobs.stg.association.datamodel.Association;
-import fr.dademo.bi.companies.tools.batch.mapper.BatchMapperTools;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
@@ -17,8 +17,8 @@ import javax.annotation.Nullable;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import static fr.dademo.batch.tools.batch.mapper.BatchMapperTools.toLocalDate;
 import static fr.dademo.bi.companies.jobs.stg.association.datamodel.Association.*;
-import static fr.dademo.bi.companies.tools.batch.mapper.BatchMapperTools.toLocalDate;
 
 /**
  * @author dademo

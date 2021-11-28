@@ -6,9 +6,9 @@
 
 package fr.dademo.bi.companies.jobs.stg.association_waldec;
 
-import fr.dademo.bi.companies.configuration.BatchConfiguration;
+import fr.dademo.batch.configuration.BatchConfiguration;
+import fr.dademo.batch.tools.batch.job.BaseChunkJob;
 import fr.dademo.bi.companies.jobs.stg.association_waldec.datamodel.AssociationWaldec;
-import fr.dademo.bi.companies.tools.batch.job.BaseChunkJob;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;

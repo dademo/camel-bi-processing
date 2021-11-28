@@ -6,10 +6,10 @@
 
 package fr.dademo.bi.companies.jobs.stg.naf;
 
-import fr.dademo.bi.companies.configuration.BatchConfiguration;
+import fr.dademo.batch.configuration.BatchConfiguration;
+import fr.dademo.batch.tools.batch.job.BaseChunkJob;
 import fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinition;
 import fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinitionContainer;
-import fr.dademo.bi.companies.tools.batch.job.BaseChunkJob;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;

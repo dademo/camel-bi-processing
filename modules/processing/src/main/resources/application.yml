@@ -3,6 +3,7 @@ spring:
     initialize-schema: always
 
 flyway:
+  apply-migrations: true
   migrations:
     batch:
       enabled: true

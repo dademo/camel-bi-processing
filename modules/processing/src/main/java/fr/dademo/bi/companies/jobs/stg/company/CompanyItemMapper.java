@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
 
+import static fr.dademo.batch.tools.batch.mapper.BatchMapperTools.*;
 import static fr.dademo.bi.companies.jobs.stg.company.datamodel.Company.*;
-import static fr.dademo.bi.companies.tools.batch.mapper.BatchMapperTools.*;
 
 /**
  * @author dademo

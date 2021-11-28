@@ -1,4 +1,4 @@
 ## https://stackoverflow.com/questions/61851491/spring-data-jdbc-firebird-dialect-not-recognized
 # Additional Dialect resolvers
 org.springframework.data.jdbc.repository.config.DialectResolver$JdbcDialectProvider=\
-fr.dademo.spring.config.SQLiteDialectResolver
+fr.dademo.batch.beans.jdbc.spring.config.SQLiteDialectResolver

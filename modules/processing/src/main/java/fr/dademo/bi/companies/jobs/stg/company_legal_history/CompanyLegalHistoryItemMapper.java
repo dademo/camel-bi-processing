@@ -13,9 +13,9 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
 
+import static fr.dademo.batch.tools.batch.mapper.BatchMapperTools.toBoolean;
+import static fr.dademo.batch.tools.batch.mapper.BatchMapperTools.toLocalDate;
 import static fr.dademo.bi.companies.jobs.stg.company_legal_history.datamodel.CompanyLegalHistory.*;
-import static fr.dademo.bi.companies.tools.batch.mapper.BatchMapperTools.toBoolean;
-import static fr.dademo.bi.companies.tools.batch.mapper.BatchMapperTools.toLocalDate;
 
 /**
  * @author dademo

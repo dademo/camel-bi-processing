@@ -6,7 +6,7 @@
 
 package fr.dademo.bi.companies.jobs.stg.association_waldec;
 
-import fr.dademo.bi.companies.tools.batch.reader.HttpItemStreamReaderSupport;
+import fr.dademo.batch.tools.batch.reader.UnidirectionalItemStreamReaderSupport;
 import fr.dademo.data.definitions.data_gouv_fr.dimensions.DataGouvFrDataSetResource;
 import fr.dademo.data.helpers.data_gouv_fr.helpers.DataGouvFrFilterHelpers;
 import fr.dademo.data.helpers.data_gouv_fr.repository.DataGouvFrDataQuerierService;
@@ -36,7 +36,7 @@ import static fr.dademo.bi.companies.jobs.stg.association_waldec.datamodel.Assoc
  */
 @Component
 @SuppressWarnings("java:S112")
-public class AssociationWaldecItemReader extends HttpItemStreamReaderSupport<CSVRecord> {
+public class AssociationWaldecItemReader extends UnidirectionalItemStreamReaderSupport<CSVRecord> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AssociationWaldecItemReader.class);
 
