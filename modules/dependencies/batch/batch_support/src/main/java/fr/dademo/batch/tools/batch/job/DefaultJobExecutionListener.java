@@ -164,7 +164,8 @@ public class DefaultJobExecutionListener implements JobExecutionListener {
 
     private String fillWithSpace(String s, int maxLength) {
 
-        final var sb = new StringBuilder(s);
+        final var sb = new StringBuilder(maxLength);
+        sb.append(s);
         IntStream.range(s.length(), maxLength)
             .forEach(ignored -> sb.append(" "));
         return sb.toString();

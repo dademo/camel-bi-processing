@@ -34,6 +34,9 @@ dependencies {
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonCoreVersion}"
     implementation "com.google.code.findbugs:jsr305:${findBugsJsr305Version}"
 
+    runtimeOnly "ch.qos.logback.contrib:logback-json-classic:${logbackJsonVersion}"
+    runtimeOnly "ch.qos.logback.contrib:logback-jackson:${logbackJsonVersion}"
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 

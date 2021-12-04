@@ -31,16 +31,16 @@ cache:
 datasources:
   jdbc:
     batch:
-        enabled: true
-        #driver-class-name: org.sqlite.JDBC
-        #url: "jdbc:sqlite:jobs.sqlite"
-        url: jdbc:postgresql://localhost:5432/bi
-        minimum-idle: 5
-        maximum-pool-size: 10
-        username: bi_rw
-        password: bi_rw
+      enabled: true
+      #driver-class-name: org.sqlite.JDBC
+      #url: "jdbc:sqlite:jobs.sqlite"
+      url: jdbc:postgresql://localhost:5432/bi
+      minimum-idle: 5
+      maximum-pool-size: 10
+      username: bi_rw
+      password: bi_rw
     stg:
-        enabled: true
+      enabled: true
       url: jdbc:postgresql://localhost:5432/bi
       minimum-idle: 5
       maximum-pool-size: 100
@@ -67,28 +67,28 @@ batch:
       #writer-type: MONGODB
       max-threads: null
     company:
-        enabled: false
+      enabled: false
       chunk-size: 100000
       writer-type: NO_ACTION
       #writer-type: MONGODB
       max-threads: null
     company-history:
-        enabled: false
+      enabled: false
       chunk-size: 100000
       writer-type: NO_ACTION
       max-threads: null
     company-inheritance:
-        enabled: false
+      enabled: false
       chunk-size: 100000
       writer-type: NO_ACTION
       max-threads: null
     company-legal:
-        enabled: false
+      enabled: false
       chunk-size: 100000
       writer-type: NO_ACTION
       max-threads: null
     company-legal-history:
-        enabled: false
+      enabled: false
       chunk-size: 100000
       writer-type: NO_ACTION
       max-threads: null
@@ -98,7 +98,7 @@ batch:
       writer-type: NO_ACTION
       max-threads: null
     association-waldec:
-        enabled: false
+      enabled: false
       chunk-size: 100000
       writer-type: NO_ACTION
       max-threads: null
