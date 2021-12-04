@@ -10,10 +10,9 @@ import fr.dademo.bi.companies.jobs.stg.association_waldec.AssociationWaldecItemW
 import fr.dademo.bi.companies.jobs.stg.association_waldec.datamodel.AssociationWaldec;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -30,14 +29,13 @@ import static fr.dademo.bi.companies.jobs.stg.association_waldec.datamodel.Assoc
 /**
  * @author dademo
  */
+@Slf4j
 @Component
 @ConditionalOnProperty(
     value = CONFIG_JOBS_BASE + "." + ASSOCIATION_WALDEC_CONFIG_JOB_NAME + "." + CONFIG_WRITER_TYPE,
     havingValue = CONFIG_JDBC_TYPE
 )
 public class AssociationWaldecJdbcItemWriterImpl implements AssociationWaldecItemWriter {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(AssociationWaldecJdbcItemWriterImpl.class);
 
     @Autowired
     @Qualifier(STG_DATASOURCE_DSL_CONTEXT_BEAN_NAME)
@@ -48,7 +46,7 @@ public class AssociationWaldecJdbcItemWriterImpl implements AssociationWaldecIte
     @Override
     public void write(List<? extends AssociationWaldec> items) {
 
-        LOGGER.info("Writing {} company documents", items.size());
+        log.info("Writing {} company documents", items.size());
 
         final var batchInsertStatement = dslContext.batch(dslContext.insertInto(ASSOCIATION_WALDEC,
             ASSOCIATION_WALDEC.FIELD_ASSOCIATION_ID,
@@ -104,9 +102,9 @@ public class AssociationWaldecJdbcItemWriterImpl implements AssociationWaldecIte
         final var batchResult = batchInsertStatement.execute();
         if (batchResult.length > 0) {
             final int totalUpdated = Arrays.stream(batchResult).sum();
-            LOGGER.info("{} rows affected", totalUpdated);
+            log.info("{} rows affected", totalUpdated);
         } else {
-            LOGGER.error("An error occurred while running batch");
+            log.error("An error occurred while running batch");
         }
     }
 

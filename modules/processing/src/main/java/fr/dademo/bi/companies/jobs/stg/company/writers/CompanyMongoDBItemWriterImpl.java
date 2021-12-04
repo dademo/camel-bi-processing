@@ -10,8 +10,7 @@ import fr.dademo.bi.companies.jobs.stg.company.CompanyItemWriter;
 import fr.dademo.bi.companies.jobs.stg.company.datamodel.Company;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemStreamException;
 import org.springframework.batch.item.ItemStreamWriter;
@@ -30,6 +29,7 @@ import static fr.dademo.bi.companies.jobs.stg.company.JobDefinition.COMPANY_CONF
 /**
  * @author dademo
  */
+@Slf4j
 @Component
 @ConditionalOnProperty(
     value = CONFIG_JOBS_BASE + "." + COMPANY_CONFIG_JOB_NAME + "." + CONFIG_WRITER_TYPE,
@@ -38,7 +38,6 @@ import static fr.dademo.bi.companies.jobs.stg.company.JobDefinition.COMPANY_CONF
 public class CompanyMongoDBItemWriterImpl implements CompanyItemWriter, ItemStreamWriter<Company> {
 
     public static final String COLLECTION_NAME = "company";
-    private static final Logger LOGGER = LoggerFactory.getLogger(CompanyMongoDBItemWriterImpl.class);
 
     @Autowired
     @Qualifier(STG_MONGO_TEMPLATE_CONFIG_BEAN_NAME)
@@ -49,20 +48,20 @@ public class CompanyMongoDBItemWriterImpl implements CompanyItemWriter, ItemStre
     @Override
     public void write(List<? extends Company> items) {
 
-        LOGGER.info("Writing {} company documents", items.size());
+        log.info("Writing {} company documents", items.size());
         final var result = mongoTemplate.getCollection(COLLECTION_NAME)
             .withDocumentClass(Company.class)
             .insertMany(items);
-        LOGGER.info("{} items added", result.getInsertedIds().size());
+        log.info("{} items added", result.getInsertedIds().size());
     }
 
     @Override
     public void open(@Nonnull ExecutionContext executionContext) throws ItemStreamException {
 
         // We clean the target collection
-        LOGGER.info("Cleaning collection `{}`", COLLECTION_NAME);
+        log.info("Cleaning collection `{}`", COLLECTION_NAME);
         mongoTemplate.dropCollection(COLLECTION_NAME);
-        LOGGER.info("Done");
+        log.info("Done");
     }
 
     @Override

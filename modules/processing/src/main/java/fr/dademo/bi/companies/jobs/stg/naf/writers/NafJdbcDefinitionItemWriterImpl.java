@@ -10,11 +10,10 @@ import fr.dademo.bi.companies.jobs.stg.naf.NafDefinitionItemWriter;
 import fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinition;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.jooq.Field;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -34,14 +33,13 @@ import static org.jooq.impl.DSL.name;
 /**
  * @author dademo
  */
+@Slf4j
 @Component
 @ConditionalOnProperty(
     value = CONFIG_JOBS_BASE + "." + NAF_CONFIG_JOB_NAME + "." + CONFIG_WRITER_TYPE,
     havingValue = CONFIG_JDBC_TYPE
 )
 public class NafJdbcDefinitionItemWriterImpl implements NafDefinitionItemWriter {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(NafJdbcDefinitionItemWriterImpl.class);
 
     @Autowired
     @Qualifier(STG_DATASOURCE_DSL_CONTEXT_BEAN_NAME)
@@ -52,7 +50,7 @@ public class NafJdbcDefinitionItemWriterImpl implements NafDefinitionItemWriter 
     @Override
     public void write(List<? extends NafDefinition> items) {
 
-        LOGGER.info("Writing {} naf definition documents", items.size());
+        log.info("Writing {} naf definition documents", items.size());
 
         final var batchInsertStatement = dslContext.batch(dslContext.insertInto(NAF_DEFINITION,
                 NAF_DEFINITION.FIELD_NAF_CODE,
@@ -73,9 +71,9 @@ public class NafJdbcDefinitionItemWriterImpl implements NafDefinitionItemWriter 
         final var batchResult = batchInsertStatement.execute();
         if (batchResult.length > 0) {
             final int totalUpdated = Arrays.stream(batchResult).sum();
-            LOGGER.info("{} rows affected", totalUpdated);
+            log.info("{} rows affected", totalUpdated);
         } else {
-            LOGGER.error("An error occurred while running batch");
+            log.error("An error occurred while running batch");
         }
     }
 

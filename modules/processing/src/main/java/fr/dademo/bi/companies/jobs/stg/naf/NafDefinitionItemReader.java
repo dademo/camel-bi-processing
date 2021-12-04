@@ -14,8 +14,7 @@ import fr.dademo.data.helpers.data_gouv_fr.helpers.DataGouvFrFilterHelpers;
 import fr.dademo.data.helpers.data_gouv_fr.repository.DataGouvFrDataQuerierService;
 import fr.dademo.data.helpers.data_gouv_fr.repository.exception.ResourceNotFoundException;
 import lombok.SneakyThrows;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemStreamException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +28,10 @@ import java.util.List;
 /**
  * @author dademo
  */
+@Slf4j
 @Component
 public class NafDefinitionItemReader extends UnidirectionalItemStreamReaderSupport<NafDefinitionContainer> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(NafDefinitionItemReader.class);
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     private static final String DATASET_TITLE = "nomenclature-dactivites-francaise-naf-rev-2-code-ape";
@@ -47,7 +46,7 @@ public class NafDefinitionItemReader extends UnidirectionalItemStreamReaderSuppo
     @Override
     public void open(@Nonnull ExecutionContext executionContext) {
 
-        LOGGER.info("Getting dataset definition");
+        log.info("Getting dataset definition");
         final var dataGouvFrDataSet = dataGouvFrDataQuerierService.getDataSet(DATASET_TITLE);
         final var dataGouvFrDataSetResource = dataGouvFrDataSet
             .getResources().stream()
@@ -55,7 +54,7 @@ public class NafDefinitionItemReader extends UnidirectionalItemStreamReaderSuppo
             .max(Comparator.comparing(DataGouvFrDataSetResource::dateTimeKeyExtractor))
             .orElseThrow(() -> new ResourceNotFoundException(DATASET_RESOURCE_TITLE, dataGouvFrDataSet));
 
-        LOGGER.info("Reading values");
+        log.info("Reading values");
         iterator = MAPPER.<List<NafDefinitionContainer>>readValue(
             dataGouvFrDataQuerierService.queryForStream(dataGouvFrDataSetResource),
             MAPPER

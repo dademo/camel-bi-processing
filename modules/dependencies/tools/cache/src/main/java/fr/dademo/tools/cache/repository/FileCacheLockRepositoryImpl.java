@@ -13,8 +13,7 @@ import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 import fr.dademo.data.generic.stream_definitions.configuration.CacheConfiguration;
 import fr.dademo.tools.cache.data_model.CachedInputStreamIdentifier;
 import lombok.SneakyThrows;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -30,10 +29,9 @@ import java.util.function.Supplier;
 /**
  * @author dademo
  */
+@Slf4j
 @Repository
 class FileCacheLockRepositoryImpl<T extends InputStreamIdentifier<?>> extends FileCacheRepositoryBase implements CacheLockRepository<T> {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(FileCacheLockRepositoryImpl.class);
 
     @Autowired
     private CacheConfiguration cacheConfiguration;
@@ -45,7 +43,7 @@ class FileCacheLockRepositoryImpl<T extends InputStreamIdentifier<?>> extends Fi
     @SneakyThrows
     public List<CachedInputStreamIdentifier<T>> readLockFile() {
 
-        LOGGER.debug("Reading lock file");
+        log.debug("Reading lock file");
         final var lockFile = lockFilePathUsingCacheDirectoryRoot().toFile();
 
         if (lockFile.exists() && lockFile.length() > 0) {
@@ -55,8 +53,8 @@ class FileCacheLockRepositoryImpl<T extends InputStreamIdentifier<?>> extends Fi
                     collectionTypeDefinitionOfCachedInputStreamIdentifierDef()
                 );
             } catch (JacksonException ex) {
-                LOGGER.warn("Unable to read lock file");
-                LOGGER.warn("Will clean the cache directory");
+                log.warn("Unable to read lock file");
+                log.warn("Will clean the cache directory");
                 cleanCacheResourceDirectory();
                 return new ArrayList<>();
             }
@@ -73,7 +71,7 @@ class FileCacheLockRepositoryImpl<T extends InputStreamIdentifier<?>> extends Fi
     @Override
     public void persistLockFile(List<CachedInputStreamIdentifier<T>> lockFileContent) {
 
-        LOGGER.debug("Writing lock file");
+        log.debug("Writing lock file");
         try {
             mapper.writeValue(
                 lockFilePathUsingCacheDirectoryRoot().toFile(),

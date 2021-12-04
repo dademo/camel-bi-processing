@@ -9,10 +9,9 @@ package fr.dademo.bi.companies.jobs.stg.company_legal.writers;
 import fr.dademo.bi.companies.jobs.stg.company_legal.CompanyLegalItemWriter;
 import fr.dademo.bi.companies.jobs.stg.company_legal.datamodel.CompanyLegal;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -29,14 +28,13 @@ import static fr.dademo.bi.companies.jobs.stg.company_legal.datamodel.CompanyLeg
 /**
  * @author dademo
  */
+@Slf4j
 @Component
 @ConditionalOnProperty(
     value = CONFIG_JOBS_BASE + "." + COMPANY_LEGAL_CONFIG_JOB_NAME + "." + CONFIG_WRITER_TYPE,
     havingValue = CONFIG_JDBC_TYPE
 )
 public class CompanyLegalJdbcItemWriterImpl implements CompanyLegalItemWriter {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(CompanyLegalJdbcItemWriterImpl.class);
 
     @Autowired
     @Qualifier(STG_DATASOURCE_DSL_CONTEXT_BEAN_NAME)
@@ -46,7 +44,7 @@ public class CompanyLegalJdbcItemWriterImpl implements CompanyLegalItemWriter {
     @Override
     public void write(List<? extends CompanyLegal> items) {
 
-        LOGGER.info("Writing {} company legal documents", items.size());
+        log.info("Writing {} company legal documents", items.size());
 
         final var batchInsertStatement = dslContext.batch(dslContext.insertInto(COMPANY_LEGAL,
             COMPANY_LEGAL.FIELD_COMPANY_LEGAL_UNIT_SIREN,
@@ -95,9 +93,9 @@ public class CompanyLegalJdbcItemWriterImpl implements CompanyLegalItemWriter {
         final var batchResult = batchInsertStatement.execute();
         if (batchResult.length > 0) {
             final int totalUpdated = Arrays.stream(batchResult).sum();
-            LOGGER.info("{} rows affected", totalUpdated);
+            log.info("{} rows affected", totalUpdated);
         } else {
-            LOGGER.error("An error occurred while running batch");
+            log.error("An error occurred while running batch");
         }
     }
 

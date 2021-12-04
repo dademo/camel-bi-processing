@@ -8,8 +8,10 @@ package fr.dademo.batch.tools.batch.job;
 
 import fr.dademo.batch.configuration.BatchConfiguration;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
@@ -52,6 +54,11 @@ public abstract class BaseChunkJob<I, O> implements BatchJobProvider {
     @Nonnull
     protected abstract ItemWriter<O> getItemWriter();
 
+    @Nonnull
+    protected JobExecutionListener getJobExecutionListener() {
+        return new DefaultJobExecutionListener();
+    }
+
 
     @Override
     public Job getJob() {
@@ -74,7 +81,7 @@ public abstract class BaseChunkJob<I, O> implements BatchJobProvider {
             threadPoolExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
             threadPoolExecutor.initialize();
 
-            final var step = stepBuilderFactory
+            final var jobProcessStep = stepBuilderFactory
                 .get(jobName)
                 .<I, O>chunk(
                     Optional.ofNullable(getJobConfiguration().getChunkSize())
@@ -87,8 +94,10 @@ public abstract class BaseChunkJob<I, O> implements BatchJobProvider {
 
             return jobBuilderFactory
                 .get(jobName)
+                .incrementer(new RunIdIncrementer())
+                .listener(getJobExecutionListener())
                 .preventRestart()
-                .start(step)
+                .start(jobProcessStep)
                 .build();
         } else {
             return null;

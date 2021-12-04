@@ -6,8 +6,7 @@
 
 package fr.dademo.batch.tools.batch.writer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemWriter;
 
 import javax.annotation.Nonnull;
@@ -16,9 +15,8 @@ import java.util.List;
 /**
  * @author dademo
  */
+@Slf4j
 public class NoActionItemWriter<T> implements ItemWriter<T> {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(NoActionItemWriter.class);
 
     boolean printWrite;
 
@@ -34,7 +32,7 @@ public class NoActionItemWriter<T> implements ItemWriter<T> {
     public void write(@Nonnull List<? extends T> items) {
 
         if (printWrite) {
-            LOGGER.info("Writing {} items", items.size());
+            log.info("Writing {} items", items.size());
         }
     }
 }

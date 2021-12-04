@@ -14,11 +14,10 @@ package fr.dademo.batch.beans.jdbc.tools;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.Location;
 import org.flywaydb.core.api.output.MigrateOutput;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -26,10 +25,9 @@ import java.util.stream.Collectors;
 /**
  * @author dademo
  */
+@Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class FlywayMigrationTools {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(FlywayMigrationTools.class);
 
     public static void applyMigration(Flyway flyway) {
 
@@ -37,14 +35,14 @@ public final class FlywayMigrationTools {
             .map(Location::toString)
             .collect(Collectors.joining(", "));
 
-        LOGGER.info("Applying migration using classpath `{}`", migrationLocations);
+        log.info("Applying migration using classpath `{}`", migrationLocations);
 
         final var migrateResult = flyway.migrate();
 
         migrateResult.warnings.forEach(FlywayMigrationTools::printMigrationWarning);
         migrateResult.migrations.forEach(FlywayMigrationTools::debugMigrateOutput);
 
-        LOGGER.info("Applied `{}` migration from `{}` to `{}` on database `{}` on schema `{}`",
+        log.info("Applied `{}` migration from `{}` to `{}` on database `{}` on schema `{}`",
             migrateResult.migrationsExecuted,
             migrateResult.initialSchemaVersion,
             migrateResult.targetSchemaVersion,
@@ -54,12 +52,12 @@ public final class FlywayMigrationTools {
     }
 
     private static void printMigrationWarning(String warning) {
-        LOGGER.warn("Warning: {}", warning);
+        log.warn("Warning: {}", warning);
     }
 
     private static void debugMigrateOutput(MigrateOutput migrateOutput) {
 
-        LOGGER.debug("{}:{} : {}:{}, took {} milliseconds",
+        log.debug("{}:{} : {}:{}, took {} milliseconds",
             migrateOutput.filepath,
             migrateOutput.type,
             migrateOutput.description,

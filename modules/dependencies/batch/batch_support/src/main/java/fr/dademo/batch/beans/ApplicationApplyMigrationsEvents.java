@@ -8,8 +8,7 @@ package fr.dademo.batch.beans;
 
 import fr.dademo.batch.beans.jdbc.DataSourcesFactory;
 import fr.dademo.batch.beans.jdbc.tools.FlywayMigrationTools;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
@@ -19,10 +18,9 @@ import org.springframework.context.event.EventListener;
 /**
  * @author dademo
  */
+@Slf4j
 @Configuration
 public class ApplicationApplyMigrationsEvents {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationApplyMigrationsEvents.class);
 
     @Autowired
     private DataSourcesFactory dataSourcesFactory;
@@ -31,9 +29,9 @@ public class ApplicationApplyMigrationsEvents {
     @ConditionalOnProperty(value = "flyway.applyMigrations", matchIfMissing = true)
     public void doApplyFlywayMigrations() {
 
-        LOGGER.debug("Application started");
-        LOGGER.info("Applying all migrations");
+        log.debug("Application started");
+        log.info("Applying all migrations");
         dataSourcesFactory.getAllMigrations().forEach(FlywayMigrationTools::applyMigration);
-        LOGGER.info("All migrations applied successfully");
+        log.info("All migrations applied successfully");
     }
 }

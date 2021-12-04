@@ -13,10 +13,9 @@ import fr.dademo.tools.cache.repository.exception.MissingCachedInputStreamExcept
 import fr.dademo.tools.cache.repository.support.CachedInputStreamWrapper;
 import fr.dademo.tools.tools.HashTools;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.input.TeeInputStream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Repository;
@@ -31,6 +30,7 @@ import java.util.Optional;
 /**
  * @author dademo
  */
+@Slf4j
 @ConditionalOnProperty(
     value = CacheConfiguration.CONFIGURATION_PREFIX + ".enabled",
     havingValue = "true"
@@ -38,7 +38,6 @@ import java.util.Optional;
 @Repository
 public class FileCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extends FileCacheRepositoryBase implements CacheRepository<T> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FileCacheRepositoryImpl.class);
     private static final String HASH_ALGORITHM = "SHA-512";
     private static final MessageDigest HASH_COMPUTER = HashTools.getHashComputerForAlgorithm(HASH_ALGORITHM);
     private static final String TEMP_PREFIX = normalizedName(FileCacheRepositoryImpl.class.getName());
@@ -67,7 +66,7 @@ public class FileCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extends
     @Override
     public InputStream readFromCachedInputStream(@Nonnull T fileIdentifier) {
 
-        LOGGER.debug("Will read from cache for file `{}`", fileIdentifier.getDescription());
+        log.debug("Will read from cache for file `{}`", fileIdentifier.getDescription());
         return getCachedInputStreamIdentifierOf(fileIdentifier)
             .map(this::getCachedFileOf)
             .map(this::openFileInputStream)
@@ -79,7 +78,7 @@ public class FileCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extends
     @SuppressWarnings("java:S2095")
     public InputStream cacheInputStream(@Nonnull InputStream inputStream, @Nonnull T inputStreamIdentifier) throws IOException {
 
-        LOGGER.debug("Storing input stream in cache for identifier `{}`", inputStreamIdentifier.getDescription());
+        log.debug("Storing input stream in cache for identifier `{}`", inputStreamIdentifier.getDescription());
         // Writing body to a temp file
         final var tempCachedFile = Files.createTempFile(TEMP_PREFIX, "").toFile();
         final var cachedFile = new FileOutputStream(tempCachedFile);
@@ -93,12 +92,12 @@ public class FileCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extends
                     } finally {
                         // In case of an error, we still clean the directories
                         if (tempCachedFile.exists()) {
-                            LOGGER.debug("Cleaning working dir for identifier `{}`", inputStreamIdentifier.getDescription());
+                            log.debug("Cleaning working dir for identifier `{}`", inputStreamIdentifier.getDescription());
                             deleteFile(tempCachedFile);
                         }
                     }
                 } else {
-                    LOGGER.warn("Input stream is not valid and will not be persistedq");
+                    log.warn("Input stream is not valid and will not be persistedq");
                 }
             });
     }
@@ -106,17 +105,17 @@ public class FileCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extends
     @Override
     public void deleteFromCache(@Nonnull T inputStreamIdentifier) {
 
-        LOGGER.info("Removing stream {}", inputStreamIdentifier);
+        log.info("Removing stream {}", inputStreamIdentifier);
         getCachedInputStreamIdentifierOf(inputStreamIdentifier)
             .map(this::getCachedFileOf)
             .ifPresent(this::deleteFile);
-        LOGGER.info("Removed file {}", "");
+        log.info("Removed file {}", "");
     }
 
 
     private synchronized void persistCache(File tempCachedFile, T inputFileIdentifier) {
 
-        LOGGER.debug("Final persisting cached identifier `{}`", inputFileIdentifier.getDescription());
+        log.debug("Final persisting cached identifier `{}`", inputFileIdentifier.getDescription());
         final var cachedInputStreamIdentifier = buildCachedInputStreamIdentifier(inputFileIdentifier);
 
         cacheLockRepository.withLockedLockFile(
@@ -129,18 +128,18 @@ public class FileCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extends
                     .toFile();
 
                 try {
-                    LOGGER.debug("Moving cached file");
+                    log.debug("Moving cached file");
                     FileUtils.moveFile(tempCachedFile, finalCachedFileFile);
-                    LOGGER.debug("Cached file moved");
+                    log.debug("Cached file moved");
                     cacheLockRepository.persistLockFile(lockFileContent);
                 } catch (IOException e) {
                     // Cleaning
                     if (tempCachedFile.exists()) {
-                        LOGGER.debug("Removing cache file `{}`", tempCachedFile.getAbsolutePath());
+                        log.debug("Removing cache file `{}`", tempCachedFile.getAbsolutePath());
                         deleteFile(tempCachedFile);
                     }
                     if (finalCachedFileFile.exists()) {
-                        LOGGER.debug("Removing cache file `{}`", finalCachedFileFile.getAbsolutePath());
+                        log.debug("Removing cache file `{}`", finalCachedFileFile.getAbsolutePath());
                         deleteFile(finalCachedFileFile);
                     }
                     throw new UncheckedIOException(e);
@@ -152,9 +151,9 @@ public class FileCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extends
     @SneakyThrows
     private void deleteFile(File file) {
 
-        LOGGER.debug("Will delete file `{}`", file.getAbsolutePath());
+        log.debug("Will delete file `{}`", file.getAbsolutePath());
         FileUtils.delete(file);
-        LOGGER.debug("File `{}` deleted", file.getAbsolutePath());
+        log.debug("File `{}` deleted", file.getAbsolutePath());
     }
 
     @SneakyThrows

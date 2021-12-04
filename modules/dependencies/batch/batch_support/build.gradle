@@ -43,6 +43,7 @@ dependencies {
     implementation 'org.flywaydb:flyway-core'
     implementation "com.zaxxer:HikariCP:${hikariCPVersion}"
     implementation "org.jooq:jooq:${jooqVersion}"
+    implementation "org.jline:jline:${jlineVersion}"
     implementation "javax.validation:validation-api:${javaxValidationApiVersion}"
     implementation "com.google.code.findbugs:jsr305:${findBugsJsr305Version}"
 
