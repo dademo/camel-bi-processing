@@ -4,11 +4,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package fr.dademo.reader.http.repository.context;
+package fr.dademo.data.generic.stream_definitions.repository;
 
+import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifierValidator;
 import fr.dademo.data.generic.stream_definitions.exception.InputStreamIdentifierValidationException;
-import fr.dademo.reader.http.data_model.HttpInputStreamIdentifier;
 import lombok.SneakyThrows;
 import org.apache.commons.io.input.TeeInputStream;
 
@@ -24,37 +24,37 @@ import java.util.concurrent.*;
 /**
  * @author dademo
  */
-public class QueryValidationContextImpl<T extends HttpInputStreamIdentifier> extends QueryValidationContext {
+public abstract class BaseValidationContext<T extends InputStreamIdentifier<?>> extends InputStream {
 
     @Nonnull
     private final InputStream delegate;
 
     @Nonnull
-    private final T httpInputStreamIdentifier;
+    private final T inputStreamIdentifier;
 
     @Nonnull
     private final ExecutorService validatorsExecutorService;
 
     private final List<Future<Void>> validatorTasks;
 
-    public QueryValidationContextImpl(@Nonnull InputStream inputStream,
-                                      @Nonnull T httpInputStreamIdentifier,
-                                      @Nonnull List<? extends InputStreamIdentifierValidator<HttpInputStreamIdentifier>> httpStreamValidators
+    protected BaseValidationContext(@Nonnull InputStream inputStream,
+                                    @Nonnull T inputStreamIdentifier,
+                                    @Nonnull List<? extends InputStreamIdentifierValidator<T>> streamValidators
     ) throws IOException {
 
-        this.httpInputStreamIdentifier = httpInputStreamIdentifier;
-        this.validatorsExecutorService = Executors.newFixedThreadPool(httpStreamValidators.size());
-        this.validatorTasks = new ArrayList<>(httpStreamValidators.size());
-        this.delegate = applyValidators(inputStream, httpStreamValidators);
+        this.inputStreamIdentifier = inputStreamIdentifier;
+        this.validatorsExecutorService = Executors.newFixedThreadPool(streamValidators.size());
+        this.validatorTasks = new ArrayList<>(streamValidators.size());
+        this.delegate = applyValidators(inputStream, streamValidators);
     }
 
     private InputStream applyValidators(InputStream inputStream,
-                                        List<? extends InputStreamIdentifierValidator<HttpInputStreamIdentifier>> httpStreamValidators
+                                        List<? extends InputStreamIdentifierValidator<T>> streamValidators
     ) throws IOException {
 
         InputStream finalDelegate = inputStream;
 
-        for (var validator : httpStreamValidators) {
+        for (var validator : streamValidators) {
             finalDelegate = this.runInputValidation(finalDelegate, validator);
         }
 
@@ -66,6 +66,13 @@ public class QueryValidationContextImpl<T extends HttpInputStreamIdentifier> ext
         return delegate.read();
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * This function also waits for all validators to end.
+     *
+     * @throws IOException the underlying {@link InputStream} have thrown an exception.
+     */
     @Override
     @SneakyThrows({InterruptedException.class, ExecutionException.class})
     public void close() throws IOException {
@@ -89,7 +96,7 @@ public class QueryValidationContextImpl<T extends HttpInputStreamIdentifier> ext
 
     @SuppressWarnings("java:S2095")
     private InputStream runInputValidation(@Nonnull InputStream inputStream,
-                                           @Nonnull InputStreamIdentifierValidator<HttpInputStreamIdentifier> validator
+                                           @Nonnull InputStreamIdentifierValidator<T> validator
     ) throws IOException {
 
         final var pipedOutputStream = new PipedOutputStream();
@@ -111,10 +118,10 @@ public class QueryValidationContextImpl<T extends HttpInputStreamIdentifier> ext
 
     private Callable<Void> validatorCallableOf(
         @Nonnull InputStream inputStream,
-        @Nonnull InputStreamIdentifierValidator<HttpInputStreamIdentifier> validator) {
+        @Nonnull InputStreamIdentifierValidator<T> validator) {
 
         return () -> {
-            validator.validate(httpInputStreamIdentifier, inputStream);
+            validator.validate(inputStreamIdentifier, inputStream);
             return null;
         };
     }

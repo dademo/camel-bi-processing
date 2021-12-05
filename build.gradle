@@ -10,20 +10,17 @@ allprojects {
         mavenLocal()
     }
 
-    //plugins.withType(JacocoPlugin).whenPluginAdded {
-    //    it.jacocoTestReport {
-    //        xml.required = true
-    //        csv.required = false
-    //        //html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
-    //    }
-    //}
-
     afterEvaluate {
 
-        (project.tasks.withType(Test).findAll {it.enabled }).each {
-            it.finalizedBy jacocoTestReport
+        (project.tasks.withType(JavaCompile).findAll { it.enabled }).each {
+            it.options.deprecation = true
+            it.options.warnings = true
+            it.options.compilerArgs << "-Xlint:unchecked"
         }
 
+        (project.tasks.withType(Test).findAll { it.enabled }).each {
+            it.finalizedBy jacocoTestReport
+        }
 
         if (project.with { it.plugins.withType(JacocoPlugin) }) {
             project.tasks.jacocoTestReport {

@@ -20,6 +20,7 @@ import javax.annotation.Nonnull;
 /**
  * @author dademo
  */
+@SuppressWarnings("unchecked")
 @Builder
 @Getter
 public class MockedChunkJob<I, O> extends BaseChunkJob<I, O> {
@@ -34,17 +35,14 @@ public class MockedChunkJob<I, O> extends BaseChunkJob<I, O> {
     @Nonnull
     protected String jobName = TEST_JOB_NAME;
 
-    @SuppressWarnings("unchecked")
     @Builder.Default
     @Nonnull
     protected ItemReader<I> itemReader = Mockito.mock(ItemReader.class);
 
-    @SuppressWarnings("unchecked")
     @Builder.Default
     @Nonnull
     protected ItemProcessor<I, O> itemProcessor = Mockito.mock(ItemProcessor.class);
 
-    @SuppressWarnings("unchecked")
     @Builder.Default
     @Nonnull
     protected ItemWriter<O> itemWriter = Mockito.mock(ItemWriter.class);

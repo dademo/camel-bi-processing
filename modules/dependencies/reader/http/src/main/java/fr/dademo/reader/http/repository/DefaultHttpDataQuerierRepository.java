@@ -8,7 +8,7 @@ package fr.dademo.reader.http.repository;
 
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifierValidator;
 import fr.dademo.reader.http.data_model.HttpInputStreamIdentifier;
-import fr.dademo.reader.http.repository.context.QueryValidationContextImpl;
+import fr.dademo.reader.http.repository.context.HttpQueryValidationContextImpl;
 import fr.dademo.reader.http.repository.handlers.DefaultQueryResponseHandler;
 import fr.dademo.reader.http.repository.handlers.QueryResponseHandler;
 import lombok.AllArgsConstructor;
@@ -82,7 +82,7 @@ public class DefaultHttpDataQuerierRepository implements HttpDataQuerierReposito
             .handleResponse(response, this);
 
         if (!httpStreamValidators.isEmpty()) {
-            return new QueryValidationContextImpl<>(
+            return new HttpQueryValidationContextImpl<>(
                 inputStream,
                 httpInputStreamIdentifier,
                 httpStreamValidators

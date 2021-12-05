@@ -11,7 +11,7 @@ plugins {
     id 'jacoco'
 }
 
-group 'fr.dademo.data.generic.stream_definitions'
+group 'fr.dademo.reader.file'
 version '1.0.0-SNAPSHOT'
 
 java {
@@ -22,19 +22,16 @@ java {
 }
 
 dependencies {
+    api project(':modules:dependencies:data:generic:stream_definitions')
+
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
     implementation 'org.springframework.boot:spring-boot-starter'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation "com.fasterxml.jackson.core:jackson-core:${jacksonCoreVersion}"
-    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonCoreVersion}"
-    implementation "org.apache.commons:commons-lang3:${apacheCommonsLang3Version}"
 
-    implementation "commons-io:commons-io:${apacheCommonsIOVersion}"
+    // Other libraries
     implementation "com.google.code.findbugs:jsr305:${findBugsJsr305Version}"
-
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
