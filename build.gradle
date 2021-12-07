@@ -27,9 +27,9 @@ allprojects {
                 dependsOn test
 
                 reports {
-                    html.enabled true
-                    xml.enabled true
-                    csv.enabled false
+                    html.required = true
+                    xml.required = true
+                    csv.required = false
                 }
             }
         }
