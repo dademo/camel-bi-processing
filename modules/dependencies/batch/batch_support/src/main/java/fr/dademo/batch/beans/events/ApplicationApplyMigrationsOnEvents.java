@@ -4,7 +4,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package fr.dademo.batch.beans;
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package fr.dademo.batch.beans.events;
 
 import fr.dademo.batch.beans.jdbc.DataSourcesFactory;
 import fr.dademo.batch.beans.jdbc.tools.FlywayMigrationTools;
@@ -20,7 +26,7 @@ import org.springframework.context.event.EventListener;
  */
 @Slf4j
 @Configuration
-public class ApplicationApplyMigrationsEvents {
+public class ApplicationApplyMigrationsOnEvents {
 
     @Autowired
     private DataSourcesFactory dataSourcesFactory;
@@ -29,7 +35,6 @@ public class ApplicationApplyMigrationsEvents {
     @ConditionalOnProperty(value = "flyway.applyMigrations", matchIfMissing = true)
     public void doApplyFlywayMigrations() {
 
-        log.debug("Application started");
         log.info("Applying all migrations");
         dataSourcesFactory.getAllMigrations().forEach(FlywayMigrationTools::applyMigration);
         log.info("All migrations applied successfully");

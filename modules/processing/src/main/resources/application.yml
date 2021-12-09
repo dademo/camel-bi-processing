@@ -12,11 +12,15 @@ flyway:
       enabled: true
       schemas: stg
 
+amqp:
+  createQueues: true
+  createExchanges: true
+
 logging:
   level:
     #'org.springframework': DEBUG
     'org.springframework': INFO
-    'fr.dademo.bi': DEBUG
+    'fr.dademo': DEBUG
     'fr.dademo.tools': TRACE
     'org.flywaydb.core': DEBUG
     'org.jooq.Constants': WARN
@@ -54,6 +58,20 @@ datasources:
       enabled: true
       connection-string: mongodb://root:root@localhost:27017/stg
       database: stg
+  rabbitmq:
+    stg:
+      enabled: true
+      connection-string: amqp://guest:guest@localhost:5672
+      confirms: false
+      queues: { }
+      exchanges:
+        association:
+          name: association
+          type: direct
+          durable: true
+          autoDelete: false
+          delayed: false
+          internal: false
 
 batch:
   repository:
@@ -93,9 +111,9 @@ batch:
       writer-type: NO_ACTION
       max-threads: null
     association:
-      enabled: false
+      enabled: true
       chunk-size: 100000
-      writer-type: NO_ACTION
+      writer-type: AMQP
       max-threads: null
     association-waldec:
       enabled: false

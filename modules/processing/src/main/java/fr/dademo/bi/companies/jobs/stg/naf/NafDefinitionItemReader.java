@@ -32,13 +32,14 @@ import java.util.List;
 @Component
 public class NafDefinitionItemReader extends UnidirectionalItemStreamReaderSupport<NafDefinitionContainer> {
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
-
     private static final String DATASET_TITLE = "nomenclature-dactivites-francaise-naf-rev-2-code-ape";
     private static final String DATASET_RESOURCE_TITLE = "Export au format JSON";
 
     @Autowired
     private DataGouvFrDataQuerierService dataGouvFrDataQuerierService;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     private Iterator<NafDefinitionContainer> iterator;
 
@@ -55,9 +56,9 @@ public class NafDefinitionItemReader extends UnidirectionalItemStreamReaderSuppo
             .orElseThrow(() -> new ResourceNotFoundException(DATASET_RESOURCE_TITLE, dataGouvFrDataSet));
 
         log.info("Reading values");
-        iterator = MAPPER.<List<NafDefinitionContainer>>readValue(
+        iterator = objectMapper.<List<NafDefinitionContainer>>readValue(
             dataGouvFrDataQuerierService.queryForStream(dataGouvFrDataSetResource),
-            MAPPER
+            objectMapper
                 .getTypeFactory()
                 .constructCollectionType(List.class, NafDefinitionContainer.class)
         ).iterator();

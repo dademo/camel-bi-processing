@@ -46,10 +46,12 @@ public final class BeanValues {
     public static final String DATASOURCE_CONFIG = "datasource";
     public static final String MONGO_CLIENT_CONFIG = "mongoClient";
     public static final String MONGO_TEMPLATE_CONFIG = "mongoTemplate";
+    public static final String AMQP_TEMPLATE_CONFIG = "amqpTemplate";
     // Types
     public static final String CONFIG_NO_ACTION_TYPE = "NO_ACTION";
     public static final String CONFIG_JDBC_TYPE = "JDBC";
     public static final String CONFIG_MONGODB_TYPE = "MONGODB";
+    public static final String CONFIG_AMQP_TYPE = "AMQP";
 
     //// Beans ////
     // Database connectors
@@ -60,8 +62,11 @@ public final class BeanValues {
     public static final String STG_DATASOURCE_DIALECT_PROVIDER_BEAN_NAME = STG_DATASOURCE_BEAN_NAME + DIALECT_PROVIDER_EXTENSION;
     // SQL contexts
     public static final String STG_DATASOURCE_DSL_CONTEXT_BEAN_NAME = STG_DATASOURCE_BEAN_NAME + DSL_CONTEXT_EXTENSION;
+    // MongoDB contexts
     public static final String STG_MONGO_CLIENT_CONFIG_BEAN_NAME = MONGO_CLIENT_CONFIG + "_" + STG_DATASOURCE_NAME;
     public static final String STG_MONGO_TEMPLATE_CONFIG_BEAN_NAME = MONGO_TEMPLATE_CONFIG + "_" + STG_DATASOURCE_NAME;
+    // AMQP contexts
+    public static final String STG_AMQP_TEMPLATE_CONFIG_BEAN_NAME = AMQP_TEMPLATE_CONFIG + "_" + STG_DATASOURCE_NAME;
     // Flyway
     public static final String FLYWAY_BATCH_BEAN_NAME = FLYWAY_CONFIG + "_" + BATCH_DATASOURCE_NAME;
     public static final String FLYWAY_STG_BEAN_NAME = FLYWAY_CONFIG + "_" + STG_DATASOURCE_NAME;

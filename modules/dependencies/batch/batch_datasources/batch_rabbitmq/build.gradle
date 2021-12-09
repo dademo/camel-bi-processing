@@ -11,7 +11,7 @@ plugins {
     id 'jacoco'
 }
 
-group 'fr.dademo.batch_configuration'
+group 'fr.dademo.batch_datasources.batch_rabbitmq'
 version '1.0.0-SNAPSHOT'
 
 java {
@@ -22,15 +22,16 @@ java {
 }
 
 dependencies {
+    implementation project(':modules:dependencies:batch:batch_configuration')
+
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
-    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.amqp:spring-amqp'
+    compileOnly 'org.springframework.amqp:spring-rabbit'
 
     // Other libraries
-    implementation 'org.mongodb:mongodb-driver-core'
-    implementation 'org.springframework.amqp:spring-amqp'
     implementation "javax.validation:validation-api:${javaxValidationApiVersion}"
     implementation "com.google.code.findbugs:jsr305:${findBugsJsr305Version}"
 

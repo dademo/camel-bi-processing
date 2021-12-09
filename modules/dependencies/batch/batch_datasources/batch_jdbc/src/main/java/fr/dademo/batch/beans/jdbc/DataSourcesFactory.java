@@ -30,21 +30,20 @@ import org.jooq.conf.StatementType;
 import org.jooq.conf.ThrowExceptions;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
 import javax.sql.DataSource;
 import javax.validation.constraints.NotEmpty;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author dademo
  */
-@Configuration
+@Component
 public class DataSourcesFactory {
 
     private final Map<String, DataSource> cachedDataSources = new HashMap<>();
@@ -84,11 +83,8 @@ public class DataSourcesFactory {
         );
     }
 
-    public List<Flyway> getAllMigrations() {
-
-        return batchDataSourcesConfiguration.getJdbc().keySet().stream()
-            .map(this::getMigration)
-            .collect(Collectors.toList());
+    public Stream<Flyway> getAllMigrations() {
+        return batchDataSourcesConfiguration.getJdbc().keySet().stream().map(this::getMigration);
     }
 
     @Nonnull

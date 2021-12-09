@@ -31,6 +31,7 @@ dependencies {
     api project(':modules:dependencies:batch:batch_configuration')
     api project(':modules:dependencies:batch:batch_datasources:batch_jdbc')
     api project(':modules:dependencies:batch:batch_datasources:batch_mongodb')
+    api project(':modules:dependencies:batch:batch_datasources:batch_rabbitmq')
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
@@ -43,6 +44,7 @@ dependencies {
     implementation 'org.flywaydb:flyway-core'
     implementation "com.zaxxer:HikariCP:${hikariCPVersion}"
     implementation "org.jooq:jooq:${jooqVersion}"
+    implementation 'org.springframework.amqp:spring-amqp'
     implementation "org.jline:jline:${jlineVersion}"
     implementation "javax.validation:validation-api:${javaxValidationApiVersion}"
     implementation "com.google.code.findbugs:jsr305:${findBugsJsr305Version}"

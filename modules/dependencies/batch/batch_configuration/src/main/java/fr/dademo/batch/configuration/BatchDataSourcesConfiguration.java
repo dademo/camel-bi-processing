@@ -26,6 +26,7 @@ package fr.dademo.batch.configuration;
 
 import fr.dademo.batch.configuration.data_sources.JDBCDataSourceConfiguration;
 import fr.dademo.batch.configuration.data_sources.MongoDBClientConfiguration;
+import fr.dademo.batch.configuration.data_sources.RabbitMQConfiguration;
 import fr.dademo.batch.configuration.exception.MissingDataSourceConfigurationException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -50,12 +51,16 @@ public class BatchDataSourcesConfiguration {
 
     private static final String JDBC_TYPE = "JDBC";
     private static final String MONGODB_TYPE = "MongoDB";
+    private static final String RABBITMQ_TYPE = "RabbitMQ";
 
     @Nonnull
     private Map<String, JDBCDataSourceConfiguration> jdbc = new HashMap<>();
 
     @Nonnull
     private Map<String, MongoDBClientConfiguration> mongodb = new HashMap<>();
+
+    @Nonnull
+    private Map<String, RabbitMQConfiguration> rabbitmq = new HashMap<>();
 
     @Nonnull
     public JDBCDataSourceConfiguration getJDBCDataSourceConfigurationByName(@Nonnull String dataSourceName) {
@@ -65,6 +70,11 @@ public class BatchDataSourcesConfiguration {
     @Nonnull
     public MongoDBClientConfiguration getMongoDBClientConfigurationByName(@Nonnull String dataSourceName) {
         return configurationByName(mongodb, dataSourceName, MONGODB_TYPE);
+    }
+
+    @Nonnull
+    public RabbitMQConfiguration getRabbitMQClientConfigurationByName(@Nonnull String dataSourceName) {
+        return configurationByName(rabbitmq, dataSourceName, RABBITMQ_TYPE);
     }
 
     @Nonnull
