@@ -4,6 +4,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+plugins {
+    id 'com.github.spotbugs' version "${spotbugsPluginVersion}" apply false
+}
+
 allprojects {
     repositories {
         mavenCentral()
@@ -18,12 +22,55 @@ allprojects {
             it.options.compilerArgs << "-Xlint:unchecked"
         }
 
+        project.findAll { it.plugins.withType(JavaPlugin) }.each { _project ->
+            if (!Boolean.parseBoolean(usesSonar)) {
+
+                [
+                    'checkstyle',
+                    'pmd',
+                    'com.github.spotbugs',
+                ].each {
+                    _project.plugins.apply(it)
+                }
+            }
+
+            [
+                'jacoco',
+            ].each {
+                _project.plugins.apply(it)
+            }
+        }
+
+        (project.tasks.withType(Jar).findAll { it.enabled }).each {
+
+            if (!Boolean.parseBoolean(usesSonar)) {
+                if (new File(it.project.projectDir, 'config/checkstyle/checkstyle.xml').exists()) {
+                    it.dependsOn checkstyleMain, spotbugsMain, pmdMain
+                } else {
+                    it.dependsOn spotbugsMain, pmdMain
+                }
+            }
+        }
+
         (project.tasks.withType(Test).findAll { it.enabled }).each {
+
+            it.useJUnitPlatform()
+            it.failFast = false
+
+            if (!Boolean.parseBoolean(usesSonar)) {
+                if (new File(it.project.projectDir, 'config/checkstyle/checkstyle.xml').exists()) {
+                    it.dependsOn spotbugsTest, pmdTest, checkstyleTest
+                } else {
+                    it.dependsOn spotbugsTest, pmdTest
+                }
+            }
+
             it.finalizedBy jacocoTestReport
         }
 
-        if (project.with { it.plugins.withType(JacocoPlugin) }) {
-            project.tasks.jacocoTestReport {
+
+        if (project.plugins.withType(JacocoPlugin)) {
+            project.tasks.findByName('jacocoTestReport')?.configure {
                 dependsOn test
 
                 reports {
