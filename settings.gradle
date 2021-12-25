@@ -18,7 +18,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'companies-bi-processing'
+rootProject.name = 'bi-data-integration'
 
 // Sub-modules
 include 'modules:dependencies:tools:generic_tools'
