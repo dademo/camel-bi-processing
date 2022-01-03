@@ -39,10 +39,6 @@ jobs:
           jdkArchitectureOption: 'x64'
           publishJUnitResults: true
           testResultsFiles: '**/TEST-*.xml'
-          codeCoverageToolOption: jaCoCo
-          codeCoverageFailIfEmpty: true
-          checkStyleRunAnalysis: false
-          findBugsRunAnalysis: false
           tasks: 'build'
         enabled: true
     
