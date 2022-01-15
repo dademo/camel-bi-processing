@@ -11,6 +11,7 @@ plugins {
 }
 
 group 'fr.dademo.batch_datasources.batch_jdbc'
+archivesBaseName = 'dademo-dependencies-batch-datasource-jdbc'
 version '1.0.0-SNAPSHOT'
 
 java {
@@ -34,6 +35,7 @@ dependencies {
     implementation 'org.flywaydb:flyway-core'
     implementation "com.zaxxer:HikariCP:${hikariCPVersion}"
     implementation "org.jooq:jooq:${jooqVersion}"
+    implementation "jakarta.xml.bind:jakarta.xml.bind-api:${jakartaBindApiVersion}" // To avoid Jooq warnings
     implementation "javax.validation:validation-api:${javaxValidationApiVersion}"
     implementation "com.google.code.findbugs:jsr305:${findBugsJsr305Version}"
 

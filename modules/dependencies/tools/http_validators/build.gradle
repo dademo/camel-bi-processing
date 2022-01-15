@@ -11,6 +11,7 @@ plugins {
 }
 
 group 'fr.dademo.tools.http_validators'
+archivesBaseName = 'dademo-dependencies-tools-http_validators'
 version '1.0.0-SNAPSHOT'
 
 java {

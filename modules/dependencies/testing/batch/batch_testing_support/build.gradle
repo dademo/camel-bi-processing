@@ -11,6 +11,7 @@ plugins {
 }
 
 group 'fr.dademo.testing.batch'
+archivesBaseName = 'dademo-dependencies-testing-batch-support'
 version '1.0.0-SNAPSHOT'
 
 java {

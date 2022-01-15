@@ -11,6 +11,7 @@ plugins {
 }
 
 group 'fr.dademo.reader.file'
+archivesBaseName = 'dademo-dependencies-reader-file'
 version '1.0.0-SNAPSHOT'
 
 java {

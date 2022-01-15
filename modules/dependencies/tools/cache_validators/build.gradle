@@ -11,6 +11,7 @@ plugins {
 }
 
 group 'fr.dademo.tools.cache_validators'
+archivesBaseName = 'dademo-dependencies-tools-cache_validators'
 version '1.0.0-SNAPSHOT'
 
 java {

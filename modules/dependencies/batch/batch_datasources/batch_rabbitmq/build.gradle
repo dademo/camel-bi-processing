@@ -11,6 +11,7 @@ plugins {
 }
 
 group 'fr.dademo.batch_datasources.batch_rabbitmq'
+archivesBaseName = 'dademo-dependencies-batch-datasource-rabbitmq'
 version '1.0.0-SNAPSHOT'
 
 java {

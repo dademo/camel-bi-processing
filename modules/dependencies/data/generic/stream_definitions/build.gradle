@@ -11,6 +11,7 @@ plugins {
 }
 
 group 'fr.dademo.data.generic.stream_definitions'
+archivesBaseName = 'dademo-dependencies-data-generic-stream_definitions'
 version '1.0.0-SNAPSHOT'
 
 java {

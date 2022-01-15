@@ -11,6 +11,7 @@ plugins {
 }
 
 group 'fr.dademo.batch_datasources.batch_mongodb'
+archivesBaseName = 'dademo-dependencies-batch-datasource-mongodb'
 version '1.0.0-SNAPSHOT'
 
 java {

@@ -11,6 +11,7 @@ plugins {
 }
 
 group 'fr.dademo.batch_configuration'
+archivesBaseName = 'dademo-dependencies-batch-configuration'
 version '1.0.0-SNAPSHOT'
 
 java {

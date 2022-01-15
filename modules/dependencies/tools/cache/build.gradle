@@ -11,6 +11,7 @@ plugins {
 }
 
 group 'fr.dademo.tools.cache'
+archivesBaseName = 'dademo-dependencies-tools-cache'
 version '1.0.0-SNAPSHOT'
 
 java {

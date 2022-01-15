@@ -16,15 +16,31 @@ allprojects {
 
     afterEvaluate {
 
+        project.tasks.withType(Jar) {
+            // We enable jar creation
+            it.enabled = true
+        }
+
+        // Project in dependencies doesn't have BootJar enabled
+        project.findAll {
+            plugins.findPlugin('org.springframework.boot') &&
+                getPath().startsWith(":modules:dependencies")
+        }.each {
+            it.bootJar {
+                enabled = false
+            }
+        }
+
+
         (project.tasks.withType(JavaCompile).findAll { it.enabled }).each {
             it.options.deprecation = true
             it.options.warnings = true
             it.options.compilerArgs << "-Xlint:unchecked"
         }
 
-        project.findAll { it.plugins.withType(JavaPlugin) }.each { _project ->
-            if (!Boolean.parseBoolean(usesSonar)) {
+        (project.findAll { plugins.withType(JavaPlugin) }).each { _project ->
 
+            if (!Boolean.parseBoolean(usesSonar)) {
                 [
                     'checkstyle',
                     'pmd',
@@ -44,7 +60,7 @@ allprojects {
         (project.tasks.withType(Jar).findAll { it.enabled }).each {
 
             if (!Boolean.parseBoolean(usesSonar)) {
-                if (new File(it.project.projectDir, 'config/checkstyle/checkstyle.xml').exists()) {
+                if (new File(project.projectDir, 'config/checkstyle/checkstyle.xml').exists()) {
                     it.dependsOn checkstyleMain, spotbugsMain, pmdMain
                 } else {
                     it.dependsOn spotbugsMain, pmdMain
@@ -70,10 +86,12 @@ allprojects {
 
 
         if (project.plugins.withType(JacocoPlugin)) {
-            project.tasks.findByName('jacocoTestReport')?.configure {
-                dependsOn test
 
-                reports {
+            project.tasks.findByName('jacocoTestReport')?.configure {
+
+                it.dependsOn test
+
+                it.reports {
                     html.required = true
                     xml.required = true
                     csv.required = false

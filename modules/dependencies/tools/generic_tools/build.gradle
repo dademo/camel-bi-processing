@@ -11,6 +11,7 @@ plugins {
 }
 
 group 'fr.dademo.tools.generic_tools'
+archivesBaseName = 'dademo-dependencies-tools-generic'
 version '1.0.0-SNAPSHOT'
 
 java {

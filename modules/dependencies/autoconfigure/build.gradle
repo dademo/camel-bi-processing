@@ -11,6 +11,7 @@ plugins {
 }
 
 group 'fr.dademo.autoconfigure'
+archivesBaseName = 'dademo-dependencies-autoconfigure'
 version '1.0.0-SNAPSHOT'
 
 java {

@@ -11,6 +11,7 @@ plugins {
 }
 
 group 'fr.dademo.data.definitions.data_gouv_fr'
+archivesBaseName = 'dademo-dependencies-data-definitions-data_gouv_fr'
 version '1.0.0-SNAPSHOT'
 
 java {

@@ -11,6 +11,7 @@ plugins {
 }
 
 group 'fr.dademo.reader.http'
+archivesBaseName = 'dademo-dependencies-reader-http'
 version '1.0.0-SNAPSHOT'
 
 java {
