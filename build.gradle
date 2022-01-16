@@ -24,7 +24,10 @@ allprojects {
         // Project in dependencies doesn't have BootJar enabled
         project.findAll {
             plugins.findPlugin('org.springframework.boot') &&
-                getPath().startsWith(":modules:dependencies")
+                [
+                    ":modules:dependencies",
+                    ":modules:supervision:backends",
+                ].stream().map(it.getPath()::startsWith).map(Boolean::valueOf).anyMatch(Boolean.TRUE::equals)
         }.each {
             it.bootJar {
                 enabled = false

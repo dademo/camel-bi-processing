@@ -4,38 +4,32 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+// https://start.spring.io/#!type=gradle-project&language=java&platformVersion=2.5.6&packaging=jar&jvmVersion=11&groupId=fr.dademo&artifactId=bi.companies&name=bi.companies&description=BI%20analysis%20using%20french%20government%20Open%20Data&packageName=fr.dademo.bi.companies&dependencies=lombok,configuration-processor,jdbc,data-jdbc,flyway,mariadb,postgresql,data-mongodb,data-couchbase,amqp,kafka,batch,validation,testcontainers,influx
 plugins {
     id 'org.springframework.boot' version "${springBootVersion}"
     id 'io.spring.dependency-management' version "${springDependencyManagement}"
-    id 'java-library'
+    id 'java'
 }
 
-group 'fr.dademo.batch_datasources.batch_rabbitmq'
-archivesBaseName = 'dademo-dependencies-batch-datasource-rabbitmq'
 version '1.0.0-SNAPSHOT'
+archivesBaseName = 'dademo-supervision-bakends-model'
+group 'fr.dademo.supervision.backends.model'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
-    withJavadocJar()
-    withSourcesJar()
 }
 
 dependencies {
-
-    implementation project(':modules:dependencies:batch:batch_configuration')
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
-    implementation 'org.springframework.amqp:spring-amqp'
-    compileOnly 'org.springframework.amqp:spring-rabbit'
-
     // Other libraries
+    compileOnly 'org.projectlombok:lombok'
     implementation "javax.validation:validation-api:${javaxValidationApiVersion}"
     implementation "com.google.code.findbugs:jsr305:${findBugsJsr305Version}"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
-

@@ -22,6 +22,7 @@ java {
 }
 
 dependencies {
+
     api project(':modules:dependencies:batch:batch_configuration')
     api project(':modules:dependencies:batch:batch_datasources:batch_jdbc')
     api project(':modules:dependencies:batch:batch_datasources:batch_mongodb')
@@ -46,6 +47,3 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
-test {
-    useJUnitPlatform()
-}

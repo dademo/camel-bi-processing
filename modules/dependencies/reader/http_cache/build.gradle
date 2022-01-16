@@ -22,6 +22,7 @@ java {
 }
 
 dependencies {
+
     api project(':modules:dependencies:reader:http')
     api project(':modules:dependencies:tools:cache')
 
@@ -38,6 +39,3 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
-test {
-    useJUnitPlatform()
-}

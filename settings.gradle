@@ -36,4 +36,19 @@ include 'modules:dependencies:batch:batch_datasources:batch_rabbitmq'
 include 'modules:dependencies:batch:batch_support'
 
 include 'modules:dependencies:autoconfigure'
+
+// Processing
 include 'modules:processing'
+
+// Supervision
+include 'modules:supervision:backends:model'
+include 'modules:supervision:backends:postgresql'
+include 'modules:supervision:backends:mysql'
+include 'modules:supervision:backends:sqlite'
+include 'modules:supervision:backends:mongodb'
+include 'modules:supervision:backends:rabbitmq'
+include 'modules:supervision:backends:kafka'
+
+include 'modules:supervision:task'
+include 'modules:supervision:service'
+include 'modules:supervision:frontend'

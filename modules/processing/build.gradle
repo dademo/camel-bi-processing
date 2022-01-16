@@ -20,6 +20,7 @@ java {
 }
 
 dependencies {
+
     implementation project(':modules:dependencies:autoconfigure') {
 //        capabilities {
 //            requireCapability("toolsSupport")
@@ -79,6 +80,3 @@ dependencyManagement {
     }
 }
 
-test {
-    useJUnitPlatform()
-}

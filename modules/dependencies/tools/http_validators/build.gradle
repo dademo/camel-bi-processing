@@ -22,6 +22,7 @@ java {
 }
 
 dependencies {
+
     api project(':modules:dependencies:tools:generic_tools')
     api project(':modules:dependencies:reader:http')
 
@@ -34,6 +35,3 @@ dependencies {
     implementation "com.google.code.findbugs:jsr305:${findBugsJsr305Version}"
 }
 
-test {
-    useJUnitPlatform()
-}

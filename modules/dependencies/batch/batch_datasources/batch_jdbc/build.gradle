@@ -22,6 +22,7 @@ java {
 }
 
 dependencies {
+
     implementation project(':modules:dependencies:batch:batch_configuration')
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
@@ -42,6 +43,3 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
-test {
-    useJUnitPlatform()
-}

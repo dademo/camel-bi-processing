@@ -22,6 +22,7 @@ java {
 }
 
 dependencies {
+
     api project(':modules:dependencies:tools:generic_tools')
     api project(':modules:dependencies:data:generic:stream_definitions')
     api project(':modules:dependencies:data:definitions:data_gouv_fr')
@@ -45,6 +46,3 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
-test {
-    useJUnitPlatform()
-}
