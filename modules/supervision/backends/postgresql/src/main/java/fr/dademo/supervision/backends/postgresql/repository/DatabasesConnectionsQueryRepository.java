@@ -6,17 +6,18 @@
 
 package fr.dademo.supervision.backends.postgresql.repository;
 
-import fr.dademo.supervision.backends.postgresql.repository.entities.DatabaseProductVersionEntity;
+import fr.dademo.supervision.backends.postgresql.repository.entities.DatabaseConnectionEntity;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 
 /**
  * @author dademo
  */
 @Repository
-public interface DatabaseProductQueryRepository {
+public interface DatabasesConnectionsQueryRepository {
 
     @Nonnull
-    DatabaseProductVersionEntity getDatabaseProductVersion();
+    List<DatabaseConnectionEntity> getDatabasesConnections();
 }

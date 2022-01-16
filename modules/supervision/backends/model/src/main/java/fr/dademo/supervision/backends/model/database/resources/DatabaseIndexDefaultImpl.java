@@ -4,12 +4,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
 package fr.dademo.supervision.backends.model.database.resources;
 
 import lombok.Builder;
@@ -30,6 +24,10 @@ public class DatabaseIndexDefaultImpl implements DatabaseIndex {
     @Nonnull
     @Size(min = 1)
     private String name;
+
+    @Nonnull
+    @Size(min = 1)
+    private String tableName;
 
     /* https://www.postgresql.org/docs/9.2/monitoring-stats.html#PG-STAT-ALL-TABLES-VIEW */
     @Nullable

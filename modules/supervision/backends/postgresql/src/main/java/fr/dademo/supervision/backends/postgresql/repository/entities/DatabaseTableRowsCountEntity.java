@@ -19,16 +19,17 @@ import java.sql.SQLException;
  */
 @Value
 @Builder
-public class DatabaseTableRowsCount {
+public class DatabaseTableRowsCountEntity {
 
+    @Nonnull
     Long rowCount;
 
-    public static class DatabaseTableRowsCountRowMapper implements RowMapper<DatabaseTableRowsCount> {
+    public static class DatabaseTableRowsCountRowMapper implements RowMapper<DatabaseTableRowsCountEntity> {
 
         @Override
-        public DatabaseTableRowsCount mapRow(@Nonnull ResultSet rs, int rowNum) throws SQLException {
+        public DatabaseTableRowsCountEntity mapRow(@Nonnull ResultSet rs, int rowNum) throws SQLException {
 
-            return DatabaseTableRowsCount.builder()
+            return DatabaseTableRowsCountEntity.builder()
                 .rowCount(rs.getLong(1))
                 .build();
         }

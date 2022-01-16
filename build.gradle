@@ -19,6 +19,14 @@ allprojects {
         project.tasks.withType(Jar) {
             // We enable jar creation
             it.enabled = true
+
+            // We inject project values within jar
+            manifest {
+                attributes 'Name': String.format("%s.%s", project.group, project.name),
+                    'Implementation-Title': project.name,
+                    'Implementation-Version': project.version,
+                    'Implementation-Vendor': 'dademo'
+            }
         }
 
         // Project in dependencies doesn't have BootJar enabled

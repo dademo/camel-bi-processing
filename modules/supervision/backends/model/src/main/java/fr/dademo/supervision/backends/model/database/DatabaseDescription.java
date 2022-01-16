@@ -7,7 +7,7 @@
 package fr.dademo.supervision.backends.model.database;
 
 import fr.dademo.supervision.backends.model.database.resources.DatabaseConnection;
-import fr.dademo.supervision.backends.model.database.resources.DatabaseNamespace;
+import fr.dademo.supervision.backends.model.database.resources.DatabaseSchema;
 import fr.dademo.supervision.backends.model.shared.DataBackendDescription;
 
 import javax.annotation.Nonnull;
@@ -96,5 +96,5 @@ public interface DatabaseDescription extends DataBackendDescription {
     Iterable<DatabaseConnection> getDatabaseConnections();
 
     @Nullable
-    Iterable<DatabaseNamespace> getDatabaseNamespaces();
+    Iterable<DatabaseSchema> getDatabaseSchemas();
 }

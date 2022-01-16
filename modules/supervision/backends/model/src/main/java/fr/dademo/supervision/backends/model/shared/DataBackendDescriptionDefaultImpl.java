@@ -4,14 +4,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
 package fr.dademo.supervision.backends.model.shared;
 
+import fr.dademo.supervision.backends.model.database.DatabaseDescription;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
@@ -76,4 +71,6 @@ public abstract class DataBackendDescriptionDefaultImpl implements DataBackendDe
     @Nullable
     @Min(0)
     private Long availableSizeBytes;
+
+    private Iterable<DatabaseDescription> databasesDescriptions;
 }

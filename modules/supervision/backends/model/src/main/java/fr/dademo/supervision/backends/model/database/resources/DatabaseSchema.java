@@ -6,34 +6,24 @@
 
 package fr.dademo.supervision.backends.model.database.resources;
 
-import lombok.Builder;
-import lombok.Data;
-
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 /**
  * @author dademo
  */
-@Data
-@Builder
-public class DatabaseViewDefaultImpl implements DatabaseView {
+public interface DatabaseSchema {
 
-    /* https://www.postgresql.org/docs/current/view-pg-views.html */
     @Nonnull
     @Size(min = 1)
-    private String name;
+    String getName();
 
     @Nonnull
-    @Min(0)
-    private Long rowsCount;
+    Iterable<DatabaseTable> getTables();
 
-    @Nullable
-    @Min(0)
-    private Long totalSize;
+    @Nonnull
+    Iterable<DatabaseView> getViews();
 
-    @Nullable
-    private String expression;
+    @Nonnull
+    Iterable<DatabaseIndex> getIndexes();
 }

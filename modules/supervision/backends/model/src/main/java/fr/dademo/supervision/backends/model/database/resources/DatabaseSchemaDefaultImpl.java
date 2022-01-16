@@ -4,13 +4,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
 package fr.dademo.supervision.backends.model.database.resources;
+
+import lombok.Builder;
+import lombok.Data;
 
 import javax.annotation.Nonnull;
 import javax.validation.constraints.Size;
@@ -18,18 +15,20 @@ import javax.validation.constraints.Size;
 /**
  * @author dademo
  */
-public interface DatabaseNamespace {
+@Data
+@Builder
+public class DatabaseSchemaDefaultImpl implements DatabaseSchema {
 
     @Nonnull
     @Size(min = 1)
-    String getName();
+    private String name;
 
     @Nonnull
-    Iterable<DatabaseTable> getTables();
+    private Iterable<DatabaseTable> tables;
 
     @Nonnull
-    Iterable<DatabaseView> getViews();
+    private Iterable<DatabaseView> views;
 
     @Nonnull
-    Iterable<DatabaseView> getIndexes();
+    private Iterable<DatabaseIndex> indexes;
 }

@@ -6,7 +6,7 @@
 
 package fr.dademo.supervision.backends.postgresql.repository;
 
-import fr.dademo.supervision.backends.postgresql.repository.entities.DatabaseTableRowsCount;
+import fr.dademo.supervision.backends.postgresql.repository.entities.DatabaseTableRowsCountEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -28,13 +28,13 @@ public class DatabaseTableRowsCountQueryRepositoryImpl implements DatabaseTableR
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @Override
     @Nonnull
-    public DatabaseTableRowsCount getRowCountForTable(@Nonnull String tableSchema, @Nonnull String tableName) {
+    @Override
+    public DatabaseTableRowsCountEntity getRowCountForTable(@Nonnull String tableSchema, @Nonnull String tableName) {
 
         return Objects.requireNonNull(jdbcTemplate.queryForObject(
             String.format(QUERY, tableSchema, tableName),
-            new DatabaseTableRowsCount.DatabaseTableRowsCountRowMapper()
+            new DatabaseTableRowsCountEntity.DatabaseTableRowsCountRowMapper()
         ));
     }
 }

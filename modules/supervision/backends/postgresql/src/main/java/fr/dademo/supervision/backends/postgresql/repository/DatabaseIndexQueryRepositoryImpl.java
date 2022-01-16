@@ -6,27 +6,30 @@
 
 package fr.dademo.supervision.backends.postgresql.repository;
 
-import fr.dademo.supervision.backends.postgresql.repository.entities.DatabaseProductVersionEntity;
+import fr.dademo.supervision.backends.postgresql.repository.entities.DatabaseIndexEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.annotation.Nonnull;
-import java.util.Objects;
+import java.util.List;
 
 import static fr.dademo.supervision.backends.postgresql.configuration.ModuleBeans.MODULE_JDBC_TEMPLATE_BEAN_NAME;
 
 /**
  * @author dademo
  */
-public class DatabaseProductQueryRepositoryImpl implements DatabaseProductQueryRepository {
+public class DatabaseIndexQueryRepositoryImpl implements DatabaseIndexQueryRepository {
 
     private static final String QUERY = "" +
         "SELECT " +
-        "  VERSION(), " +
-        "  SETTING " +
-        "FROM PG_CATALOG.PG_SETTINGS " +
-        "WHERE name = 'server_version' ";
+        "  SCHEMANAME, " +
+        "  RELNAME, " +
+        "  INDEXRELNAME, " +
+        "  IDX_SCAN, " +
+        "  IDX_TUP_READ, " +
+        "  IDX_TUP_FETCH " +
+        "FROM PG_STAT_ALL_INDEXES ";
 
     @Qualifier(MODULE_JDBC_TEMPLATE_BEAN_NAME)
     @Autowired
@@ -34,9 +37,7 @@ public class DatabaseProductQueryRepositoryImpl implements DatabaseProductQueryR
 
     @Nonnull
     @Override
-    public DatabaseProductVersionEntity getDatabaseProductVersion() {
-        return Objects.requireNonNull(
-            jdbcTemplate.queryForObject(QUERY, new DatabaseProductVersionEntity.DatabaseProductRowMapper())
-        );
+    public List<DatabaseIndexEntity> getDatabaseIndexes() {
+        return jdbcTemplate.query(QUERY, new DatabaseIndexEntity.DatabaseIndexEntityRowMapper());
     }
 }

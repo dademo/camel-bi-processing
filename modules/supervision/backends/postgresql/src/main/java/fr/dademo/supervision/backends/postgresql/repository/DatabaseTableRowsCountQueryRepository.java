@@ -6,7 +6,7 @@
 
 package fr.dademo.supervision.backends.postgresql.repository;
 
-import fr.dademo.supervision.backends.postgresql.repository.entities.DatabaseTableRowsCount;
+import fr.dademo.supervision.backends.postgresql.repository.entities.DatabaseTableRowsCountEntity;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Nonnull;
@@ -18,5 +18,5 @@ import javax.annotation.Nonnull;
 public interface DatabaseTableRowsCountQueryRepository {
 
     @Nonnull
-    DatabaseTableRowsCount getRowCountForTable(@Nonnull String tableSchema, @Nonnull String tableName);
+    DatabaseTableRowsCountEntity getRowCountForTable(@Nonnull String tableSchema, @Nonnull String tableName);
 }

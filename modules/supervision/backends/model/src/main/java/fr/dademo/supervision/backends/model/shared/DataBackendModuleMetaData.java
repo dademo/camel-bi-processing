@@ -4,12 +4,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
 package fr.dademo.supervision.backends.model.shared;
 
 import javax.annotation.Nonnull;
@@ -32,6 +26,15 @@ public interface DataBackendModuleMetaData {
     String getCollectionModuleName();
 
     /**
+     * Get this module name.
+     *
+     * @return this module name
+     */
+    @Nonnull
+    @Min(1)
+    String getCollectionModuleTitle();
+
+    /**
      * Get this module version.
      *
      * @return this module version
@@ -39,4 +42,13 @@ public interface DataBackendModuleMetaData {
     @Nonnull
     @Min(1)
     String getCollectionModuleVersion();
+
+    /**
+     * Get this module vendor.
+     *
+     * @return this module vendor
+     */
+    @Nonnull
+    @Min(1)
+    String getCollectionModuleVendor();
 }

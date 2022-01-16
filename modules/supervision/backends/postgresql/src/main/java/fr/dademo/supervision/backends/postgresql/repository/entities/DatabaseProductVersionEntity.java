@@ -19,7 +19,7 @@ import java.sql.SQLException;
  */
 @Value
 @Builder
-public class DatabaseProductVersion {
+public class DatabaseProductVersionEntity {
 
     @Nonnull
     String productNameFull;
@@ -27,12 +27,12 @@ public class DatabaseProductVersion {
     @Nonnull
     String productVersion;
 
-    public static class DatabaseProductRowMapper implements RowMapper<DatabaseProductVersion> {
+    public static class DatabaseProductRowMapper implements RowMapper<DatabaseProductVersionEntity> {
 
         @Override
-        public DatabaseProductVersion mapRow(ResultSet rs, int rowNum) throws SQLException {
+        public DatabaseProductVersionEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-            return DatabaseProductVersion.builder()
+            return DatabaseProductVersionEntity.builder()
                 .productNameFull(rs.getString(1))
                 .productVersion(rs.getString(2))
                 .build();

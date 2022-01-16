@@ -7,7 +7,7 @@
 package fr.dademo.supervision.backends.model.database;
 
 import fr.dademo.supervision.backends.model.database.resources.DatabaseConnection;
-import fr.dademo.supervision.backends.model.database.resources.DatabaseNamespace;
+import fr.dademo.supervision.backends.model.database.resources.DatabaseSchema;
 import fr.dademo.supervision.backends.model.shared.DataBackendDescriptionDefaultImpl;
 import fr.dademo.supervision.backends.model.shared.DataBackendKind;
 import lombok.Data;
@@ -27,64 +27,83 @@ import java.util.Date;
 @Data
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
-public class DatabaseDescriptionDefaultImpl extends DataBackendDescriptionDefaultImpl {
+public class DatabaseDescriptionDefaultImpl extends DataBackendDescriptionDefaultImpl implements DatabaseDescription {
 
     // pg_postmaster_start_time
     @Nullable
-    Date startTime;
+    private Date startTime;
+
     @Nonnull
     @Size(min = 1)
-    String name;
+    private String name;
+
     @Nullable
     @Min(0)
-    Long memoryUsageBytes;
+    private Long memoryUsageBytes;
+
     @Nullable
     @Min(0)
-    Long cpuUsageMilliCPU;
+    private Long cpuUsageMilliCPU;
+
     /* https://www.postgresql.org/docs/9.2/monitoring-stats.html#PG-STAT-DATABASE-VIEW */
     @Nullable
     @Min(0)
-    Long commitCounts;
+    private Long commitCounts;
+
     @Nullable
     @Min(0)
-    Long rollbackCounts;
+    private Long rollbackCounts;
+
     @Nullable
     @Min(0)
-    Long bufferBlocksRead;
+    private Long bufferBlocksRead;
+
     @Nullable
     @Min(0)
-    Long diskBlocksRead;
+    private Long diskBlocksRead;
+
     @Nullable
     @Min(0)
-    Long returnedRowsCount;
+    private Long returnedRowsCount;
+
     @Nullable
     @Min(0)
-    Long fetchedRowsCount;
+    private Long fetchedRowsCount;
+
     @Nullable
     @Min(0)
-    Long insertedRowsCount;
+    private Long insertedRowsCount;
+
     @Nullable
     @Min(0)
-    Long updatedRowsCount;
+    private Long updatedRowsCount;
+
     @Nullable
     @Min(0)
-    Long deletedRowsCount;
+    private Long deletedRowsCount;
+
     @Nullable
     @Min(0)
-    Long conflictsCount;
+    private Long conflictsCount;
+
     @Nullable
     @Min(0)
-    Long deadlocksCount;
+    private Long deadlocksCount;
+
     @Nullable
-    Duration readTime;
+    private Duration readTime;
+
     @Nullable
-    Duration writeTime;
+    private Duration writeTime;
+
     @Nullable
-    Date lastStatisticsResetTime;
+    private Date lastStatisticsResetTime;
+
     @Nullable
-    Iterable<DatabaseConnection> databaseConnections;
+    private Iterable<DatabaseConnection> databaseConnections;
+
     @Nullable
-    Iterable<DatabaseNamespace> databaseNamespaces;
+    private Iterable<DatabaseSchema> databaseSchemas;
 
     @Nonnull
     @Override

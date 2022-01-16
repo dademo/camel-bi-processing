@@ -6,11 +6,18 @@
 
 package fr.dademo.supervision.backends.postgresql.repository;
 
+import fr.dademo.supervision.backends.postgresql.repository.entities.DatabaseIndexEntity;
 import org.springframework.stereotype.Repository;
+
+import javax.annotation.Nonnull;
+import java.util.List;
 
 /**
  * @author dademo
  */
 @Repository
-public interface DatabaseStatsQueryRepository {
+public interface DatabaseIndexQueryRepository {
+
+    @Nonnull
+    List<DatabaseIndexEntity> getDatabaseIndexes();
 }
