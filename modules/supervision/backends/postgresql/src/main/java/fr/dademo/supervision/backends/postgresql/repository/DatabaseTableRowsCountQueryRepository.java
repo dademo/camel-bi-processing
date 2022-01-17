@@ -7,14 +7,12 @@
 package fr.dademo.supervision.backends.postgresql.repository;
 
 import fr.dademo.supervision.backends.postgresql.repository.entities.DatabaseTableRowsCountEntity;
-import org.springframework.stereotype.Repository;
 
 import javax.annotation.Nonnull;
 
 /**
  * @author dademo
  */
-@Repository
 public interface DatabaseTableRowsCountQueryRepository {
 
     @Nonnull

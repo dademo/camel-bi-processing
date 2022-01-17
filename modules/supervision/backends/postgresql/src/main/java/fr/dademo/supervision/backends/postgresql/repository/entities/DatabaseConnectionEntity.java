@@ -12,7 +12,6 @@ import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.RowMapper;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -20,6 +19,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -29,7 +29,7 @@ import java.util.Optional;
 @Builder
 public class DatabaseConnectionEntity {
 
-    @Nonnull
+    @Nullable
     DatabaseConnectionState connectionState;
 
     @Nullable
@@ -112,7 +112,7 @@ public class DatabaseConnectionEntity {
         private Optional<DatabaseConnectionState> getFromValue(String value) {
 
             return Arrays.stream(DatabaseConnectionState.values())
-                .filter(databaseConnectionState -> value.equals(databaseConnectionState.getValue()))
+                .filter(databaseConnectionState -> Objects.equals(value, databaseConnectionState.getValue()))
                 .findFirst();
         }
 

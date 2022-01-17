@@ -10,7 +10,6 @@ package fr.dademo.supervision.backends.model.shared;
  * @author dademo
  */
 public enum DataBackendKind {
-
     DATABASE,
     FILE_SYSTEM,
     MESSAGE_QUEUE,

@@ -24,7 +24,6 @@ public interface DatabaseIndex {
     @Size(min = 1)
     String getTableName();
 
-    /* https://www.postgresql.org/docs/9.2/monitoring-stats.html#PG-STAT-ALL-INDEXES-VIEW */
     @Nullable
     @Min(0)
     Long getIndexScansCount();

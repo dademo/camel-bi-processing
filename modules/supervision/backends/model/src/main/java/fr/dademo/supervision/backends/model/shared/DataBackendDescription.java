@@ -10,14 +10,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
-import java.net.URL;
 
 /**
  * Description of a supervised data backend.
  *
  * @author dademo
  */
-public interface DataBackendDescription {
+public interface DataBackendDescription extends DataBackendDescriptionBase {
 
     /**
      * Get the backend product name.
@@ -40,7 +39,7 @@ public interface DataBackendDescription {
      *
      * @return the usual name of the data backend
      */
-    @Nonnull
+    @Nullable
     String getBackendName();
 
     /**
@@ -48,8 +47,8 @@ public interface DataBackendDescription {
      *
      * @return the data backend primary URL
      */
-    @Nonnull
-    URL getPrimaryUrl();
+    @Nullable
+    String getPrimaryUrl();
 
     /**
      * Get the URL of all nodes across the cluster.
@@ -58,7 +57,7 @@ public interface DataBackendDescription {
      */
     @Size(min = 1)
     @Nonnull
-    Iterable<URL> getNodeUrls();
+    Iterable<String> getNodeUrls();
 
     /**
      * Get the data backend kind.
@@ -66,7 +65,7 @@ public interface DataBackendDescription {
      * @return the data backend kind
      */
     @Nonnull
-    DataBackendKind getKind();
+    DataBackendKind getBackendKind();
 
 
     /**
@@ -101,7 +100,6 @@ public interface DataBackendDescription {
     @Min(1)
     Integer getClusterSize();
 
-
     /**
      * Get the number of primary nodes/controllers.
      *
@@ -111,7 +109,6 @@ public interface DataBackendDescription {
     @Min(1)
     Integer getPrimaryCount();
 
-
     /**
      * Get the number of replicas.
      *
@@ -120,31 +117,4 @@ public interface DataBackendDescription {
     @Nullable
     @Min(0)
     Integer getReplicaCount();
-
-    /**
-     * The data size.
-     *
-     * @return the data size
-     */
-    @Nullable
-    @Min(0)
-    Long getSizeBytes();
-
-    /**
-     * Get the effective data size (space really used on the underlying file system).
-     *
-     * @return the effective data size
-     */
-    @Nullable
-    @Min(0)
-    Long getEffectiveSizeBytes();
-
-    /**
-     * Get the available size for the data backend.
-     *
-     * @return the available size for the data backend
-     */
-    @Nullable
-    @Min(0)
-    Long getAvailableSizeBytes();
 }

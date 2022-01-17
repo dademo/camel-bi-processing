@@ -49,6 +49,7 @@ include 'modules:supervision:backends:mongodb'
 include 'modules:supervision:backends:rabbitmq'
 include 'modules:supervision:backends:kafka'
 
+include 'modules:supervision:data_model'
 include 'modules:supervision:task'
 include 'modules:supervision:service'
 include 'modules:supervision:frontend'

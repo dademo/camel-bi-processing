@@ -21,7 +21,6 @@ import javax.validation.constraints.Size;
 @Builder
 public class DatabaseViewDefaultImpl implements DatabaseView {
 
-    /* https://www.postgresql.org/docs/current/view-pg-views.html */
     @Nonnull
     @Size(min = 1)
     private String name;

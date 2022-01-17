@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: Supervision task runner
+  #datasource:
+  #  url: jdbc:postgresql://localhost:5432/bi
+  #  username: postgres
+  #  password: postgres
+  #  driver-class-name: org.postgresql.Driver
+
+module:
+  data-source-url: jdbc:postgresql://localhost:5432/bi
+  username: postgres
+  password: postgres
+
+logging:
+  level:
+    root: INFO
+    fr.dademo: DEBUG

@@ -16,7 +16,6 @@ import javax.validation.constraints.Size;
  */
 public interface DatabaseView {
 
-    /* https://www.postgresql.org/docs/current/view-pg-views.html */
     @Nonnull
     @Size(min = 1)
     String getName();

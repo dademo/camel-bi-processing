@@ -8,11 +8,11 @@
 plugins {
     id 'org.springframework.boot' version "${springBootVersion}"
     id 'io.spring.dependency-management' version "${springDependencyManagement}"
-    id 'java'
+    id 'java-library'
 }
 
 version '1.0.0-SNAPSHOT'
-archivesBaseName = 'dademo-supervision-bakends-model'
+archivesBaseName = 'dademo-supervision-bakends-postgresql'
 group 'fr.dademo.supervision.backends.model'
 
 java {
@@ -22,7 +22,7 @@ java {
 
 dependencies {
 
-    implementation project(':modules:supervision:backends:model')
+    api project(':modules:supervision:backends:model')
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"

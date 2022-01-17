@@ -20,7 +20,6 @@ public class DatabaseStatisticsToBuilderValueMapper implements Function<Database
     public DatabaseDescriptionDefaultImpl.DatabaseDescriptionDefaultImplBuilder<?, ?> apply(DatabaseStatisticsEntity databaseStatisticsEntity) {
 
         return DatabaseDescriptionDefaultImpl.builder()
-            .startTime(databaseStatisticsEntity.getStartTime())
             .name(databaseStatisticsEntity.getName())
             .commitCounts(databaseStatisticsEntity.getCommitCounts())
             .rollbackCounts(databaseStatisticsEntity.getRollbackCounts())

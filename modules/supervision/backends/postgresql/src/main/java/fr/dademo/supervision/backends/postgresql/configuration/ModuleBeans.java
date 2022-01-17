@@ -29,7 +29,7 @@ public class ModuleBeans {
 
         final var dataSourceBuilder = DataSourceBuilder.create();
         dataSourceBuilder.driverClassName(DRIVER_CLASS_POSTGRESQL);
-        dataSourceBuilder.url(moduleConfiguration.getDataSourceUrl().toString());
+        dataSourceBuilder.url(moduleConfiguration.getDataSourceUrl());
         dataSourceBuilder.username(moduleConfiguration.getUsername());
         dataSourceBuilder.password(moduleConfiguration.getPassword());
         return dataSourceBuilder.build();

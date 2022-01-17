@@ -8,10 +8,12 @@ package fr.dademo.supervision.backends.model;
 
 import fr.dademo.supervision.backends.model.shared.DataBackendDescription;
 import fr.dademo.supervision.backends.model.shared.DataBackendModuleMetaData;
+import org.springframework.stereotype.Service;
 
 /**
  * @author dademo
  */
+@Service
 public interface DataBackendStateFetchService {
 
     DataBackendModuleMetaData getModuleMetaData();

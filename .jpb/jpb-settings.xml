@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ This Source Code Form is subject to the terms of the Mozilla Public
+  ~ License, v. 2.0. If a copy of the MPL was not distributed with this
+  ~ file, You can obtain one at https://mozilla.org/MPL/2.0/.
+  -->
+
+<project version="4">
+    <component name="JpaPluginProjectSettings">
+        <option name="entityNameTemplate"/>
+        <option name="generateSerialVersionUID" value="true"/>
+        <option name="isLombokGetterAndSetter" value="true"/>
+        <option name="isLombokToString" value="true"/>
+        <option name="isLombokRequiredArgsConstructor" value="true"/>
+        <option name="lastSelectedLanguage" value="Java"/>
+    </component>
+</project>

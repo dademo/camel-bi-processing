@@ -33,7 +33,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 
     // Other libraries
-    implementation 'org.flywaydb:flyway-core'
+    implementation "org.flywaydb:flyway-core:${flywayVersion}"
     implementation "com.zaxxer:HikariCP:${hikariCPVersion}"
     implementation "org.jooq:jooq:${jooqVersion}"
     implementation "jakarta.xml.bind:jakarta.xml.bind-api:${jakartaBindApiVersion}" // To avoid Jooq warnings

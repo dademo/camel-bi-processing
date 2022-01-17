@@ -22,9 +22,7 @@ import java.util.Date;
 @Builder
 public class DatabaseConnectionDefaultImpl implements DatabaseConnection {
 
-    /* https://www.postgresql.org/docs/9.2/monitoring-stats.html#PG-STAT-ACTIVITY-VIEW */
     @Nullable
-    @Size(min = 1)
     private DatabaseConnectionState connectionState;
 
     @Nullable

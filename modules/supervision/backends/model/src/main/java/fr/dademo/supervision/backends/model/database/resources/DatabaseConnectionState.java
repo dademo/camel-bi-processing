@@ -8,8 +8,6 @@ package fr.dademo.supervision.backends.model.database.resources;
 
 import lombok.Getter;
 
-/* Based on https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-ACTIVITY-VIEW */
-
 /**
  * @author dademo
  */

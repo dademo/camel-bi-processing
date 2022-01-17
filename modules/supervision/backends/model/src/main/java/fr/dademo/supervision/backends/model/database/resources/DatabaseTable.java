@@ -29,7 +29,6 @@ public interface DatabaseTable {
     @Min(0)
     Long getTotalSize();
 
-    /* https://www.postgresql.org/docs/9.2/monitoring-stats.html#PG-STAT-ALL-TABLES-VIEW */
     @Nullable
     @Min(0)
     Long getSequentialScansCount();
@@ -102,7 +101,6 @@ public interface DatabaseTable {
     @Min(0)
     Long getAutoAnalyzeCount();
 
-    /* https://www.postgresql.org/docs/9.2/monitoring-stats.html#PG-STATIO-ALL-TABLES-VIEW */
     @Nullable
     @Min(0)
     Long getTableBlocksDiskRead();

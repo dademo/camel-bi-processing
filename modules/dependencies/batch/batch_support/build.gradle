@@ -36,7 +36,7 @@ dependencies {
     implementation 'org.springframework.batch:spring-batch-core'
 
     // Other libraries
-    implementation 'org.flywaydb:flyway-core'
+    implementation "org.flywaydb:flyway-core:${flywayVersion}"
     implementation "com.zaxxer:HikariCP:${hikariCPVersion}"
     implementation "org.jooq:jooq:${jooqVersion}"
     implementation 'org.springframework.amqp:spring-amqp'

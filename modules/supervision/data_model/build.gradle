@@ -1,0 +1,45 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+// https://start.spring.io/#!type=gradle-project&language=java&platformVersion=2.5.6&packaging=jar&jvmVersion=11&groupId=fr.dademo&artifactId=bi.companies&name=bi.companies&description=BI%20analysis%20using%20french%20government%20Open%20Data&packageName=fr.dademo.bi.companies&dependencies=lombok,configuration-processor,jdbc,data-jdbc,flyway,mariadb,postgresql,data-mongodb,data-couchbase,amqp,kafka,batch,validation,testcontainers,influx
+plugins {
+    id 'org.springframework.boot' version "${springBootVersion}"
+    id 'io.spring.dependency-management' version "${springDependencyManagement}"
+    id 'java-library'
+}
+
+version '1.0.0-SNAPSHOT'
+archivesBaseName = 'dademo-supervision-data_model'
+group 'fr.dademo.supervision.data_model'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+dependencies {
+
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation "org.flywaydb:flyway-core:${flywayVersion}"
+
+    // Other libraries
+    implementation "javax.validation:validation-api:${javaxValidationApiVersion}"
+    implementation "com.google.code.findbugs:jsr305:${findBugsJsr305Version}"
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+

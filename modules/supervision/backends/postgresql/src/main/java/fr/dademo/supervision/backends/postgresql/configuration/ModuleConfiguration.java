@@ -7,19 +7,27 @@
 package fr.dademo.supervision.backends.postgresql.configuration;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
-import java.net.URL;
+import javax.annotation.Nonnull;
 
 /**
  * @author dademo
  */
-@ConfigurationProperties(prefix = "module")
 @Data
+@NoArgsConstructor
+@Configuration
+@ConfigurationProperties(prefix = "module")
 public class ModuleConfiguration {
 
-    private URL dataSourceUrl;
+    @Nonnull
+    private String dataSourceUrl;
 
+    @Nonnull
     private String username;
+
+    @Nonnull
     private String password;
 }

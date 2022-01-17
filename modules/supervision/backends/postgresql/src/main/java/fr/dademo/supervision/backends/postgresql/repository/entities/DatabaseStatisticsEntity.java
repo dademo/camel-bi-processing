@@ -24,8 +24,6 @@ import java.util.Date;
 @Builder
 public class DatabaseStatisticsEntity {
 
-
-    // pg_postmaster_start_time
     @Nullable
     Date startTime;
 

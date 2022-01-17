@@ -9,6 +9,7 @@ package fr.dademo.supervision.backends.postgresql.service;
 import fr.dademo.supervision.backends.model.DataBackendStateFetchService;
 import fr.dademo.supervision.backends.model.database.DatabaseDescription;
 import fr.dademo.supervision.backends.model.database.DatabaseDescriptionDefaultImpl;
+import fr.dademo.supervision.backends.model.database.GlobalDatabaseDescriptionDefaultImpl;
 import fr.dademo.supervision.backends.model.database.resources.*;
 import fr.dademo.supervision.backends.model.shared.DataBackendDescription;
 import fr.dademo.supervision.backends.model.shared.DataBackendModuleMetaData;
@@ -22,9 +23,11 @@ import fr.dademo.supervision.backends.postgresql.service.mappers.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
+import javax.annotation.Nullable;
 import javax.sql.DataSource;
-import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,6 +42,7 @@ import static fr.dademo.supervision.backends.postgresql.configuration.ModuleBean
  */
 @Slf4j
 @SuppressWarnings("unused")
+@Service
 public class PostgreSQLBackendStateFetchService implements DataBackendStateFetchService {
 
     public static final String MODULE_NAME = "";
@@ -64,6 +68,9 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
     private DatabaseTableRowsCountQueryRepository databaseTableRowsCountQueryRepository;
 
     @Autowired
+    private DatabaseGlobalStatisticsQueryRepository databaseGlobalStatisticsQueryRepository;
+
+    @Autowired
     private DatabasesStatisticsQueryRepository databasesStatisticsQueryRepository;
 
     @Autowired
@@ -82,17 +89,28 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
     @Override
     public DataBackendDescription getDataBackendDescription() {
 
-        final var objectBuilder = DatabaseDescriptionDefaultImpl.builder()
+        final var objectBuilder = GlobalDatabaseDescriptionDefaultImpl.builder()
             .dataBackendState(DataBackendState.READY)
             .dataBackendStateExplanation(null)
-            .backendName(moduleConfiguration.getDataSourceUrl().getHost())
+            .backendName(getConnectionUrl())
             .primaryUrl(moduleConfiguration.getDataSourceUrl())
-            .databasesDescriptions(getAllDatabasesDescriptions())
-            .databaseConnections(getAllDatabasesConnections());
+            .startTime(databaseGlobalStatisticsQueryRepository.getDatabaseStartTime())
+            .databaseConnections(getAllDatabasesConnections())
+            .databasesDescriptions(getAllDatabasesDescriptions());
         applyDatabaseVersion(objectBuilder);
         applyReplication(objectBuilder);
 
         return objectBuilder.build();
+    }
+
+    @Nullable
+    private String getConnectionUrl() {
+
+        try (var connection = dataSource.getConnection()) {
+            return connection.getMetaData().getURL();
+        } catch (SQLException e) {
+            return null;
+        }
     }
 
     private List<DatabaseDescription> getAllDatabasesDescriptions() {
@@ -115,7 +133,7 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
     }
 
 
-    private void applyDatabaseVersion(DatabaseDescriptionDefaultImpl.DatabaseDescriptionDefaultImplBuilder<?, ?> objectBuilder) {
+    private void applyDatabaseVersion(GlobalDatabaseDescriptionDefaultImpl.GlobalDatabaseDescriptionDefaultImplBuilder<?, ?> objectBuilder) {
 
         final var databaseProductVersion = databaseProductQueryRepository.getDatabaseProductVersion();
         objectBuilder
@@ -123,10 +141,10 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
             .backendProductVersion(databaseProductVersion.getProductVersion());
     }
 
-    private void applyReplication(DatabaseDescriptionDefaultImpl.DatabaseDescriptionDefaultImplBuilder<?, ?> objectBuilder) {
+    private void applyReplication(GlobalDatabaseDescriptionDefaultImpl.GlobalDatabaseDescriptionDefaultImplBuilder<?, ?> objectBuilder) {
 
         // TODO: replication hosts
-        final var replicationHosts = Collections.<URL>emptyList();
+        final var replicationHosts = Collections.<String>emptyList();
         objectBuilder
             .nodeUrls(Stream.concat(
                 replicationHosts.stream(),

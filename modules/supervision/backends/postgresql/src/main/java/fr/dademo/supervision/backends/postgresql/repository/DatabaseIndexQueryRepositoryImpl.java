@@ -10,6 +10,7 @@ import fr.dademo.supervision.backends.postgresql.repository.entities.DatabaseInd
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -19,6 +20,7 @@ import static fr.dademo.supervision.backends.postgresql.configuration.ModuleBean
 /**
  * @author dademo
  */
+@Repository
 public class DatabaseIndexQueryRepositoryImpl implements DatabaseIndexQueryRepository {
 
     private static final String QUERY = "" +

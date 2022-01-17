@@ -29,7 +29,6 @@ public class DatabaseIndexDefaultImpl implements DatabaseIndex {
     @Size(min = 1)
     private String tableName;
 
-    /* https://www.postgresql.org/docs/9.2/monitoring-stats.html#PG-STAT-ALL-TABLES-VIEW */
     @Nullable
     @Min(0)
     private Long indexScansCount;

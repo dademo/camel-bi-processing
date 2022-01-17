@@ -6,12 +6,11 @@
 
 package fr.dademo.supervision.backends.model.database;
 
-import fr.dademo.supervision.backends.model.database.resources.DatabaseConnection;
 import fr.dademo.supervision.backends.model.database.resources.DatabaseSchema;
-import fr.dademo.supervision.backends.model.shared.DataBackendDescriptionDefaultImpl;
-import fr.dademo.supervision.backends.model.shared.DataBackendKind;
+import fr.dademo.supervision.backends.model.shared.DataBackendDescriptionBaseDefaultImpl;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 
 import javax.annotation.Nonnull;
@@ -27,25 +26,12 @@ import java.util.Date;
 @Data
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
-public class DatabaseDescriptionDefaultImpl extends DataBackendDescriptionDefaultImpl implements DatabaseDescription {
-
-    // pg_postmaster_start_time
-    @Nullable
-    private Date startTime;
+public class DatabaseDescriptionDefaultImpl extends DataBackendDescriptionBaseDefaultImpl implements DatabaseDescription {
 
     @Nonnull
     @Size(min = 1)
     private String name;
 
-    @Nullable
-    @Min(0)
-    private Long memoryUsageBytes;
-
-    @Nullable
-    @Min(0)
-    private Long cpuUsageMilliCPU;
-
-    /* https://www.postgresql.org/docs/9.2/monitoring-stats.html#PG-STAT-DATABASE-VIEW */
     @Nullable
     @Min(0)
     private Long commitCounts;
@@ -99,15 +85,6 @@ public class DatabaseDescriptionDefaultImpl extends DataBackendDescriptionDefaul
     @Nullable
     private Date lastStatisticsResetTime;
 
-    @Nullable
-    private Iterable<DatabaseConnection> databaseConnections;
-
-    @Nullable
+    @NonNull
     private Iterable<DatabaseSchema> databaseSchemas;
-
-    @Nonnull
-    @Override
-    public final DataBackendKind getKind() {
-        return DataBackendKind.DATABASE;
-    }
 }

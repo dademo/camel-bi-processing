@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
@@ -25,13 +26,14 @@ import static fr.dademo.supervision.backends.postgresql.configuration.ModuleBean
  * @author dademo
  */
 @Slf4j
+@Repository
 public class DatabasesConnectionsQueryRepositoryImpl implements DatabasesConnectionsQueryRepository {
 
     private static final String QUERY = "" +
         "SELECT " +
         "  STATE, " +
-        "  DATNAME, " +
         "  PID, " +
+        "  DATNAME, " +
         "  USENAME, " +
         "  APPLICATION_NAME, " +
         "  REGEXP_REPLACE(CLIENT_ADDR::VARCHAR, '\\/.+$', ''), " +
@@ -41,7 +43,8 @@ public class DatabasesConnectionsQueryRepositoryImpl implements DatabasesConnect
         "  XACT_START, " +
         "  QUERY_START, " +
         "  STATE_CHANGE, " +
-        "  WAITING, " +
+        "  WAIT_EVENT_TYPE, " +
+        "  WAIT_EVENT, " +
         "  QUERY %s " +
         "FROM PG_CATALOG.PG_STAT_ACTIVITY ";
 

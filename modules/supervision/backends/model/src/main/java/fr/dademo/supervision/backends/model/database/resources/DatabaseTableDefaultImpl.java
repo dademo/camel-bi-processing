@@ -34,7 +34,6 @@ public class DatabaseTableDefaultImpl implements DatabaseTable {
     @Min(0)
     private Long totalSize;
 
-    /* https://www.postgresql.org/docs/9.2/monitoring-stats.html#PG-STAT-ALL-TABLES-VIEW */
     @Nullable
     @Min(0)
     private Long sequentialScansCount;
@@ -107,7 +106,6 @@ public class DatabaseTableDefaultImpl implements DatabaseTable {
     @Min(0)
     private Long autoAnalyzeCount;
 
-    /* https://www.postgresql.org/docs/9.2/monitoring-stats.html#PG-STATIO-ALL-TABLES-VIEW */
     @Nullable
     @Min(0)
     private Long tableBlocksDiskRead;

@@ -23,6 +23,9 @@ java {
 dependencies {
 
     implementation project(':modules:supervision:backends:model')
+    implementation project(':modules:supervision:data_model')
+
+    runtimeOnly project(':modules:supervision:backends:postgresql')
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
@@ -30,8 +33,12 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.cloud:spring-cloud-starter-task'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation "org.flywaydb:flyway-core:${flywayVersion}"
+    implementation "org.mapstruct:mapstruct:${mapStructVersion}"
     runtimeOnly 'org.postgresql:postgresql'
+    runtimeOnly 'org.hsqldb:hsqldb'
 
     // Other libraries
     implementation "javax.validation:validation-api:${javaxValidationApiVersion}"

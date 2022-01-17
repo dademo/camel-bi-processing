@@ -6,9 +6,9 @@
 
 package fr.dademo.supervision.backends.model.database;
 
-import fr.dademo.supervision.backends.model.database.resources.DatabaseConnection;
 import fr.dademo.supervision.backends.model.database.resources.DatabaseSchema;
-import fr.dademo.supervision.backends.model.shared.DataBackendDescription;
+import fr.dademo.supervision.backends.model.shared.DataBackendDescriptionBase;
+import lombok.NonNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -20,25 +20,12 @@ import java.util.Date;
 /**
  * @author dademo
  */
-public interface DatabaseDescription extends DataBackendDescription {
-
-    // pg_postmaster_start_time
-    @Nullable
-    Date getStartTime();
+public interface DatabaseDescription extends DataBackendDescriptionBase {
 
     @Nonnull
     @Size(min = 1)
     String getName();
 
-    @Nullable
-    @Min(0)
-    Long getMemoryUsageBytes();
-
-    @Nullable
-    @Min(0)
-    Long getCpuUsageMilliCPU();
-
-    /* https://www.postgresql.org/docs/9.2/monitoring-stats.html#PG-STAT-DATABASE-VIEW */
     @Nullable
     @Min(0)
     Long getCommitCounts();
@@ -92,9 +79,6 @@ public interface DatabaseDescription extends DataBackendDescription {
     @Nullable
     Date getLastStatisticsResetTime();
 
-    @Nullable
-    Iterable<DatabaseConnection> getDatabaseConnections();
-
-    @Nullable
+    @NonNull
     Iterable<DatabaseSchema> getDatabaseSchemas();
 }

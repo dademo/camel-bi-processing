@@ -6,15 +6,14 @@
 
 package fr.dademo.supervision.backends.model.shared;
 
-import fr.dademo.supervision.backends.model.database.DatabaseDescription;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
-import java.net.URL;
 
 /**
  * Description of a supervised data backend.
@@ -22,8 +21,9 @@ import java.net.URL;
  * @author dademo
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @SuperBuilder
-public abstract class DataBackendDescriptionDefaultImpl implements DataBackendDescription {
+public abstract class DataBackendDescriptionDefaultImpl extends DataBackendDescriptionBaseDefaultImpl implements DataBackendDescription {
 
     @Nonnull
     private String backendProductName;
@@ -31,15 +31,15 @@ public abstract class DataBackendDescriptionDefaultImpl implements DataBackendDe
     @Nonnull
     private String backendProductVersion;
 
-    @Nonnull
+    @Nullable
     private String backendName;
 
     @Nonnull
-    private URL primaryUrl;
+    private String primaryUrl;
 
     @Size(min = 1)
     @Nonnull
-    private Iterable<URL> nodeUrls;
+    private Iterable<String> nodeUrls;
 
     @Nonnull
     private DataBackendState dataBackendState;
@@ -59,18 +59,4 @@ public abstract class DataBackendDescriptionDefaultImpl implements DataBackendDe
     @Nullable
     @Min(0)
     private Integer replicaCount;
-
-    @Nullable
-    @Min(0)
-    private Long sizeBytes;
-
-    @Nullable
-    @Min(0)
-    private Long effectiveSizeBytes;
-
-    @Nullable
-    @Min(0)
-    private Long availableSizeBytes;
-
-    private Iterable<DatabaseDescription> databasesDescriptions;
 }
