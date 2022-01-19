@@ -25,7 +25,7 @@ public class DatabaseViewDefaultImpl implements DatabaseView {
     @Size(min = 1)
     private String name;
 
-    @Nonnull
+    @Nullable
     @Min(0)
     private Long rowsCount;
 

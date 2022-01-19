@@ -86,7 +86,6 @@ public class DatabaseTableEntity {
     @Nullable
     Long autoAnalyzeCount;
 
-    /* https://www.postgresql.org/docs/9.2/monitoring-stats.html#PG-STATIO-ALL-TABLES-VIEW */
     @Nullable
     Long tableBlocksDiskRead;
 
@@ -133,10 +132,10 @@ public class DatabaseTableEntity {
                 .hotUpdatedRowsCount(rs.getLong(11))
                 .liveRowsCount(rs.getLong(12))
                 .deadRowsCount(rs.getLong(13))
-                .lastVacuum(rs.getDate(14))
-                .lastAutoVacuum(rs.getDate(15))
-                .lastAnalyze(rs.getDate(16))
-                .lastAutoAnalyze(rs.getDate(17))
+                .lastVacuum(rs.getTimestamp(14))
+                .lastAutoVacuum(rs.getTimestamp(15))
+                .lastAnalyze(rs.getTimestamp(16))
+                .lastAutoAnalyze(rs.getTimestamp(17))
                 .vacuumCount(rs.getLong(18))
                 .autoVacuumCount(rs.getLong(19))
                 .analyzeCount(rs.getLong(20))

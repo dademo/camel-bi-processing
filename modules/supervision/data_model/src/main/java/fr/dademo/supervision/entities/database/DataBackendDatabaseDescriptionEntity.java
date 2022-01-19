@@ -45,7 +45,7 @@ public class DataBackendDatabaseDescriptionEntity implements Serializable {
     @ToString.Exclude
     private List<DataBackendDatabaseSchemaEntity> databaseSchemas;
 
-    @Nonnull
+    @Nullable
     @Size(min = 1)
     private String name;
 

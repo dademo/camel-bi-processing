@@ -21,7 +21,7 @@ public interface DatabaseTable {
     @Size(min = 1)
     String getName();
 
-    @Nonnull
+    @Nullable
     @Min(0)
     Long getRowsCount();
 

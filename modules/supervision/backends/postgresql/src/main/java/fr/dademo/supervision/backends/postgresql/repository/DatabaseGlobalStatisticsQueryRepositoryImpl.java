@@ -39,7 +39,7 @@ public class DatabaseGlobalStatisticsQueryRepositoryImpl implements DatabaseGlob
 
         @Override
         public Date mapRow(ResultSet rs, int rowNum) throws SQLException {
-            return rs.getDate(1);
+            return rs.getTimestamp(1);
         }
     }
 }

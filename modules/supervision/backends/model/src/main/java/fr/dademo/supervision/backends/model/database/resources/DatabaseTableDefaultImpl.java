@@ -26,7 +26,7 @@ public class DatabaseTableDefaultImpl implements DatabaseTable {
     @Size(min = 1)
     private String name;
 
-    @Nonnull
+    @Nullable
     @Min(0)
     private Long rowsCount;
 

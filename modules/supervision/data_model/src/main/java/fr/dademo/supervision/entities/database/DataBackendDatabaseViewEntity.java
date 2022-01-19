@@ -41,7 +41,7 @@ public class DataBackendDatabaseViewEntity implements Serializable {
     @Size(min = 1)
     private String name;
 
-    @Nonnull
+    @Nullable
     @Min(0)
     private Long rowsCount;
 

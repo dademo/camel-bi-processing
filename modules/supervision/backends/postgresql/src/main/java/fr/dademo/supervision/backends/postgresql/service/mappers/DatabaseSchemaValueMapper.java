@@ -8,6 +8,7 @@ package fr.dademo.supervision.backends.postgresql.service.mappers;
 
 import fr.dademo.supervision.backends.model.database.resources.DatabaseSchemaDefaultImpl;
 
+import java.util.Collections;
 import java.util.function.Function;
 
 /**
@@ -20,6 +21,9 @@ public class DatabaseSchemaValueMapper implements Function<String, DatabaseSchem
 
         return DatabaseSchemaDefaultImpl.builder()
             .name(schemaName)
+            .tables(Collections.emptyList())
+            .views(Collections.emptyList())
+            .indexes(Collections.emptyList())
             .build();
     }
 }

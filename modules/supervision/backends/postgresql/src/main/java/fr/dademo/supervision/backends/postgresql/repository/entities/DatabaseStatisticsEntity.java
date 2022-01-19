@@ -10,7 +10,6 @@ import lombok.Builder;
 import lombok.Value;
 import org.springframework.jdbc.core.RowMapper;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,10 +26,9 @@ public class DatabaseStatisticsEntity {
     @Nullable
     Date startTime;
 
-    @Nonnull
+    @Nullable
     String name;
 
-    /* https://www.postgresql.org/docs/9.2/monitoring-stats.html#PG-STAT-DATABASE-VIEW */
     @Nullable
     Long commitCounts;
 
@@ -79,7 +77,7 @@ public class DatabaseStatisticsEntity {
         public DatabaseStatisticsEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
 
             return DatabaseStatisticsEntity.builder()
-                .startTime(rs.getDate(1))
+                .startTime(rs.getTimestamp(1))
                 .name(rs.getString(2))
                 .commitCounts(rs.getLong(3))
                 .rollbackCounts(rs.getLong(4))
@@ -94,7 +92,7 @@ public class DatabaseStatisticsEntity {
                 .deadlocksCount(rs.getLong(13))
                 .readTime(fromDurationMilliseconds(rs.getDouble(14)))
                 .writeTime(fromDurationMilliseconds(rs.getDouble(15)))
-                .lastStatisticsResetTime(rs.getDate(16))
+                .lastStatisticsResetTime(rs.getTimestamp(16))
                 .build();
         }
 

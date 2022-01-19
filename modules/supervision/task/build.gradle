@@ -37,7 +37,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation "org.flywaydb:flyway-core:${flywayVersion}"
     implementation "org.mapstruct:mapstruct:${mapStructVersion}"
-    runtimeOnly 'org.postgresql:postgresql'
+    runtimeOnly "org.postgresql:postgresql:${postgresqlVersion}"
     runtimeOnly 'org.hsqldb:hsqldb'
 
     // Other libraries

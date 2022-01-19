@@ -37,8 +37,6 @@ public class DatabasesStatisticsQueryRepositoryImpl implements DatabasesStatisti
         "  TUP_UPDATED, " +
         "  TUP_DELETED, " +
         "  CONFLICTS, " +
-        "  TEMP_FILES, " +
-        "  TEMP_BYTES, " +
         "  DEADLOCKS, " +
         "  BLK_READ_TIME, " +
         "  BLK_WRITE_TIME, " +

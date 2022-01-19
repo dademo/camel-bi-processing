@@ -10,7 +10,6 @@ import fr.dademo.supervision.backends.model.database.resources.DatabaseSchema;
 import fr.dademo.supervision.backends.model.shared.DataBackendDescriptionBase;
 import lombok.NonNull;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
@@ -22,7 +21,7 @@ import java.util.Date;
  */
 public interface DatabaseDescription extends DataBackendDescriptionBase {
 
-    @Nonnull
+    @Nullable
     @Size(min = 1)
     String getName();
 

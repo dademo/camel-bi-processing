@@ -31,7 +31,6 @@ public class DatabaseIndexEntity {
     @Nonnull
     String tableName;
 
-    /* https://www.postgresql.org/docs/9.2/monitoring-stats.html#PG-STAT-ALL-TABLES-VIEW */
     @Nullable
     Long indexScansCount;
 

@@ -51,7 +51,7 @@ dependencies {
     runtimeOnly 'io.micrometer:micrometer-registry-influx'
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
     runtimeOnly "org.xerial:sqlite-jdbc:${sqlite_jdbc_version}"
-    runtimeOnly 'org.postgresql:postgresql'
+    runtimeOnly "org.postgresql:postgresql:${postgresqlVersion}"
 
     // Other libraries
     implementation "org.jooq:jooq:${jooqVersion}"
