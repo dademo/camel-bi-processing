@@ -59,10 +59,10 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
     private DatabaseProductQueryRepository databaseProductQueryRepository;
 
     @Autowired
-    private DatabaseTablesQueryRepository databaseTablesQueryRepository;
+    private DatabaseTablesAndViewsStatisticsQueryRepository databaseTablesAndViewsStatisticsQueryRepository;
 
     @Autowired
-    private DatabaseIndexQueryRepository databaseIndexQueryRepository;
+    private DatabaseIndexesStatisticsQueryRepository databaseIndexesStatisticsQueryRepository;
 
     @Autowired
     private DatabaseTableRowsCountQueryRepository databaseTableRowsCountQueryRepository;
@@ -157,8 +157,8 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
 
     private List<? extends DatabaseSchema> getSchemas() {
 
-        final var databaseTableEntities = databaseTablesQueryRepository.getDatabaseTables();
-        final var databaseIndexEntities = databaseIndexQueryRepository.getDatabaseIndexes();
+        final var databaseTableEntities = databaseTablesAndViewsStatisticsQueryRepository.getDatabaseTablesAndViewsStatistics();
+        final var databaseIndexEntities = databaseIndexesStatisticsQueryRepository.getDatabaseIndexesStatistics();
 
         final var databaseSchemas = databaseTableEntities
             .stream()

@@ -7,6 +7,7 @@
 package fr.dademo.supervision.backends.postgresql.repository;
 
 import fr.dademo.supervision.backends.postgresql.repository.entities.DatabaseIndexEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,8 +21,9 @@ import static fr.dademo.supervision.backends.postgresql.configuration.ModuleBean
 /**
  * @author dademo
  */
+@Slf4j
 @Repository
-public class DatabaseIndexQueryRepositoryImpl implements DatabaseIndexQueryRepository {
+public class DatabaseIndexesStatisticsQueryRepositoryImpl implements DatabaseIndexesStatisticsQueryRepository {
 
     private static final String QUERY = "" +
         "SELECT " +
@@ -39,7 +41,9 @@ public class DatabaseIndexQueryRepositoryImpl implements DatabaseIndexQueryRepos
 
     @Nonnull
     @Override
-    public List<DatabaseIndexEntity> getDatabaseIndexes() {
+    public List<DatabaseIndexEntity> getDatabaseIndexesStatistics() {
+
+        log.debug("Getting database indexes");
         return jdbcTemplate.query(QUERY, new DatabaseIndexEntity.DatabaseIndexEntityRowMapper());
     }
 }

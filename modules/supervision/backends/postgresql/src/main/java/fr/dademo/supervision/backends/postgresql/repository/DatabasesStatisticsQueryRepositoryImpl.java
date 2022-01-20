@@ -7,6 +7,7 @@
 package fr.dademo.supervision.backends.postgresql.repository;
 
 import fr.dademo.supervision.backends.postgresql.repository.entities.DatabaseStatisticsEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,6 +21,7 @@ import static fr.dademo.supervision.backends.postgresql.configuration.ModuleBean
 /**
  * @author dademo
  */
+@Slf4j
 @Repository
 public class DatabasesStatisticsQueryRepositoryImpl implements DatabasesStatisticsQueryRepository {
 
@@ -50,6 +52,8 @@ public class DatabasesStatisticsQueryRepositoryImpl implements DatabasesStatisti
     @Nonnull
     @Override
     public List<DatabaseStatisticsEntity> getDatabasesStatistics() {
+
+        log.debug("Getting databases global statistics");
         return jdbcTemplate.query(QUERY, new DatabaseStatisticsEntity.DatabaseStatisticsRowMapper());
     }
 }

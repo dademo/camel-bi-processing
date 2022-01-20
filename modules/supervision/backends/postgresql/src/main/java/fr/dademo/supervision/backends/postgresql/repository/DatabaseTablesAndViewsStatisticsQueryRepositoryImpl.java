@@ -7,6 +7,7 @@
 package fr.dademo.supervision.backends.postgresql.repository;
 
 import fr.dademo.supervision.backends.postgresql.repository.entities.DatabaseTableEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,8 +21,9 @@ import static fr.dademo.supervision.backends.postgresql.configuration.ModuleBean
 /**
  * @author dademo
  */
+@Slf4j
 @Repository
-public class DatabaseTablesQueryRepositoryImpl implements DatabaseTablesQueryRepository {
+public class DatabaseTablesAndViewsStatisticsQueryRepositoryImpl implements DatabaseTablesAndViewsStatisticsQueryRepository {
 
     private static final String QUERY = "" +
         "SELECT " +
@@ -72,7 +74,9 @@ public class DatabaseTablesQueryRepositoryImpl implements DatabaseTablesQueryRep
 
     @Nonnull
     @Override
-    public List<DatabaseTableEntity> getDatabaseTables() {
+    public List<DatabaseTableEntity> getDatabaseTablesAndViewsStatistics() {
+
+        log.debug("Getting tables and views statistics");
         return jdbcTemplate.query(QUERY, new DatabaseTableEntity.DatabaseTableRowMapper());
     }
 }

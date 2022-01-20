@@ -14,8 +14,8 @@ import java.util.List;
 /**
  * @author dademo
  */
-public interface DatabaseTablesQueryRepository {
+public interface DatabaseTablesAndViewsStatisticsQueryRepository {
 
     @Nonnull
-    List<DatabaseTableEntity> getDatabaseTables();
+    List<DatabaseTableEntity> getDatabaseTablesAndViewsStatistics();
 }

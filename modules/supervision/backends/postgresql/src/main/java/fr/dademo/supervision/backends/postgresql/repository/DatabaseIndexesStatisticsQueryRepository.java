@@ -14,8 +14,8 @@ import java.util.List;
 /**
  * @author dademo
  */
-public interface DatabaseIndexQueryRepository {
+public interface DatabaseIndexesStatisticsQueryRepository {
 
     @Nonnull
-    List<DatabaseIndexEntity> getDatabaseIndexes();
+    List<DatabaseIndexEntity> getDatabaseIndexesStatistics();
 }

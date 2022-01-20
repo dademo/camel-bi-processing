@@ -7,6 +7,7 @@
 package fr.dademo.supervision.backends.postgresql.repository;
 
 import fr.dademo.supervision.backends.postgresql.repository.entities.DatabaseProductVersionEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,6 +21,7 @@ import static fr.dademo.supervision.backends.postgresql.configuration.ModuleBean
 /**
  * @author dademo
  */
+@Slf4j
 @Repository
 public class DatabaseProductQueryRepositoryImpl implements DatabaseProductQueryRepository {
 
@@ -37,6 +39,8 @@ public class DatabaseProductQueryRepositoryImpl implements DatabaseProductQueryR
     @Nonnull
     @Override
     public DatabaseProductVersionEntity getDatabaseProductVersion() {
+
+        log.debug("Getting database product version");
         return Objects.requireNonNull(
             jdbcTemplate.queryForObject(QUERY, new DatabaseProductVersionEntity.DatabaseProductRowMapper())
         );

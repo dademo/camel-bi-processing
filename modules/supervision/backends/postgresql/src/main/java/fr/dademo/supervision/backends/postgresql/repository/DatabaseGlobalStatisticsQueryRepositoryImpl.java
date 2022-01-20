@@ -6,6 +6,7 @@
 
 package fr.dademo.supervision.backends.postgresql.repository;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,6 +22,7 @@ import static fr.dademo.supervision.backends.postgresql.configuration.ModuleBean
 /**
  * @author dademo
  */
+@Slf4j
 @Repository
 public class DatabaseGlobalStatisticsQueryRepositoryImpl implements DatabaseGlobalStatisticsQueryRepository {
 
@@ -32,6 +34,8 @@ public class DatabaseGlobalStatisticsQueryRepositoryImpl implements DatabaseGlob
 
     @Override
     public Date getDatabaseStartTime() {
+
+        log.debug("Getting database start time");
         return jdbcTemplate.queryForObject(QUERY, new RowDateMapper());
     }
 

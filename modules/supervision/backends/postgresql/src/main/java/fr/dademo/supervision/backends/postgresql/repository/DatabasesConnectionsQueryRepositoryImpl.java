@@ -56,6 +56,8 @@ public class DatabasesConnectionsQueryRepositoryImpl implements DatabasesConnect
     @Override
     public List<DatabaseConnectionEntity> getDatabasesConnections() {
 
+        log.debug("Getting database connections");
+
         return Stream.of(
                 ", BACKEND_TYPE",   // v10+
                 ""                  // Older versions
