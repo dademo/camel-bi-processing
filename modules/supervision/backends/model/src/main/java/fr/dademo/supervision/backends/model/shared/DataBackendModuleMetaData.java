@@ -23,7 +23,7 @@ public interface DataBackendModuleMetaData {
      */
     @Nonnull
     @Size(min = 1, max = 255)
-    String getCollectionModuleName();
+    String getModuleName();
 
     /**
      * Get this module name.
@@ -32,7 +32,7 @@ public interface DataBackendModuleMetaData {
      */
     @Nonnull
     @Size(min = 1, max = 255)
-    String getCollectionModuleTitle();
+    String getModuleTitle();
 
     /**
      * Get this module version.
@@ -41,7 +41,7 @@ public interface DataBackendModuleMetaData {
      */
     @Nonnull
     @Size(min = 1, max = 50)
-    String getCollectionModuleVersion();
+    String getModuleVersion();
 
     /**
      * Get this module vendor.
@@ -50,5 +50,5 @@ public interface DataBackendModuleMetaData {
      */
     @Nonnull
     @Size(min = 1, max = 255)
-    String getCollectionModuleVendor();
+    String getModuleVendor();
 }

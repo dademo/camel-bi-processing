@@ -14,6 +14,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 /**
  * Description of a supervised data backend.
@@ -63,4 +64,15 @@ public abstract class DataBackendDescriptionDefaultImpl extends DataBackendDescr
     @Nullable
     @Min(0)
     private Integer replicaCount;
+
+    @Nullable
+    private Date startTime;
+
+    @Nullable
+    @Min(0)
+    private Long memoryUsageBytes;
+
+    @Nullable
+    @Min(0)
+    private Long cpuUsageMilliCPU;
 }

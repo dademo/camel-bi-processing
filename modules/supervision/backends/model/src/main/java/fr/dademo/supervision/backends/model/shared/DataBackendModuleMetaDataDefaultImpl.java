@@ -24,17 +24,17 @@ public class DataBackendModuleMetaDataDefaultImpl implements DataBackendModuleMe
 
     @Nonnull
     @Size(min = 1, max = 255)
-    private String collectionModuleName;
+    private String moduleName;
 
     @Nonnull
     @Size(min = 1, max = 255)
-    private String collectionModuleTitle;
+    private String moduleTitle;
 
     @Nonnull
     @Size(min = 1, max = 50)
-    private String collectionModuleVersion;
+    private String moduleVersion;
 
     @Nullable
     @Size(min = 1, max = 255)
-    private String collectionModuleVendor;
+    private String moduleVendor;
 }

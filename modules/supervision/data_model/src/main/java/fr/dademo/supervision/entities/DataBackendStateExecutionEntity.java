@@ -29,7 +29,7 @@ public class DataBackendStateExecutionEntity implements Serializable {
     private static final long serialVersionUID = -4433439263893655592L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -37,7 +37,7 @@ public class DataBackendStateExecutionEntity implements Serializable {
     private DataBackendModuleMetaDataEntity dataBackendModuleMetaData;
 
     @Embedded
-    private DataBackendDescriptionEntity dataBackendDescriptionEntity;
+    private DataBackendDescriptionEntity dataBackendDescription;
 
     @OneToOne(optional = false, mappedBy = "backendStateExecution", fetch = FetchType.LAZY)
     @JoinColumn(name = "global_database_id")

@@ -29,7 +29,7 @@ public class DataBackendDatabaseTableEntity implements Serializable {
     private static final long serialVersionUID = 2127603795918036607L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 

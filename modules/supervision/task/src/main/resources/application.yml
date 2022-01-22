@@ -9,6 +9,7 @@ task:
     url: jdbc:postgresql://localhost:5432/bi
     username: postgres
     password: postgres
+    schema: supervision
 
 module:
   datasource:
@@ -19,4 +20,5 @@ module:
 logging:
   level:
     root: INFO
+    #root: DEBUG
     fr.dademo: DEBUG

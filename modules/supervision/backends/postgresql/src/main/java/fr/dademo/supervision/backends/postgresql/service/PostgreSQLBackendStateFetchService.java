@@ -79,10 +79,10 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
     @Override
     public DataBackendModuleMetaData getModuleMetaData() {
         return DataBackendModuleMetaDataDefaultImpl.builder()
-            .collectionModuleName(PostgreSQLBackendStateFetchService.class.getPackage().getName())
-            .collectionModuleTitle(PostgreSQLBackendStateFetchService.class.getPackage().getImplementationTitle())
-            .collectionModuleVersion(PostgreSQLBackendStateFetchService.class.getPackage().getImplementationVersion())
-            .collectionModuleVendor(PostgreSQLBackendStateFetchService.class.getPackage().getImplementationVendor())
+            .moduleName(PostgreSQLBackendStateFetchService.class.getPackage().getName())
+            .moduleTitle(PostgreSQLBackendStateFetchService.class.getPackage().getImplementationTitle())
+            .moduleVersion(PostgreSQLBackendStateFetchService.class.getPackage().getImplementationVersion())
+            .moduleVendor(PostgreSQLBackendStateFetchService.class.getPackage().getImplementationVendor())
             .build();
     }
 
@@ -96,7 +96,24 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
             .primaryUrl(moduleConfiguration.getDatasource().getUrl())
             .startTime(databaseGlobalStatisticsQueryRepository.getDatabaseStartTime())
             .databaseConnections(getAllDatabasesConnections())
-            .databasesDescriptions(getAllDatabasesDescriptions());
+            .databasesDescriptions(getAllDatabasesDescriptions(false));
+        applyDatabaseVersion(objectBuilder);
+        applyReplication(objectBuilder);
+
+        return objectBuilder.build();
+    }
+
+    @Override
+    public DataBackendDescription getDataBackendDescriptionFull() {
+
+        final var objectBuilder = GlobalDatabaseDescriptionDefaultImpl.builder()
+            .backendState(DataBackendState.READY)
+            .backendStateExplanation(null)
+            .backendName(getConnectionUrl())
+            .primaryUrl(moduleConfiguration.getDatasource().getUrl())
+            .startTime(databaseGlobalStatisticsQueryRepository.getDatabaseStartTime())
+            .databaseConnections(getAllDatabasesConnections())
+            .databasesDescriptions(getAllDatabasesDescriptions(true));
         applyDatabaseVersion(objectBuilder);
         applyReplication(objectBuilder);
 
@@ -113,13 +130,13 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
         }
     }
 
-    private List<DatabaseDescription> getAllDatabasesDescriptions() {
+    private List<DatabaseDescription> getAllDatabasesDescriptions(boolean getRowsCount) {
 
         final var databasesStatistics = databasesStatisticsQueryRepository.getDatabasesStatistics();
         return databasesStatistics
             .stream()
             .map(new DatabaseStatisticsToBuilderValueMapper())
-            .map(v -> v.databaseSchemas(new ArrayList<>(getSchemas())))
+            .map(v -> v.databaseSchemas(new ArrayList<>(getSchemas(getRowsCount))))
             .map(DatabaseDescriptionDefaultImpl.DatabaseDescriptionDefaultImplBuilder::build)
             .collect(Collectors.toList());
     }
@@ -155,7 +172,7 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
             .replicaCount(replicationHosts.size());
     }
 
-    private List<? extends DatabaseSchema> getSchemas() {
+    private List<? extends DatabaseSchema> getSchemas(boolean getRowsCount) {
 
         final var databaseTableEntities = databaseTablesAndViewsStatisticsQueryRepository.getDatabaseTablesAndViewsStatistics();
         final var databaseIndexEntities = databaseIndexesStatisticsQueryRepository.getDatabaseIndexesStatistics();
@@ -168,13 +185,14 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
             .map(new DatabaseSchemaValueMapper())
             .collect(Collectors.toList());
 
-        databaseSchemas.forEach(mergeWithDatabaseTablesAndIndexes(databaseTableEntities, databaseIndexEntities));
+        databaseSchemas.forEach(mergeWithDatabaseTablesAndIndexes(databaseTableEntities, databaseIndexEntities, getRowsCount));
 
         return databaseSchemas;
     }
 
     private Consumer<DatabaseSchemaDefaultImpl> mergeWithDatabaseTablesAndIndexes(List<DatabaseTableEntity> databaseTableEntities,
-                                                                                  List<DatabaseIndexEntity> databaseIndexEntities) {
+                                                                                  List<DatabaseIndexEntity> databaseIndexEntities,
+                                                                                  boolean getRowsCount) {
 
         return databaseSchema -> {
 
@@ -198,8 +216,10 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
                 .map(new DatabaseIndexValueMapper())
                 .collect(Collectors.toList());
 
-            tables.forEach(tableRowsCountSetterForSchema(databaseSchema));
-            views.forEach(viewRowsCountSetterForSchema(databaseSchema));
+            if (getRowsCount) {
+                tables.forEach(tableRowsCountSetterForSchema(databaseSchema));
+                views.forEach(viewRowsCountSetterForSchema(databaseSchema));
+            }
 
             databaseSchema.setTables(new ArrayList<>(tables));
             databaseSchema.setViews(new ArrayList<>(views));

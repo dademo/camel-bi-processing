@@ -14,9 +14,6 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.validation.constraints.Min;
-import java.util.Date;
 
 /**
  * @author dademo
@@ -25,17 +22,6 @@ import java.util.Date;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 public class GlobalDatabaseDescriptionDefaultImpl extends DataBackendDescriptionDefaultImpl implements GlobalDatabaseDescription {
-
-    @Nullable
-    private Date startTime;
-
-    @Nullable
-    @Min(0)
-    private Long memoryUsageBytes;
-
-    @Nullable
-    @Min(0)
-    private Long cpuUsageMilliCPU;
 
     @Nonnull
     private Iterable<DatabaseConnection> databaseConnections;

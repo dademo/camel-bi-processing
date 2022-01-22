@@ -10,25 +10,10 @@ import fr.dademo.supervision.backends.model.database.resources.DatabaseConnectio
 import fr.dademo.supervision.backends.model.shared.DataBackendDescription;
 import lombok.NonNull;
 
-import javax.annotation.Nullable;
-import javax.validation.constraints.Min;
-import java.util.Date;
-
 /**
  * @author dademo
  */
 public interface GlobalDatabaseDescription extends DataBackendDescription {
-
-    @Nullable
-    Date getStartTime();
-
-    @Nullable
-    @Min(0)
-    Long getMemoryUsageBytes();
-
-    @Nullable
-    @Min(0)
-    Long getCpuUsageMilliCPU();
 
     @NonNull
     Iterable<DatabaseConnection> getDatabaseConnections();

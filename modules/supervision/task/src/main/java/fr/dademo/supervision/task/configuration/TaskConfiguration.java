@@ -12,6 +12,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author dademo
@@ -36,5 +37,8 @@ public class TaskConfiguration {
 
         @Nonnull
         private String password;
+
+        @Nullable
+        private String schema = "public";
     }
 }

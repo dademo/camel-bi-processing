@@ -19,4 +19,6 @@ public interface DataBackendStateFetchService {
     DataBackendModuleMetaData getModuleMetaData();
 
     DataBackendDescription getDataBackendDescription();
+
+    DataBackendDescription getDataBackendDescriptionFull();
 }

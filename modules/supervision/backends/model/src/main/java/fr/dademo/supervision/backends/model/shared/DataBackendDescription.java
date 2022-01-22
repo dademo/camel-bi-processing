@@ -10,6 +10,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 /**
  * Description of a supervised data backend.
@@ -121,4 +122,30 @@ public interface DataBackendDescription extends DataBackendDescriptionBase {
     @Nullable
     @Min(0)
     Integer getReplicaCount();
+
+    /**
+     * Get the start time of the data backend.
+     *
+     * @return the start time of the data backend
+     */
+    @Nullable
+    Date getStartTime();
+
+    /**
+     * Get the amount of memory used by the data backend.
+     *
+     * @return the amount of memory used by the data backend
+     */
+    @Nullable
+    @Min(0)
+    Long getMemoryUsageBytes();
+
+    /**
+     * Get the amount of CPU used by the data backend.
+     *
+     * @return the amount of CPU used by the data backend
+     */
+    @Nullable
+    @Min(0)
+    Long getCpuUsageMilliCPU();
 }

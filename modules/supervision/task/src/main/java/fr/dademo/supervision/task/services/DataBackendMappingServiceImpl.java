@@ -9,6 +9,8 @@ package fr.dademo.supervision.task.services;
 import fr.dademo.supervision.backends.model.shared.DataBackendDescription;
 import fr.dademo.supervision.backends.model.shared.DataBackendModuleMetaData;
 import fr.dademo.supervision.entities.DataBackendStateExecutionEntity;
+import fr.dademo.supervision.task.services.mappers.DataBackendDescriptionMapper;
+import fr.dademo.supervision.task.services.mappers.DataBackendModuleMetaDataMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
@@ -24,7 +26,11 @@ public class DataBackendMappingServiceImpl implements DataBackendMappingService 
     public DataBackendStateExecutionEntity mapModuleDataToEntity(
         @Nonnull DataBackendModuleMetaData backendModuleMetaData,
         @Nonnull DataBackendDescription dataBackendDescription) {
-        // TODO To be implemented
-        throw new UnsupportedOperationException();
+
+        return DataBackendStateExecutionEntity.builder()
+            .dataBackendModuleMetaData(DataBackendModuleMetaDataMapper.INSTANCE.moduleMetaDataToEntity(backendModuleMetaData))
+            .dataBackendDescription(DataBackendDescriptionMapper.INSTANCE.moduleDescriptionToEntity(dataBackendDescription))
+            .globalDatabase(null)
+            .build();
     }
 }

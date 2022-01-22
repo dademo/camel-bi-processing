@@ -14,13 +14,17 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.task.configuration.EnableTask;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
+
+import static fr.dademo.supervision.task.Beans.TASK_TRANSACTION_MANAGER_BEAN_NAME;
 
 /**
  * @author dademo
  */
 @Slf4j
 @EnableTask
+@EnableTransactionManagement
 @SpringBootApplication(scanBasePackages = "fr.dademo.supervision")
 public class TaskApplication implements CommandLineRunner {
 
@@ -34,7 +38,7 @@ public class TaskApplication implements CommandLineRunner {
         System.exit(SpringApplication.exit(SpringApplication.run(TaskApplication.class, args)));
     }
 
-    @Transactional
+    @Transactional(TASK_TRANSACTION_MANAGER_BEAN_NAME)
     @Override
     public void run(String... args) {
 
@@ -42,11 +46,8 @@ public class TaskApplication implements CommandLineRunner {
         final var moduleMetaData = dataBackendStateFetchService.getModuleMetaData();
         final var dataBackendDescription = dataBackendStateFetchService.getDataBackendDescription();
 
-        //dataBackendPersistenceService.persistBackendFetchResult();
-
-        log.info("Mapping values");
-
         log.info("Persisting values");
+        dataBackendPersistenceService.persistBackendFetchResult(moduleMetaData, dataBackendDescription);
 
         log.info("Task finished");
     }
