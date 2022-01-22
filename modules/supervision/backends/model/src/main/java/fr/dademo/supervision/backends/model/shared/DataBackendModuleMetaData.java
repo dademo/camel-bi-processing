@@ -7,7 +7,7 @@
 package fr.dademo.supervision.backends.model.shared;
 
 import javax.annotation.Nonnull;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
 /**
  * Data backend module meta data.
@@ -22,7 +22,7 @@ public interface DataBackendModuleMetaData {
      * @return this module name
      */
     @Nonnull
-    @Min(1)
+    @Size(min = 1, max = 255)
     String getCollectionModuleName();
 
     /**
@@ -31,7 +31,7 @@ public interface DataBackendModuleMetaData {
      * @return this module name
      */
     @Nonnull
-    @Min(1)
+    @Size(min = 1, max = 255)
     String getCollectionModuleTitle();
 
     /**
@@ -40,7 +40,7 @@ public interface DataBackendModuleMetaData {
      * @return this module version
      */
     @Nonnull
-    @Min(1)
+    @Size(min = 1, max = 50)
     String getCollectionModuleVersion();
 
     /**
@@ -49,6 +49,6 @@ public interface DataBackendModuleMetaData {
      * @return this module vendor
      */
     @Nonnull
-    @Min(1)
+    @Size(min = 1, max = 255)
     String getCollectionModuleVendor();
 }

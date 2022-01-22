@@ -11,7 +11,7 @@ import lombok.Data;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
 /**
  * Data backend module meta data.
@@ -23,18 +23,18 @@ import javax.validation.constraints.Min;
 public class DataBackendModuleMetaDataDefaultImpl implements DataBackendModuleMetaData {
 
     @Nonnull
-    @Min(1)
+    @Size(min = 1, max = 255)
     private String collectionModuleName;
 
     @Nonnull
-    @Min(1)
+    @Size(min = 1, max = 255)
     private String collectionModuleTitle;
 
     @Nonnull
-    @Min(1)
+    @Size(min = 1, max = 50)
     private String collectionModuleVersion;
 
     @Nullable
-    @Min(1)
+    @Size(min = 1, max = 255)
     private String collectionModuleVendor;
 }

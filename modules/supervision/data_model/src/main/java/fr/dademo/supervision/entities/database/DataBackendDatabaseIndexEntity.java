@@ -23,7 +23,7 @@ import java.io.Serializable;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Entity
-@Table(name = "data_backend_database_index_entity")
+@Table(name = "data_backend_database_index")
 public class DataBackendDatabaseIndexEntity implements Serializable {
 
     private static final long serialVersionUID = -6623202159530184286L;
@@ -34,26 +34,32 @@ public class DataBackendDatabaseIndexEntity implements Serializable {
     private Long id;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_schema")
     @ToString.Exclude
     private DataBackendDatabaseSchemaEntity schema;
 
     @Nonnull
-    @Size(min = 1)
+    @Column(name = "name", updatable = false)
+    @Size(min = 1, max = 255)
     private String name;
 
     @Nonnull
-    @Size(min = 1)
+    @Column(name = "table_name", updatable = false)
+    @Size(min = 1, max = 255)
     private String tableName;
 
     @Nullable
+    @Column(name = "index_scans_count", updatable = false)
     @Min(0)
     private Long indexScansCount;
 
     @Nullable
+    @Column(name = "returned_rows_count", updatable = false)
     @Min(0)
     private Long returnedRowsCount;
 
     @Nullable
+    @Column(name = "fetched_rows_count", updatable = false)
     @Min(0)
     private Long fetchedRowsCount;
 }

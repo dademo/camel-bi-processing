@@ -6,16 +6,14 @@
 
 package fr.dademo.supervision.task;
 
-import fr.dademo.supervision.entities.FlywayMigrationsTools;
-import org.flywaydb.core.Flyway;
+import fr.dademo.supervision.task.configuration.TaskConfiguration;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.cloud.task.configuration.DefaultTaskConfigurer;
 import org.springframework.cloud.task.configuration.TaskConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -33,15 +31,14 @@ public class Beans {
     public static final String TASK_DATASOURCE_BEAN_NAME = "TASK_DATASOURCE_BEAN";
 
     @Bean(name = TASK_DATASOURCE_BEAN_NAME)
-    public DataSource dataSource() {
+    public DataSource dataSource(TaskConfiguration taskConfiguration) {
 
-        final var builder = new EmbeddedDatabaseBuilder();
-        return builder.setType(EmbeddedDatabaseType.HSQL).build();
-    }
-
-    @Bean
-    public Flyway getMigrations(@Qualifier(TASK_DATASOURCE_BEAN_NAME) DataSource dataSource) {
-        return FlywayMigrationsTools.prepareFlywayMigration(dataSource);
+        final var datasourceConfiguration = taskConfiguration.getDatasource();
+        final var dataSourceBuilder = DataSourceBuilder.create();
+        dataSourceBuilder.url(datasourceConfiguration.getUrl());
+        dataSourceBuilder.username(datasourceConfiguration.getUsername());
+        dataSourceBuilder.password(datasourceConfiguration.getPassword());
+        return dataSourceBuilder.build();
     }
 
     @Bean

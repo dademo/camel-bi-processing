@@ -28,7 +28,7 @@ import java.util.Date;
 public class DatabaseDescriptionDefaultImpl extends DataBackendDescriptionBaseDefaultImpl implements DatabaseDescription {
 
     @Nullable
-    @Size(min = 1)
+    @Size(min = 1, max = 255)
     private String name;
 
     @Nullable
@@ -37,7 +37,7 @@ public class DatabaseDescriptionDefaultImpl extends DataBackendDescriptionBaseDe
 
     @Nullable
     @Min(0)
-    private Long rollbackCounts;
+    private Long rollbacksCounts;
 
     @Nullable
     @Min(0)

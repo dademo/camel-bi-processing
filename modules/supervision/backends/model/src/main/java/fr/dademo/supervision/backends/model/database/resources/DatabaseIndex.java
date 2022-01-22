@@ -17,11 +17,11 @@ import javax.validation.constraints.Size;
 public interface DatabaseIndex {
 
     @Nonnull
-    @Size(min = 1)
+    @Size(min = 1, max = 255)
     String getName();
 
     @Nonnull
-    @Size(min = 1)
+    @Size(min = 1, max = 255)
     String getTableName();
 
     @Nullable

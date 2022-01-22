@@ -23,7 +23,7 @@ import java.util.Date;
 public class DatabaseTableDefaultImpl implements DatabaseTable {
 
     @Nonnull
-    @Size(min = 1)
+    @Size(min = 1, max = 255)
     private String name;
 
     @Nullable

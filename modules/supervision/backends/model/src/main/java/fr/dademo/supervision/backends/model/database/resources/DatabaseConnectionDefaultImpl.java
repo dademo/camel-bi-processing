@@ -30,22 +30,22 @@ public class DatabaseConnectionDefaultImpl implements DatabaseConnection {
     private Long connectionPID;
 
     @Nullable
-    @Size(min = 1)
+    @Size(min = 1, max = 255)
     private String connectedDatabaseName;
 
     @Nullable
-    @Size(min = 1)
+    @Size(min = 1, max = 255)
     private String userName;
 
     @Nullable
-    @Size(min = 1)
+    @Size(min = 1, max = 255)
     private String applicationName;
 
     @Nullable
     private InetAddress clientAddress;
 
     @Nullable
-    @Size(min = 1)
+    @Size(min = 1, max = 255)
     private String clientHostname;
 
     @Nullable

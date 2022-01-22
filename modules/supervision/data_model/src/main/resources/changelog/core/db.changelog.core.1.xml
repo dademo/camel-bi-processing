@@ -1,0 +1,143 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<!--
+  ~ This Source Code Form is subject to the terms of the Mozilla Public
+  ~ License, v. 2.0. If a copy of the MPL was not distributed with this
+  ~ file, You can obtain one at https://mozilla.org/MPL/2.0/.
+  -->
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="1" author="dademo" dbms="postgresql,oracle,mssql">
+        <comment>Used namespace</comment>
+        <sql endDelimiter=";">
+            CREATE SCHEMA ${schema_name}
+        </sql>
+    </changeSet>
+
+    <changeSet author="dademo" id="2">
+        <comment>Core table storing a backend state module execution</comment>
+        <createTable tableName="data_backend_state_execution" schemaName="${schema_name}">
+            <!-- fr.dademo.supervision.entities.DataBackendStateExecutionEntity -->
+            <column name="id" type="INTEGER" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+
+            <!-- fr.dademo.supervision.entities.DataBackendModuleMetaDataEntity -->
+            <column name="module_name" type="VARCHAR(255)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="module_title" type="VARCHAR(255)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="module_version" type="VARCHAR(50)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="module_vendor" type="VARCHAR(255)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+
+            <!-- fr.dademo.supervision.entities.DataBackendDescriptionEntity -->
+            <column name="backend_product_name" type="VARCHAR(255)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="backend_product_version" type="VARCHAR(50)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="backend_name" type="VARCHAR(255)">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="start_time" type="DATETIME">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="primary_url" type="VARCHAR(1000)">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="backend_state" type="VARCHAR(10)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="backend_state_explanation" type="CLOB">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="cluster_size" type="INTEGER">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="primary_count" type="INTEGER">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="replica_count" type="INTEGER">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="size_bytes" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="effective_size_bytes" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="available_size_bytes" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+        </createTable>
+        <createIndex tableName="data_backend_state_execution"
+                     indexName="idx_data_backend_state_execution_module_name"
+                     schemaName="${schema_name}">
+            <column name="module_name" descending="true"/>
+        </createIndex>
+        <createIndex tableName="data_backend_state_execution"
+                     indexName="idx_data_backend_state_execution_module_name_version"
+                     schemaName="${schema_name}">
+            <column name="module_name" descending="true"/>
+            <column name="module_version" descending="true"/>
+        </createIndex>
+        <createIndex tableName="data_backend_state_execution"
+                     indexName="idx_data_backend_state_execution_module_title"
+                     schemaName="${schema_name}">
+            <column name="module_title" descending="true"/>
+        </createIndex>
+        <createIndex tableName="data_backend_state_execution"
+                     indexName="idx_data_backend_state_execution_module_title_version"
+                     schemaName="${schema_name}">
+            <column name="module_title" descending="true"/>
+            <column name="module_version" descending="true"/>
+        </createIndex>
+        <createIndex tableName="data_backend_state_execution"
+                     indexName="idx_data_backend_state_execution_module_vendor"
+                     schemaName="${schema_name}">
+            <column name="module_vendor" descending="true"/>
+        </createIndex>
+        <createIndex tableName="data_backend_state_execution"
+                     indexName="idx_data_backend_state_execution_backend_product_name"
+                     schemaName="${schema_name}">
+            <column name="backend_product_name" descending="true"/>
+        </createIndex>
+        <createIndex tableName="data_backend_state_execution"
+                     indexName="idx_data_backend_state_execution_backend_product_name_version"
+                     schemaName="${schema_name}">
+            <column name="backend_product_name" descending="true"/>
+            <column name="backend_product_version" descending="true"/>
+        </createIndex>
+        <createIndex tableName="data_backend_state_execution"
+                     indexName="idx_data_backend_state_execution_backend_name"
+                     schemaName="${schema_name}">
+            <column name="backend_name" descending="true"/>
+        </createIndex>
+        <createIndex tableName="data_backend_state_execution"
+                     indexName="idx_data_backend_state_execution_start_time"
+                     schemaName="${schema_name}">
+            <column name="start_time" descending="true"/>
+        </createIndex>
+        <createIndex tableName="data_backend_state_execution"
+                     indexName="idx_data_backend_state_execution_primary_url"
+                     schemaName="${schema_name}">
+            <column name="primary_url" descending="true"/>
+        </createIndex>
+        <createIndex tableName="data_backend_state_execution"
+                     indexName="idx_data_backend_state_execution_backend_state"
+                     schemaName="${schema_name}">
+            <column name="backend_state" descending="true"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

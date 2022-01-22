@@ -1,3 +1,5 @@
+import java.util.stream.Stream
+
 /*
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -8,13 +10,56 @@ plugins {
     id 'com.github.spotbugs' version "${spotbugsPluginVersion}" apply false
 }
 
+static boolean isProjectPathIn(Project project, Collection paths) {
+
+    return paths
+        .stream()
+        .map(project.getPath()::startsWith)
+        .map(Boolean::valueOf)
+        .anyMatch(Boolean.TRUE::equals)
+}
+
+final String TASK_GROUP_LIQUIBASE = "liquibase"
+final String TASK_JAR = "jar"
+final String EXPECTED_LIQUIBASE_FILE_NAME = 'liquibase.properties'
+final String LIQUIBASE_IGNORE_INJECTION_PROPERTY = 'liquibaseIgnoreInjection'
+
 allprojects {
     repositories {
         mavenCentral()
         mavenLocal()
     }
 
-    afterEvaluate {
+    afterEvaluate { project ->
+
+        // Project in dependencies doesn't have BootJar enabled
+        if (plugins.findPlugin('org.springframework.boot') && isProjectPathIn(project, [
+            ":modules:dependencies",
+            ":modules:supervision:backends",
+        ])) {
+            project.bootJar {
+                enabled = false
+            }
+        }
+
+        if (project.plugins.withType(JavaPlugin)) {
+
+            if (!Boolean.parseBoolean(usesSonar)) {
+                [
+                    'checkstyle',
+                    'pmd',
+                    'com.github.spotbugs',
+                ].each {
+                    project.plugins.apply(it)
+                }
+            }
+
+            [
+                'jacoco',
+            ].each {
+                project.plugins.apply(it)
+            }
+        }
 
         project.tasks.withType(Jar) {
             // We enable jar creation
@@ -29,43 +74,110 @@ allprojects {
             }
         }
 
-        // Project in dependencies doesn't have BootJar enabled
-        project.findAll {
-            plugins.findPlugin('org.springframework.boot') &&
-                [
-                    ":modules:dependencies",
-                    ":modules:supervision:backends",
-                ].stream().map(it.getPath()::startsWith).map(Boolean::valueOf).anyMatch(Boolean.TRUE::equals)
-        }.each {
-            it.bootJar {
-                enabled = false
+        if (project.plugins.withType(JacocoPlugin)) {
+
+            project.tasks.findByName('jacocoTestReport')?.configure {
+
+                it.dependsOn test
+
+                it.reports {
+                    html.required = true
+                    xml.required = true
+                    csv.required = false
+                }
             }
         }
 
+        if (project.plugins.findPlugin('org.liquibase.gradle') && !project.findProperty(LIQUIBASE_IGNORE_INJECTION_PROPERTY)) {
+
+            // https://github.com/liquibase/liquibase-gradle-plugin#2-setting-up-the-classpath
+            [
+                project.project(":modules:dependencies:tools:liquibase"),
+                "org.liquibase:liquibase-core:${liquibaseVersion}",
+                "org.liquibase:liquibase-groovy-dsl:${liquibaseGroovyDslVersion}",
+                "org.liquibase.ext:liquibase-hibernate5:${liquibaseVersion}",
+                'info.picocli:picocli',
+                'javax.xml.bind:jaxb-api',
+                'ch.qos.logback:logback-core',
+                'ch.qos.logback:logback-classic',
+                "org.postgresql:postgresql:${postgresqlVersion}",
+                "mysql:mysql-connector-java:${mysqlDriverVersion}",
+                'org.springframework.boot:spring-boot-starter-data-jpa',
+                "javax.validation:validation-api:${javaxValidationApiVersion}",
+            ].each { _runtimeDependency ->
+                project.getDependencies().add('liquibaseRuntime', _runtimeDependency)
+            }
+
+            [
+                project.project(":modules:dependencies:tools:liquibase"),
+            ].each { _projectDependency ->
+                project.tasks.findAll { it.group && it.group.toLowerCase().equals(TASK_GROUP_LIQUIBASE.toLowerCase()) }.each {
+                    it.dependsOn _projectDependency.getTasksByName(TASK_JAR, false)[0]
+                }
+            }
+
+            project.getDependencies().add('liquibaseRuntime', project.sourceSets.main.output)
+
+            // We import all project default libs, https://stackoverflow.com/questions/52517215/setup-liquibase-in-a-gradle-spring-boot-hibernate-project
+            project.getConfigurations().findByName('liquibaseRuntime')?.extendsFrom(
+                project.getConfigurations().findByName('runtimeClasspath')
+            )
+
+            project.liquibase {
+                activities {
+
+                    final var properties = new Properties()
+                    // Reading configuration file which will be excluded from git
+                    final File propertyFile = (((Collection<File>) project.sourceSets.main.resources.srcDirs)
+                        .stream()
+                        .map(File::listFiles)
+                        .flatMap(Stream::of)
+                        .filter(file -> EXPECTED_LIQUIBASE_FILE_NAME.equals(((File) file).getName()))
+                        .findFirst()
+                        .orElseThrow(() -> new RuntimeException(
+                            "Unable to locate a file named [${EXPECTED_LIQUIBASE_FILE_NAME}] in project classpath"
+                        )))
+                    // Reading configuration
+                    try (final var inputStream = new FileInputStream(propertyFile)) {
+                        properties.load(inputStream)
+                    }
+
+                    main {
+                        final var changeLogParametersMap = new HashMap<String, Object>()
+                        java.util.Optional.ofNullable(properties.get('databaseSchema'))
+                            .ifPresent(databaseSchema -> changeLogParametersMap.put('schemaName', databaseSchema))
+
+                        classpath propertyFile.getParentFile().getAbsolutePath()
+
+                        changeLogFile java.util.Optional.of(properties.get('changeLogFile')).orElse('changelog.xml')
+
+                        url properties.get('url')
+                        username properties.get('username')
+                        password properties.get('password')
+                        driver properties.get('driver')
+
+                        [
+                            'referenceUrl'     : it::referenceUrl,
+                            'referenceUsername': it::referenceUsername,
+                            'referencePassword': it::referencePassword,
+                            'referenceDriver'  : it::referenceDriver,
+                        ].each { _def ->
+                            java.util.Optional
+                                .ofNullable(properties.get(_def.key))
+                                .ifPresent(_def.value)
+                        }
+
+                        changeLogParameters changeLogParametersMap
+                        defaultsFile propertyFile.getAbsolutePath()
+                    }
+                }
+            }
+        }
 
         (project.tasks.withType(JavaCompile).findAll { it.enabled }).each {
             it.options.deprecation = true
             it.options.warnings = true
             it.options.compilerArgs << "-Xlint:unchecked"
-        }
-
-        (project.findAll { plugins.withType(JavaPlugin) }).each { _project ->
-
-            if (!Boolean.parseBoolean(usesSonar)) {
-                [
-                    'checkstyle',
-                    'pmd',
-                    'com.github.spotbugs',
-                ].each {
-                    _project.plugins.apply(it)
-                }
-            }
-
-            [
-                'jacoco',
-            ].each {
-                _project.plugins.apply(it)
-            }
         }
 
         (project.tasks.withType(Jar).findAll { it.enabled }).each {
@@ -93,21 +205,6 @@ allprojects {
             }
 
             it.finalizedBy jacocoTestReport
-        }
-
-
-        if (project.plugins.withType(JacocoPlugin)) {
-
-            project.tasks.findByName('jacocoTestReport')?.configure {
-
-                it.dependsOn test
-
-                it.reports {
-                    html.required = true
-                    xml.required = true
-                    csv.required = false
-                }
-            }
         }
     }
 }

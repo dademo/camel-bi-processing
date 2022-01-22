@@ -22,7 +22,7 @@ public class DatabaseStatisticsToBuilderValueMapper implements Function<Database
         return DatabaseDescriptionDefaultImpl.builder()
             .name(databaseStatisticsEntity.getName())
             .commitCounts(databaseStatisticsEntity.getCommitCounts())
-            .rollbackCounts(databaseStatisticsEntity.getRollbackCounts())
+            .rollbacksCounts(databaseStatisticsEntity.getRollbackCounts())
             .bufferBlocksRead(databaseStatisticsEntity.getBufferBlocksRead())
             .diskBlocksRead(databaseStatisticsEntity.getDiskBlocksRead())
             .returnedRowsCount(databaseStatisticsEntity.getReturnedRowsCount())

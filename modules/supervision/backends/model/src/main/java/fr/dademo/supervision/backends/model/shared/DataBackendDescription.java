@@ -24,6 +24,7 @@ public interface DataBackendDescription extends DataBackendDescriptionBase {
      * @return the backend product name
      */
     @Nonnull
+    @Size(min = 1, max = 255)
     String getBackendProductName();
 
     /**
@@ -32,6 +33,7 @@ public interface DataBackendDescription extends DataBackendDescriptionBase {
      * @return the backend product version
      */
     @Nonnull
+    @Size(min = 1, max = 50)
     String getBackendProductVersion();
 
     /**
@@ -40,6 +42,7 @@ public interface DataBackendDescription extends DataBackendDescriptionBase {
      * @return the usual name of the data backend
      */
     @Nullable
+    @Size(min = 1, max = 255)
     String getBackendName();
 
     /**
@@ -48,6 +51,7 @@ public interface DataBackendDescription extends DataBackendDescriptionBase {
      * @return the data backend primary URL
      */
     @Nullable
+    @Size(min = 1, max = 1000)
     String getPrimaryUrl();
 
     /**
@@ -74,7 +78,7 @@ public interface DataBackendDescription extends DataBackendDescriptionBase {
      * @return the data backend state
      */
     @Nonnull
-    DataBackendState getDataBackendState();
+    DataBackendState getBackendState();
 
     /**
      * Get a text message describing the backend state (in english).
@@ -85,7 +89,7 @@ public interface DataBackendDescription extends DataBackendDescriptionBase {
      */
     @Nullable
     @Size(min = 1)
-    String getDataBackendStateExplanation();
+    String getBackendStateExplanation();
 
     /**
      * Get the number of nodes composing the data backend cluster.

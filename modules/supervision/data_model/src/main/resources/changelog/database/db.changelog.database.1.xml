@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ This Source Code Form is subject to the terms of the Mozilla Public
+  ~ License, v. 2.0. If a copy of the MPL was not distributed with this
+  ~ file, You can obtain one at https://mozilla.org/MPL/2.0/.
+  -->
+
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+
+    <changeSet id="1" author="dademo">
+        <comment>Database-related tables</comment>
+        <!-- fr.dademo.supervision.entities.database.DataBackendGlobalDatabaseDescriptionEntity -->
+        <createTable tableName="data_backend_global_database_description" schemaName="${schema_name}">
+            <column name="id" type="INTEGER" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="id_backend_state_execution" type="INTEGER">
+                <constraints
+                    nullable="false" unique="false"
+                    foreignKeyName="fk_data_backend_state_execution_id"
+                    referencedTableSchemaName="${schema_name}"
+                    referencedTableName="data_backend_state_execution"
+                    referencedColumnNames="id"
+                />
+            </column>
+            <column name="start_time" type="datetime">
+                <constraints nullable="true" unique="false"/>
+            </column>
+        </createTable>
+        <createIndex tableName="data_backend_global_database_description"
+                     indexName="idx_data_backend_global_database_description_start_time"
+                     schemaName="${schema_name}">
+            <column name="start_time" descending="true"/>
+        </createIndex>
+
+        <!-- fr.dademo.supervision.entities.database.DataBackendDatabaseConnectionEntity -->
+        <createTable tableName="data_backend_database_connection" schemaName="${schema_name}">
+            <column name="id" type="INTEGER" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="id_global_database" type="INTEGER">
+                <constraints
+                    nullable="false" unique="false"
+                    foreignKeyName="fk_data_backend_global_database_description_id"
+                    referencedTableSchemaName="${schema_name}"
+                    referencedTableName="data_backend_global_database_description"
+                    referencedColumnNames="id"
+                />
+            </column>
+            <column name="connection_state" type="VARCHAR(50)">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="connection_pid" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="connected_database_name" type="VARCHAR(255)">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="user_name" type="VARCHAR(255)">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="application_name" type="VARCHAR(255)">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="client_address" type="CLOB">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="client_hostname" type="VARCHAR(255)">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="client_port" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="connection_start" type="DATETIME">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="transaction_start" type="DATETIME">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="last_query_start" type="DATETIME">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="last_state_change" type="DATETIME">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="wait_event_type" type="CLOB">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="wait_event_name" type="CLOB">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="last_query" type="CLOB">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="backend_type_name" type="CLOB">
+                <constraints nullable="true" unique="false"/>
+            </column>
+        </createTable>
+        <createIndex tableName="data_backend_database_connection"
+                     indexName="idx_data_backend_database_connection_user_name"
+                     schemaName="${schema_name}">
+            <column name="user_name" descending="true"/>
+        </createIndex>
+        <createIndex tableName="data_backend_database_connection"
+                     indexName="idx_data_backend_database_connection_application_name"
+                     schemaName="${schema_name}">
+            <column name="application_name" descending="true"/>
+        </createIndex>
+        <createIndex tableName="data_backend_database_connection"
+                     indexName="idx_data_backend_database_connection_client_address"
+                     schemaName="${schema_name}">
+            <column name="client_address" descending="true"/>
+        </createIndex>
+        <createIndex tableName="data_backend_database_connection"
+                     indexName="idx_data_backend_database_connection_client_address_port"
+                     schemaName="${schema_name}">
+            <column name="client_address" descending="true"/>
+            <column name="client_port" descending="true"/>
+        </createIndex>
+        <createIndex tableName="data_backend_database_connection"
+                     indexName="idx_data_backend_database_connection_client_hostname"
+                     schemaName="${schema_name}">
+            <column name="client_hostname" descending="true"/>
+        </createIndex>
+        <createIndex tableName="data_backend_database_connection"
+                     indexName="idx_data_backend_database_connection_client_hostname_port"
+                     schemaName="${schema_name}">
+            <column name="client_hostname" descending="true"/>
+            <column name="client_port" descending="true"/>
+        </createIndex>
+
+        <!-- fr.dademo.supervision.entities.database.DataBackendDatabaseDescriptionEntity -->
+        <createTable tableName="data_backend_database_description" schemaName="${schema_name}">
+            <column name="id" type="INTEGER" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="id_global_database" type="INTEGER">
+                <constraints
+                    nullable="false" unique="false"
+                    foreignKeyName="fk_data_backend_global_database_description_id"
+                    referencedTableSchemaName="${schema_name}"
+                    referencedTableName="data_backend_global_database_description"
+                    referencedColumnNames="id"
+                />
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="memory_usage_bytes" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="cpu_usage_millicpu" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="commits_count" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="rollbacks_count" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="buffer_blocks_read" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="disk_blocks_read" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="returned_rows_count" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="fetched_rows_count" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="inserted_rows_count" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="updated_rows_count" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="deleted_rows_count" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="conflicts_count" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="dead_locks_count" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="read_time_milliseconds" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="write_time_milliseconds" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+        </createTable>
+        <createIndex tableName="data_backend_database_description"
+                     indexName="idx_data_backend_database_description_name"
+                     schemaName="${schema_name}">
+            <column name="name" descending="true"/>
+        </createIndex>
+
+        <!-- fr.dademo.supervision.entities.database.DataBackendDatabaseSchemaEntity -->
+        <createTable tableName="data_backend_database_schema" schemaName="${schema_name}">
+            <column name="id" type="INTEGER" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="id_database" type="INTEGER">
+                <constraints
+                    nullable="false" unique="false"
+                    foreignKeyName="fk_data_backend_database_description_id"
+                    referencedTableSchemaName="${schema_name}"
+                    referencedTableName="data_backend_database_description"
+                    referencedColumnNames="id"
+                />
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="true" unique="false"/>
+            </column>
+        </createTable>
+        <createIndex tableName="data_backend_database_schema"
+                     indexName="idx_data_backend_database_schema_name"
+                     schemaName="${schema_name}">
+            <column name="name" descending="true"/>
+        </createIndex>
+
+        <!-- fr.dademo.supervision.entities.database.DataBackendDatabaseTableEntity -->
+        <createTable tableName="data_backend_database_table" schemaName="${schema_name}">
+            <column name="id" type="INTEGER" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="id_schema" type="INTEGER">
+                <constraints
+                    nullable="false" unique="false"
+                    foreignKeyName="fk_data_backend_database_schema_id"
+                    referencedTableSchemaName="${schema_name}"
+                    referencedTableName="data_backend_database_schema"
+                    referencedColumnNames="id"
+                />
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="rows_count" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="total_size" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="sequential_scans_count" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="sequential_scans_fetched_rows_count" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="index_scans_count" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="index_scans_fetched_rows_count" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="inserted_rows_count" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="updated_rows_count" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="deleted_rows_count" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="hot_updated_rows_count" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="live_rows_count" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="dead_rows_count" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="last_vacuum" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="last_auto_vacuum" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="last_analyze" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="last_auto_analyze" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="vacuum_count" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="auto_vacuum_count" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="analyze_count" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="auto_analyze_count" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="table_blocks_disk_read" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="table_blocks_cache_read" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="indexes_disk_read" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="indexes_cache_read" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="table_toast_disk_read" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="table_toast_cache_read" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="indexes_toast_disk_read" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="indexes_toast_cache_read" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+        </createTable>
+        <createIndex tableName="data_backend_database_table"
+                     indexName="idx_data_backend_database_table_name"
+                     schemaName="${schema_name}">
+            <column name="name" descending="true"/>
+        </createIndex>
+
+        <!-- fr.dademo.supervision.entities.database.DataBackendDatabaseViewEntity -->
+        <createTable tableName="data_backend_database_view" schemaName="${schema_name}">
+            <column name="id" type="INTEGER" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="id_schema" type="INTEGER">
+                <constraints
+                    nullable="false" unique="false"
+                    foreignKeyName="fk_data_backend_database_schema_id"
+                    referencedTableSchemaName="${schema_name}"
+                    referencedTableName="data_backend_database_schema"
+                    referencedColumnNames="id"
+                />
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="rows_count" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="total_size" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="expression" type="CLOB">
+                <constraints nullable="true" unique="false"/>
+            </column>
+        </createTable>
+        <createIndex tableName="data_backend_database_view"
+                     indexName="idx_data_backend_database_view_name"
+                     schemaName="${schema_name}">
+            <column name="name" descending="true"/>
+        </createIndex>
+
+        <!-- fr.dademo.supervision.entities.database.DataBackendDatabaseIndexEntity -->
+        <createTable tableName="data_backend_database_index" schemaName="${schema_name}">
+            <column name="id" type="INTEGER" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="id_schema" type="INTEGER">
+                <constraints
+                    nullable="false" unique="false"
+                    foreignKeyName="fk_data_backend_database_schema_id"
+                    referencedTableSchemaName="${schema_name}"
+                    referencedTableName="data_backend_database_schema"
+                    referencedColumnNames="id"
+                />
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="table_name" type="VARCHAR(255)">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="index_scans_count" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="returned_rows_count" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="fetched_rows_count" type="BIGINT">
+                <constraints nullable="true" unique="false"/>
+            </column>
+        </createTable>
+        <createIndex tableName="data_backend_database_index"
+                     indexName="idx_data_backend_database_index_name"
+                     schemaName="${schema_name}">
+            <column name="name" descending="true"/>
+        </createIndex>
+
+    </changeSet>
+</databaseChangeLog>

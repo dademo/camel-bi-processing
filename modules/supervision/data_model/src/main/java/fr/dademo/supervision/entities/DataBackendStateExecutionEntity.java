@@ -39,7 +39,7 @@ public class DataBackendStateExecutionEntity implements Serializable {
     @Embedded
     private DataBackendDescriptionEntity dataBackendDescriptionEntity;
 
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @OneToOne(optional = false, mappedBy = "backendStateExecution", fetch = FetchType.LAZY)
     @JoinColumn(name = "global_database_id")
     @Nullable
     @ToString.Exclude

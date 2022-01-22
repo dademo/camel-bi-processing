@@ -90,10 +90,10 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
     public DataBackendDescription getDataBackendDescription() {
 
         final var objectBuilder = GlobalDatabaseDescriptionDefaultImpl.builder()
-            .dataBackendState(DataBackendState.READY)
-            .dataBackendStateExplanation(null)
+            .backendState(DataBackendState.READY)
+            .backendStateExplanation(null)
             .backendName(getConnectionUrl())
-            .primaryUrl(moduleConfiguration.getDataSourceUrl())
+            .primaryUrl(moduleConfiguration.getDatasource().getUrl())
             .startTime(databaseGlobalStatisticsQueryRepository.getDatabaseStartTime())
             .databaseConnections(getAllDatabasesConnections())
             .databasesDescriptions(getAllDatabasesDescriptions());
@@ -148,7 +148,7 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
         objectBuilder
             .nodeUrls(Stream.concat(
                 replicationHosts.stream(),
-                Stream.of(moduleConfiguration.getDataSourceUrl())
+                Stream.of(moduleConfiguration.getDatasource().getUrl())
             ).collect(Collectors.toList()))
             .clusterSize(replicationHosts.size() + 1)
             .primaryCount(1)

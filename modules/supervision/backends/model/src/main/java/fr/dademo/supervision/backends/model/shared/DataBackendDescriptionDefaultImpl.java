@@ -26,15 +26,19 @@ import javax.validation.constraints.Size;
 public abstract class DataBackendDescriptionDefaultImpl extends DataBackendDescriptionBaseDefaultImpl implements DataBackendDescription {
 
     @Nonnull
+    @Size(min = 1, max = 255)
     private String backendProductName;
 
     @Nonnull
+    @Size(min = 1, max = 50)
     private String backendProductVersion;
 
     @Nullable
+    @Size(min = 1, max = 255)
     private String backendName;
 
     @Nonnull
+    @Size(min = 1, max = 1000)
     private String primaryUrl;
 
     @Size(min = 1)
@@ -42,11 +46,11 @@ public abstract class DataBackendDescriptionDefaultImpl extends DataBackendDescr
     private Iterable<String> nodeUrls;
 
     @Nonnull
-    private DataBackendState dataBackendState;
+    private DataBackendState backendState;
 
     @Nullable
     @Size(min = 1)
-    private String dataBackendStateExplanation;
+    private String backendStateExplanation;
 
     @Nullable
     @Min(1)

@@ -20,7 +20,7 @@ import javax.validation.constraints.Size;
 public class DatabaseSchemaDefaultImpl implements DatabaseSchema {
 
     @Nonnull
-    @Size(min = 1)
+    @Size(min = 1, max = 255)
     private String name;
 
     @Nonnull

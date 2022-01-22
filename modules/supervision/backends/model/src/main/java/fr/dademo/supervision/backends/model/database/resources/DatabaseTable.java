@@ -18,7 +18,7 @@ import java.util.Date;
 public interface DatabaseTable {
 
     @Nonnull
-    @Size(min = 1)
+    @Size(min = 1, max = 255)
     String getName();
 
     @Nullable

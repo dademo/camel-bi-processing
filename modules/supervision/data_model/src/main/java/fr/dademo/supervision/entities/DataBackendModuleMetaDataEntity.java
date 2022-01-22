@@ -9,8 +9,10 @@ package fr.dademo.supervision.entities;
 import lombok.*;
 
 import javax.annotation.Nonnull;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 /**
  * @author dademo
@@ -22,21 +24,27 @@ import javax.validation.constraints.Min;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Embeddable
-public class DataBackendModuleMetaDataEntity {
+public class DataBackendModuleMetaDataEntity implements Serializable {
+
+    private static final long serialVersionUID = 5299679268268153054L;
 
     @Nonnull
-    @Min(1)
+    @Size(min = 1, max = 255)
+    @Column(name = "module_name", nullable = false, updatable = false)
     private String moduleName;
 
     @Nonnull
-    @Min(1)
+    @Size(min = 1, max = 255)
+    @Column(name = "module_title", nullable = false, updatable = false)
     private String moduleTitle;
 
     @Nonnull
-    @Min(1)
+    @Size(min = 1, max = 50)
+    @Column(name = "module_version", nullable = false, updatable = false)
     private String moduleVersion;
 
     @Nonnull
-    @Min(1)
+    @Size(min = 1, max = 255)
+    @Column(name = "module_vendor", nullable = false, updatable = false)
     private String moduleVendor;
 }

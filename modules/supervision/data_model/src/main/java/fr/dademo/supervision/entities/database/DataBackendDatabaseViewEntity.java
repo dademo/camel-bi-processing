@@ -23,7 +23,7 @@ import java.io.Serializable;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Entity
-@Table(name = "data_backend_database_view_entity")
+@Table(name = "data_backend_database_view")
 public class DataBackendDatabaseViewEntity implements Serializable {
 
     private static final long serialVersionUID = 137597439122592056L;
@@ -34,21 +34,27 @@ public class DataBackendDatabaseViewEntity implements Serializable {
     private Long id;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_schema")
     @ToString.Exclude
     private DataBackendDatabaseSchemaEntity schema;
 
     @Nonnull
-    @Size(min = 1)
+    @Column(name = "name", updatable = false)
+    @Size(min = 1, max = 255)
     private String name;
 
     @Nullable
+    @Column(name = "rows_count", updatable = false)
     @Min(0)
     private Long rowsCount;
 
     @Nullable
+    @Column(name = "total_size", updatable = false)
     @Min(0)
     private Long totalSize;
 
     @Nullable
+    @Column(name = "expression", updatable = false)
+    @Size(min = 1)
     private String expression;
 }

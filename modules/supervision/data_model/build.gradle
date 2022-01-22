@@ -4,11 +4,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-// https://start.spring.io/#!type=gradle-project&language=java&platformVersion=2.5.6&packaging=jar&jvmVersion=11&groupId=fr.dademo&artifactId=bi.companies&name=bi.companies&description=BI%20analysis%20using%20french%20government%20Open%20Data&packageName=fr.dademo.bi.companies&dependencies=lombok,configuration-processor,jdbc,data-jdbc,flyway,mariadb,postgresql,data-mongodb,data-couchbase,amqp,kafka,batch,validation,testcontainers,influx
 plugins {
     id 'org.springframework.boot' version "${springBootVersion}"
     id 'io.spring.dependency-management' version "${springDependencyManagement}"
     id 'java-library'
+    id 'org.liquibase.gradle' version "${liquibaseGradlePluginVersion}"
 }
 
 version '1.0.0-SNAPSHOT'
@@ -29,7 +29,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation "org.flywaydb:flyway-core:${flywayVersion}"
+    implementation "org.liquibase:liquibase-core:${liquibaseVersion}"
 
     // Other libraries
     implementation "javax.validation:validation-api:${javaxValidationApiVersion}"

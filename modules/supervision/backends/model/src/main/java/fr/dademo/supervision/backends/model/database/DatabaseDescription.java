@@ -22,7 +22,7 @@ import java.util.Date;
 public interface DatabaseDescription extends DataBackendDescriptionBase {
 
     @Nullable
-    @Size(min = 1)
+    @Size(min = 1, max = 255)
     String getName();
 
     @Nullable
@@ -31,7 +31,7 @@ public interface DatabaseDescription extends DataBackendDescriptionBase {
 
     @Nullable
     @Min(0)
-    Long getRollbackCounts();
+    Long getRollbacksCounts();
 
     @Nullable
     @Min(0)

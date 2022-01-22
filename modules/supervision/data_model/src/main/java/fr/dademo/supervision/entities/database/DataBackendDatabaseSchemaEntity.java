@@ -22,7 +22,7 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Entity
-@Table(name = "data_backend_database_schema_entity")
+@Table(name = "data_backend_database_schema")
 public class DataBackendDatabaseSchemaEntity implements Serializable {
 
     private static final long serialVersionUID = 7554858801534261567L;
@@ -33,12 +33,9 @@ public class DataBackendDatabaseSchemaEntity implements Serializable {
     private Long id;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_database")
     @ToString.Exclude
     private DataBackendDatabaseDescriptionEntity database;
-
-    @Nonnull
-    @Size(min = 1)
-    private String name;
 
     @Nonnull
     @OneToMany(mappedBy = "schema", fetch = FetchType.LAZY)
@@ -54,4 +51,9 @@ public class DataBackendDatabaseSchemaEntity implements Serializable {
     @OneToMany(mappedBy = "schema", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<DataBackendDatabaseIndexEntity> indexes;
+
+    @Nonnull
+    @Size(min = 1, max = 255)
+    @Column(name = "name", updatable = false)
+    private String name;
 }

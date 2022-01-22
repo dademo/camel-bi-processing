@@ -27,11 +27,12 @@ public class ModuleBeans {
     @Bean(name = MODULE_DATASOURCE_BEAN_NAME)
     public DataSource moduleDataSource(ModuleConfiguration moduleConfiguration) {
 
+        final var dataSourceConfiguration = moduleConfiguration.getDatasource();
         final var dataSourceBuilder = DataSourceBuilder.create();
         dataSourceBuilder.driverClassName(DRIVER_CLASS_POSTGRESQL);
-        dataSourceBuilder.url(moduleConfiguration.getDataSourceUrl());
-        dataSourceBuilder.username(moduleConfiguration.getUsername());
-        dataSourceBuilder.password(moduleConfiguration.getPassword());
+        dataSourceBuilder.url(dataSourceConfiguration.getUrl());
+        dataSourceBuilder.username(dataSourceConfiguration.getUsername());
+        dataSourceBuilder.password(dataSourceConfiguration.getPassword());
         return dataSourceBuilder.build();
     }
 

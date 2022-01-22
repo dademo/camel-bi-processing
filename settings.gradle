@@ -16,6 +16,7 @@ rootProject.name = 'bi-data-integration'
 
 // Sub-modules
 include 'modules:dependencies:tools:generic_tools'
+include 'modules:dependencies:tools:liquibase'
 include 'modules:dependencies:data:generic:stream_definitions'
 include 'modules:dependencies:reader:http'
 include 'modules:dependencies:reader:file'

@@ -24,7 +24,7 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Entity
-@Table(name = "data_backend_database_description_entity")
+@Table(name = "data_backend_global_database_description")
 public class DataBackendGlobalDatabaseDescriptionEntity implements Serializable {
 
     private static final long serialVersionUID = 2888789316495194833L;
@@ -35,7 +35,7 @@ public class DataBackendGlobalDatabaseDescriptionEntity implements Serializable 
     private Long id;
 
     @OneToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "backend_state_execution_id")
+    @JoinColumn(name = "id_backend_state_execution")
     @ToString.Exclude
     private DataBackendStateExecutionEntity backendStateExecution;
 
@@ -50,5 +50,6 @@ public class DataBackendGlobalDatabaseDescriptionEntity implements Serializable 
     private List<DataBackendDatabaseDescriptionEntity> databases;
 
     @Nullable
+    @Column(name = "start_time", updatable = false)
     private Date startTime;
 }

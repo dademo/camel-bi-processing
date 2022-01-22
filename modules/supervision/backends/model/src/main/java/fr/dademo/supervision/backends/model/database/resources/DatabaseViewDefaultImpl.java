@@ -22,7 +22,7 @@ import javax.validation.constraints.Size;
 public class DatabaseViewDefaultImpl implements DatabaseView {
 
     @Nonnull
-    @Size(min = 1)
+    @Size(min = 1, max = 255)
     private String name;
 
     @Nullable

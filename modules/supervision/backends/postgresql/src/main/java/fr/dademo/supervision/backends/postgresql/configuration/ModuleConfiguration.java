@@ -22,12 +22,19 @@ import javax.annotation.Nonnull;
 @ConfigurationProperties(prefix = "module")
 public class ModuleConfiguration {
 
-    @Nonnull
-    private String dataSourceUrl;
+    private DatasourceConfiguration datasource;
 
-    @Nonnull
-    private String username;
+    @Data
+    @NoArgsConstructor
+    public static class DatasourceConfiguration {
 
-    @Nonnull
-    private String password;
+        @Nonnull
+        private String url;
+
+        @Nonnull
+        private String username;
+
+        @Nonnull
+        private String password;
+    }
 }

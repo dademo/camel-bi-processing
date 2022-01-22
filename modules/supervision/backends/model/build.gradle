@@ -4,7 +4,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-// https://start.spring.io/#!type=gradle-project&language=java&platformVersion=2.5.6&packaging=jar&jvmVersion=11&groupId=fr.dademo&artifactId=bi.companies&name=bi.companies&description=BI%20analysis%20using%20french%20government%20Open%20Data&packageName=fr.dademo.bi.companies&dependencies=lombok,configuration-processor,jdbc,data-jdbc,flyway,mariadb,postgresql,data-mongodb,data-couchbase,amqp,kafka,batch,validation,testcontainers,influx
 plugins {
     id 'org.springframework.boot' version "${springBootVersion}"
     id 'io.spring.dependency-management' version "${springDependencyManagement}"

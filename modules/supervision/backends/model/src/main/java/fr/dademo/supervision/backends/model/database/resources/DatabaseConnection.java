@@ -18,7 +18,6 @@ import java.util.Date;
 public interface DatabaseConnection {
 
     @Nullable
-    @Size(min = 1)
     DatabaseConnectionState getConnectionState();
 
     @Nullable
@@ -26,22 +25,22 @@ public interface DatabaseConnection {
     Long getConnectionPID();
 
     @Nullable
-    @Size(min = 1)
+    @Size(min = 1, max = 255)
     String getConnectedDatabaseName();
 
     @Nullable
-    @Size(min = 1)
+    @Size(min = 1, max = 255)
     String getUserName();
 
     @Nullable
-    @Size(min = 1)
+    @Size(min = 1, max = 255)
     String getApplicationName();
 
     @Nullable
     InetAddress getClientAddress();
 
     @Nullable
-    @Size(min = 1)
+    @Size(min = 1, max = 255)
     String getClientHostname();
 
     @Nullable
