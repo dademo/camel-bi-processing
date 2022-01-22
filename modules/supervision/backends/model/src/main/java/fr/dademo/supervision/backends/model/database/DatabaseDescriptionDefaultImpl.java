@@ -76,6 +76,14 @@ public class DatabaseDescriptionDefaultImpl extends DataBackendDescriptionBaseDe
     private Long deadlocksCount;
 
     @Nullable
+    @Min(0)
+    Long memoryUsageBytes;
+
+    @Nullable
+    @Min(0)
+    Long cpuUsageMilliCPU;
+
+    @Nullable
     private Duration readTime;
 
     @Nullable

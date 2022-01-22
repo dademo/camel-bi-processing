@@ -35,14 +35,14 @@ public class DataBackendDatabaseDescriptionEntity implements Serializable {
     private Long id;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_global_database")
+    @JoinColumn(name = "id_global_database", referencedColumnName = "id", nullable = false)
     @ToString.Exclude
     private DataBackendGlobalDatabaseDescriptionEntity globalDatabase;
 
     @Nonnull
-    @OneToMany(mappedBy = "database", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "database", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @ToString.Exclude
-    private List<DataBackendDatabaseSchemaEntity> databaseSchemas;
+    private List<DataBackendDatabaseSchemaEntity> schemas;
 
     @Nullable
     @Size(min = 1, max = 255)

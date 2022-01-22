@@ -70,6 +70,14 @@ public interface DatabaseDescription extends DataBackendDescriptionBase {
     Long getDeadlocksCount();
 
     @Nullable
+    @Min(0)
+    Long getMemoryUsageBytes();
+
+    @Nullable
+    @Min(0)
+    Long getCpuUsageMilliCPU();
+
+    @Nullable
     Duration getReadTime();
 
     @Nullable

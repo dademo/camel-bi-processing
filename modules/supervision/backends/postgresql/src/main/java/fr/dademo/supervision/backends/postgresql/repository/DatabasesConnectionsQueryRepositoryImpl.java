@@ -35,7 +35,10 @@ public class DatabasesConnectionsQueryRepositoryImpl implements DatabasesConnect
         "  PID, " +
         "  DATNAME, " +
         "  USENAME, " +
-        "  APPLICATION_NAME, " +
+        "  CASE LENGTH(TRIM(APPLICATION_NAME))" +
+        "    WHEN 0 THEN NULL" +
+        "    ELSE APPLICATION_NAME" +
+        "  END AS APPLICATION_NAME, " +
         "  REGEXP_REPLACE(CLIENT_ADDR::VARCHAR, '\\/.+$', ''), " +
         "  CLIENT_HOSTNAME, " +
         "  CLIENT_PORT, " +
@@ -45,7 +48,11 @@ public class DatabasesConnectionsQueryRepositoryImpl implements DatabasesConnect
         "  STATE_CHANGE, " +
         "  WAIT_EVENT_TYPE, " +
         "  WAIT_EVENT, " +
-        "  QUERY %s " +
+        "  CASE LENGTH(TRIM(QUERY))" +
+        "    WHEN 0 THEN NULL" +
+        "    ELSE QUERY" +
+        "  END AS QUERY " +
+        "  %s " +
         "FROM PG_CATALOG.PG_STAT_ACTIVITY ";
 
     @Qualifier(MODULE_JDBC_TEMPLATE_BEAN_NAME)

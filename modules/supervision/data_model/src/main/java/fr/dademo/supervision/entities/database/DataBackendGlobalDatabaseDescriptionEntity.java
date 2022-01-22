@@ -10,10 +10,8 @@ import fr.dademo.supervision.entities.DataBackendStateExecutionEntity;
 import lombok.*;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -35,21 +33,17 @@ public class DataBackendGlobalDatabaseDescriptionEntity implements Serializable 
     private Long id;
 
     @OneToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_backend_state_execution")
+    @JoinColumn(name = "id_backend_state_execution", referencedColumnName = "id", nullable = false)
     @ToString.Exclude
     private DataBackendStateExecutionEntity backendStateExecution;
 
     @Nonnull
-    @OneToMany(mappedBy = "globalDatabase", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "globalDatabase", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @ToString.Exclude
     private List<DataBackendDatabaseConnectionEntity> connections;
 
     @Nonnull
-    @OneToMany(mappedBy = "globalDatabase", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "globalDatabase", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @ToString.Exclude
     private List<DataBackendDatabaseDescriptionEntity> databases;
-
-    @Nullable
-    @Column(name = "start_time", updatable = false)
-    private Date startTime;
 }

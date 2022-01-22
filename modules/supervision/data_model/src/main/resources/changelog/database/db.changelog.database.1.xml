@@ -27,15 +27,7 @@
                     referencedColumnNames="id"
                 />
             </column>
-            <column name="start_time" type="datetime">
-                <constraints nullable="true" unique="false"/>
-            </column>
         </createTable>
-        <createIndex tableName="data_backend_global_database_description"
-                     indexName="idx_data_backend_global_database_description_start_time"
-                     schemaName="${schema_name}">
-            <column name="start_time" descending="true"/>
-        </createIndex>
 
         <!-- fr.dademo.supervision.entities.database.DataBackendDatabaseConnectionEntity -->
         <createTable tableName="data_backend_database_connection" schemaName="${schema_name}">
@@ -279,16 +271,16 @@
             <column name="dead_rows_count" type="BIGINT">
                 <constraints nullable="true" unique="false"/>
             </column>
-            <column name="last_vacuum" type="BIGINT">
+            <column name="last_vacuum" type="DATETIME">
                 <constraints nullable="true" unique="false"/>
             </column>
-            <column name="last_auto_vacuum" type="BIGINT">
+            <column name="last_auto_vacuum" type="DATETIME">
                 <constraints nullable="true" unique="false"/>
             </column>
-            <column name="last_analyze" type="BIGINT">
+            <column name="last_analyze" type="DATETIME">
                 <constraints nullable="true" unique="false"/>
             </column>
-            <column name="last_auto_analyze" type="BIGINT">
+            <column name="last_auto_analyze" type="DATETIME">
                 <constraints nullable="true" unique="false"/>
             </column>
             <column name="vacuum_count" type="BIGINT">

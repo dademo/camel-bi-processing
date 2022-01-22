@@ -10,11 +10,14 @@ import lombok.Builder;
 import lombok.Value;
 import org.springframework.jdbc.core.RowMapper;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.util.Date;
+
+import static fr.dademo.supervision.backends.postgresql.repository.entities.RowMapperUtilities.validateField;
 
 /**
  * @author dademo
@@ -74,25 +77,25 @@ public class DatabaseStatisticsEntity {
     public static class DatabaseStatisticsRowMapper implements RowMapper<DatabaseStatisticsEntity> {
 
         @Override
-        public DatabaseStatisticsEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
+        public DatabaseStatisticsEntity mapRow(@Nonnull ResultSet rs, int rowNum) throws SQLException {
 
             return DatabaseStatisticsEntity.builder()
-                .startTime(rs.getTimestamp(1))
-                .name(rs.getString(2))
-                .commitCounts(rs.getLong(3))
-                .rollbackCounts(rs.getLong(4))
-                .bufferBlocksRead(rs.getLong(5))
-                .diskBlocksRead(rs.getLong(6))
-                .returnedRowsCount(rs.getLong(7))
-                .fetchedRowsCount(rs.getLong(8))
-                .insertedRowsCount(rs.getLong(9))
-                .updatedRowsCount(rs.getLong(10))
-                .deletedRowsCount(rs.getLong(11))
-                .conflictsCount(rs.getLong(12))
-                .deadlocksCount(rs.getLong(13))
-                .readTime(fromDurationMilliseconds(rs.getDouble(14)))
-                .writeTime(fromDurationMilliseconds(rs.getDouble(15)))
-                .lastStatisticsResetTime(rs.getTimestamp(16))
+                .startTime(validateField(rs.getTimestamp(1), rs))
+                .name(validateField(rs.getString(2), rs))
+                .commitCounts(validateField(rs.getLong(3), rs))
+                .rollbackCounts(validateField(rs.getLong(4), rs))
+                .bufferBlocksRead(validateField(rs.getLong(5), rs))
+                .diskBlocksRead(validateField(rs.getLong(6), rs))
+                .returnedRowsCount(validateField(rs.getLong(7), rs))
+                .fetchedRowsCount(validateField(rs.getLong(8), rs))
+                .insertedRowsCount(validateField(rs.getLong(9), rs))
+                .updatedRowsCount(validateField(rs.getLong(10), rs))
+                .deletedRowsCount(validateField(rs.getLong(11), rs))
+                .conflictsCount(validateField(rs.getLong(12), rs))
+                .deadlocksCount(validateField(rs.getLong(13), rs))
+                .readTime(validateField(fromDurationMilliseconds(rs.getDouble(14)), rs))
+                .writeTime(validateField(fromDurationMilliseconds(rs.getDouble(15)), rs))
+                .lastStatisticsResetTime(validateField(rs.getTimestamp(16), rs))
                 .build();
         }
 

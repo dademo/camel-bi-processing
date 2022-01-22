@@ -6,6 +6,7 @@
 
 package fr.dademo.supervision.entities.database;
 
+
 import lombok.*;
 
 import javax.annotation.Nullable;
@@ -14,6 +15,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
+
 
 @Getter
 @Setter
@@ -27,40 +29,48 @@ public class DataBackendDatabaseConnectionEntity implements Serializable {
 
     private static final long serialVersionUID = -6016932834303708425L;
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
+
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_global_database")
+    @JoinColumn(name = "id_global_database", referencedColumnName = "id", nullable = false)
     @ToString.Exclude
     private DataBackendGlobalDatabaseDescriptionEntity globalDatabase;
+
 
     @Nullable
     @Size(min = 1)
     @Column(name = "connection_state", updatable = false)
     private String connectionState;
 
+
     @Nullable
     @Min(1)
     @Column(name = "connection_pid", updatable = false)
     private Long connectionPID;
+
 
     @Nullable
     @Size(min = 1)
     @Column(name = "connected_database_name", updatable = false)
     private String connectedDatabaseName;
 
+
     @Nullable
     @Size(min = 1)
     @Column(name = "user_name", updatable = false)
     private String userName;
 
+
     @Nullable
     @Size(min = 1)
     @Column(name = "application_name", updatable = false)
     private String applicationName;
+
 
     @Nullable
     @Size(min = 1)
@@ -112,4 +122,5 @@ public class DataBackendDatabaseConnectionEntity implements Serializable {
     @Size(min = 1)
     @Column(name = "backend_type_name", updatable = false)
     private String backendTypeName;
+
 }

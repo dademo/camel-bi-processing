@@ -116,7 +116,7 @@ allprojects {
                 }
             }
 
-            project.getDependencies().add('liquibaseRuntime', project.sourceSets.main.output)
+            //project.getDependencies().add('liquibaseRuntime', project.sourceSets.main.output)
 
             // We import all project default libs, https://stackoverflow.com/questions/52517215/setup-liquibase-in-a-gradle-spring-boot-hibernate-project
             project.getConfigurations().findByName('liquibaseRuntime')?.extendsFrom(

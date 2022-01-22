@@ -12,6 +12,7 @@ import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.RowMapper;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -21,6 +22,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
+
+import static fr.dademo.supervision.backends.postgresql.repository.entities.RowMapperUtilities.validateField;
 
 /**
  * @author dademo
@@ -81,24 +84,24 @@ public class DatabaseConnectionEntity {
     public static class DatabaseConnectionEntityRowMapper implements RowMapper<DatabaseConnectionEntity> {
 
         @Override
-        public DatabaseConnectionEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
+        public DatabaseConnectionEntity mapRow(@Nonnull ResultSet rs, int rowNum) throws SQLException {
 
             final var objectBuilder = DatabaseConnectionEntity.builder()
-                .connectionState(getFromValue(rs.getString(1)).orElse(null))
-                .connectionPID(rs.getLong(2))
-                .connectedDatabaseName(rs.getString(3))
-                .userName(rs.getString(4))
-                .applicationName(rs.getString(5))
-                .clientAddress(mapToInet(rs.getString(6)))
-                .clientHostname(rs.getString(7))
-                .clientPort(rs.getLong(8))
-                .connectionStart(rs.getTimestamp(9))
-                .transactionStart(rs.getTimestamp(10))
-                .lastQueryStart(rs.getTimestamp(11))
-                .lastStateChange(rs.getTimestamp(12))
-                .waitEventType(rs.getString(13))
-                .waitEventName(rs.getString(14))
-                .lastQuery(rs.getString(15));
+                .connectionState(getConnectionStateFromValue(validateField(rs.getString(1), rs)).orElse(null))
+                .connectionPID(validateField(rs.getLong(2), rs))
+                .connectedDatabaseName(validateField(rs.getString(3), rs))
+                .userName(validateField(rs.getString(4), rs))
+                .applicationName(validateField(rs.getString(5), rs))
+                .clientAddress(mapToInet(validateField(rs.getString(6), rs)))
+                .clientHostname(validateField(rs.getString(7), rs))
+                .clientPort(validateField(rs.getLong(8), rs))
+                .connectionStart(validateField(rs.getTimestamp(9), rs))
+                .transactionStart(validateField(rs.getTimestamp(10), rs))
+                .lastQueryStart(validateField(rs.getTimestamp(11), rs))
+                .lastStateChange(validateField(rs.getTimestamp(12), rs))
+                .waitEventType(validateField(rs.getString(13), rs))
+                .waitEventName(validateField(rs.getString(14), rs))
+                .lastQuery(validateField(rs.getString(15), rs));
 
             try {
                 objectBuilder.backendTypeName(rs.getString(16));
@@ -109,7 +112,7 @@ public class DatabaseConnectionEntity {
             return objectBuilder.build();
         }
 
-        private Optional<DatabaseConnectionState> getFromValue(String value) {
+        private Optional<DatabaseConnectionState> getConnectionStateFromValue(String value) {
 
             return Arrays.stream(DatabaseConnectionState.values())
                 .filter(databaseConnectionState -> Objects.equals(value, databaseConnectionState.getValue()))

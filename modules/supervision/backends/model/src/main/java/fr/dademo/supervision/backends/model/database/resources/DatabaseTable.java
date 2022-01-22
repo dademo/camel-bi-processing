@@ -70,19 +70,15 @@ public interface DatabaseTable {
     Long getDeadRowsCount();
 
     @Nullable
-    @Min(0)
     Date getLastVacuum();
 
     @Nullable
-    @Min(0)
     Date getLastAutoVacuum();
 
     @Nullable
-    @Min(0)
     Date getLastAnalyze();
 
     @Nullable
-    @Min(0)
     Date getLastAutoAnalyze();
 
     @Nullable

@@ -14,6 +14,8 @@ import javax.annotation.Nonnull;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import static fr.dademo.supervision.backends.postgresql.repository.entities.RowMapperUtilities.validateField;
+
 /**
  * @author dademo
  */
@@ -30,11 +32,11 @@ public class DatabaseProductVersionEntity {
     public static class DatabaseProductRowMapper implements RowMapper<DatabaseProductVersionEntity> {
 
         @Override
-        public DatabaseProductVersionEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
+        public DatabaseProductVersionEntity mapRow(@Nonnull ResultSet rs, int rowNum) throws SQLException {
 
             return DatabaseProductVersionEntity.builder()
-                .productNameFull(rs.getString(1))
-                .productVersion(rs.getString(2))
+                .productNameFull(validateField(rs.getString(1), rs))
+                .productVersion(validateField(rs.getString(2), rs))
                 .build();
         }
     }

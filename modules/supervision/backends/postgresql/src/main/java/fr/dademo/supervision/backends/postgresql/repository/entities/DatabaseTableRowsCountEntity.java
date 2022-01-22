@@ -14,6 +14,8 @@ import javax.annotation.Nonnull;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import static fr.dademo.supervision.backends.postgresql.repository.entities.RowMapperUtilities.validateField;
+
 /**
  * @author dademo
  */
@@ -30,7 +32,7 @@ public class DatabaseTableRowsCountEntity {
         public DatabaseTableRowsCountEntity mapRow(@Nonnull ResultSet rs, int rowNum) throws SQLException {
 
             return DatabaseTableRowsCountEntity.builder()
-                .rowCount(rs.getLong(1))
+                .rowCount(validateField(rs.getLong(1), rs))
                 .build();
         }
     }

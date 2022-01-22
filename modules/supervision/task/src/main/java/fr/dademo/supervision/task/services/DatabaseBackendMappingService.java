@@ -6,7 +6,7 @@
 
 package fr.dademo.supervision.task.services;
 
-import fr.dademo.supervision.backends.model.shared.DataBackendDescription;
+import fr.dademo.supervision.backends.model.database.GlobalDatabaseDescription;
 import fr.dademo.supervision.backends.model.shared.DataBackendModuleMetaData;
 import fr.dademo.supervision.entities.DataBackendStateExecutionEntity;
 
@@ -15,11 +15,10 @@ import javax.annotation.Nonnull;
 /**
  * @author dademo
  */
-public interface DataBackendMappingService {
+public interface DatabaseBackendMappingService {
 
     @Nonnull
     DataBackendStateExecutionEntity mapModuleDataToEntity(
         @Nonnull DataBackendModuleMetaData backendModuleMetaData,
-        @Nonnull DataBackendDescription dataBackendDescription
-    );
+        @Nonnull GlobalDatabaseDescription globalDatabaseDescription);
 }

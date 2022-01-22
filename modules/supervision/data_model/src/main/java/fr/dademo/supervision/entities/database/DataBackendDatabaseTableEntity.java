@@ -34,7 +34,7 @@ public class DataBackendDatabaseTableEntity implements Serializable {
     private Long id;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_schema")
+    @JoinColumn(name = "id_schema", referencedColumnName = "id", nullable = false)
     @ToString.Exclude
     private DataBackendDatabaseSchemaEntity schema;
 
@@ -104,22 +104,18 @@ public class DataBackendDatabaseTableEntity implements Serializable {
     private Long deadRowsCount;
 
     @Nullable
-    @Min(0)
     @Column(name = "last_vacuum", updatable = false)
     private Date lastVacuum;
 
     @Nullable
-    @Min(0)
     @Column(name = "last_auto_vacuum", updatable = false)
     private Date lastAutoVacuum;
 
     @Nullable
-    @Min(0)
     @Column(name = "last_analyze", updatable = false)
     private Date lastAnalyze;
 
     @Nullable
-    @Min(0)
     @Column(name = "last_auto_analyze", updatable = false)
     private Date lastAutoAnalyze;
 

@@ -33,27 +33,27 @@ public class DataBackendDatabaseSchemaEntity implements Serializable {
     private Long id;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_database")
+    @JoinColumn(name = "id_database", referencedColumnName = "id", nullable = false)
     @ToString.Exclude
     private DataBackendDatabaseDescriptionEntity database;
-
-    @Nonnull
-    @OneToMany(mappedBy = "schema", fetch = FetchType.LAZY)
-    @ToString.Exclude
-    private List<DataBackendDatabaseTableEntity> tables;
-
-    @Nonnull
-    @OneToMany(mappedBy = "schema", fetch = FetchType.LAZY)
-    @ToString.Exclude
-    private List<DataBackendDatabaseViewEntity> views;
-
-    @Nonnull
-    @OneToMany(mappedBy = "schema", fetch = FetchType.LAZY)
-    @ToString.Exclude
-    private List<DataBackendDatabaseIndexEntity> indexes;
 
     @Nonnull
     @Size(min = 1, max = 255)
     @Column(name = "name", updatable = false)
     private String name;
+
+    @Nonnull
+    @OneToMany(mappedBy = "schema", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ToString.Exclude
+    private List<DataBackendDatabaseTableEntity> tables;
+
+    @Nonnull
+    @OneToMany(mappedBy = "schema", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ToString.Exclude
+    private List<DataBackendDatabaseViewEntity> views;
+
+    @Nonnull
+    @OneToMany(mappedBy = "schema", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ToString.Exclude
+    private List<DataBackendDatabaseIndexEntity> indexes;
 }

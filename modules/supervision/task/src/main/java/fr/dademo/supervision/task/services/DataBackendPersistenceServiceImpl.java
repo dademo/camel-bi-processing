@@ -6,9 +6,11 @@
 
 package fr.dademo.supervision.task.services;
 
+import fr.dademo.supervision.backends.model.database.GlobalDatabaseDescription;
 import fr.dademo.supervision.backends.model.shared.DataBackendDescription;
 import fr.dademo.supervision.backends.model.shared.DataBackendModuleMetaData;
 import fr.dademo.supervision.task.repositories.DatabaseBackendStateRepository;
+import fr.dademo.supervision.task.services.exceptions.InvalidDataBackendDescriptionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +23,7 @@ import javax.annotation.Nonnull;
 public class DataBackendPersistenceServiceImpl implements DataBackendPersistenceService {
 
     @Autowired
-    private DataBackendMappingService dataBackendMappingService;
+    private DatabaseBackendMappingService databaseBackendMappingService;
 
     @Autowired
     private DatabaseBackendStateRepository databaseBackendStateRepository;
@@ -31,7 +33,11 @@ public class DataBackendPersistenceServiceImpl implements DataBackendPersistence
                                           @Nonnull DataBackendDescription dataBackendDescription) {
         switch (dataBackendDescription.getBackendKind()) {
             case DATABASE:
-                persistDatabaseBackendFetchResult(backendModuleMetaData, dataBackendDescription);
+                // Guard to avoid bad casting
+                if (!GlobalDatabaseDescription.class.isAssignableFrom(dataBackendDescription.getClass())) {
+                    throw new InvalidDataBackendDescriptionType(GlobalDatabaseDescription.class, dataBackendDescription);
+                }
+                persistDatabaseBackendFetchResult(backendModuleMetaData, (GlobalDatabaseDescription) dataBackendDescription);
                 break;
             case FILE_SYSTEM:
                 persistFileSystemBackendFetchResult(backendModuleMetaData, dataBackendDescription);
@@ -48,10 +54,11 @@ public class DataBackendPersistenceServiceImpl implements DataBackendPersistence
 
     private void persistDatabaseBackendFetchResult(
         @Nonnull DataBackendModuleMetaData backendModuleMetaData,
-        @Nonnull DataBackendDescription dataBackendDescription) {
+        @Nonnull GlobalDatabaseDescription globalDatabaseDescription) {
+
         databaseBackendStateRepository.saveAndFlush(
-            dataBackendMappingService.mapModuleDataToEntity(
-                backendModuleMetaData, dataBackendDescription
+            databaseBackendMappingService.mapModuleDataToEntity(
+                backendModuleMetaData, globalDatabaseDescription
             ));
     }
 

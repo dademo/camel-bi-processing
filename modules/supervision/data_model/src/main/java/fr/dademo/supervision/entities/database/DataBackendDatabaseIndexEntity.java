@@ -34,7 +34,7 @@ public class DataBackendDatabaseIndexEntity implements Serializable {
     private Long id;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_schema")
+    @JoinColumn(name = "id_schema", referencedColumnName = "id", nullable = false)
     @ToString.Exclude
     private DataBackendDatabaseSchemaEntity schema;
 

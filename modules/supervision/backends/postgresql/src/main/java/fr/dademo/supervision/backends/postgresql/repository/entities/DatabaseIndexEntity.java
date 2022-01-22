@@ -15,6 +15,8 @@ import javax.annotation.Nullable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import static fr.dademo.supervision.backends.postgresql.repository.entities.RowMapperUtilities.validateField;
+
 /**
  * @author dademo
  */
@@ -43,14 +45,14 @@ public class DatabaseIndexEntity {
     public static class DatabaseIndexEntityRowMapper implements RowMapper<DatabaseIndexEntity> {
 
         @Override
-        public DatabaseIndexEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
+        public DatabaseIndexEntity mapRow(@Nonnull ResultSet rs, int rowNum) throws SQLException {
             return DatabaseIndexEntity.builder()
-                .schema(rs.getString(1))
-                .name(rs.getString(2))
-                .tableName(rs.getString(3))
-                .indexScansCount(rs.getLong(4))
-                .returnedRowsCount(rs.getLong(5))
-                .fetchedRowsCount(rs.getLong(6))
+                .schema(validateField(rs.getString(1), rs))
+                .name(validateField(rs.getString(2), rs))
+                .tableName(validateField(rs.getString(3), rs))
+                .indexScansCount(validateField(rs.getLong(4), rs))
+                .returnedRowsCount(validateField(rs.getLong(5), rs))
+                .fetchedRowsCount(validateField(rs.getLong(6), rs))
                 .build();
         }
     }

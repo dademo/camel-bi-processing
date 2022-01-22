@@ -75,19 +75,15 @@ public class DatabaseTableDefaultImpl implements DatabaseTable {
     private Long deadRowsCount;
 
     @Nullable
-    @Min(0)
     private Date lastVacuum;
 
     @Nullable
-    @Min(0)
     private Date lastAutoVacuum;
 
     @Nullable
-    @Min(0)
     private Date lastAnalyze;
 
     @Nullable
-    @Min(0)
     private Date lastAutoAnalyze;
 
     @Nullable
