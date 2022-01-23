@@ -9,10 +9,10 @@ package fr.dademo.supervision.entities;
 import lombok.*;
 
 import javax.annotation.Nonnull;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author dademo
@@ -23,10 +23,21 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-@Embeddable
+@Entity
+@Table(name = "data_backend_module_meta_data")
 public class DataBackendModuleMetaDataEntity implements Serializable {
 
     private static final long serialVersionUID = 5299679268268153054L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
+    @Nonnull
+    @OneToMany(mappedBy = "dataBackendModuleMetaData", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ToString.Exclude
+    private List<DataBackendStateExecutionEntity> backendStateExecutions;
 
     @Nonnull
     @Size(min = 1, max = 255)

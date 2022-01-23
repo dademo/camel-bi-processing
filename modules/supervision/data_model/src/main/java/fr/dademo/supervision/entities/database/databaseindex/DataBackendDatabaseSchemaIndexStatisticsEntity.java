@@ -4,49 +4,45 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package fr.dademo.supervision.entities.database;
+package fr.dademo.supervision.entities.database.databaseindex;
 
+import fr.dademo.supervision.entities.DataBackendStateExecutionEntity;
 import lombok.*;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 
+/**
+ * @author dademo
+ */
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
-@RequiredArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Entity
-@Table(name = "data_backend_database_index")
-public class DataBackendDatabaseIndexEntity implements Serializable {
+@Table(name = "data_backend_database_schema_index_statistics")
+public class DataBackendDatabaseSchemaIndexStatisticsEntity implements Serializable {
 
-    private static final long serialVersionUID = -6623202159530184286L;
+    private static final long serialVersionUID = -7088606431247652530L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_schema", referencedColumnName = "id", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "id_index", referencedColumnName = "id", nullable = false)
     @ToString.Exclude
-    private DataBackendDatabaseSchemaEntity schema;
+    private DataBackendDatabaseSchemaIndexEntity index;
 
-    @Nonnull
-    @Column(name = "name", updatable = false)
-    @Size(min = 1, max = 255)
-    private String name;
-
-    @Nonnull
-    @Column(name = "table_name", updatable = false)
-    @Size(min = 1, max = 255)
-    private String tableName;
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "id_backend_state_execution", referencedColumnName = "id", nullable = false)
+    @ToString.Exclude
+    private DataBackendStateExecutionEntity backendStateExecution;
 
     @Nullable
     @Column(name = "index_scans_count", updatable = false)

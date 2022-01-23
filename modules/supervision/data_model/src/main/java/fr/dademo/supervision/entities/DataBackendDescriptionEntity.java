@@ -10,24 +10,34 @@ import lombok.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
-@RequiredArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-@Embeddable
+@Entity
+@Table(name = "data_backend_description")
 public class DataBackendDescriptionEntity implements Serializable {
 
     private static final long serialVersionUID = 5367781118588957675L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
+    @Nonnull
+    @OneToMany(mappedBy = "dataBackendDescription", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ToString.Exclude
+    private List<DataBackendStateExecutionEntity> backendStateExecutions;
 
     @Nonnull
     @Size(min = 1, max = 255)

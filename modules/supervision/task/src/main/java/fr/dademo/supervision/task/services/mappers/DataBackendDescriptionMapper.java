@@ -8,8 +8,12 @@ package fr.dademo.supervision.task.services.mappers;
 
 import fr.dademo.supervision.backends.model.shared.DataBackendDescription;
 import fr.dademo.supervision.entities.DataBackendDescriptionEntity;
+import fr.dademo.supervision.entities.DataBackendStateExecutionEntity;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+
+import java.util.List;
 
 /**
  * @author dademo
@@ -19,5 +23,10 @@ public interface DataBackendDescriptionMapper {
 
     DataBackendDescriptionMapper INSTANCE = Mappers.getMapper(DataBackendDescriptionMapper.class);
 
-    DataBackendDescriptionEntity moduleDescriptionToEntity(DataBackendDescription source);
+    @Mapping(target = "id", ignore = true)
+    @Mapping(source = "backendStateExecutions", target = "backendStateExecutions")
+    DataBackendDescriptionEntity moduleDescriptionToEntity(
+        DataBackendDescription source,
+        List<DataBackendStateExecutionEntity> backendStateExecutions
+    );
 }

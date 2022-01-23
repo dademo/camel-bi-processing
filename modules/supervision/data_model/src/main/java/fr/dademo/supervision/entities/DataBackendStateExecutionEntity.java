@@ -6,12 +6,13 @@
 
 package fr.dademo.supervision.entities;
 
-import fr.dademo.supervision.entities.database.DataBackendGlobalDatabaseDescriptionEntity;
+import fr.dademo.supervision.entities.database.globaldatabase.DataBackendGlobalDatabaseEntity;
 import lombok.*;
 
 import javax.annotation.Nullable;
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author dademo
@@ -33,14 +34,21 @@ public class DataBackendStateExecutionEntity implements Serializable {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @Column(name = "execution", nullable = false)
+    private Date timestamp;
+
     @OneToOne(optional = false, mappedBy = "backendStateExecution", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @Nullable
     @ToString.Exclude
-    private DataBackendGlobalDatabaseDescriptionEntity globalDatabase;
+    private DataBackendGlobalDatabaseEntity globalDatabase;
 
-    @Embedded
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "id_backend_module_meta_data", referencedColumnName = "id", nullable = false)
+    @ToString.Exclude
     private DataBackendModuleMetaDataEntity dataBackendModuleMetaData;
 
-    @Embedded
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "id_backend_description", referencedColumnName = "id", nullable = false)
+    @ToString.Exclude
     private DataBackendDescriptionEntity dataBackendDescription;
 }

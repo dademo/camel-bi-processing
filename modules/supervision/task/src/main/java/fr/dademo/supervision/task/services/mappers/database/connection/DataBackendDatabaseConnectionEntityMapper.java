@@ -10,10 +10,17 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package fr.dademo.supervision.task.services.mappers.database;
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package fr.dademo.supervision.task.services.mappers.database.connection;
 
 import fr.dademo.supervision.backends.model.database.resources.DatabaseConnection;
-import fr.dademo.supervision.entities.database.DataBackendDatabaseConnectionEntity;
+import fr.dademo.supervision.entities.DataBackendStateExecutionEntity;
+import fr.dademo.supervision.entities.database.connection.DataBackendDatabaseConnectionEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -40,5 +47,9 @@ public interface DataBackendDatabaseConnectionEntityMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "globalDatabase", ignore = true)
-    DataBackendDatabaseConnectionEntity toDataBackendGlobalDatabaseDescriptionEntity(DatabaseConnection source);
+    @Mapping(source = "backendStateExecution", target = "backendStateExecution")
+    DataBackendDatabaseConnectionEntity toDataBackendGlobalDatabaseDescriptionEntity(
+        DatabaseConnection source,
+        DataBackendStateExecutionEntity backendStateExecution
+    );
 }

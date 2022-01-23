@@ -13,15 +13,15 @@
 
     <changeSet id="1" author="dademo">
         <comment>Database-related tables</comment>
-        <!-- fr.dademo.supervision.entities.database.DataBackendGlobalDatabaseDescriptionEntity -->
-        <createTable tableName="data_backend_global_database_description" schemaName="${schema_name}">
+        <!-- fr.dademo.supervision.entities.database.globaldatabase.DataBackendGlobalDatabaseDescriptionEntity -->
+        <createTable tableName="data_backend_global_database" schemaName="${schema_name}">
             <column name="id" type="INTEGER" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" unique="true"/>
             </column>
             <column name="id_backend_state_execution" type="INTEGER">
                 <constraints
                     nullable="false" unique="false"
-                    foreignKeyName="fk_data_backend_state_execution_id"
+                    foreignKeyName="fk_data_backend_global_database__data_backend_state_execution_id"
                     referencedTableSchemaName="${schema_name}"
                     referencedTableName="data_backend_state_execution"
                     referencedColumnNames="id"
@@ -29,7 +29,7 @@
             </column>
         </createTable>
 
-        <!-- fr.dademo.supervision.entities.database.DataBackendDatabaseConnectionEntity -->
+        <!-- fr.dademo.supervision.entities.database.connection.DataBackendDatabaseConnectionEntity -->
         <createTable tableName="data_backend_database_connection" schemaName="${schema_name}">
             <column name="id" type="INTEGER" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" unique="true"/>
@@ -37,9 +37,18 @@
             <column name="id_global_database" type="INTEGER">
                 <constraints
                     nullable="false" unique="false"
-                    foreignKeyName="fk_data_backend_global_database_description_id"
+                    foreignKeyName="fk_data_backend_database_connection__data_backend_global_database_id"
                     referencedTableSchemaName="${schema_name}"
-                    referencedTableName="data_backend_global_database_description"
+                    referencedTableName="data_backend_global_database"
+                    referencedColumnNames="id"
+                />
+            </column>
+            <column name="id_backend_state_execution" type="INTEGER">
+                <constraints
+                    nullable="false" unique="false"
+                    foreignKeyName="fk_data_backend_database_connection__data_backend_state_execution_id"
+                    referencedTableSchemaName="${schema_name}"
+                    referencedTableName="data_backend_state_execution"
                     referencedColumnNames="id"
                 />
             </column>
@@ -125,22 +134,52 @@
             <column name="client_port" descending="true"/>
         </createIndex>
 
-        <!-- fr.dademo.supervision.entities.database.DataBackendDatabaseDescriptionEntity -->
-        <createTable tableName="data_backend_database_description" schemaName="${schema_name}">
+        <!-- fr.dademo.supervision.entities.database.database.DataBackendDatabaseEntity -->
+        <createTable tableName="data_backend_database" schemaName="${schema_name}">
             <column name="id" type="INTEGER" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" unique="true"/>
             </column>
             <column name="id_global_database" type="INTEGER">
                 <constraints
                     nullable="false" unique="false"
-                    foreignKeyName="fk_data_backend_global_database_description_id"
+                    foreignKeyName="fk_data_backend_database__data_backend_global_database_id"
                     referencedTableSchemaName="${schema_name}"
-                    referencedTableName="data_backend_global_database_description"
+                    referencedTableName="data_backend_global_database"
                     referencedColumnNames="id"
                 />
             </column>
             <column name="name" type="VARCHAR(255)">
                 <constraints nullable="true" unique="false"/>
+            </column>
+        </createTable>
+        <createIndex tableName="data_backend_database"
+                     indexName="idx_data_backend_database_name"
+                     schemaName="${schema_name}">
+            <column name="name" descending="false"/>
+        </createIndex>
+
+        <!-- fr.dademo.supervision.entities.database.database.DataBackendDatabaseStatisticsEntity -->
+        <createTable tableName="data_backend_database_statistics" schemaName="${schema_name}">
+            <column name="id" type="INTEGER" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="id_database" type="INTEGER">
+                <constraints
+                    nullable="false" unique="false"
+                    foreignKeyName="fk_data_backend_database_statistics__data_backend_database_id"
+                    referencedTableSchemaName="${schema_name}"
+                    referencedTableName="data_backend_database"
+                    referencedColumnNames="id"
+                />
+            </column>
+            <column name="id_backend_state_execution" type="INTEGER">
+                <constraints
+                    nullable="false" unique="false"
+                    foreignKeyName="fk_data_backend_database_statistics__data_backend_state_execution_id"
+                    referencedTableSchemaName="${schema_name}"
+                    referencedTableName="data_backend_state_execution"
+                    referencedColumnNames="id"
+                />
             </column>
             <column name="memory_usage_bytes" type="BIGINT">
                 <constraints nullable="true" unique="false"/>
@@ -188,13 +227,8 @@
                 <constraints nullable="true" unique="false"/>
             </column>
         </createTable>
-        <createIndex tableName="data_backend_database_description"
-                     indexName="idx_data_backend_database_description_name"
-                     schemaName="${schema_name}">
-            <column name="name" descending="true"/>
-        </createIndex>
 
-        <!-- fr.dademo.supervision.entities.database.DataBackendDatabaseSchemaEntity -->
+        <!-- fr.dademo.supervision.entities.database.databaseschema.DataBackendDatabaseSchemaEntity -->
         <createTable tableName="data_backend_database_schema" schemaName="${schema_name}">
             <column name="id" type="INTEGER" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" unique="true"/>
@@ -204,7 +238,7 @@
                     nullable="false" unique="false"
                     foreignKeyName="fk_data_backend_database_description_id"
                     referencedTableSchemaName="${schema_name}"
-                    referencedTableName="data_backend_database_description"
+                    referencedTableName="data_backend_database"
                     referencedColumnNames="id"
                 />
             </column>
@@ -218,15 +252,15 @@
             <column name="name" descending="true"/>
         </createIndex>
 
-        <!-- fr.dademo.supervision.entities.database.DataBackendDatabaseTableEntity -->
-        <createTable tableName="data_backend_database_table" schemaName="${schema_name}">
+        <!-- fr.dademo.supervision.entities.database.databasetable.DataBackendDatabaseSchemaTableEntityEntity -->
+        <createTable tableName="data_backend_database_schema_table" schemaName="${schema_name}">
             <column name="id" type="INTEGER" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" unique="true"/>
             </column>
             <column name="id_schema" type="INTEGER">
                 <constraints
                     nullable="false" unique="false"
-                    foreignKeyName="fk_data_backend_database_schema_id"
+                    foreignKeyName="fk_data_backend_database_schema_table__data_backend_database_schema_id"
                     referencedTableSchemaName="${schema_name}"
                     referencedTableName="data_backend_database_schema"
                     referencedColumnNames="id"
@@ -234,6 +268,36 @@
             </column>
             <column name="name" type="VARCHAR(255)">
                 <constraints nullable="true" unique="false"/>
+            </column>
+        </createTable>
+        <createIndex tableName="data_backend_database_schema_table"
+                     indexName="idx_data_backend_database_schema_table_name"
+                     schemaName="${schema_name}">
+            <column name="name" descending="true"/>
+        </createIndex>
+
+        <!-- fr.dademo.supervision.entities.database.databasetable.DataBackendDatabaseSchemaTableStatisticsEntityEntity -->
+        <createTable tableName="data_backend_database_schema_table_statistics" schemaName="${schema_name}">
+            <column name="id" type="INTEGER" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="id_table" type="INTEGER">
+                <constraints
+                    nullable="false" unique="false"
+                    foreignKeyName="fk_data_backend_database_schema_table_statistics__data_backend_database_schema_table_id"
+                    referencedTableSchemaName="${schema_name}"
+                    referencedTableName="data_backend_database_schema_table"
+                    referencedColumnNames="id"
+                />
+            </column>
+            <column name="id_backend_state_execution" type="INTEGER">
+                <constraints
+                    nullable="false" unique="false"
+                    foreignKeyName="fk_data_backend_database_statistics__data_backend_state_execution_id"
+                    referencedTableSchemaName="${schema_name}"
+                    referencedTableName="data_backend_state_execution"
+                    referencedColumnNames="id"
+                />
             </column>
             <column name="rows_count" type="BIGINT">
                 <constraints nullable="true" unique="false"/>
@@ -320,21 +384,16 @@
                 <constraints nullable="true" unique="false"/>
             </column>
         </createTable>
-        <createIndex tableName="data_backend_database_table"
-                     indexName="idx_data_backend_database_table_name"
-                     schemaName="${schema_name}">
-            <column name="name" descending="true"/>
-        </createIndex>
 
-        <!-- fr.dademo.supervision.entities.database.DataBackendDatabaseViewEntity -->
-        <createTable tableName="data_backend_database_view" schemaName="${schema_name}">
+        <!-- fr.dademo.supervision.entities.database.databaseschema.DataBackendDatabaseSchemaViewEntity -->
+        <createTable tableName="data_backend_database_schema_view" schemaName="${schema_name}">
             <column name="id" type="INTEGER" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" unique="true"/>
             </column>
             <column name="id_schema" type="INTEGER">
                 <constraints
                     nullable="false" unique="false"
-                    foreignKeyName="fk_data_backend_database_schema_id"
+                    foreignKeyName="fk_data_backend_database_view__data_backend_database_schema_id"
                     referencedTableSchemaName="${schema_name}"
                     referencedTableName="data_backend_database_schema"
                     referencedColumnNames="id"
@@ -343,31 +402,56 @@
             <column name="name" type="VARCHAR(255)">
                 <constraints nullable="true" unique="false"/>
             </column>
+            <column name="expression" type="CLOB">
+                <constraints nullable="true" unique="false"/>
+            </column>
+        </createTable>
+        <createIndex tableName="data_backend_database_schema_view"
+                     indexName="idx_data_backend_database_schema_view_name"
+                     schemaName="${schema_name}">
+            <column name="name" descending="true"/>
+        </createIndex>
+
+        <!-- fr.dademo.supervision.entities.database.databaseschema.DataBackendDatabaseSchemaViewStatisticsEntity -->
+        <createTable tableName="data_backend_database_schema_view_statistics" schemaName="${schema_name}">
+            <column name="id" type="INTEGER" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="id_view" type="INTEGER">
+                <constraints
+                    nullable="false" unique="false"
+                    foreignKeyName="fk_data_backend_database_view__data_backend_database_schema_view_id"
+                    referencedTableSchemaName="${schema_name}"
+                    referencedTableName="data_backend_database_schema_view"
+                    referencedColumnNames="id"
+                />
+            </column>
+            <column name="id_backend_state_execution" type="INTEGER">
+                <constraints
+                    nullable="false" unique="false"
+                    foreignKeyName="fk_data_backend_database_statistics__data_backend_state_execution_id"
+                    referencedTableSchemaName="${schema_name}"
+                    referencedTableName="data_backend_state_execution"
+                    referencedColumnNames="id"
+                />
+            </column>
             <column name="rows_count" type="BIGINT">
                 <constraints nullable="true" unique="false"/>
             </column>
             <column name="total_size" type="BIGINT">
                 <constraints nullable="true" unique="false"/>
             </column>
-            <column name="expression" type="CLOB">
-                <constraints nullable="true" unique="false"/>
-            </column>
         </createTable>
-        <createIndex tableName="data_backend_database_view"
-                     indexName="idx_data_backend_database_view_name"
-                     schemaName="${schema_name}">
-            <column name="name" descending="true"/>
-        </createIndex>
 
-        <!-- fr.dademo.supervision.entities.database.DataBackendDatabaseIndexEntity -->
-        <createTable tableName="data_backend_database_index" schemaName="${schema_name}">
+        <!-- fr.dademo.supervision.entities.database.databaseindex.DataBackendDatabaseIndexEntity -->
+        <createTable tableName="data_backend_database_schema_index" schemaName="${schema_name}">
             <column name="id" type="INTEGER" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" unique="true"/>
             </column>
             <column name="id_schema" type="INTEGER">
                 <constraints
                     nullable="false" unique="false"
-                    foreignKeyName="fk_data_backend_database_schema_id"
+                    foreignKeyName="fk_data_backend_database_index__data_backend_database_schema_id"
                     referencedTableSchemaName="${schema_name}"
                     referencedTableName="data_backend_database_schema"
                     referencedColumnNames="id"
@@ -379,6 +463,36 @@
             <column name="table_name" type="VARCHAR(255)">
                 <constraints nullable="true" unique="false"/>
             </column>
+        </createTable>
+        <createIndex tableName="data_backend_database_schema_index"
+                     indexName="idx_data_backend_database_schema_index_name"
+                     schemaName="${schema_name}">
+            <column name="name" descending="true"/>
+        </createIndex>
+
+        <!-- fr.dademo.supervision.entities.database.databaseindex.DataBackendDatabaseIndexStatisticsEntity -->
+        <createTable tableName="data_backend_database_schema_index_statistics" schemaName="${schema_name}">
+            <column name="id" type="INTEGER" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="id_index" type="INTEGER">
+                <constraints
+                    nullable="false" unique="false"
+                    foreignKeyName="fk_data_backend_database_schema_index_statistics__data_backend_database_schema_index_id"
+                    referencedTableSchemaName="${schema_name}"
+                    referencedTableName="data_backend_database_schema_index_statistics"
+                    referencedColumnNames="id"
+                />
+            </column>
+            <column name="id_backend_state_execution" type="INTEGER">
+                <constraints
+                    nullable="false" unique="false"
+                    foreignKeyName="fk_data_backend_database_statistics__data_backend_state_execution_id"
+                    referencedTableSchemaName="${schema_name}"
+                    referencedTableName="data_backend_state_execution"
+                    referencedColumnNames="id"
+                />
+            </column>
             <column name="index_scans_count" type="BIGINT">
                 <constraints nullable="true" unique="false"/>
             </column>
@@ -389,11 +503,6 @@
                 <constraints nullable="true" unique="false"/>
             </column>
         </createTable>
-        <createIndex tableName="data_backend_database_index"
-                     indexName="idx_data_backend_database_index_name"
-                     schemaName="${schema_name}">
-            <column name="name" descending="true"/>
-        </createIndex>
 
     </changeSet>
 </databaseChangeLog>

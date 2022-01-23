@@ -13,6 +13,8 @@ import fr.dademo.supervision.task.services.mappers.DataBackendDescriptionMapper;
 import fr.dademo.supervision.task.services.mappers.DataBackendModuleMetaDataMapper;
 
 import javax.annotation.Nonnull;
+import java.util.Collections;
+import java.util.Date;
 
 /**
  * @author dademo
@@ -24,7 +26,14 @@ public abstract class AbstractGenericDataBackendMappingService {
         @Nonnull DataBackendDescription dataBackendDescription
     ) {
         return DataBackendStateExecutionEntity.builder()
-            .dataBackendModuleMetaData(DataBackendModuleMetaDataMapper.INSTANCE.moduleMetaDataToEntity(backendModuleMetaData))
-            .dataBackendDescription(DataBackendDescriptionMapper.INSTANCE.moduleDescriptionToEntity(dataBackendDescription));
+            .timestamp(new Date(System.currentTimeMillis()))
+            .dataBackendModuleMetaData(DataBackendModuleMetaDataMapper.INSTANCE.moduleMetaDataToEntity(
+                backendModuleMetaData,
+                Collections.emptyList()
+            ))
+            .dataBackendDescription(DataBackendDescriptionMapper.INSTANCE.moduleDescriptionToEntity(
+                dataBackendDescription,
+                Collections.emptyList()
+            ));
     }
 }

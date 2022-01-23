@@ -19,13 +19,12 @@
 
     <changeSet author="dademo" id="2">
         <comment>Core table storing a backend state module execution</comment>
-        <createTable tableName="data_backend_state_execution" schemaName="${schema_name}">
-            <!-- fr.dademo.supervision.entities.DataBackendStateExecutionEntity -->
+
+        <!-- fr.dademo.supervision.entities.DataBackendModuleMetaDataEntity -->
+        <createTable tableName="data_backend_module_meta_data" schemaName="${schema_name}">
             <column name="id" type="INTEGER" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" unique="true"/>
             </column>
-
-            <!-- fr.dademo.supervision.entities.DataBackendModuleMetaDataEntity -->
             <column name="module_name" type="VARCHAR(255)">
                 <constraints nullable="false" unique="false"/>
             </column>
@@ -38,8 +37,40 @@
             <column name="module_vendor" type="VARCHAR(255)">
                 <constraints nullable="false" unique="false"/>
             </column>
+        </createTable>
+        <createIndex tableName="data_backend_module_meta_data"
+                     indexName="idx_data_backend_module_meta_data_modulename"
+                     schemaName="${schema_name}">
+            <column name="module_name" descending="true"/>
+        </createIndex>
+        <createIndex tableName="data_backend_module_meta_data"
+                     indexName="idx_data_backend_module_meta_data_modulename_version"
+                     schemaName="${schema_name}">
+            <column name="module_name" descending="true"/>
+            <column name="module_version" descending="true"/>
+        </createIndex>
+        <createIndex tableName="data_backend_module_meta_data"
+                     indexName="idx_data_backend_module_meta_data_moduletitle"
+                     schemaName="${schema_name}">
+            <column name="module_title" descending="true"/>
+        </createIndex>
+        <createIndex tableName="data_backend_module_meta_data"
+                     indexName="idx_data_backend_module_meta_data_moduletitle_version"
+                     schemaName="${schema_name}">
+            <column name="module_title" descending="true"/>
+            <column name="module_version" descending="true"/>
+        </createIndex>
+        <createIndex tableName="data_backend_module_meta_data"
+                     indexName="idx_data_backend_module_meta_data_modulevendor"
+                     schemaName="${schema_name}">
+            <column name="module_vendor" descending="true"/>
+        </createIndex>
 
-            <!-- fr.dademo.supervision.entities.DataBackendDescriptionEntity -->
+        <!-- fr.dademo.supervision.entities.DataBackendDescriptionEntity -->
+        <createTable tableName="data_backend_description" schemaName="${schema_name}">
+            <column name="id" type="INTEGER" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
             <column name="backend_product_name" type="VARCHAR(255)">
                 <constraints nullable="false" unique="false"/>
             </column>
@@ -80,64 +111,65 @@
                 <constraints nullable="true" unique="false"/>
             </column>
         </createTable>
-        <createIndex tableName="data_backend_state_execution"
-                     indexName="idx_data_backend_state_execution_module_name"
-                     schemaName="${schema_name}">
-            <column name="module_name" descending="true"/>
-        </createIndex>
-        <createIndex tableName="data_backend_state_execution"
-                     indexName="idx_data_backend_state_execution_module_name_version"
-                     schemaName="${schema_name}">
-            <column name="module_name" descending="true"/>
-            <column name="module_version" descending="true"/>
-        </createIndex>
-        <createIndex tableName="data_backend_state_execution"
-                     indexName="idx_data_backend_state_execution_module_title"
-                     schemaName="${schema_name}">
-            <column name="module_title" descending="true"/>
-        </createIndex>
-        <createIndex tableName="data_backend_state_execution"
-                     indexName="idx_data_backend_state_execution_module_title_version"
-                     schemaName="${schema_name}">
-            <column name="module_title" descending="true"/>
-            <column name="module_version" descending="true"/>
-        </createIndex>
-        <createIndex tableName="data_backend_state_execution"
-                     indexName="idx_data_backend_state_execution_module_vendor"
-                     schemaName="${schema_name}">
-            <column name="module_vendor" descending="true"/>
-        </createIndex>
-        <createIndex tableName="data_backend_state_execution"
-                     indexName="idx_data_backend_state_execution_backend_product_name"
+        <createIndex tableName="data_backend_description"
+                     indexName="idx_data_backend_description_backend_product_name"
                      schemaName="${schema_name}">
             <column name="backend_product_name" descending="true"/>
         </createIndex>
-        <createIndex tableName="data_backend_state_execution"
-                     indexName="idx_data_backend_state_execution_backend_product_name_version"
+        <createIndex tableName="data_backend_description"
+                     indexName="idx_data_backend_description_backend_product_name_version"
                      schemaName="${schema_name}">
             <column name="backend_product_name" descending="true"/>
             <column name="backend_product_version" descending="true"/>
         </createIndex>
-        <createIndex tableName="data_backend_state_execution"
-                     indexName="idx_data_backend_state_execution_backend_name"
+        <createIndex tableName="data_backend_description"
+                     indexName="idx_data_backend_description_backend_name"
                      schemaName="${schema_name}">
             <column name="backend_name" descending="true"/>
         </createIndex>
-        <createIndex tableName="data_backend_state_execution"
-                     indexName="idx_data_backend_state_execution_start_time"
+        <createIndex tableName="data_backend_description"
+                     indexName="idx_data_backend_description_start_time"
                      schemaName="${schema_name}">
             <column name="start_time" descending="true"/>
         </createIndex>
-        <createIndex tableName="data_backend_state_execution"
-                     indexName="idx_data_backend_state_execution_primary_url"
+        <createIndex tableName="data_backend_description"
+                     indexName="idx_data_backend_description_primary_url"
                      schemaName="${schema_name}">
             <column name="primary_url" descending="true"/>
         </createIndex>
-        <createIndex tableName="data_backend_state_execution"
-                     indexName="idx_data_backend_state_execution_backend_state"
+        <createIndex tableName="data_backend_description"
+                     indexName="idx_data_backend_description_backend_state"
                      schemaName="${schema_name}">
             <column name="backend_state" descending="true"/>
         </createIndex>
+
+        <!-- fr.dademo.supervision.entities.DataBackendStateExecutionEntity -->
+        <createTable tableName="data_backend_state_execution" schemaName="${schema_name}">
+            <column name="id" type="INTEGER" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="id_backend_module_meta_data" type="INTEGER">
+                <constraints
+                    nullable="false" unique="false"
+                    foreignKeyName="fk_data_backend_state_execution__data_backend_module_meta_data_id"
+                    referencedTableSchemaName="${schema_name}"
+                    referencedTableName="data_backend_module_meta_data"
+                    referencedColumnNames="id"
+                />
+            </column>
+            <column name="id_backend_description" type="INTEGER">
+                <constraints
+                    nullable="false" unique="false"
+                    foreignKeyName="fk_data_backend_state_execution__data_backend_description_id"
+                    referencedTableSchemaName="${schema_name}"
+                    referencedTableName="data_backend_description"
+                    referencedColumnNames="id"
+                />
+            </column>
+            <column name="execution" type="DATETIME">
+                <constraints nullable="false" unique="false"/>
+            </column>
+        </createTable>
     </changeSet>
 
 </databaseChangeLog>

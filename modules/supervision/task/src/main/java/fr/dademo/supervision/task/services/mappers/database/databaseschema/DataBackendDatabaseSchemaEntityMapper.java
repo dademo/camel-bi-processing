@@ -4,13 +4,19 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package fr.dademo.supervision.task.services.mappers.database;
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package fr.dademo.supervision.task.services.mappers.database.databaseschema;
 
 import fr.dademo.supervision.backends.model.database.resources.DatabaseSchema;
-import fr.dademo.supervision.entities.database.DataBackendDatabaseIndexEntity;
-import fr.dademo.supervision.entities.database.DataBackendDatabaseSchemaEntity;
-import fr.dademo.supervision.entities.database.DataBackendDatabaseTableEntity;
-import fr.dademo.supervision.entities.database.DataBackendDatabaseViewEntity;
+import fr.dademo.supervision.entities.database.databaseindex.DataBackendDatabaseSchemaIndexEntity;
+import fr.dademo.supervision.entities.database.databaseschema.DataBackendDatabaseSchemaEntity;
+import fr.dademo.supervision.entities.database.databasetable.DataBackendDatabaseSchemaTableEntity;
+import fr.dademo.supervision.entities.database.databaseview.DataBackendDatabaseSchemaViewEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -32,9 +38,9 @@ public interface DataBackendDatabaseSchemaEntityMapper {
     @Mapping(source = "indexes", target = "indexes")
     DataBackendDatabaseSchemaEntity toDataBackendDatabaseSchemaEntity(
         DatabaseSchema source,
-        List<DataBackendDatabaseTableEntity> tables,
-        List<DataBackendDatabaseViewEntity> views,
-        List<DataBackendDatabaseIndexEntity> indexes
+        List<DataBackendDatabaseSchemaTableEntity> tables,
+        List<DataBackendDatabaseSchemaViewEntity> views,
+        List<DataBackendDatabaseSchemaIndexEntity> indexes
     );
 
 }

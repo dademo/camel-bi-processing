@@ -4,9 +4,16 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package fr.dademo.supervision.entities.database;
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
 
+package fr.dademo.supervision.entities.database.connection;
 
+import fr.dademo.supervision.entities.DataBackendStateExecutionEntity;
+import fr.dademo.supervision.entities.database.globaldatabase.DataBackendGlobalDatabaseEntity;
 import lombok.*;
 
 import javax.annotation.Nullable;
@@ -16,7 +23,9 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
-
+/**
+ * @author dademo
+ */
 @Getter
 @Setter
 @ToString
@@ -29,24 +38,25 @@ public class DataBackendDatabaseConnectionEntity implements Serializable {
 
     private static final long serialVersionUID = -6016932834303708425L;
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "id_global_database", referencedColumnName = "id", nullable = false)
     @ToString.Exclude
-    private DataBackendGlobalDatabaseDescriptionEntity globalDatabase;
+    private DataBackendGlobalDatabaseEntity globalDatabase;
 
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "id_backend_state_execution", referencedColumnName = "id", nullable = false)
+    @ToString.Exclude
+    private DataBackendStateExecutionEntity backendStateExecution;
 
     @Nullable
     @Size(min = 1)
     @Column(name = "connection_state", updatable = false)
     private String connectionState;
-
 
     @Nullable
     @Min(1)

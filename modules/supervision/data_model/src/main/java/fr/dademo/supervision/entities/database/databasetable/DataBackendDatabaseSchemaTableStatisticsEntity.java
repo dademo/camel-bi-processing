@@ -4,18 +4,20 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package fr.dademo.supervision.entities.database;
+package fr.dademo.supervision.entities.database.databasetable;
 
+import fr.dademo.supervision.entities.DataBackendStateExecutionEntity;
 import lombok.*;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * @author dademo
+ */
 @Getter
 @Setter
 @ToString
@@ -23,25 +25,25 @@ import java.util.Date;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Entity
-@Table(name = "data_backend_database_table")
-public class DataBackendDatabaseTableEntity implements Serializable {
+@Table(name = "data_backend_database_schema_table_statistics")
+public class DataBackendDatabaseSchemaTableStatisticsEntity implements Serializable {
 
-    private static final long serialVersionUID = 2127603795918036607L;
+    private static final long serialVersionUID = 5917195842212780744L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_schema", referencedColumnName = "id", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "id_table", referencedColumnName = "id", nullable = false)
     @ToString.Exclude
-    private DataBackendDatabaseSchemaEntity schema;
+    private DataBackendDatabaseSchemaTableEntity table;
 
-    @Nonnull
-    @Size(min = 1, max = 255)
-    @Column(name = "name", updatable = false)
-    private String name;
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "id_backend_state_execution", referencedColumnName = "id", nullable = false)
+    @ToString.Exclude
+    private DataBackendStateExecutionEntity backendStateExecution;
 
     @Nullable
     @Min(0)
