@@ -37,17 +37,17 @@ public class DataBackendStateExecutionEntity implements Serializable {
     @Column(name = "execution", nullable = false)
     private Date timestamp;
 
-    @OneToOne(optional = false, mappedBy = "backendStateExecution", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToOne(optional = false, mappedBy = "backendStateExecution", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @Nullable
     @ToString.Exclude
     private DataBackendGlobalDatabaseEntity globalDatabase;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "id_backend_module_meta_data", referencedColumnName = "id", nullable = false)
     @ToString.Exclude
     private DataBackendModuleMetaDataEntity dataBackendModuleMetaData;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "id_backend_description", referencedColumnName = "id", nullable = false)
     @ToString.Exclude
     private DataBackendDescriptionEntity dataBackendDescription;

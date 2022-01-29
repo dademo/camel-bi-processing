@@ -8,12 +8,20 @@ package fr.dademo.supervision.task.services;
 
 import fr.dademo.supervision.backends.model.shared.DataBackendDescription;
 import fr.dademo.supervision.backends.model.shared.DataBackendModuleMetaData;
+import fr.dademo.supervision.entities.DataBackendDescriptionEntity;
+import fr.dademo.supervision.entities.DataBackendModuleMetaDataEntity;
 import fr.dademo.supervision.entities.DataBackendStateExecutionEntity;
+import fr.dademo.supervision.task.repositories.DataBackendDescriptionRepository;
+import fr.dademo.supervision.task.repositories.DataBackendModuleMetaDataRepository;
+import fr.dademo.supervision.task.repositories.DatabaseBackendStateRepository;
 import fr.dademo.supervision.task.services.mappers.DataBackendDescriptionMapper;
 import fr.dademo.supervision.task.services.mappers.DataBackendModuleMetaDataMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 
 import javax.annotation.Nonnull;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -21,19 +29,61 @@ import java.util.Date;
  */
 public abstract class AbstractGenericDataBackendMappingService {
 
-    protected DataBackendStateExecutionEntity.DataBackendStateExecutionEntityBuilder mapCommonModuleDataToEntity(
+    @Autowired
+    private DatabaseBackendStateRepository databaseBackendStateRepository;
+
+    @Autowired
+    private DataBackendModuleMetaDataRepository dataBackendModuleMetaDataRepository;
+
+    @Autowired
+    private DataBackendDescriptionRepository dataBackendDescriptionRepository;
+
+
+    protected DataBackendStateExecutionEntity mapCommonModuleDataToEntity(
         @Nonnull DataBackendModuleMetaData backendModuleMetaData,
         @Nonnull DataBackendDescription dataBackendDescription
     ) {
-        return DataBackendStateExecutionEntity.builder()
-            .timestamp(new Date(System.currentTimeMillis()))
-            .dataBackendModuleMetaData(DataBackendModuleMetaDataMapper.INSTANCE.moduleMetaDataToEntity(
-                backendModuleMetaData,
-                Collections.emptyList()
-            ))
-            .dataBackendDescription(DataBackendDescriptionMapper.INSTANCE.moduleDescriptionToEntity(
-                dataBackendDescription,
-                Collections.emptyList()
-            ));
+        return databaseBackendStateRepository.save(
+            DataBackendStateExecutionEntity.builder()
+                .timestamp(new Date(System.currentTimeMillis()))
+                .dataBackendModuleMetaData(getDataBackendModuleMetaDataEntity(backendModuleMetaData))
+                .dataBackendDescription(getDataBackendDescriptionEntity(dataBackendDescription))
+                .build()
+        );
+    }
+
+    private DataBackendModuleMetaDataEntity getDataBackendModuleMetaDataEntity(@Nonnull DataBackendModuleMetaData backendModuleMetaData) {
+
+        final var defaultEntity = DataBackendModuleMetaDataMapper.INSTANCE.moduleMetaDataToEntity(
+            backendModuleMetaData,
+            new ArrayList<>()
+        );
+        return dataBackendModuleMetaDataRepository
+            .findOne(Example.of(
+                defaultEntity,
+                ExampleMatcher.matching()
+                    .withIgnorePaths(
+                        "backendStateExecutions"
+                    ))
+            )
+            .orElseGet(() -> dataBackendModuleMetaDataRepository.save(defaultEntity));
+    }
+
+    private DataBackendDescriptionEntity getDataBackendDescriptionEntity(@Nonnull DataBackendDescription dataBackendDescription) {
+
+        final var defaultEntity = DataBackendDescriptionMapper.INSTANCE.moduleDescriptionToEntity(
+            dataBackendDescription,
+            new ArrayList<>()
+        );
+
+        return dataBackendDescriptionRepository
+            .findOne(Example.of(
+                defaultEntity,
+                ExampleMatcher.matching()
+                    .withIgnorePaths(
+                        "backendStateExecutions"
+                    ))
+            )
+            .orElseGet(() -> dataBackendDescriptionRepository.save(defaultEntity));
     }
 }

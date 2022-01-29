@@ -6,7 +6,7 @@ spring:
 
 task:
   datasource:
-    url: jdbc:postgresql://localhost:5432/bi
+    url: jdbc:postgresql://localhost:5432/supervision
     username: postgres
     password: postgres
     schema: supervision

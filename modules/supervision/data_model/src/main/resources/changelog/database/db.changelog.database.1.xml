@@ -152,6 +152,12 @@
                 <constraints nullable="true" unique="false"/>
             </column>
         </createTable>
+        <addUniqueConstraint
+            constraintName="data_backend_database_uniq"
+            tableName="data_backend_database"
+            columnNames="id_global_database, name"
+            schemaName="${schema_name}"
+        />
         <createIndex tableName="data_backend_database"
                      indexName="idx_data_backend_database_name"
                      schemaName="${schema_name}">
@@ -227,6 +233,12 @@
                 <constraints nullable="true" unique="false"/>
             </column>
         </createTable>
+        <addUniqueConstraint
+            constraintName="data_backend_database_statistics_uniq"
+            tableName="data_backend_database_statistics"
+            columnNames="id_database, id_backend_state_execution"
+            schemaName="${schema_name}"
+        />
 
         <!-- fr.dademo.supervision.entities.database.databaseschema.DataBackendDatabaseSchemaEntity -->
         <createTable tableName="data_backend_database_schema" schemaName="${schema_name}">
@@ -246,6 +258,12 @@
                 <constraints nullable="true" unique="false"/>
             </column>
         </createTable>
+        <addUniqueConstraint
+            constraintName="data_backend_database_schema_uniq"
+            tableName="data_backend_database_schema"
+            columnNames="id_database, name"
+            schemaName="${schema_name}"
+        />
         <createIndex tableName="data_backend_database_schema"
                      indexName="idx_data_backend_database_schema_name"
                      schemaName="${schema_name}">
@@ -270,6 +288,12 @@
                 <constraints nullable="true" unique="false"/>
             </column>
         </createTable>
+        <addUniqueConstraint
+            constraintName="data_backend_database_schema_table_uniq"
+            tableName="data_backend_database_schema_table"
+            columnNames="id_schema, name"
+            schemaName="${schema_name}"
+        />
         <createIndex tableName="data_backend_database_schema_table"
                      indexName="idx_data_backend_database_schema_table_name"
                      schemaName="${schema_name}">
@@ -384,6 +408,12 @@
                 <constraints nullable="true" unique="false"/>
             </column>
         </createTable>
+        <addUniqueConstraint
+            constraintName="data_backend_database_schema_table_statistics_uniq"
+            tableName="data_backend_database_schema_table_statistics"
+            columnNames="id_table, id_backend_state_execution"
+            schemaName="${schema_name}"
+        />
 
         <!-- fr.dademo.supervision.entities.database.databaseschema.DataBackendDatabaseSchemaViewEntity -->
         <createTable tableName="data_backend_database_schema_view" schemaName="${schema_name}">
@@ -406,10 +436,21 @@
                 <constraints nullable="true" unique="false"/>
             </column>
         </createTable>
+        <addUniqueConstraint
+            constraintName="data_backend_database_schema_view_uniq"
+            tableName="data_backend_database_schema_view"
+            columnNames="id_schema, name, expression"
+            schemaName="${schema_name}"
+        />
         <createIndex tableName="data_backend_database_schema_view"
                      indexName="idx_data_backend_database_schema_view_name"
                      schemaName="${schema_name}">
             <column name="name" descending="true"/>
+        </createIndex>
+        <createIndex tableName="data_backend_database_schema_view"
+                     indexName="idx_data_backend_database_schema_view_expression"
+                     schemaName="${schema_name}">
+            <column name="expression" descending="true"/>
         </createIndex>
 
         <!-- fr.dademo.supervision.entities.database.databaseschema.DataBackendDatabaseSchemaViewStatisticsEntity -->
@@ -442,6 +483,12 @@
                 <constraints nullable="true" unique="false"/>
             </column>
         </createTable>
+        <addUniqueConstraint
+            constraintName="data_backend_database_schema_view_statistics_uniq"
+            tableName="data_backend_database_schema_view_statistics"
+            columnNames="id_view, id_backend_state_execution"
+            schemaName="${schema_name}"
+        />
 
         <!-- fr.dademo.supervision.entities.database.databaseindex.DataBackendDatabaseIndexEntity -->
         <createTable tableName="data_backend_database_schema_index" schemaName="${schema_name}">
@@ -464,6 +511,12 @@
                 <constraints nullable="true" unique="false"/>
             </column>
         </createTable>
+        <addUniqueConstraint
+            constraintName="data_backend_database_schema_index_uniq"
+            tableName="data_backend_database_schema_index"
+            columnNames="id_schema, name, table_name"
+            schemaName="${schema_name}"
+        />
         <createIndex tableName="data_backend_database_schema_index"
                      indexName="idx_data_backend_database_schema_index_name"
                      schemaName="${schema_name}">
@@ -480,7 +533,7 @@
                     nullable="false" unique="false"
                     foreignKeyName="fk_data_backend_database_schema_index_statistics__data_backend_database_schema_index_id"
                     referencedTableSchemaName="${schema_name}"
-                    referencedTableName="data_backend_database_schema_index_statistics"
+                    referencedTableName="data_backend_database_schema_index"
                     referencedColumnNames="id"
                 />
             </column>
@@ -503,6 +556,12 @@
                 <constraints nullable="true" unique="false"/>
             </column>
         </createTable>
+        <addUniqueConstraint
+            constraintName="data_backend_database_schema_index_statistics_uniq"
+            tableName="data_backend_database_schema_index_statistics"
+            columnNames="id_index, id_backend_state_execution"
+            schemaName="${schema_name}"
+        />
 
     </changeSet>
 </databaseChangeLog>

@@ -38,6 +38,12 @@
                 <constraints nullable="false" unique="false"/>
             </column>
         </createTable>
+        <addUniqueConstraint
+            constraintName="data_backend_module_meta_data_uniq"
+            tableName="data_backend_module_meta_data"
+            columnNames="module_name, module_title, module_version, module_vendor"
+            schemaName="${schema_name}"
+        />
         <createIndex tableName="data_backend_module_meta_data"
                      indexName="idx_data_backend_module_meta_data_modulename"
                      schemaName="${schema_name}">
@@ -111,6 +117,12 @@
                 <constraints nullable="true" unique="false"/>
             </column>
         </createTable>
+        <addUniqueConstraint
+            constraintName="data_backend_description_uniq"
+            tableName="data_backend_description"
+            columnNames="primary_url, start_time, backend_name, backend_product_name, backend_product_version, backend_state, backend_state_explanation"
+            schemaName="${schema_name}"
+        />
         <createIndex tableName="data_backend_description"
                      indexName="idx_data_backend_description_backend_product_name"
                      schemaName="${schema_name}">

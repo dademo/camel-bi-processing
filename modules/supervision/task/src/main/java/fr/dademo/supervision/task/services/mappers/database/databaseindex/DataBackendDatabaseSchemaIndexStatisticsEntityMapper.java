@@ -14,6 +14,7 @@ package fr.dademo.supervision.task.services.mappers.database.databaseindex;
 
 import fr.dademo.supervision.backends.model.database.resources.DatabaseIndex;
 import fr.dademo.supervision.entities.DataBackendStateExecutionEntity;
+import fr.dademo.supervision.entities.database.databaseindex.DataBackendDatabaseSchemaIndexEntity;
 import fr.dademo.supervision.entities.database.databaseindex.DataBackendDatabaseSchemaIndexStatisticsEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -28,10 +29,11 @@ public interface DataBackendDatabaseSchemaIndexStatisticsEntityMapper {
     DataBackendDatabaseSchemaIndexStatisticsEntityMapper INSTANCE = Mappers.getMapper(DataBackendDatabaseSchemaIndexStatisticsEntityMapper.class);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "index", ignore = true)
+    @Mapping(source = "index", target = "index")
     @Mapping(source = "backendStateExecution", target = "backendStateExecution")
     DataBackendDatabaseSchemaIndexStatisticsEntity toDataBackendDatabaseIndexStatisticsEntity(
         DatabaseIndex source,
+        DataBackendDatabaseSchemaIndexEntity index,
         DataBackendStateExecutionEntity backendStateExecution
     );
 }

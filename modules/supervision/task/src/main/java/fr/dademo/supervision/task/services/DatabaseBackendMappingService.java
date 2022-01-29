@@ -18,7 +18,7 @@ import javax.annotation.Nonnull;
 public interface DatabaseBackendMappingService {
 
     @Nonnull
-    DataBackendStateExecutionEntity mapModuleDataToEntity(
+    DataBackendStateExecutionEntity mapModuleDataToDatabaseEntity(
         @Nonnull DataBackendModuleMetaData backendModuleMetaData,
         @Nonnull GlobalDatabaseDescription globalDatabaseDescription);
 }

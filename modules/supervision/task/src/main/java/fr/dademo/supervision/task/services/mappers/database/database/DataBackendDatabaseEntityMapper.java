@@ -16,6 +16,7 @@ import fr.dademo.supervision.backends.model.database.DatabaseDescription;
 import fr.dademo.supervision.entities.database.database.DataBackendDatabaseEntity;
 import fr.dademo.supervision.entities.database.database.DataBackendDatabaseStatisticsEntity;
 import fr.dademo.supervision.entities.database.databaseschema.DataBackendDatabaseSchemaEntity;
+import fr.dademo.supervision.entities.database.globaldatabase.DataBackendGlobalDatabaseEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -33,11 +34,12 @@ public interface DataBackendDatabaseEntityMapper {
     DataBackendDatabaseEntityMapper INSTANCE = Mappers.getMapper(DataBackendDatabaseEntityMapper.class);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "globalDatabase", ignore = true)
+    @Mapping(source = "globalDatabase", target = "globalDatabase")
     @Mapping(source = "schemas", target = "schemas")
     @Mapping(source = "databaseStatistics", target = "databaseStatistics")
     DataBackendDatabaseEntity toDataBackendDatabaseEntity(
         DatabaseDescription source,
+        DataBackendGlobalDatabaseEntity globalDatabase,
         List<DataBackendDatabaseSchemaEntity> schemas,
         List<DataBackendDatabaseStatisticsEntity> databaseStatistics
     );

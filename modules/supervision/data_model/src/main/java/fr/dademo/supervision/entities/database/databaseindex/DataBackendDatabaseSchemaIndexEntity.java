@@ -31,7 +31,16 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Entity
-@Table(name = "data_backend_database_schema_index")
+@Table(
+    name = "data_backend_database_schema_index",
+    uniqueConstraints = {
+        @UniqueConstraint(name = "data_backend_database_schema_index_uniq", columnNames = {
+            "id_schema",
+            "name",
+            "table_name",
+        })
+    }
+)
 public class DataBackendDatabaseSchemaIndexEntity implements Serializable {
 
     private static final long serialVersionUID = -6623202159530184286L;
@@ -41,13 +50,13 @@ public class DataBackendDatabaseSchemaIndexEntity implements Serializable {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "id_schema", referencedColumnName = "id", nullable = false)
     @ToString.Exclude
     private DataBackendDatabaseSchemaEntity schema;
 
     @Nonnull
-    @OneToMany(mappedBy = "index", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "index", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @ToString.Exclude
     private List<DataBackendDatabaseSchemaIndexStatisticsEntity> statistics;
 

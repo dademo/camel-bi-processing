@@ -13,6 +13,7 @@
 package fr.dademo.supervision.task.services.mappers.database.databasetable;
 
 import fr.dademo.supervision.backends.model.database.resources.DatabaseTable;
+import fr.dademo.supervision.entities.database.databaseschema.DataBackendDatabaseSchemaEntity;
 import fr.dademo.supervision.entities.database.databasetable.DataBackendDatabaseSchemaTableEntity;
 import fr.dademo.supervision.entities.database.databasetable.DataBackendDatabaseSchemaTableStatisticsEntity;
 import org.mapstruct.Mapper;
@@ -30,10 +31,12 @@ public interface DataBackendDatabaseSchemaTableEntityMapper {
     DataBackendDatabaseSchemaTableEntityMapper INSTANCE = Mappers.getMapper(DataBackendDatabaseSchemaTableEntityMapper.class);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "schema", ignore = true)
+    @Mapping(source = "source.name", target = "name")   // Resolving a conflict
+    @Mapping(source = "schema", target = "schema")
     @Mapping(source = "statistics", target = "statistics")
     DataBackendDatabaseSchemaTableEntity toDataBackendDatabaseTableEntity(
         DatabaseTable source,
+        DataBackendDatabaseSchemaEntity schema,
         List<DataBackendDatabaseSchemaTableStatisticsEntity> statistics
     );
 }

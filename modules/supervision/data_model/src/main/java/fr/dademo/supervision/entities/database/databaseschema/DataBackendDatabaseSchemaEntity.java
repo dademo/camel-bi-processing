@@ -34,7 +34,15 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Entity
-@Table(name = "data_backend_database_schema")
+@Table(
+    name = "data_backend_database_schema",
+    uniqueConstraints = {
+        @UniqueConstraint(name = "data_backend_database_schema_uniq", columnNames = {
+            "id_database",
+            "name",
+        })
+    }
+)
 public class DataBackendDatabaseSchemaEntity implements Serializable {
 
     private static final long serialVersionUID = 7554858801534261567L;
@@ -44,7 +52,7 @@ public class DataBackendDatabaseSchemaEntity implements Serializable {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "id_database", referencedColumnName = "id", nullable = false)
     @ToString.Exclude
     private DataBackendDatabaseEntity database;
@@ -55,17 +63,17 @@ public class DataBackendDatabaseSchemaEntity implements Serializable {
     private String name;
 
     @Nonnull
-    @OneToMany(mappedBy = "schema", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "schema", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @ToString.Exclude
     private List<DataBackendDatabaseSchemaTableEntity> tables;
 
     @Nonnull
-    @OneToMany(mappedBy = "schema", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "schema", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @ToString.Exclude
     private List<DataBackendDatabaseSchemaViewEntity> views;
 
     @Nonnull
-    @OneToMany(mappedBy = "schema", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "schema", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @ToString.Exclude
     private List<DataBackendDatabaseSchemaIndexEntity> indexes;
 }

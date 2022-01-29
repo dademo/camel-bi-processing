@@ -13,6 +13,7 @@
 package fr.dademo.supervision.task.services.mappers.database.databaseschema;
 
 import fr.dademo.supervision.backends.model.database.resources.DatabaseSchema;
+import fr.dademo.supervision.entities.database.database.DataBackendDatabaseEntity;
 import fr.dademo.supervision.entities.database.databaseindex.DataBackendDatabaseSchemaIndexEntity;
 import fr.dademo.supervision.entities.database.databaseschema.DataBackendDatabaseSchemaEntity;
 import fr.dademo.supervision.entities.database.databasetable.DataBackendDatabaseSchemaTableEntity;
@@ -32,12 +33,14 @@ public interface DataBackendDatabaseSchemaEntityMapper {
     DataBackendDatabaseSchemaEntityMapper INSTANCE = Mappers.getMapper(DataBackendDatabaseSchemaEntityMapper.class);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "database", ignore = true)
+    @Mapping(source = "source.name", target = "name")   // Resolving a conflict
+    @Mapping(source = "database", target = "database")
     @Mapping(source = "tables", target = "tables")
     @Mapping(source = "views", target = "views")
     @Mapping(source = "indexes", target = "indexes")
     DataBackendDatabaseSchemaEntity toDataBackendDatabaseSchemaEntity(
         DatabaseSchema source,
+        DataBackendDatabaseEntity database,
         List<DataBackendDatabaseSchemaTableEntity> tables,
         List<DataBackendDatabaseSchemaViewEntity> views,
         List<DataBackendDatabaseSchemaIndexEntity> indexes

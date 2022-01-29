@@ -24,7 +24,20 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Entity
-@Table(name = "data_backend_description")
+@Table(
+    name = "data_backend_description",
+    uniqueConstraints = {
+        @UniqueConstraint(name = "data_backend_description_uniq", columnNames = {
+            "primary_url",
+            "start_time",
+            "backend_name",
+            "backend_product_name",
+            "backend_product_version",
+            "backend_state",
+            "backend_state_explanation",
+        })
+    }
+)
 public class DataBackendDescriptionEntity implements Serializable {
 
     private static final long serialVersionUID = 5367781118588957675L;
@@ -35,7 +48,7 @@ public class DataBackendDescriptionEntity implements Serializable {
     private Long id;
 
     @Nonnull
-    @OneToMany(mappedBy = "dataBackendDescription", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "dataBackendDescription", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @ToString.Exclude
     private List<DataBackendStateExecutionEntity> backendStateExecutions;
 

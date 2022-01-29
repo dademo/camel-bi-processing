@@ -14,6 +14,7 @@ package fr.dademo.supervision.task.services.mappers.database.database;
 
 import fr.dademo.supervision.backends.model.database.DatabaseDescription;
 import fr.dademo.supervision.entities.DataBackendStateExecutionEntity;
+import fr.dademo.supervision.entities.database.database.DataBackendDatabaseEntity;
 import fr.dademo.supervision.entities.database.database.DataBackendDatabaseStatisticsEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -38,12 +39,13 @@ public interface DataBackendDatabaseStatisticsEntityMapper {
     }
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "database", ignore = true)
+    @Mapping(source = "database", target = "database")
     @Mapping(source = "backendStateExecution", target = "backendStateExecution")
     @Mapping(source = "source.readTime", target = "readTimeMilliseconds", qualifiedByName = DURATION_TO_MILLISECONDS_MAPPER_NAME)
     @Mapping(source = "source.writeTime", target = "writeTimeMilliseconds", qualifiedByName = DURATION_TO_MILLISECONDS_MAPPER_NAME)
     DataBackendDatabaseStatisticsEntity toDataBackendDatabaseStatisticsEntity(
         DatabaseDescription source,
+        DataBackendDatabaseEntity database,
         DataBackendStateExecutionEntity backendStateExecution
     );
 }

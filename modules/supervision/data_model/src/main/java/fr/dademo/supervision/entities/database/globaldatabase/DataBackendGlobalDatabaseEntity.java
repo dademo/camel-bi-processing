@@ -42,18 +42,18 @@ public class DataBackendGlobalDatabaseEntity implements Serializable {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @OneToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToOne(optional = false, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "id_backend_state_execution", referencedColumnName = "id", nullable = false)
     @ToString.Exclude
     private DataBackendStateExecutionEntity backendStateExecution;
 
     @Nonnull
-    @OneToMany(mappedBy = "globalDatabase", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "globalDatabase", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @ToString.Exclude
     private List<DataBackendDatabaseConnectionEntity> connections;
 
     @Nonnull
-    @OneToMany(mappedBy = "globalDatabase", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "globalDatabase", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @ToString.Exclude
     private List<DataBackendDatabaseEntity> databases;
 }

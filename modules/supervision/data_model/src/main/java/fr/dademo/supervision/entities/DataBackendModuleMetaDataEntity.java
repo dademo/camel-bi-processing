@@ -24,7 +24,17 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Entity
-@Table(name = "data_backend_module_meta_data")
+@Table(
+    name = "data_backend_module_meta_data",
+    uniqueConstraints = {
+        @UniqueConstraint(name = "data_backend_module_meta_data_uniq", columnNames = {
+            "module_name",
+            "module_title",
+            "module_version",
+            "module_vendor",
+        })
+    }
+)
 public class DataBackendModuleMetaDataEntity implements Serializable {
 
     private static final long serialVersionUID = 5299679268268153054L;
@@ -35,7 +45,7 @@ public class DataBackendModuleMetaDataEntity implements Serializable {
     private Long id;
 
     @Nonnull
-    @OneToMany(mappedBy = "dataBackendModuleMetaData", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "dataBackendModuleMetaData", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @ToString.Exclude
     private List<DataBackendStateExecutionEntity> backendStateExecutions;
 

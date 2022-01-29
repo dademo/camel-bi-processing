@@ -57,7 +57,7 @@ public class DataBackendPersistenceServiceImpl implements DataBackendPersistence
         @Nonnull GlobalDatabaseDescription globalDatabaseDescription) {
 
         databaseBackendStateRepository.saveAndFlush(
-            databaseBackendMappingService.mapModuleDataToEntity(
+            databaseBackendMappingService.mapModuleDataToDatabaseEntity(
                 backendModuleMetaData, globalDatabaseDescription
             ));
     }

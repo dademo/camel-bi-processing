@@ -24,7 +24,15 @@ import java.io.Serializable;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Entity
-@Table(name = "data_backend_database_schema_index_statistics")
+@Table(
+    name = "data_backend_database_schema_index_statistics",
+    uniqueConstraints = {
+        @UniqueConstraint(name = "data_backend_database_schema_index_statistics_uniq", columnNames = {
+            "id_index",
+            "id_backend_state_execution",
+        })
+    }
+)
 public class DataBackendDatabaseSchemaIndexStatisticsEntity implements Serializable {
 
     private static final long serialVersionUID = -7088606431247652530L;
@@ -34,12 +42,12 @@ public class DataBackendDatabaseSchemaIndexStatisticsEntity implements Serializa
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "id_index", referencedColumnName = "id", nullable = false)
     @ToString.Exclude
     private DataBackendDatabaseSchemaIndexEntity index;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "id_backend_state_execution", referencedColumnName = "id", nullable = false)
     @ToString.Exclude
     private DataBackendStateExecutionEntity backendStateExecution;
