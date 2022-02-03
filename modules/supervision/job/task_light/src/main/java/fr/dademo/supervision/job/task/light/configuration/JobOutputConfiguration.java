@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.validation.constraints.NotBlank;
+import java.util.Map;
 
 /**
  * @author dademo
@@ -26,9 +27,19 @@ public class JobOutputConfiguration {
 
     @Nonnull
     @NotBlank
-    private String exchange;
+    private String exchangeName;
 
     @Nullable
     @NotBlank
     private String routingKey;
+
+    private boolean durable = false;
+
+    private boolean autoDelete = false;
+
+    private boolean delayed = false;
+
+    private boolean internal = false;
+
+    private Map<String, Object> arguments;
 }

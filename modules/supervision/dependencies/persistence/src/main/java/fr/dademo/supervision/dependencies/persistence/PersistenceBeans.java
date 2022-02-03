@@ -141,6 +141,7 @@ public class PersistenceBeans {
                 .map(cacheName -> new ConcurrentMapCache(cacheName, false))
                 .collect(Collectors.toList())
         );
+        cacheManager.initializeCaches();
         return cacheManager;
     }
 

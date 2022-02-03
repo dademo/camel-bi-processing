@@ -23,6 +23,7 @@ import javax.annotation.Nullable;
 @ConfigurationProperties(prefix = "persistence")
 public class PersistenceConfiguration {
 
+    @Nonnull
     private DatasourceConfiguration datasource;
 
     @Data

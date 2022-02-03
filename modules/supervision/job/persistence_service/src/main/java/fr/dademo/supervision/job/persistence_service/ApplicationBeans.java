@@ -16,45 +16,19 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package fr.dademo.supervision.job.task.light;
+package fr.dademo.supervision.job.persistence_service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
-import fr.dademo.supervision.job.task.light.configuration.TaskConfiguration;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.jdbc.DataSourceBuilder;
-import org.springframework.cloud.task.configuration.DefaultTaskConfigurer;
-import org.springframework.cloud.task.configuration.TaskConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import javax.sql.DataSource;
 
 /**
  * @author dademo
  */
 @Configuration
-public class TaskBeans {
-
-    public static final String TASK_DATASOURCE_BEAN_NAME = "TASK_DATASOURCE_BEAN";
-    public static final String OUTPUT_DATASOURCE_NAME = "output";
-
-    @Bean(name = TASK_DATASOURCE_BEAN_NAME)
-    public DataSource dataSource(TaskConfiguration taskConfiguration) {
-
-        final var datasourceConfiguration = taskConfiguration.getDatasource();
-        final var dataSourceBuilder = DataSourceBuilder.create();
-        dataSourceBuilder.url(datasourceConfiguration.getUrl());
-        dataSourceBuilder.username(datasourceConfiguration.getUsername());
-        dataSourceBuilder.password(datasourceConfiguration.getPassword());
-        return dataSourceBuilder.build();
-    }
-
-    @Bean
-    public TaskConfigurer taskConfigurer(@Qualifier(TASK_DATASOURCE_BEAN_NAME) DataSource taskDataSource) {
-        return new DefaultTaskConfigurer(taskDataSource);
-    }
+public class ApplicationBeans {
 
     @Bean
     public ObjectMapper objectMapper() {

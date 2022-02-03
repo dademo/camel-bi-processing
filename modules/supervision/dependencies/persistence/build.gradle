@@ -21,8 +21,8 @@ java {
 
 dependencies {
 
-    implementation project(':modules:supervision:dependencies:backends:model')
-    implementation project(':modules:supervision:dependencies:data_model')
+    api project(':modules:supervision:dependencies:backends:model')
+    api project(':modules:supervision:dependencies:data_model')
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"

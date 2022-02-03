@@ -14,8 +14,11 @@ package fr.dademo.supervision.dependencies.backends.model.database.resources;
 
 // TODO
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * @author dademo
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public interface DatabaseReplication {
 }

@@ -12,8 +12,10 @@
 
 package fr.dademo.supervision.dependencies.backends.model.shared;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.annotation.Nonnull;
@@ -28,6 +30,8 @@ import java.util.Date;
  * @author dademo
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 public abstract class DataBackendDescriptionDefaultImpl extends DataBackendDescriptionBaseDefaultImpl implements DataBackendDescription {

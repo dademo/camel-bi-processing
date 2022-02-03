@@ -12,12 +12,17 @@
 
 package fr.dademo.supervision.dependencies.backends.model.database.resources;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import javax.annotation.Nonnull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 /**
  * @author dademo
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public interface DatabaseSchema {
 
     @Nonnull
@@ -25,11 +30,14 @@ public interface DatabaseSchema {
     String getName();
 
     @Nonnull
+    @JsonDeserialize(as = List.class, contentAs = DatabaseTableDefaultImpl.class)
     Iterable<DatabaseTable> getTables();
 
     @Nonnull
+    @JsonDeserialize(as = List.class, contentAs = DatabaseViewDefaultImpl.class)
     Iterable<DatabaseView> getViews();
 
     @Nonnull
+    @JsonDeserialize(as = List.class, contentAs = DatabaseIndexDefaultImpl.class)
     Iterable<DatabaseIndex> getIndexes();
 }

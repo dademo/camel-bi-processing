@@ -29,6 +29,7 @@ dependencies {
 
     // Other libraries
     compileOnly 'org.projectlombok:lombok'
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonCoreVersion}"
     implementation "javax.validation:validation-api:${javaxValidationApiVersion}"
     implementation "com.google.code.findbugs:jsr305:${findBugsJsr305Version}"
 

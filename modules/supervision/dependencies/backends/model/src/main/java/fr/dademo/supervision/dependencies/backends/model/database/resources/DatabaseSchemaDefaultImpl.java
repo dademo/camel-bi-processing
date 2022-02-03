@@ -12,16 +12,24 @@
 
 package fr.dademo.supervision.dependencies.backends.model.database.resources;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.annotation.Nonnull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 /**
  * @author dademo
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class DatabaseSchemaDefaultImpl implements DatabaseSchema {
 
@@ -30,11 +38,14 @@ public class DatabaseSchemaDefaultImpl implements DatabaseSchema {
     private String name;
 
     @Nonnull
+    @JsonDeserialize(as = List.class, contentAs = DatabaseTableDefaultImpl.class)
     private Iterable<DatabaseTable> tables;
 
     @Nonnull
+    @JsonDeserialize(as = List.class, contentAs = DatabaseViewDefaultImpl.class)
     private Iterable<DatabaseView> views;
 
     @Nonnull
+    @JsonDeserialize(as = List.class, contentAs = DatabaseIndexDefaultImpl.class)
     private Iterable<DatabaseIndex> indexes;
 }

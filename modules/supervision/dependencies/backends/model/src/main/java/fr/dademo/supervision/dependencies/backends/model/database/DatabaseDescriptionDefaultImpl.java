@@ -12,11 +12,12 @@
 
 package fr.dademo.supervision.dependencies.backends.model.database;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import fr.dademo.supervision.dependencies.backends.model.database.resources.DatabaseSchema;
+import fr.dademo.supervision.dependencies.backends.model.database.resources.DatabaseSchemaDefaultImpl;
 import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendDescriptionBaseDefaultImpl;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.annotation.Nullable;
@@ -24,11 +25,15 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.time.Duration;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author dademo
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 public class DatabaseDescriptionDefaultImpl extends DataBackendDescriptionBaseDefaultImpl implements DatabaseDescription {
@@ -99,5 +104,6 @@ public class DatabaseDescriptionDefaultImpl extends DataBackendDescriptionBaseDe
     private Date lastStatisticsResetTime;
 
     @NonNull
+    @JsonDeserialize(as = List.class, contentAs = DatabaseSchemaDefaultImpl.class)
     private Iterable<DatabaseSchema> databaseSchemas;
 }

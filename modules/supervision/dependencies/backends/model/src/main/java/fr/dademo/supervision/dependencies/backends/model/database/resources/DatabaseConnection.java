@@ -12,6 +12,8 @@
 
 package fr.dademo.supervision.dependencies.backends.model.database.resources;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.annotation.Nullable;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
@@ -21,6 +23,7 @@ import java.util.Date;
 /**
  * @author dademo
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public interface DatabaseConnection {
 
     @Nullable

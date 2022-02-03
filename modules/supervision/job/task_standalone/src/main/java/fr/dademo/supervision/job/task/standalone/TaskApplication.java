@@ -19,7 +19,6 @@
 package fr.dademo.supervision.job.task.standalone;
 
 import fr.dademo.supervision.dependencies.backends.model.DataBackendStateFetchService;
-import fr.dademo.supervision.dependencies.persistence.PersistenceBeans;
 import fr.dademo.supervision.dependencies.persistence.services.DataBackendPersistenceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.task.configuration.EnableTask;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author dademo
@@ -49,7 +47,6 @@ public class TaskApplication implements CommandLineRunner {
         System.exit(SpringApplication.exit(SpringApplication.run(TaskApplication.class, args)));
     }
 
-    @Transactional(PersistenceBeans.PERSISTENCE_TRANSACTION_MANAGER_BEAN_NAME)
     @Override
     public void run(String... args) {
 

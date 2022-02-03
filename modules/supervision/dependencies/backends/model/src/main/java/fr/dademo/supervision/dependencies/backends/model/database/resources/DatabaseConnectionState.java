@@ -12,11 +12,13 @@
 
 package fr.dademo.supervision.dependencies.backends.model.database.resources;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 
 /**
  * @author dademo
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 @SuppressWarnings({"unused", "SpellCheckingInspection"})
 public enum DatabaseConnectionState {
 

@@ -12,7 +12,9 @@
 
 package fr.dademo.supervision.dependencies.backends.model.shared;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.annotation.Nullable;
@@ -22,6 +24,8 @@ import javax.validation.constraints.Min;
  * @author dademo
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @SuperBuilder
 public abstract class DataBackendDescriptionBaseDefaultImpl implements DataBackendDescriptionBase {
 

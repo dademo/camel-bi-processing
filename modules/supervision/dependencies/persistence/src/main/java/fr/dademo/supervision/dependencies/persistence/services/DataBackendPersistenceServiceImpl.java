@@ -27,10 +27,12 @@ package fr.dademo.supervision.dependencies.persistence.services;
 import fr.dademo.supervision.dependencies.backends.model.database.GlobalDatabaseDescription;
 import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendDescription;
 import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendModuleMetaData;
+import fr.dademo.supervision.dependencies.persistence.PersistenceBeans;
 import fr.dademo.supervision.dependencies.persistence.repositories.DatabaseBackendStateRepository;
 import fr.dademo.supervision.dependencies.persistence.services.exceptions.InvalidDataBackendDescriptionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
 
@@ -47,6 +49,7 @@ public class DataBackendPersistenceServiceImpl implements DataBackendPersistence
     private DatabaseBackendStateRepository databaseBackendStateRepository;
 
     @Override
+    @Transactional(PersistenceBeans.PERSISTENCE_TRANSACTION_MANAGER_BEAN_NAME)
     public void persistBackendFetchResult(@Nonnull DataBackendModuleMetaData backendModuleMetaData,
                                           @Nonnull DataBackendDescription dataBackendDescription) {
         switch (dataBackendDescription.getBackendKind()) {

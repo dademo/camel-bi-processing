@@ -12,6 +12,8 @@
 
 package fr.dademo.supervision.dependencies.backends.model.shared;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.annotation.Nonnull;
 import javax.validation.constraints.Size;
 
@@ -20,6 +22,7 @@ import javax.validation.constraints.Size;
  *
  * @author dademo
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public interface DataBackendModuleMetaData {
 
     /**

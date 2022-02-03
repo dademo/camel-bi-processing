@@ -6,14 +6,19 @@
 
 package fr.dademo.supervision.dependencies.backends.model;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import fr.dademo.supervision.dependencies.backends.model.database.GlobalDatabaseDescriptionDefaultImpl;
 import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendDescription;
 import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendModuleMetaData;
+import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendModuleMetaDataDefaultImpl;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
 /**
  * @author dademo
@@ -24,10 +29,15 @@ import javax.annotation.Nullable;
 @AllArgsConstructor
 public class DataBackendStateFetchServiceExecutionResult {
 
-    @Nullable
+    @Nonnull
+    @JsonDeserialize(as = DataBackendModuleMetaDataDefaultImpl.class)
     private DataBackendModuleMetaData moduleMetaData;
 
-    @Nullable
+    @Nonnull
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", include = JsonTypeInfo.As.EXTERNAL_PROPERTY)
+    @JsonSubTypes({
+        @JsonSubTypes.Type(value = GlobalDatabaseDescriptionDefaultImpl.class, name = "GlobalDatabaseDescription"),
+    })
     private DataBackendDescription dataBackendDescription;
 
 }

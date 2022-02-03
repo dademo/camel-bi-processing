@@ -12,8 +12,11 @@
 
 package fr.dademo.supervision.dependencies.backends.model.database.resources;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -23,7 +26,10 @@ import javax.validation.constraints.Size;
 /**
  * @author dademo
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class DatabaseIndexDefaultImpl implements DatabaseIndex {
 

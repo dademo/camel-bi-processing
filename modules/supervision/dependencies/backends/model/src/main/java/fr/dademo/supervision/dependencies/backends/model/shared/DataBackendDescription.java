@@ -12,6 +12,8 @@
 
 package fr.dademo.supervision.dependencies.backends.model.shared;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.validation.constraints.Min;
@@ -23,6 +25,7 @@ import java.util.Date;
  *
  * @author dademo
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public interface DataBackendDescription extends DataBackendDescriptionBase {
 
     /**

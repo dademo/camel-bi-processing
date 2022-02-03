@@ -22,10 +22,8 @@ java {
 dependencies {
 
     implementation project(':modules:dependencies:tools:generic_tools')
-    implementation project(':modules:supervision:dependencies:backends:model')
     implementation project(':modules:supervision:dependencies:data_model')
-
-    runtimeOnly project(':modules:supervision:dependencies:backends:postgresql')
+    implementation project(':modules:supervision:dependencies:persistence')
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
@@ -33,17 +31,27 @@ dependencies {
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapStructVersion}"
 
     implementation 'org.springframework.boot:spring-boot-starter'
-    implementation 'org.springframework.cloud:spring-cloud-starter-task'
+    implementation 'org.springframework.cloud:spring-cloud-stream'
+    implementation 'org.springframework.cloud:spring-cloud-stream-binder-rabbit'
+    implementation 'org.springframework.cloud:spring-cloud-stream-binder-kafka'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
+    implementation 'org.springframework.amqp:spring-amqp'
+    implementation 'org.springframework.kafka:spring-kafka'
 
     // Other libraries
     implementation "javax.validation:validation-api:${javaxValidationApiVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-core:${jacksonCoreVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonCoreVersion}"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonCoreVersion}"
+    implementation "commons-io:commons-io:${apacheCommonsIOVersion}"
+    implementation "org.apache.commons:commons-compress:${apacheCommonsCompressVersion}"
+    runtimeOnly "org.tukaani:xz:${xzJavaVersion}"
     implementation "com.google.code.findbugs:jsr305:${findBugsJsr305Version}"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.amqp:spring-rabbit-test'
+    testImplementation 'org.springframework.kafka:spring-kafka-test'
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.testcontainers:kafka'
     testImplementation 'org.testcontainers:rabbitmq'

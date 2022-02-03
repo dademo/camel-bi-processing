@@ -14,13 +14,17 @@ package fr.dademo.supervision.dependencies.backends.model.database.resources;
 
 // TODO
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import lombok.Data;
 
 /**
  * @author dademo
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Data
+// @NoArgsConstructor
+// @AllArgsConstructor
 @Builder
 public class DatabaseReplicationDefaultImpl implements DatabaseReplication {
 }

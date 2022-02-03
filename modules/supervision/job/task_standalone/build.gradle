@@ -21,11 +21,12 @@ java {
 
 dependencies {
 
+    implementation project(':modules:dependencies:tools:generic_tools')
     implementation project(':modules:supervision:dependencies:backends:model')
+    implementation project(':modules:supervision:dependencies:persistence')
+
     runtimeOnly project(':modules:supervision:dependencies:backends:postgresql')
 
-    implementation project(':modules:dependencies:tools:generic_tools')
-    implementation project(':modules:supervision:dependencies:persistence')
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"

@@ -12,7 +12,10 @@
 
 package fr.dademo.supervision.dependencies.backends.model.database;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import fr.dademo.supervision.dependencies.backends.model.database.resources.DatabaseSchema;
+import fr.dademo.supervision.dependencies.backends.model.database.resources.DatabaseSchemaDefaultImpl;
 import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendDescriptionBase;
 import lombok.NonNull;
 
@@ -21,10 +24,12 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.time.Duration;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author dademo
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public interface DatabaseDescription extends DataBackendDescriptionBase {
 
     @Nullable
@@ -93,5 +98,6 @@ public interface DatabaseDescription extends DataBackendDescriptionBase {
     Date getLastStatisticsResetTime();
 
     @NonNull
+    @JsonDeserialize(as = List.class, contentAs = DatabaseSchemaDefaultImpl.class)
     Iterable<DatabaseSchema> getDatabaseSchemas();
 }
