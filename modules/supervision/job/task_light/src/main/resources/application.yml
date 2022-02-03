@@ -1,0 +1,62 @@
+spring:
+  application:
+    name: Supervision task runner
+  liquibase:
+    enabled: false
+  cloud:
+    stream:
+      bindings:
+        supervision:
+          destination: supervision
+          binder: supervision-rabbitmq
+      binders:
+        supervision-rabbitmq:
+          type: rabbit
+          environment:
+            spring:
+              rabbitmq:
+                host: localhost
+                port: 5672
+                username: guest
+                password: guest
+          defaultCandidate: true
+
+datasources:
+  rabbitmq:
+    output:
+      enabled: true
+      connection-string: amqp://guest:guest@localhost:5672
+      confirms: false
+      queues: { }
+      exchanges:
+        association:
+          name: association
+          type: direct
+          durable: true
+          autoDelete: false
+          delayed: false
+          internal: false
+
+job:
+  output:
+    exchange: supervision
+    routingKey: '#'
+
+task:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/supervision
+    username: postgres
+    password: postgres
+    schema: supervision
+
+module:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bi
+    username: postgres
+    password: postgres
+
+logging:
+  level:
+    root: INFO
+    #root: DEBUG
+    fr.dademo: DEBUG

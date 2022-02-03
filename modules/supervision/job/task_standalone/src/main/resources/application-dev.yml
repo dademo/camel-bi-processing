@@ -1,0 +1,13 @@
+spring:
+  jpa:
+    show-sql: true
+  hibernate:
+    format_sql: true
+    generate_statistics: true
+
+logging:
+  level:
+    ROOT: INFO
+    org.springframework: INFO
+    org.springframework.cache: TRACE
+    fr.dademo: DEBUG

@@ -6,7 +6,7 @@
 
 package fr.dademo.supervision.service.repositories;
 
-import fr.dademo.supervision.entities.DataBackendStateExecutionEntity;
+import fr.dademo.supervision.dependencies.entities.DataBackendStateExecutionEntity;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 

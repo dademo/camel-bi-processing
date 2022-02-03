@@ -1,0 +1,13 @@
+# Based on https://spring.io/guides/gs/spring-boot-docker/
+ARG SOURCE_IMAGE_TAG=11-jre-bullseye
+FROM docker.io/library/openjdk:${SOURCE_IMAGE_TAG}
+
+
+RUN groupadd spring && useradd -m -d /app -s /bin/false -g spring spring
+
+USER spring:spring
+
+ARG JAR_FILE=build/libs/*.jar
+COPY ${JAR_FILE} /app/app.jar
+
+ENTRYPOINT ["java","-jar","/app/app.jar"]
