@@ -4,24 +4,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
 package fr.dademo.supervision.dependencies.persistence.repositories.database;
 
 import fr.dademo.supervision.dependencies.entities.database.databasetable.DataBackendDatabaseSchemaTableEntity;
@@ -30,32 +12,33 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.QueryHints;
 
 import javax.annotation.Nonnull;
+import javax.persistence.QueryHint;
 import java.util.Optional;
 
 /**
  * @author dademo
  */
-@CacheConfig(cacheNames = PersistenceBeans.CACHE_DATA_BACKEND_DATABASE_SCHEMA_TABLE_REPOSITORY, keyGenerator = PersistenceBeans.TASK_ENTITY_CLASS_KEY_GENERATOR_BEAN_NAME)
+@CacheConfig(cacheNames = PersistenceBeans.CACHE_DATA_BACKEND_DATABASE_SCHEMA_TABLE_REPOSITORY)
 public interface DataBackendDatabaseSchemaTableRepository extends
-    JpaRepository<DataBackendDatabaseSchemaTableEntity, Long>,
-    JpaSpecificationExecutor<DataBackendDatabaseSchemaTableEntity> {
+    JpaRepository<DataBackendDatabaseSchemaTableEntity, Long> {
 
     @Nonnull
     @Override
-    @Cacheable
-    Optional<DataBackendDatabaseSchemaTableEntity> findOne(Specification<DataBackendDatabaseSchemaTableEntity> spec);
+    @Cacheable(key="#id", condition="#id != null")
+    @QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
+    <S extends DataBackendDatabaseSchemaTableEntity> Optional<S> findOne(@Nonnull Example<S> example);
 
     @Nonnull
     @Override
-    @CachePut
+    @CachePut(key="#id", condition="#id != null")
     <S extends DataBackendDatabaseSchemaTableEntity> S save(@Nonnull S entity);
 
     @Override
-    @CacheEvict
+    @CacheEvict(key="#id")
     void delete(@Nonnull DataBackendDatabaseSchemaTableEntity entity);
 }

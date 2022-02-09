@@ -4,24 +4,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
 package fr.dademo.supervision.dependencies.persistence.services;
 
 import fr.dademo.supervision.dependencies.backends.model.database.DatabaseDescription;
@@ -31,13 +13,14 @@ import fr.dademo.supervision.dependencies.backends.model.database.resources.Data
 import fr.dademo.supervision.dependencies.backends.model.database.resources.DatabaseTable;
 import fr.dademo.supervision.dependencies.backends.model.database.resources.DatabaseView;
 import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendModuleMetaData;
+import fr.dademo.supervision.dependencies.entities.DataBackendDescriptionEntity;
 import fr.dademo.supervision.dependencies.entities.DataBackendStateExecutionEntity;
 import fr.dademo.supervision.dependencies.entities.database.database.DataBackendDatabaseEntity;
 import fr.dademo.supervision.dependencies.entities.database.databaseindex.DataBackendDatabaseSchemaIndexEntity;
 import fr.dademo.supervision.dependencies.entities.database.databaseschema.DataBackendDatabaseSchemaEntity;
 import fr.dademo.supervision.dependencies.entities.database.databasetable.DataBackendDatabaseSchemaTableEntity;
 import fr.dademo.supervision.dependencies.entities.database.databaseview.DataBackendDatabaseSchemaViewEntity;
-import fr.dademo.supervision.dependencies.entities.database.globaldatabase.DataBackendGlobalDatabaseEntity;
+import fr.dademo.supervision.dependencies.persistence.repositories.DatabaseBackendStateRepository;
 import fr.dademo.supervision.dependencies.persistence.repositories.database.*;
 import fr.dademo.supervision.dependencies.persistence.services.mappers.database.connection.DataBackendDatabaseConnectionEntityMapper;
 import fr.dademo.supervision.dependencies.persistence.services.mappers.database.database.DataBackendDatabaseEntityMapper;
@@ -49,6 +32,7 @@ import fr.dademo.supervision.dependencies.persistence.services.mappers.database.
 import fr.dademo.supervision.dependencies.persistence.services.mappers.database.databasetable.DataBackendDatabaseSchemaTableStatisticsEntityMapper;
 import fr.dademo.supervision.dependencies.persistence.services.mappers.database.databaseview.DataBackendDatabaseSchemaViewEntityMapper;
 import fr.dademo.supervision.dependencies.persistence.services.mappers.database.databaseview.DataBackendDatabaseSchemaViewEntityStatisticsMapper;
+import fr.dademo.supervision.dependencies.persistence.services.specialSpecifications.DataBackendDatabaseEntitySpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -66,7 +50,7 @@ import java.util.stream.StreamSupport;
 public class DatabaseBackendMappingServiceImpl extends AbstractGenericDataBackendMappingService implements DatabaseBackendMappingService {
 
     @Autowired
-    private DataBackendGlobalDatabaseRepository dataBackendGlobalDatabaseRepository;
+    private DatabaseBackendStateRepository databaseBackendStateRepository;
 
     @Autowired
     private DataBackendDatabaseRepository dataBackendDatabaseRepository;
@@ -95,71 +79,67 @@ public class DatabaseBackendMappingServiceImpl extends AbstractGenericDataBacken
             globalDatabaseDescription
         );
 
-        backendStateExecutionEntity.setGlobalDatabase(mapToGlobalDatabaseEntity(globalDatabaseDescription, backendStateExecutionEntity));
+        databaseBackendStateRepository.save(backendStateExecutionEntity);
 
-        // Reverse links
-        backendStateExecutionEntity.getDataBackendModuleMetaData().getBackendStateExecutions().add(backendStateExecutionEntity);
-        backendStateExecutionEntity.getDataBackendDescription().getBackendStateExecutions().add(backendStateExecutionEntity);
+        // Applying database-related values
+        applyDatabaseValues(
+            backendStateExecutionEntity,
+            globalDatabaseDescription
+        );
 
         return backendStateExecutionEntity;
     }
 
-    private DataBackendGlobalDatabaseEntity mapToGlobalDatabaseEntity(GlobalDatabaseDescription globalDatabaseDescription,
-                                                                      DataBackendStateExecutionEntity dataBackendStateExecution) {
+    private void applyDatabaseValues(DataBackendStateExecutionEntity dataBackendStateExecution,
+                                     GlobalDatabaseDescription globalDatabaseDescription) {
 
-        final var globalDatabaseDescriptionEntity = dataBackendGlobalDatabaseRepository.save(
-            DataBackendGlobalDatabaseEntity.builder()
-                .connections(new ArrayList<>())
-                .databases(new ArrayList<>())
-                .backendStateExecution(dataBackendStateExecution)
-                .build()
-        );
+        var dataBackendDescription = dataBackendStateExecution.getDataBackendDescription();
 
-        globalDatabaseDescriptionEntity.setConnections(
-            StreamSupport.stream(globalDatabaseDescription.getDatabaseConnections().spliterator(), false)
-                .map(databaseConnection -> DataBackendDatabaseConnectionEntityMapper.INSTANCE.toDataBackendGlobalDatabaseDescriptionEntity(
-                    databaseConnection,
-                    globalDatabaseDescriptionEntity,
-                    dataBackendStateExecution
-                ))
-                .collect(Collectors.toList())
-        );
-        globalDatabaseDescriptionEntity.setDatabases(
+        dataBackendDescription.setDatabases(
             StreamSupport.stream(globalDatabaseDescription.getDatabasesDescriptions().spliterator(), false)
                 .map(databaseDescription -> mapToDataBackendDatabaseDescriptionEntity(
                     databaseDescription,
-                    globalDatabaseDescriptionEntity,
+                    dataBackendDescription,
                     dataBackendStateExecution
                 ))
                 .collect(Collectors.toList())
         );
 
-        // Reverse links
-        globalDatabaseDescriptionEntity.getConnections().forEach(connection -> connection.setGlobalDatabase(globalDatabaseDescriptionEntity));
-        globalDatabaseDescriptionEntity.getDatabases().forEach(database -> database.setGlobalDatabase(globalDatabaseDescriptionEntity));
-
-        return globalDatabaseDescriptionEntity;
+        dataBackendDescription.getDatabaseConnections().addAll(
+            StreamSupport.stream(globalDatabaseDescription.getDatabaseConnections().spliterator(), false)
+                .map(databaseConnection -> DataBackendDatabaseConnectionEntityMapper.INSTANCE.toDataBackendDatabaseConnectionEntity(
+                    databaseConnection,
+                    dataBackendDescription,
+                    dataBackendStateExecution
+                ))
+                .collect(Collectors.toList())
+        );
     }
 
     private DataBackendDatabaseEntity mapToDataBackendDatabaseDescriptionEntity(DatabaseDescription databaseDescription,
-                                                                                DataBackendGlobalDatabaseEntity globalDatabase,
+                                                                                DataBackendDescriptionEntity backendDescription,
                                                                                 DataBackendStateExecutionEntity dataBackendStateExecution) {
 
         final var databaseDescriptionEntity = DataBackendDatabaseEntityMapper.INSTANCE.toDataBackendDatabaseEntity(
             databaseDescription,
-            globalDatabase,
+            backendDescription,
             new ArrayList<>(),
             new ArrayList<>()
         );
-
+/*
         final var finalDatabaseDescriptionEntity = dataBackendDatabaseRepository
-            .findOne(Example.of(databaseDescriptionEntity,
+            .findOne(Example.of(
+                databaseDescriptionEntity,
                 ExampleMatcher.matching()
                     .withIgnorePaths(
                         "databaseStatistics",
                         "schemas"
                     )
             ))
+            .orElseGet(() -> dataBackendDatabaseRepository.save(databaseDescriptionEntity));
+ */
+        final var finalDatabaseDescriptionEntity = dataBackendDatabaseRepository
+            .findOne(DataBackendDatabaseEntitySpecification.forEntity(databaseDescriptionEntity))
             .orElseGet(() -> dataBackendDatabaseRepository.save(databaseDescriptionEntity));
 
         finalDatabaseDescriptionEntity.getDatabaseStatistics().add(
@@ -170,14 +150,13 @@ public class DatabaseBackendMappingServiceImpl extends AbstractGenericDataBacken
             )
         );
 
+        dataBackendDatabaseRepository.save(finalDatabaseDescriptionEntity);
+
         finalDatabaseDescriptionEntity.setSchemas(
             StreamSupport.stream(databaseDescription.getDatabaseSchemas().spliterator(), false)
                 .map(databaseSchema -> mapToDataBackendDatabaseSchemaEntity(databaseSchema, finalDatabaseDescriptionEntity, dataBackendStateExecution))
                 .collect(Collectors.toList())
         );
-
-        // Reverse links
-        finalDatabaseDescriptionEntity.getDatabaseStatistics().forEach(databaseStatistics -> databaseStatistics.setDatabase(finalDatabaseDescriptionEntity));
 
         return finalDatabaseDescriptionEntity;
     }
@@ -234,20 +213,6 @@ public class DatabaseBackendMappingServiceImpl extends AbstractGenericDataBacken
                 ))
                 .collect(Collectors.toList())
         );
-
-        // Reverse links
-        finalDatabaseSchemaEntity.getTables().forEach(table -> {
-            table.setSchema(finalDatabaseSchemaEntity);
-            table.getStatistics().forEach(statistic -> statistic.setTable(table));
-        });
-        finalDatabaseSchemaEntity.getViews().forEach(view -> {
-            view.setSchema(finalDatabaseSchemaEntity);
-            view.getStatistics().forEach(statistic -> statistic.setView(view));
-        });
-        finalDatabaseSchemaEntity.getIndexes().forEach(index -> {
-            index.setSchema(finalDatabaseSchemaEntity);
-            index.getStatistics().forEach(statistic -> statistic.setIndex(index));
-        });
 
         return finalDatabaseSchemaEntity;
     }

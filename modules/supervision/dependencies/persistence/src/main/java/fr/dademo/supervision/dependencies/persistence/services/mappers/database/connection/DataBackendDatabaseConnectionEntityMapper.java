@@ -4,42 +4,12 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
 package fr.dademo.supervision.dependencies.persistence.services.mappers.database.connection;
 
 import fr.dademo.supervision.dependencies.backends.model.database.resources.DatabaseConnection;
+import fr.dademo.supervision.dependencies.entities.DataBackendDescriptionEntity;
 import fr.dademo.supervision.dependencies.entities.DataBackendStateExecutionEntity;
 import fr.dademo.supervision.dependencies.entities.database.connection.DataBackendDatabaseConnectionEntity;
-import fr.dademo.supervision.dependencies.entities.database.globaldatabase.DataBackendGlobalDatabaseEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -65,11 +35,11 @@ public interface DataBackendDatabaseConnectionEntityMapper {
     }
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(source = "globalDatabase", target = "globalDatabase")
+    @Mapping(source = "backendDescription", target = "backendDescription")
     @Mapping(source = "backendStateExecution", target = "backendStateExecution")
-    DataBackendDatabaseConnectionEntity toDataBackendGlobalDatabaseDescriptionEntity(
+    DataBackendDatabaseConnectionEntity toDataBackendDatabaseConnectionEntity(
         DatabaseConnection source,
-        DataBackendGlobalDatabaseEntity globalDatabase,
+        DataBackendDescriptionEntity backendDescription,
         DataBackendStateExecutionEntity backendStateExecution
     );
 }

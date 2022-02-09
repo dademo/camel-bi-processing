@@ -4,18 +4,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
 package fr.dademo.supervision.dependencies.entities.database.databaseschema;
 
 import fr.dademo.supervision.dependencies.entities.BaseEntity;
@@ -24,6 +12,7 @@ import fr.dademo.supervision.dependencies.entities.database.databaseindex.DataBa
 import fr.dademo.supervision.dependencies.entities.database.databasetable.DataBackendDatabaseSchemaTableEntity;
 import fr.dademo.supervision.dependencies.entities.database.databaseview.DataBackendDatabaseSchemaViewEntity;
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.annotation.Nonnull;
 import javax.persistence.*;
@@ -40,6 +29,8 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Entity
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Table(
     name = "data_backend_database_schema",
     uniqueConstraints = {

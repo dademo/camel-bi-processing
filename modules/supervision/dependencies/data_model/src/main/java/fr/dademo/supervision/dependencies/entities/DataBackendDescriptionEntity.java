@@ -4,15 +4,12 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
 package fr.dademo.supervision.dependencies.entities;
 
+import fr.dademo.supervision.dependencies.entities.database.connection.DataBackendDatabaseConnectionEntity;
+import fr.dademo.supervision.dependencies.entities.database.database.DataBackendDatabaseEntity;
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -29,6 +26,8 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Entity
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Table(
     name = "data_backend_description",
     uniqueConstraints = {
@@ -56,6 +55,16 @@ public class DataBackendDescriptionEntity implements BaseEntity {
     @OneToMany(mappedBy = "dataBackendDescription", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @ToString.Exclude
     private List<DataBackendStateExecutionEntity> backendStateExecutions;
+
+    @Nonnull
+    @OneToMany(mappedBy = "backendDescription", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @ToString.Exclude
+    private List<DataBackendDatabaseEntity> databases;
+
+    @Nonnull
+    @OneToMany(mappedBy = "backendDescription", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @ToString.Exclude
+    private List<DataBackendDatabaseConnectionEntity> databaseConnections;
 
     @Nonnull
     @Size(min = 1, max = 255)

@@ -4,37 +4,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
 package fr.dademo.supervision.dependencies.persistence.services.mappers.database.database;
 
 import fr.dademo.supervision.dependencies.backends.model.database.DatabaseDescription;
+import fr.dademo.supervision.dependencies.entities.DataBackendDescriptionEntity;
 import fr.dademo.supervision.dependencies.entities.database.database.DataBackendDatabaseEntity;
 import fr.dademo.supervision.dependencies.entities.database.database.DataBackendDatabaseStatisticsEntity;
 import fr.dademo.supervision.dependencies.entities.database.databaseschema.DataBackendDatabaseSchemaEntity;
-import fr.dademo.supervision.dependencies.entities.database.globaldatabase.DataBackendGlobalDatabaseEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -52,12 +28,12 @@ public interface DataBackendDatabaseEntityMapper {
     DataBackendDatabaseEntityMapper INSTANCE = Mappers.getMapper(DataBackendDatabaseEntityMapper.class);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(source = "globalDatabase", target = "globalDatabase")
+    @Mapping(source = "backendDescription", target = "backendDescription")
     @Mapping(source = "schemas", target = "schemas")
     @Mapping(source = "databaseStatistics", target = "databaseStatistics")
     DataBackendDatabaseEntity toDataBackendDatabaseEntity(
         DatabaseDescription source,
-        DataBackendGlobalDatabaseEntity globalDatabase,
+        DataBackendDescriptionEntity backendDescription,
         List<DataBackendDatabaseSchemaEntity> schemas,
         List<DataBackendDatabaseStatisticsEntity> databaseStatistics
     );

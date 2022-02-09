@@ -4,7 +4,6 @@
   ~ License, v. 2.0. If a copy of the MPL was not distributed with this
   ~ file, You can obtain one at https://mozilla.org/MPL/2.0/.
   -->
-
 <databaseChangeLog
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
@@ -13,33 +12,18 @@
 
     <changeSet id="1" author="dademo">
         <comment>Database-related tables</comment>
-        <!-- fr.dademo.supervision.entities.database.globaldatabase.DataBackendGlobalDatabaseDescriptionEntity -->
-        <createTable tableName="data_backend_global_database" schemaName="${schema_name}">
-            <column name="id" type="INTEGER" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true" unique="true"/>
-            </column>
-            <column name="id_backend_state_execution" type="INTEGER">
-                <constraints
-                    nullable="false" unique="false"
-                    foreignKeyName="fk_data_backend_global_database__data_backend_state_execution_id"
-                    referencedTableSchemaName="${schema_name}"
-                    referencedTableName="data_backend_state_execution"
-                    referencedColumnNames="id"
-                />
-            </column>
-        </createTable>
 
         <!-- fr.dademo.supervision.entities.database.connection.DataBackendDatabaseConnectionEntity -->
         <createTable tableName="data_backend_database_connection" schemaName="${schema_name}">
             <column name="id" type="INTEGER" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" unique="true"/>
             </column>
-            <column name="id_global_database" type="INTEGER">
+            <column name="id_data_backend_description" type="INTEGER">
                 <constraints
                     nullable="false" unique="false"
-                    foreignKeyName="fk_data_backend_database_connection__data_backend_global_database_id"
+                    foreignKeyName="fk_data_backend_database_connection__data_backend_description_id"
                     referencedTableSchemaName="${schema_name}"
-                    referencedTableName="data_backend_global_database"
+                    referencedTableName="data_backend_state_execution"
                     referencedColumnNames="id"
                 />
             </column>
@@ -139,12 +123,12 @@
             <column name="id" type="INTEGER" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" unique="true"/>
             </column>
-            <column name="id_global_database" type="INTEGER">
+            <column name="id_data_backend_description" type="INTEGER">
                 <constraints
                     nullable="false" unique="false"
-                    foreignKeyName="fk_data_backend_database__data_backend_global_database_id"
+                    foreignKeyName="fk_data_backend_database__data_backend_description_id"
                     referencedTableSchemaName="${schema_name}"
-                    referencedTableName="data_backend_global_database"
+                    referencedTableName="data_backend_description"
                     referencedColumnNames="id"
                 />
             </column>
@@ -155,7 +139,7 @@
         <addUniqueConstraint
             constraintName="data_backend_database_uniq"
             tableName="data_backend_database"
-            columnNames="id_global_database, name"
+            columnNames="id_data_backend_description, name"
             schemaName="${schema_name}"
         />
         <createIndex tableName="data_backend_database"

@@ -4,36 +4,18 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
 package fr.dademo.supervision.dependencies.persistence;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import fr.dademo.supervision.dependencies.persistence.configuration.PersistenceConfiguration;
-import fr.dademo.supervision.dependencies.persistence.repositories.database.caching.EntityClassKeyGenerator;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCache;
 import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -42,6 +24,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import javax.persistence.SharedCacheMode;
 import javax.sql.DataSource;
 import java.util.Arrays;
 import java.util.Properties;
@@ -60,20 +43,18 @@ import static fr.dademo.supervision.dependencies.persistence.PersistenceBeans.TA
     transactionManagerRef = PersistenceBeans.PERSISTENCE_TRANSACTION_MANAGER_BEAN_NAME
 )
 @EnableTransactionManagement
-@EnableCaching
 public class PersistenceBeans {
 
-    public static final String PERSISTENCE_DATASOURCE_BEAN_NAME = "PERSISTENCE_DATASOURCE_BEAN_NAME";
+    public static final String PERSISTENCE_DATASOURCE_BEAN_NAME = "PERSISTENCE_DATASOURCE_BEAN";
+    public static final String JPA_PROPERTIES_BEAN_NAME = "JPA_PROPERTIES_BEAN";
     public static final String TASK_CONTAINER_ENTITY_MANAGER_FACTORY_BEAN_NAME = "TASK_CONTAINER_ENTITY_MANAGER_FACTORY_BEAN";
     public static final String PERSISTENCE_TRANSACTION_MANAGER_BEAN_NAME = "TASK_TRANSACTION_MANAGER_BEAN";
-    public static final String TASK_ENTITY_CLASS_KEY_GENERATOR_BEAN_NAME = "TASK_ENTITY_CLASS_KEY_GENERATOR_BEAN_NAME";
 
     public static final String CACHE_DATA_BACKEND_DATABASE_REPOSITORY = "DataBackendDatabaseRepository";
     public static final String CACHE_DATA_BACKEND_DATABASE_SCHEMA_INDEX_REPOSITORY = "DataBackendDatabaseSchemaIndexRepository";
     public static final String CACHE_DATA_BACKEND_DATABASE_SCHEMA_REPOSITORY = "DataBackendDatabaseSchemaRepository";
     public static final String CACHE_DATA_BACKEND_DATABASE_SCHEMA_TABLE_REPOSITORY = "DataBackendDatabaseSchemaTableRepository";
     public static final String CACHE_DATA_BACKEND_DATABASE_SCHEMA_VIEW_REPOSITORY = "DataBackendDatabaseSchemaViewRepository";
-    public static final String CACHE_DATA_BACKEND_GLOBAL_DATABASE_REPOSITORY = "DataBackendGlobalDatabaseRepository";
     public static final String CACHE_DATA_BACKEND_DESCRIPTION_REPOSITORY = "DataBackendDescriptionRepository";
     public static final String CACHE_DATA_BACKEND_MODULE_META_DATA_REPOSITORY = "DataBackendModuleMetaDataRepository";
     private static final String[] CACHE_ALL = {
@@ -82,7 +63,6 @@ public class PersistenceBeans {
         CACHE_DATA_BACKEND_DATABASE_SCHEMA_REPOSITORY,
         CACHE_DATA_BACKEND_DATABASE_SCHEMA_TABLE_REPOSITORY,
         CACHE_DATA_BACKEND_DATABASE_SCHEMA_VIEW_REPOSITORY,
-        CACHE_DATA_BACKEND_GLOBAL_DATABASE_REPOSITORY,
         CACHE_DATA_BACKEND_DESCRIPTION_REPOSITORY,
         CACHE_DATA_BACKEND_MODULE_META_DATA_REPOSITORY,
     };
@@ -90,17 +70,64 @@ public class PersistenceBeans {
     @Bean(name = PERSISTENCE_DATASOURCE_BEAN_NAME)
     public DataSource dataSource(PersistenceConfiguration persistenceConfiguration) {
 
-        final var datasourceConfiguration = persistenceConfiguration.getDatasource();
-        final var dataSourceBuilder = DataSourceBuilder.create();
-        dataSourceBuilder.url(datasourceConfiguration.getUrl());
-        dataSourceBuilder.username(datasourceConfiguration.getUsername());
-        dataSourceBuilder.password(datasourceConfiguration.getPassword());
-        return dataSourceBuilder.build();
+        final var hikariConfiguration = new HikariConfig();
+
+        hikariConfiguration.setJdbcUrl(persistenceConfiguration.getDatasource().getUrl());
+        hikariConfiguration.setUsername(persistenceConfiguration.getDatasource().getUsername());
+        hikariConfiguration.setPassword(persistenceConfiguration.getDatasource().getPassword());
+        hikariConfiguration.setMinimumIdle(persistenceConfiguration.getMinimumIdle());
+        hikariConfiguration.setMaximumPoolSize(persistenceConfiguration.getMaximumPoolSize());
+        hikariConfiguration.setAutoCommit(false);
+
+        return new HikariDataSource(hikariConfiguration);
+    }
+
+    @Profile("!dev")
+    @Bean(name = JPA_PROPERTIES_BEAN_NAME)
+    public Properties jpaPropertiesDefault(PersistenceConfiguration persistenceConfiguration) {
+
+        final var jpaProperties = new Properties();
+
+        jpaProperties.setProperty("hibernate.default_schema", persistenceConfiguration.getDatasource().getSchema());
+        jpaProperties.setProperty("hibernate.javax.cache.missing_cache_strategy", "create");
+        jpaProperties.setProperty("hibernate.format_sql", Boolean.FALSE.toString());
+        jpaProperties.setProperty("hibernate.jdbc.batch_size", String.valueOf(persistenceConfiguration.getBatchSize()));
+
+        if (persistenceConfiguration.isCacheEnabled()) {
+            jpaProperties.setProperty("hibernate.generate_statistics", Boolean.FALSE.toString());
+            jpaProperties.setProperty("hibernate.cache.use_second_level_cache", Boolean.TRUE.toString());
+            jpaProperties.setProperty("hibernate.cache.use_query_cache", Boolean.TRUE.toString());
+            jpaProperties.setProperty("hibernate.cache.region.factory_class", "org.hibernate.cache.jcache.JCacheRegionFactory");
+        }
+
+        return jpaProperties;
+    }
+
+    @Profile("dev")
+    @Bean(name = JPA_PROPERTIES_BEAN_NAME)
+    public Properties jpaPropertiesDev(PersistenceConfiguration persistenceConfiguration) {
+
+        final var jpaProperties = new Properties();
+
+        jpaProperties.setProperty("hibernate.default_schema", persistenceConfiguration.getDatasource().getSchema());
+        jpaProperties.setProperty("hibernate.javax.cache.missing_cache_strategy", "create");
+        jpaProperties.setProperty("hibernate.format_sql", Boolean.FALSE.toString());
+        jpaProperties.setProperty("hibernate.jdbc.batch_size", String.valueOf(persistenceConfiguration.getBatchSize()));
+
+        if (persistenceConfiguration.isCacheEnabled()) {
+            jpaProperties.setProperty("hibernate.generate_statistics", Boolean.TRUE.toString());
+            jpaProperties.setProperty("hibernate.cache.use_second_level_cache", Boolean.TRUE.toString());
+            jpaProperties.setProperty("hibernate.cache.use_query_cache", Boolean.TRUE.toString());
+            jpaProperties.setProperty("hibernate.cache.region.factory_class", "org.hibernate.cache.jcache.JCacheRegionFactory");
+        }
+
+        return jpaProperties;
     }
 
     @Bean(name = TASK_CONTAINER_ENTITY_MANAGER_FACTORY_BEAN_NAME)
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
         @Qualifier(PERSISTENCE_DATASOURCE_BEAN_NAME) DataSource dataSource,
+        @Qualifier(JPA_PROPERTIES_BEAN_NAME) Properties jpaProperties,
         PersistenceConfiguration persistenceConfiguration) {
 
         final var vendorAdapter = new HibernateJpaVendorAdapter();
@@ -110,10 +137,9 @@ public class PersistenceBeans {
         factory.setJpaVendorAdapter(vendorAdapter);
         factory.setPackagesToScan("fr.dademo.supervision");
         factory.setDataSource(dataSource);
+        factory.setSharedCacheMode(SharedCacheMode.ENABLE_SELECTIVE);
 
-        var jpaProperties = new Properties();
         jpaProperties.putAll(factory.getJpaPropertyMap());
-        jpaProperties.setProperty("hibernate.default_schema", persistenceConfiguration.getDatasource().getSchema());
         factory.setJpaProperties(jpaProperties);
 
         return factory;
@@ -143,10 +169,5 @@ public class PersistenceBeans {
         );
         cacheManager.initializeCaches();
         return cacheManager;
-    }
-
-    @Bean(TASK_ENTITY_CLASS_KEY_GENERATOR_BEAN_NAME)
-    public EntityClassKeyGenerator entityClassKeyGenerator() {
-        return new EntityClassKeyGenerator();
     }
 }

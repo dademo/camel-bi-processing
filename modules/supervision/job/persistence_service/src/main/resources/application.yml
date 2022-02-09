@@ -34,8 +34,36 @@ spring:
           group: supervision
           consumer:
             maxAttempts: 1
+  jpa:
+    show-sql: true
+    properties:
+      javax:
+        persistence:
+          sharedCache:
+            #required - enable selective caching mode - only entities with @Cacheable annotation will use L2 cache.
+            mode: ENABLE_SELECTIVE
+      hibernate:
+        javax:
+          cache:
+            missing_cache_strategy: create
+        #optional - enable SQL statements formatting.
+        format_sql: true
+        #optional - generate statistics to check if L2/query cache is actually being used.
+        generate_statistics: true
+        cache:
+          #required - turn on L2 cache.
+          use_second_level_cache: true
+          #optional - turn on query cache.
+          use_query_cache: true
+          region:
+            #required - classpath to cache region factory.
+            factory_class: org.hibernate.cache.jcache.JCacheRegionFactory
 
 persistence:
+  cache-enabled: true
+  batch-size: 100
+  minimum-idle: 2
+  maximum-pool-size: 10
   datasource:
     url: jdbc:postgresql://localhost:5432/supervision
     username: postgres

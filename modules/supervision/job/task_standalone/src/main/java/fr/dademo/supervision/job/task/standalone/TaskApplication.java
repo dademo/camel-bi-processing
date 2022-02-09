@@ -4,18 +4,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
 package fr.dademo.supervision.job.task.standalone;
 
 import fr.dademo.supervision.dependencies.backends.model.DataBackendStateFetchService;
@@ -26,14 +14,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.task.configuration.EnableTask;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * @author dademo
  */
 @Slf4j
 @EnableTask
-@EnableTransactionManagement
 @SpringBootApplication(scanBasePackages = "fr.dademo.supervision")
 public class TaskApplication implements CommandLineRunner {
 

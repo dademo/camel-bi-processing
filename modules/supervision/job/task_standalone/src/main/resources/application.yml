@@ -5,6 +5,10 @@ spring:
     enabled: false
 
 persistence:
+  cache-enabled: false
+  batch-size: 100
+  minimum-idle: 1
+  maximum-pool-size: 1
   datasource:
     url: jdbc:postgresql://localhost:5432/supervision
     username: postgres

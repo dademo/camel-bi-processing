@@ -4,24 +4,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
 package fr.dademo.supervision.dependencies.persistence.services;
 
 import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendDescription;
@@ -91,6 +73,8 @@ public abstract class AbstractGenericDataBackendMappingService {
 
         final var defaultEntity = DataBackendDescriptionMapper.INSTANCE.moduleDescriptionToEntity(
             dataBackendDescription,
+            new ArrayList<>(),
+            new ArrayList<>(),
             new ArrayList<>()
         );
 
@@ -99,7 +83,8 @@ public abstract class AbstractGenericDataBackendMappingService {
                 defaultEntity,
                 ExampleMatcher.matching()
                     .withIgnorePaths(
-                        "backendStateExecutions"
+                        "backendStateExecutions",
+                        "databases"
                     ))
             )
             .orElseGet(() -> dataBackendDescriptionRepository.save(defaultEntity));

@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.validation.constraints.Min;
 
 /**
  * @author dademo
@@ -25,6 +26,17 @@ public class PersistenceConfiguration {
 
     @Nonnull
     private DatasourceConfiguration datasource;
+
+    private boolean cacheEnabled = false;
+
+    @Min(0)
+    private int batchSize = 0;
+
+    @Min(0)
+    private int minimumIdle = 0;
+
+    @Min(1)
+    private int maximumPoolSize = 1;
 
     @Data
     @NoArgsConstructor

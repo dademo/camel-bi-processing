@@ -1,13 +1,9 @@
-spring:
-  jpa:
-    show-sql: true
-  hibernate:
-    format_sql: true
-    generate_statistics: true
-
 logging:
   level:
     ROOT: INFO
     org.springframework: INFO
+    org.hibernate.SQL: DEBUG
+    logging.level.org.springframework.jdbc.core.JdbcTemplate: DEBUG
+    logging.level.org.springframework.jdbc.core.StatementCreatorUtils: TRACE
     org.springframework.cache: TRACE
     fr.dademo: DEBUG
