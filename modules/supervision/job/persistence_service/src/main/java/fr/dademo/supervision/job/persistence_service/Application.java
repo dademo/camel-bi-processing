@@ -11,13 +11,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cache.annotation.EnableCaching;
 
 /**
  * @author dademo
  */
 @Slf4j
-@EnableCaching
 @SpringBootApplication(scanBasePackages = "fr.dademo.supervision")
 public class Application {
 

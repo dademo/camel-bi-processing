@@ -10,9 +10,6 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import fr.dademo.supervision.dependencies.persistence.configuration.PersistenceConfiguration;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.concurrent.ConcurrentMapCache;
-import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -26,9 +23,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.persistence.SharedCacheMode;
 import javax.sql.DataSource;
-import java.util.Arrays;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
 import static fr.dademo.supervision.dependencies.persistence.PersistenceBeans.TASK_CONTAINER_ENTITY_MANAGER_FACTORY_BEAN_NAME;
 
@@ -49,23 +44,6 @@ public class PersistenceBeans {
     public static final String JPA_PROPERTIES_BEAN_NAME = "JPA_PROPERTIES_BEAN";
     public static final String TASK_CONTAINER_ENTITY_MANAGER_FACTORY_BEAN_NAME = "TASK_CONTAINER_ENTITY_MANAGER_FACTORY_BEAN";
     public static final String PERSISTENCE_TRANSACTION_MANAGER_BEAN_NAME = "TASK_TRANSACTION_MANAGER_BEAN";
-
-    public static final String CACHE_DATA_BACKEND_DATABASE_REPOSITORY = "DataBackendDatabaseRepository";
-    public static final String CACHE_DATA_BACKEND_DATABASE_SCHEMA_INDEX_REPOSITORY = "DataBackendDatabaseSchemaIndexRepository";
-    public static final String CACHE_DATA_BACKEND_DATABASE_SCHEMA_REPOSITORY = "DataBackendDatabaseSchemaRepository";
-    public static final String CACHE_DATA_BACKEND_DATABASE_SCHEMA_TABLE_REPOSITORY = "DataBackendDatabaseSchemaTableRepository";
-    public static final String CACHE_DATA_BACKEND_DATABASE_SCHEMA_VIEW_REPOSITORY = "DataBackendDatabaseSchemaViewRepository";
-    public static final String CACHE_DATA_BACKEND_DESCRIPTION_REPOSITORY = "DataBackendDescriptionRepository";
-    public static final String CACHE_DATA_BACKEND_MODULE_META_DATA_REPOSITORY = "DataBackendModuleMetaDataRepository";
-    private static final String[] CACHE_ALL = {
-        CACHE_DATA_BACKEND_DATABASE_REPOSITORY,
-        CACHE_DATA_BACKEND_DATABASE_SCHEMA_INDEX_REPOSITORY,
-        CACHE_DATA_BACKEND_DATABASE_SCHEMA_REPOSITORY,
-        CACHE_DATA_BACKEND_DATABASE_SCHEMA_TABLE_REPOSITORY,
-        CACHE_DATA_BACKEND_DATABASE_SCHEMA_VIEW_REPOSITORY,
-        CACHE_DATA_BACKEND_DESCRIPTION_REPOSITORY,
-        CACHE_DATA_BACKEND_MODULE_META_DATA_REPOSITORY,
-    };
 
     @Bean(name = PERSISTENCE_DATASOURCE_BEAN_NAME)
     public DataSource dataSource(PersistenceConfiguration persistenceConfiguration) {
@@ -94,7 +72,6 @@ public class PersistenceBeans {
         jpaProperties.setProperty("hibernate.jdbc.batch_size", String.valueOf(persistenceConfiguration.getBatchSize()));
 
         if (persistenceConfiguration.isCacheEnabled()) {
-            jpaProperties.setProperty("hibernate.generate_statistics", Boolean.FALSE.toString());
             jpaProperties.setProperty("hibernate.cache.use_second_level_cache", Boolean.TRUE.toString());
             jpaProperties.setProperty("hibernate.cache.use_query_cache", Boolean.TRUE.toString());
             jpaProperties.setProperty("hibernate.cache.region.factory_class", "org.hibernate.cache.jcache.JCacheRegionFactory");
@@ -113,9 +90,9 @@ public class PersistenceBeans {
         jpaProperties.setProperty("hibernate.javax.cache.missing_cache_strategy", "create");
         jpaProperties.setProperty("hibernate.format_sql", Boolean.FALSE.toString());
         jpaProperties.setProperty("hibernate.jdbc.batch_size", String.valueOf(persistenceConfiguration.getBatchSize()));
+        jpaProperties.setProperty("hibernate.generate_statistics", Boolean.TRUE.toString());
 
         if (persistenceConfiguration.isCacheEnabled()) {
-            jpaProperties.setProperty("hibernate.generate_statistics", Boolean.TRUE.toString());
             jpaProperties.setProperty("hibernate.cache.use_second_level_cache", Boolean.TRUE.toString());
             jpaProperties.setProperty("hibernate.cache.use_query_cache", Boolean.TRUE.toString());
             jpaProperties.setProperty("hibernate.cache.region.factory_class", "org.hibernate.cache.jcache.JCacheRegionFactory");
@@ -156,18 +133,5 @@ public class PersistenceBeans {
     @Bean
     public TransactionTemplate transactionTemplate(@Qualifier(PERSISTENCE_TRANSACTION_MANAGER_BEAN_NAME) PlatformTransactionManager platformTransactionManager) {
         return new TransactionTemplate(platformTransactionManager);
-    }
-
-    @Bean
-    public CacheManager cacheManager() {
-
-        final var cacheManager = new SimpleCacheManager();
-        cacheManager.setCaches(
-            Arrays.stream(CACHE_ALL)
-                .map(cacheName -> new ConcurrentMapCache(cacheName, false))
-                .collect(Collectors.toList())
-        );
-        cacheManager.initializeCaches();
-        return cacheManager;
     }
 }
