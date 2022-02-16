@@ -7,11 +7,13 @@
 package fr.dademo.tools.tools;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import fr.dademo.tools.tools.object_mapper.ObjectMapperCustomizer;
+import fr.dademo.tools.tools.object_mapper.ObjectMapperDateCustomizer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
 
 /**
  * @author dademo
@@ -19,14 +21,22 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class DefaultToolBeans {
 
+    public static final List<ObjectMapperCustomizer> DEFAULT_OBJECT_MAPPER_CUSTOMIZERS = List.of(
+        new ObjectMapperDateCustomizer()
+    );
+
+    @Bean
+    public ObjectMapperCustomizer objectMapperDateCustomizerBean() {
+        return new ObjectMapperDateCustomizer();
+    }
+
     @Bean
     @ConditionalOnMissingBean(ObjectMapper.class)
-    public ObjectMapper defaultObjectMapper() {
+    public ObjectMapper defaultObjectMapper(List<ObjectMapperCustomizer> objectMapperCustomizers) {
 
         final var mapper = new ObjectMapper();
 
-        mapper.registerModule(new JavaTimeModule());
-        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        objectMapperCustomizers.forEach(objectMapperCustomizer -> objectMapperCustomizer.customize(mapper));
 
         return mapper;
     }

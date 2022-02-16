@@ -10,8 +10,8 @@ import fr.dademo.supervision.dependencies.backends.model.database.GlobalDatabase
 import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendDescription;
 import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendModuleMetaData;
 import fr.dademo.supervision.dependencies.persistence.PersistenceBeans;
-import fr.dademo.supervision.dependencies.persistence.repositories.DatabaseBackendStateRepository;
 import fr.dademo.supervision.dependencies.persistence.services.exceptions.InvalidDataBackendDescriptionType;
+import fr.dademo.supervision.dependencies.repositories.DatabaseBackendStateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

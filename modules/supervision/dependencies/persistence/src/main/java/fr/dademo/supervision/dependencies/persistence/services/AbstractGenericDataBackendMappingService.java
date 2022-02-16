@@ -11,11 +11,11 @@ import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendModul
 import fr.dademo.supervision.dependencies.entities.DataBackendDescriptionEntity;
 import fr.dademo.supervision.dependencies.entities.DataBackendModuleMetaDataEntity;
 import fr.dademo.supervision.dependencies.entities.DataBackendStateExecutionEntity;
-import fr.dademo.supervision.dependencies.persistence.repositories.DataBackendDescriptionRepository;
-import fr.dademo.supervision.dependencies.persistence.repositories.DataBackendModuleMetaDataRepository;
-import fr.dademo.supervision.dependencies.persistence.repositories.DatabaseBackendStateRepository;
 import fr.dademo.supervision.dependencies.persistence.services.mappers.DataBackendDescriptionMapper;
 import fr.dademo.supervision.dependencies.persistence.services.mappers.DataBackendModuleMetaDataMapper;
+import fr.dademo.supervision.dependencies.repositories.DataBackendDescriptionRepository;
+import fr.dademo.supervision.dependencies.repositories.DataBackendModuleMetaDataRepository;
+import fr.dademo.supervision.dependencies.repositories.DatabaseBackendStateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;

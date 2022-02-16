@@ -20,8 +20,6 @@ import fr.dademo.supervision.dependencies.entities.database.databaseindex.DataBa
 import fr.dademo.supervision.dependencies.entities.database.databaseschema.DataBackendDatabaseSchemaEntity;
 import fr.dademo.supervision.dependencies.entities.database.databasetable.DataBackendDatabaseSchemaTableEntity;
 import fr.dademo.supervision.dependencies.entities.database.databaseview.DataBackendDatabaseSchemaViewEntity;
-import fr.dademo.supervision.dependencies.persistence.repositories.DatabaseBackendStateRepository;
-import fr.dademo.supervision.dependencies.persistence.repositories.database.*;
 import fr.dademo.supervision.dependencies.persistence.services.mappers.database.connection.DataBackendDatabaseConnectionEntityMapper;
 import fr.dademo.supervision.dependencies.persistence.services.mappers.database.database.DataBackendDatabaseEntityMapper;
 import fr.dademo.supervision.dependencies.persistence.services.mappers.database.database.DataBackendDatabaseStatisticsEntityMapper;
@@ -33,6 +31,8 @@ import fr.dademo.supervision.dependencies.persistence.services.mappers.database.
 import fr.dademo.supervision.dependencies.persistence.services.mappers.database.databaseview.DataBackendDatabaseSchemaViewEntityMapper;
 import fr.dademo.supervision.dependencies.persistence.services.mappers.database.databaseview.DataBackendDatabaseSchemaViewEntityStatisticsMapper;
 import fr.dademo.supervision.dependencies.persistence.services.specialSpecifications.DataBackendDatabaseEntitySpecification;
+import fr.dademo.supervision.dependencies.repositories.DatabaseBackendStateRepository;
+import fr.dademo.supervision.dependencies.repositories.database.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;

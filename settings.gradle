@@ -51,6 +51,7 @@ include 'modules:supervision:dependencies:backends:rabbitmq'
 include 'modules:supervision:dependencies:backends:kafka'
 
 include 'modules:supervision:dependencies:data_model'
+include 'modules:supervision:dependencies:repositories'
 include 'modules:supervision:dependencies:persistence'
 include 'modules:supervision:job:task_light'
 include 'modules:supervision:job:persistence_service'

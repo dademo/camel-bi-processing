@@ -10,8 +10,8 @@ plugins {
     id 'java-library'
 }
 
-group 'fr.dademo.supervision.dependencies.persistence'
-archivesBaseName = 'dademo-supervision-dependencies-persistence'
+group 'fr.dademo.supervision.dependencies.repositories'
+archivesBaseName = 'dademo-supervision-repositories'
 version '1.0.0-SNAPSHOT'
 
 java {
@@ -21,31 +21,20 @@ java {
 
 dependencies {
 
-    api project(':modules:supervision:dependencies:backends:model')
-    api project(':modules:supervision:dependencies:data_model')
-    api project(':modules:supervision:dependencies:repositories')
+    implementation project(':modules:supervision:dependencies:data_model')
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-    annotationProcessor "org.mapstruct:mapstruct-processor:${mapStructVersion}"
 
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation "org.mapstruct:mapstruct:${mapStructVersion}"
-    runtimeOnly "org.postgresql:postgresql:${postgresqlVersion}"
 
     // Other libraries
     implementation "javax.validation:validation-api:${javaxValidationApiVersion}"
     implementation "com.google.code.findbugs:jsr305:${findBugsJsr305Version}"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-}
-
-dependencyManagement {
-    imports {
-        mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
-    }
 }
 

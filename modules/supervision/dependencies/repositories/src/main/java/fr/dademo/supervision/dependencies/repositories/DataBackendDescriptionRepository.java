@@ -4,9 +4,15 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package fr.dademo.supervision.dependencies.persistence.repositories.database;
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
 
-import fr.dademo.supervision.dependencies.entities.database.databaseindex.DataBackendDatabaseSchemaIndexEntity;
+package fr.dademo.supervision.dependencies.repositories;
+
+import fr.dademo.supervision.dependencies.entities.DataBackendDescriptionEntity;
 import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.QueryHints;
@@ -18,15 +24,15 @@ import java.util.Optional;
 /**
  * @author dademo
  */
-public interface DataBackendDatabaseSchemaIndexRepository extends
-    JpaRepository<DataBackendDatabaseSchemaIndexEntity, Long> {
+public interface DataBackendDescriptionRepository extends
+    JpaRepository<DataBackendDescriptionEntity, Long> {
 
     @Nonnull
     @Override
     @QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
-    <S extends DataBackendDatabaseSchemaIndexEntity> Optional<S> findOne(@Nonnull Example<S> example);
+    <S extends DataBackendDescriptionEntity> Optional<S> findOne(@Nonnull Example<S> example);
 
     @Nonnull
     @Override
-    <S extends DataBackendDatabaseSchemaIndexEntity> S save(@Nonnull S entity);
+    <S extends DataBackendDescriptionEntity> S save(@Nonnull S entity);
 }

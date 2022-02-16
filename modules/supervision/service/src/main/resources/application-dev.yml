@@ -3,3 +3,13 @@ management:
     web:
       exposure:
         include: '*'
+
+logging:
+  level:
+    ROOT: INFO
+    org.springframework: DEBUG
+    org.hibernate.SQL: DEBUG
+    logging.level.org.springframework.jdbc.core.JdbcTemplate: DEBUG
+    logging.level.org.springframework.jdbc.core.StatementCreatorUtils: TRACE
+    fr.dademo: DEBUG
+

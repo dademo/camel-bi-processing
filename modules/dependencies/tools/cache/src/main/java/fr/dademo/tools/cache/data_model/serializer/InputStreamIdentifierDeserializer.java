@@ -17,6 +17,7 @@ import java.io.IOException;
 
 import static fr.dademo.tools.cache.data_model.serializer.Constants.FIELD_SERIALIZED_CLASS;
 import static fr.dademo.tools.cache.data_model.serializer.Constants.FIELD_SERIALIZED_VALUE;
+import static fr.dademo.tools.tools.DefaultToolBeans.DEFAULT_OBJECT_MAPPER_CUSTOMIZERS;
 
 /**
  * @author dademo
@@ -38,7 +39,7 @@ public class InputStreamIdentifierDeserializer extends StdDeserializer<InputStre
     @SneakyThrows({ClassNotFoundException.class})
     public InputStreamIdentifier<?> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
 
-        final var defaultObjectMapper = new DefaultToolBeans().defaultObjectMapper();
+        final var defaultObjectMapper = new DefaultToolBeans().defaultObjectMapper(DEFAULT_OBJECT_MAPPER_CUSTOMIZERS);
 
         final var treeNode = p.readValueAsTree();
 

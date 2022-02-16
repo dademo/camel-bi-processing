@@ -26,12 +26,14 @@ dependencies {
 
     implementation project(':modules:dependencies:tools:generic_tools')
     implementation project(':modules:supervision:dependencies:data_model')
+    implementation project(':modules:supervision:dependencies:repositories')
 
     runtimeOnly project(':modules:supervision:dependencies:backends:postgresql')
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapStructVersion}"
 
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
@@ -39,6 +41,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation "org.zalando:problem-spring-web:${problemSpringWebVersion}"
+    implementation "org.mapstruct:mapstruct:${mapStructVersion}"
+    runtimeOnly "org.postgresql:postgresql:${postgresqlVersion}"
 
     // springdoc
     implementation "org.springdoc:springdoc-openapi-ui:${springdocVersion}"
