@@ -6,10 +6,10 @@
 
 package fr.dademo.supervision.service.controllers;
 
+import fr.dademo.supervision.service.controllers.database.DataBackendDatabaseController;
 import fr.dademo.supervision.service.controllers.exceptions.DataBackendNotFoundException;
 import fr.dademo.supervision.service.services.DataBackendService;
 import fr.dademo.supervision.service.services.dto.DataBackendDescriptionDto;
-import fr.dademo.supervision.service.services.dto.DataBackendDescriptionLightDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,14 +21,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.zalando.problem.Problem;
-import org.zalando.problem.Status;
+import org.zalando.problem.DefaultProblem;
 import org.zalando.problem.spring.web.advice.ProblemHandling;
 
 import javax.annotation.Nonnull;
@@ -49,13 +49,10 @@ public class DataBackendController implements ProblemHandling {
     private DataBackendService dataBackendService;
 
     @Autowired
-    private PagedResourcesAssembler<DataBackendDescriptionLightDto> dataBackendDescriptionLightDtoPagedResourcesAssembler;
-
-    @Autowired
     private PagedResourcesAssembler<DataBackendDescriptionDto> dataBackendDescriptionDtoPagedResourcesAssembler;
 
-    @Operation(summary = "Get a list of data backends")
     @PageableAsQueryParam
+    @Operation(summary = "Get a list of data backends")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Found data backends",
             content = {
@@ -64,51 +61,33 @@ public class DataBackendController implements ProblemHandling {
     })
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public PagedModel<EntityModel<DataBackendDescriptionDto>> findAllDataBackends(@ParameterObject Pageable pageable) {
+    public PagedModel<EntityModel<DataBackendDescriptionDto>> findDataBackends(@ParameterObject Pageable pageable) {
 
         return dataBackendDescriptionDtoPagedResourcesAssembler.toModel(
-            dataBackendService.findAllDataBackends(pageable),
+            dataBackendService.findDataBackends(pageable),
             this::mapToEntityModel,
             WebMvcLinkBuilder.linkTo(DataBackendController.class).withSelfRel()
         );
     }
 
-    @PageableAsQueryParam
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Found data backend",
             content = {
-                @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DataBackendDescriptionLightDto.class))
+                @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DataBackendDescriptionDto.class))
             }),
         @ApiResponse(responseCode = "404", description = "Data backend not found",
             content = {
-                @Content(mediaType = MediaTypes.HTTP_PROBLEM_DETAILS_JSON_VALUE, schema = @Schema(implementation = DataBackendDescriptionLightDto.class))
+                @Content(mediaType = MediaTypes.HTTP_PROBLEM_DETAILS_JSON_VALUE, schema = @Schema(implementation = DefaultProblem.class))
             })
     })
     @GetMapping("/{id:\\d+}")
     @ResponseStatus(HttpStatus.OK)
-    public EntityModel<DataBackendDescriptionLightDto> findDataBackendById(
-        @PathVariable("id") @Min(1) @Nonnull Long dataBackendId) {
+    public EntityModel<DataBackendDescriptionDto> findDataBackendById(@PathVariable("id") @Min(1) @Nonnull Long dataBackendId) {
 
         return EntityModel.of(
             dataBackendService.findDataBackendById(dataBackendId)
                 .orElseThrow(() -> new DataBackendNotFoundException(dataBackendId)),
-            WebMvcLinkBuilder.linkTo(
-                WebMvcLinkBuilder.methodOn(DataBackendController.class).findDataBackendById(dataBackendId)
-            ).withSelfRel(),
-            WebMvcLinkBuilder.linkTo(
-                WebMvcLinkBuilder.methodOn(DataBackendController.class).findAllDataBackends(Pageable.unpaged())
-            ).withRel("databases")
-        );
-    }
-
-    @Nonnull
-    private EntityModel<DataBackendDescriptionLightDto> mapLightToEntityModel(DataBackendDescriptionLightDto dataBackendDescriptionLightDto) {
-
-        return EntityModel.of(
-            dataBackendDescriptionLightDto,
-            WebMvcLinkBuilder.linkTo(
-                WebMvcLinkBuilder.methodOn(DataBackendController.class).findDataBackendById(dataBackendDescriptionLightDto.getId())
-            ).withSelfRel()
+            getLinks(dataBackendId)
         );
     }
 
@@ -117,34 +96,22 @@ public class DataBackendController implements ProblemHandling {
 
         return EntityModel.of(
             dataBackendDescriptionDto,
-            WebMvcLinkBuilder.linkTo(DataBackendController.class).slash(dataBackendDescriptionDto.getId()).withRel("database").withSelfRel()
+            getLinks(dataBackendDescriptionDto.getId())
         );
     }
 
-    @ExceptionHandler(value = {
-        NullPointerException.class
-    })
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public Problem handleException(Exception exception) {
+    private Link[] getLinks(@Nonnull Long dataBackendId) {
 
-        return Problem.builder()
-            .withTitle("Internal server error")
-            .withStatus(Status.INTERNAL_SERVER_ERROR)
-            .withDetail(exception.getMessage())
-            .build();
-    }
-
-    @ExceptionHandler(DataBackendNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Problem handleNotFound(DataBackendNotFoundException exception) {
-
-        return Problem.builder()
-            .withCause(exception)
-            .withType(WebMvcLinkBuilder.linkTo(DataBackendController.class).slash("/").toUri())
-            .withTitle("Not found")
-            .withStatus(Status.NOT_FOUND)
-            .withDetail(exception.getMessage())
-            .with("id", exception.getId())
-            .build();
+        return new Link[]{
+            WebMvcLinkBuilder.linkTo(
+                WebMvcLinkBuilder.methodOn(DataBackendController.class).findDataBackendById(dataBackendId)
+            ).withSelfRel(),
+            WebMvcLinkBuilder.linkTo(
+                WebMvcLinkBuilder.methodOn(DataBackendController.class).findDataBackends(Pageable.unpaged())
+            ).withRel("data backends"),
+            WebMvcLinkBuilder.linkTo(
+                WebMvcLinkBuilder.methodOn(DataBackendDatabaseController.class).findDatabasesForDataBackend(dataBackendId, Pageable.unpaged())
+            ).withRel("databases"),
+        };
     }
 }

@@ -6,7 +6,7 @@
 
 package fr.dademo.supervision.service.repository.views;
 
-import fr.dademo.supervision.dependencies.entities.DataBackendDescriptionEntity;
+import fr.dademo.supervision.dependencies.entities.database.databaseview.DataBackendDatabaseSchemaViewEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,10 +17,11 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class DataBackendDescriptionView {
+public class DataBackendDatabaseSchemaViewView {
 
-    private final DataBackendDescriptionEntity dataBackendDescriptionEntity;
+    private final DataBackendDatabaseSchemaViewEntity dataBackendDatabaseSchemaViewEntity;
 
-    private final Long backendStateExecutionsCount;
-    private final Long databasesCount;
+    private final Long dataBackendDatabaseSchemaId;
+
+    private final Long statisticsCount;
 }

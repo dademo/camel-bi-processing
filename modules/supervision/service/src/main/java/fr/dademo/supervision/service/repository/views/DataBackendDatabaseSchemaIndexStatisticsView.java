@@ -6,10 +6,12 @@
 
 package fr.dademo.supervision.service.repository.views;
 
-import fr.dademo.supervision.dependencies.entities.DataBackendDescriptionEntity;
+import fr.dademo.supervision.dependencies.entities.database.databaseindex.DataBackendDatabaseSchemaIndexStatisticsEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.util.Date;
 
 /**
  * @author dademo
@@ -17,10 +19,9 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class DataBackendDescriptionView {
+public class DataBackendDatabaseSchemaIndexStatisticsView {
 
-    private final DataBackendDescriptionEntity dataBackendDescriptionEntity;
+    private final DataBackendDatabaseSchemaIndexStatisticsEntity dataBackendDatabaseSchemaIndexStatisticsEntity;
 
-    private final Long backendStateExecutionsCount;
-    private final Long databasesCount;
+    private final Date timestamp;
 }

@@ -11,6 +11,7 @@ import fr.dademo.supervision.service.repository.views.DataBackendDescriptionView
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -23,37 +24,25 @@ public interface ExtendedDataBackendDescriptionRepository extends DataBackendDes
 
     @Query("SELECT new fr.dademo.supervision.service.repository.views.DataBackendDescriptionView( " +
         "       d, " +
-        "       COUNT(exec), " +
-        "       COUNT(db) " +
+        "       COUNT(DISTINCT exec), " +
+        "       COUNT(DISTINCT db) " +
         "   ) " +
         "   FROM DataBackendDescriptionEntity d " +
         "   LEFT OUTER JOIN d.backendStateExecutions exec " +
         "   LEFT OUTER JOIN d.databases db " +
         "   GROUP BY d " +
-        "   ORDER BY d.id")
-    Page<DataBackendDescriptionView> findAllDescriptionWithLinks(Pageable pageable);
+        "   ORDER BY d.id ASC")
+    Page<DataBackendDescriptionView> findDescriptionWithLinks(Pageable pageable);
 
     @Query("SELECT new fr.dademo.supervision.service.repository.views.DataBackendDescriptionView( " +
         "       d, " +
-        "       COUNT(exec), " +
-        "       COUNT(db) " +
+        "       COUNT(DISTINCT exec), " +
+        "       COUNT(DISTINCT db) " +
         "   ) " +
         "   FROM DataBackendDescriptionEntity d " +
         "   LEFT OUTER JOIN d.backendStateExecutions exec " +
         "   LEFT OUTER JOIN d.databases db " +
-        "   WHERE d.id = ?1 " +
+        "   WHERE d.id = :id " +
         "   GROUP BY d")
-    Optional<DataBackendDescriptionView> findOneDescriptionWithLinks(Long id);
-
-    @Query("SELECT new fr.dademo.supervision.service.repository.views.DataBackendDescriptionView( " +
-        "       d, " +
-        "       COUNT(exec), " +
-        "       COUNT(db) " +
-        "   ) " +
-        "   FROM DataBackendDescriptionEntity d " +
-        "   INNER JOIN d.backendStateExecutions exec " +
-        "   INNER JOIN d.databases db " +
-        "   GROUP BY d " +
-        "   ORDER BY d.id")
-    Page<DataBackendDescriptionView> findAllDatabaseDescriptionViews(Pageable pageable);
+    Optional<DataBackendDescriptionView> findOneDescriptionWithLinks(@Param("id") Long id);
 }

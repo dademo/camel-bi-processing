@@ -24,19 +24,19 @@ import java.util.Optional;
 public class DataBackendServiceImpl implements DataBackendService {
 
     @Autowired
-    private ExtendedDataBackendDescriptionRepository extendedDataBackendDescriptionRepository;
+    private ExtendedDataBackendDescriptionRepository repository;
 
     @Override
-    public Page<DataBackendDescriptionDto> findAllDataBackends(@Nonnull Pageable pageable) {
+    public Page<DataBackendDescriptionDto> findDataBackends(@Nonnull Pageable pageable) {
 
-        return extendedDataBackendDescriptionRepository.findAllDescriptionWithLinks(pageable)
+        return repository.findDescriptionWithLinks(pageable)
             .map(DataBackendDescriptionEntityToDtoMapper.INSTANCE::viewToDto);
     }
 
     @Override
     public Optional<DataBackendDescriptionDto> findDataBackendById(@Nonnull Long id) {
 
-        return extendedDataBackendDescriptionRepository.findOneDescriptionWithLinks(id)
+        return repository.findOneDescriptionWithLinks(id)
             .map(DataBackendDescriptionEntityToDtoMapper.INSTANCE::viewToDto);
     }
 }

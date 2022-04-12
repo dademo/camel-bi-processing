@@ -6,22 +6,30 @@
 
 package fr.dademo.supervision.service.services.dto;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
+import lombok.*;
 
 import java.util.Date;
+
 
 /**
  * @author dademo
  */
-@SuperBuilder
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-public class DataBackendDescriptionDto extends DataBackendDescriptionLightDto {
+public class DataBackendDescriptionDto {
 
+    // Primary key
+    private Long id;
+
+    // Primary values
+    private String backendName;
+    private String primaryUrl;
+    private String backendState;
+
+    // Secondary values
     private String backendProductName;
     private String backendProductVersion;
     private Date startTime;
@@ -32,6 +40,8 @@ public class DataBackendDescriptionDto extends DataBackendDescriptionLightDto {
     private Long sizeBytes;
     private Long effectiveSizeBytes;
     private Long availableSizeBytes;
+
+    // Linked entities count
     private Long backendStateExecutionsCount;
     private Long databasesCount;
 }

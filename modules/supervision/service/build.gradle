@@ -64,6 +64,11 @@ dependencies {
     testImplementation 'org.testcontainers:postgresql'
 }
 
+openApi {
+    outputDir.set(file("$buildDir/docs"))
+    outputFileName.set("openapi.json")
+}
+
 dependencyManagement {
     imports {
         mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"

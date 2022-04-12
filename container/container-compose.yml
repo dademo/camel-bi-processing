@@ -1,7 +1,7 @@
 version: '3.0'
 services:
   postgresql:
-    image: 'postgres:14.1'
+    image: 'postgres:14.2'
     restart: always
     ports:
       - '5432:5432'
@@ -9,14 +9,17 @@ services:
       - 'POSTGRES_PASSWORD=postgres'
     volumes:
       - './docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:ro'
+      - 'postgresql:/var/lib/postgresql/data:rw'
   mongodb:
-    image: 'mongo:5.0.3'
+    image: 'mongo:5.0.6'
     restart: always
     ports:
       - 27017:27017
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - 'mongodb:/data/db:rw'
 
   mongo-express:
     image: mongo-express
@@ -32,8 +35,15 @@ services:
       ME_CONFIG_MONGODB_URL: mongodb://root:root@mongodb:27017/
 
   rabbitmq:
-    image: rabbitmq:3.9.8-management
+    image: rabbitmq:3.9.13-management
     restart: always
     ports:
       - 5672:5672
       - 15672:15672
+    volumes:
+      - 'rabbitmq:/var/lib/rabbitmq:rw'
+
+volumes:
+  postgresql: { }
+  mongodb: { }
+  rabbitmq: { }

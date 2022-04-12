@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package fr.dademo.supervision.service.controllers.exceptions;
+package fr.dademo.supervision.service.controllers.database.exceptions;
 
 import org.zalando.problem.Status;
 import org.zalando.problem.StatusType;
@@ -17,13 +17,13 @@ import java.util.Map;
 /**
  * @author dademo
  */
-public class DataBackendNotFoundException extends ThrowableProblem {
+public class DatabaseSchemaViewNotFoundException extends ThrowableProblem {
 
-    private static final long serialVersionUID = 2687728885181781343L;
+    private static final long serialVersionUID = 2207706126538012379L;
 
     private final Long id;
 
-    public DataBackendNotFoundException(@Nonnull Long id) {
+    public DatabaseSchemaViewNotFoundException(@Nonnull Long id) {
         this.id = id;
     }
 
@@ -39,7 +39,7 @@ public class DataBackendNotFoundException extends ThrowableProblem {
 
     @Override
     public String getDetail() {
-        return MessageFormat.format("Data backend with id {0} not found", id);
+        return MessageFormat.format("Database schema view with id {0} not found", id);
     }
 
     @Override

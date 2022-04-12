@@ -6,7 +6,7 @@
 
 package fr.dademo.supervision.service.services;
 
-import fr.dademo.supervision.service.services.dto.DataBackendDescriptionDto;
+import fr.dademo.supervision.service.services.dto.DataBackendDatabaseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -17,9 +17,9 @@ import java.util.Optional;
 /**
  * @author dademo
  */
-public interface DataBackendService {
+public interface DatabaseService {
 
-    Page<DataBackendDescriptionDto> findDataBackends(@Nonnull Pageable pageable);
+    Page<DataBackendDatabaseDto> findDatabasesForDataBackend(@Nonnull @Min(1) Long dataBackendId, @Nonnull Pageable pageable);
 
-    Optional<DataBackendDescriptionDto> findDataBackendById(@Nonnull @Min(1) Long id);
+    Optional<DataBackendDatabaseDto> findDatabaseById(@Nonnull @Min(1) Long id);
 }

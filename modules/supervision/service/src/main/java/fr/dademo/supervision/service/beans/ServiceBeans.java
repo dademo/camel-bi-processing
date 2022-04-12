@@ -6,6 +6,7 @@
 
 package fr.dademo.supervision.service.beans;
 
+import fr.dademo.supervision.service.beans.impl.ProblemObjectMapperCustomizer;
 import fr.dademo.tools.tools.object_mapper.ObjectMapperCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

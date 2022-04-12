@@ -6,22 +6,29 @@
 
 package fr.dademo.supervision.service.services.dto;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
+import lombok.*;
 
 /**
  * @author dademo
  */
-@SuperBuilder
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-public class DataBackendDescriptionLightDto {
+public class DataBackendDatabaseSchemaDto {
 
+    // Primary key
     private Long id;
-    private String backendName;
-    private String primaryUrl;
-    private String backendState;
+
+    // Links
+    private Long dataBackendDatabaseId;
+
+    // Primary values
+    private String name;
+
+    // Linked entities count
+    private Long tablesCount;
+    private Long schemasCount;
+    private Long indexesCount;
 }
