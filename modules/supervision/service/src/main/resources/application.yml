@@ -34,5 +34,7 @@ management:
 springdoc:
   swagger-ui:
     path: /swagger
-    #layout: StandaloneLayout
-    layout: BaseLayout
+    layout: StandaloneLayout
+    #layout: BaseLayout
+  show-actuator: false
+  model-and-view-allowed: true

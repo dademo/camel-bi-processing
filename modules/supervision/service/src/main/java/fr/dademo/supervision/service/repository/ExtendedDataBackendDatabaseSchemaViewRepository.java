@@ -6,8 +6,8 @@
 
 package fr.dademo.supervision.service.repository;
 
+import fr.dademo.supervision.dependencies.entities.database.databaseview.DataBackendDatabaseSchemaViewStatisticsEntity;
 import fr.dademo.supervision.dependencies.repositories.database.DataBackendDatabaseSchemaViewRepository;
-import fr.dademo.supervision.service.repository.views.DataBackendDatabaseSchemaViewStatisticsView;
 import fr.dademo.supervision.service.repository.views.DataBackendDatabaseSchemaViewView;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -48,17 +48,13 @@ public interface ExtendedDataBackendDatabaseSchemaViewRepository extends DataBac
         "   GROUP BY v, v.schema.id")
     Optional<DataBackendDatabaseSchemaViewView> findOneDatabaseSchemaViewWithLinks(@Param("id") Long id);
 
-    @Query("SELECT new fr.dademo.supervision.service.repository.views.DataBackendDatabaseSchemaViewStatisticsView( " +
-        "       stats, " +
-        "       backendStateExecution.timestamp " +
-        "   ) " +
-        "   FROM DataBackendDatabaseSchemaViewEntity v " +
-        "       LEFT OUTER JOIN v.statistics stats " +
-        "       LEFT OUTER JOIN stats.backendStateExecution backendStateExecution " +
-        "   WHERE v.id = :id " +
-        "       AND backendStateExecution.timestamp BETWEEN :from and :to " +
-        "   ORDER BY backendStateExecution.timestamp ASC")
-    List<DataBackendDatabaseSchemaViewStatisticsView> findDatabaseSchemaViewStatisticsBetweenDatesWithLinks(
+    @Query("SELECT s " +
+        "   FROM DataBackendDatabaseSchemaViewStatisticsEntity s " +
+        "   INNER JOIN FETCH s.backendStateExecution b " +
+        "   WHERE s.view.id = :id " +
+        "       AND b.timestamp BETWEEN :from and :to " +
+        "   ORDER BY b.timestamp ASC")
+    List<DataBackendDatabaseSchemaViewStatisticsEntity> findDatabaseSchemaViewStatisticsBetweenDatesWithLinks(
         @Param("id") Long id,
         @Param("from") Date from,
         @Param("to") Date to

@@ -6,7 +6,7 @@
 
 package fr.dademo.supervision.service.services.mappers;
 
-import fr.dademo.supervision.service.repository.views.DataBackendDatabaseSchemaViewStatisticsView;
+import fr.dademo.supervision.dependencies.entities.database.databaseview.DataBackendDatabaseSchemaViewStatisticsEntity;
 import fr.dademo.supervision.service.services.dto.DataBackendDatabaseSchemaViewStatisticsDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -20,7 +20,6 @@ public interface DataBackendDatabaseSchemaViewStatisticsEntityToDtoMapper {
 
     DataBackendDatabaseSchemaViewStatisticsEntityToDtoMapper INSTANCE = Mappers.getMapper(DataBackendDatabaseSchemaViewStatisticsEntityToDtoMapper.class);
 
-    @Mapping(source = "source.dataBackendDatabaseSchemaViewStatisticsEntity", target = ".")
-    @Mapping(source = "source.timestamp", target = "timestamp")
-    DataBackendDatabaseSchemaViewStatisticsDto viewToDto(DataBackendDatabaseSchemaViewStatisticsView source);
+    @Mapping(source = "source.backendStateExecution.timestamp", target = "timestamp")
+    DataBackendDatabaseSchemaViewStatisticsDto viewToDto(DataBackendDatabaseSchemaViewStatisticsEntity source);
 }

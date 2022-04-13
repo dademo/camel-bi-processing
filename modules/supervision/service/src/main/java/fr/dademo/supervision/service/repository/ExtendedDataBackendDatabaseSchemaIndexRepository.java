@@ -6,8 +6,8 @@
 
 package fr.dademo.supervision.service.repository;
 
+import fr.dademo.supervision.dependencies.entities.database.databaseindex.DataBackendDatabaseSchemaIndexStatisticsEntity;
 import fr.dademo.supervision.dependencies.repositories.database.DataBackendDatabaseSchemaIndexRepository;
-import fr.dademo.supervision.service.repository.views.DataBackendDatabaseSchemaIndexStatisticsView;
 import fr.dademo.supervision.service.repository.views.DataBackendDatabaseSchemaIndexView;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -48,17 +48,13 @@ public interface ExtendedDataBackendDatabaseSchemaIndexRepository extends DataBa
         "   GROUP BY i, i.schema.id")
     Optional<DataBackendDatabaseSchemaIndexView> findOneDatabaseSchemaIndexWithLinks(@Param("id") Long id);
 
-    @Query("SELECT new fr.dademo.supervision.service.repository.views.DataBackendDatabaseSchemaIndexStatisticsView( " +
-        "       stats, " +
-        "       backendStateExecution.timestamp " +
-        "   ) " +
-        "   FROM DataBackendDatabaseSchemaIndexEntity i " +
-        "       LEFT OUTER JOIN i.statistics stats " +
-        "       LEFT OUTER JOIN stats.backendStateExecution backendStateExecution " +
-        "   WHERE i.id = :id " +
-        "       AND backendStateExecution.timestamp BETWEEN :from and :to " +
-        "   ORDER BY backendStateExecution.timestamp ASC")
-    List<DataBackendDatabaseSchemaIndexStatisticsView> findDatabaseSchemaIndexStatisticsBetweenDatesWithLinks(
+    @Query("SELECT s " +
+        "   FROM DataBackendDatabaseSchemaIndexStatisticsEntity s " +
+        "   INNER JOIN FETCH s.backendStateExecution b " +
+        "   WHERE s.index.id = :id " +
+        "       AND b.timestamp BETWEEN :from and :to " +
+        "   ORDER BY b.timestamp ASC")
+    List<DataBackendDatabaseSchemaIndexStatisticsEntity> findDatabaseSchemaIndexStatisticsBetweenDatesWithLinks(
         @Param("id") Long id,
         @Param("from") Date from,
         @Param("to") Date to
