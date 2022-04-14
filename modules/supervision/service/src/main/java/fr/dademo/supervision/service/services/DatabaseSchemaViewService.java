@@ -30,4 +30,6 @@ public interface DatabaseSchemaViewService {
     List<DataBackendDatabaseSchemaViewStatisticsDto> findDatabaseSchemaViewStatisticsBetween(
         @Nonnull @Min(1) Long id, @Nonnull Date from, @Nonnull Date to
     );
+
+    Optional<DataBackendDatabaseSchemaViewStatisticsDto> findLatestDatabaseSchemaViewStatistics(@Nonnull @Min(1) Long id);
 }

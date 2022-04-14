@@ -50,7 +50,7 @@ public final class DataBackendRepresentationModelAssembler implements Representa
             ).withSelfRel(),
             WebMvcLinkBuilder.linkTo(
                 WebMvcLinkBuilder.methodOn(DataBackendController.class).findDataBackends(Pageable.unpaged())
-            ).withRel("data backends"),
+            ).withRel("data-backends"),
             WebMvcLinkBuilder.linkTo(
                 WebMvcLinkBuilder.methodOn(DataBackendController.class).findDatabasesForDataBackend(dataBackendId, Pageable.unpaged())
             ).withRel("databases"),

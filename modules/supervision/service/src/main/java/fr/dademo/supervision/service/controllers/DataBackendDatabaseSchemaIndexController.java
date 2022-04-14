@@ -14,6 +14,7 @@ package fr.dademo.supervision.service.controllers;
 
 import fr.dademo.supervision.service.controllers.exceptions.DatabaseSchemaIndexNotFoundException;
 import fr.dademo.supervision.service.controllers.hal.DataBackendDatabaseSchemaIndexRepresentationModelAssembler;
+import fr.dademo.supervision.service.controllers.hal.DataBackendDatabaseSchemaIndexStatisticsRepresentationCollectionModelAssembler;
 import fr.dademo.supervision.service.controllers.hal.DataBackendDatabaseSchemaIndexStatisticsRepresentationModelAssembler;
 import fr.dademo.supervision.service.services.DatabaseSchemaIndexService;
 import fr.dademo.supervision.service.services.dto.DataBackendDatabaseSchemaIndexDto;
@@ -46,7 +47,7 @@ import java.util.Date;
  * @author dademo
  */
 @RestController
-@RequestMapping(path = "/database_schema_index/{id:\\d+}", produces = {
+@RequestMapping(path = "/database-schema-index/{id:\\d+}", produces = {
     MediaType.APPLICATION_JSON_VALUE,
     MediaTypes.HTTP_PROBLEM_DETAILS_JSON_VALUE,
     MediaTypes.HAL_JSON_VALUE,
@@ -98,7 +99,31 @@ public class DataBackendDatabaseSchemaIndexController implements ProblemHandling
         @RequestParam("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @Parameter(name = "from", description = "The minimum date range", required = true) Date from,
         @RequestParam("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @Parameter(name = "to", description = "The maximum date range", required = true) Date to) {
 
-        return DataBackendDatabaseSchemaIndexStatisticsRepresentationModelAssembler.of(indexId, from, to)
+        return DataBackendDatabaseSchemaIndexStatisticsRepresentationCollectionModelAssembler.of(indexId, from, to)
             .toCollectionModel(databaseSchemaIndexService.findDatabaseSchemaIndexStatisticsBetween(indexId, from, to));
+    }
+
+    @PageableAsQueryParam
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Latest database schema index statistic",
+            content = {
+                @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DataBackendDescriptionDto.class))
+            }),
+        @ApiResponse(responseCode = "404", description = "Database schema index not found",
+            content = {
+                @Content(mediaType = MediaTypes.HTTP_PROBLEM_DETAILS_JSON_VALUE, schema = @Schema(implementation = DefaultProblem.class))
+            })
+    })
+    @GetMapping("/latest-statistic")
+    @ResponseStatus(HttpStatus.OK)
+    public EntityModel<DataBackendDatabaseSchemaIndexStatisticsDto> findLatestDataBackendDatabaseSchemaIndexStatisticsById(
+        @PathVariable("id") @Min(1) @Nonnull Long indexId) {
+
+        return databaseSchemaIndexService.findLatestDatabaseSchemaIndexStatistics(indexId)
+            .map(
+                DataBackendDatabaseSchemaIndexStatisticsRepresentationModelAssembler
+                    .of(indexId)::toModel
+            )
+            .orElseThrow(() -> new DatabaseSchemaIndexNotFoundException(indexId));
     }
 }

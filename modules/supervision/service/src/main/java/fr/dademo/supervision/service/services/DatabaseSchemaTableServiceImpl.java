@@ -34,14 +34,16 @@ public class DatabaseSchemaTableServiceImpl implements DatabaseSchemaTableServic
     @Override
     public Page<DataBackendDatabaseSchemaTableDto> findTablesForDatabaseSchema(@Nonnull Long databaseSchemaId, @Nonnull Pageable pageable) {
 
-        return repository.findDatabasesSchemaTablesWithLinks(databaseSchemaId, pageable)
+        return repository
+            .findDatabasesSchemaTablesWithLinks(databaseSchemaId, pageable)
             .map(DataBackendDatabaseSchemaTableEntityToDtoMapper.INSTANCE::viewToDto);
     }
 
     @Override
     public Optional<DataBackendDatabaseSchemaTableDto> findDatabaseSchemaTableById(@Nonnull Long id) {
 
-        return repository.findOneDatabaseSchemaTableWithLinks(id)
+        return repository
+            .findOneDatabaseSchemaTableWithLinks(id)
             .map(DataBackendDatabaseSchemaTableEntityToDtoMapper.INSTANCE::viewToDto);
     }
 
@@ -49,9 +51,18 @@ public class DatabaseSchemaTableServiceImpl implements DatabaseSchemaTableServic
     public List<DataBackendDatabaseSchemaTableStatisticsDto> findDatabaseSchemaTableStatisticsBetween(
         @Nonnull Long id, @Nonnull Date from, @Nonnull Date to) {
 
-        return repository.findDatabaseSchemaTableStatisticsBetweenDatesWithLinks(id, from, to)
+        return repository
+            .findDatabaseSchemaTableStatisticsBetweenDates(id, from, to)
             .stream()
             .map(DataBackendDatabaseSchemaTableStatisticsEntityToDtoMapper.INSTANCE::viewToDto)
             .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<DataBackendDatabaseSchemaTableStatisticsDto> findLatestDatabaseSchemaTableStatistics(@Nonnull Long id) {
+
+        return repository
+            .findLatestDatabaseSchemaTableStatistic(id)
+            .map(DataBackendDatabaseSchemaTableStatisticsEntityToDtoMapper.INSTANCE::viewToDto);
     }
 }

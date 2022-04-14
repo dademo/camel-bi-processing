@@ -54,9 +54,21 @@ public interface ExtendedDataBackendDatabaseSchemaTableRepository extends DataBa
         "   WHERE s.table.id = :id " +
         "       AND b.timestamp BETWEEN :from and :to " +
         "   ORDER BY b.timestamp ASC")
-    List<DataBackendDatabaseSchemaTableStatisticsEntity> findDatabaseSchemaTableStatisticsBetweenDatesWithLinks(
+    List<DataBackendDatabaseSchemaTableStatisticsEntity> findDatabaseSchemaTableStatisticsBetweenDates(
         @Param("id") Long id,
         @Param("from") Date from,
         @Param("to") Date to
     );
+
+    @Query("SELECT s " +
+        "   FROM DataBackendDatabaseSchemaTableStatisticsEntity s " +
+        "   INNER JOIN s.backendStateExecution b " +
+        "   WHERE s.table.id = :id" +
+        "   AND b.timestamp = (" +
+        "       SELECT MAX(b.timestamp) AS timestamp " +
+        "       FROM DataBackendDatabaseSchemaTableStatisticsEntity s " +
+        "       INNER JOIN s.backendStateExecution b " +
+        "       WHERE s.table.id = :id " +
+        ")")
+    Optional<DataBackendDatabaseSchemaTableStatisticsEntity> findLatestDatabaseSchemaTableStatistic(@Param("id") Long id);
 }

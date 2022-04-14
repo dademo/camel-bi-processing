@@ -4,53 +4,50 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
 package fr.dademo.supervision.service.controllers.hal;
 
-import fr.dademo.supervision.service.controllers.DataBackendDatabaseSchemaTableController;
 import fr.dademo.supervision.service.services.dto.DataBackendDatabaseSchemaTableStatisticsDto;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import lombok.Getter;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.RepresentationModelAssembler;
 
 import javax.annotation.Nonnull;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.temporal.TemporalAmount;
 import java.util.Date;
 
+/**
+ * @author dademo
+ */
+@Getter(AccessLevel.PROTECTED)
 @AllArgsConstructor(staticName = "of")
-public final class DataBackendDatabaseSchemaTableStatisticsRepresentationModelAssembler {
+public final class DataBackendDatabaseSchemaTableStatisticsRepresentationModelAssembler
+    extends AbstractDataBackendDatabaseSchemaTableStatisticsRepresentationModelAssembler
+    implements RepresentationModelAssembler<DataBackendDatabaseSchemaTableStatisticsDto, EntityModel<DataBackendDatabaseSchemaTableStatisticsDto>> {
+
+    private static final TemporalAmount DEFAULT_TEMPORAL_AMOUNT = Duration.ofMinutes(15);
 
     private final Long tableId;
-    private final Date from;
-    private final Date to;
 
     @Nonnull
-    public CollectionModel<DataBackendDatabaseSchemaTableStatisticsDto> toCollectionModel(@Nonnull Iterable<DataBackendDatabaseSchemaTableStatisticsDto> entities) {
+    public EntityModel<DataBackendDatabaseSchemaTableStatisticsDto> toModel(@Nonnull DataBackendDatabaseSchemaTableStatisticsDto entity) {
 
-        return CollectionModel.of(
-            entities,
+        return EntityModel.of(
+            entity,
             getLinks()
         );
     }
 
-    private Link[] getLinks() {
+    @Override
+    protected Date getFrom() {
+        return Date.from(Instant.now().minus(DEFAULT_TEMPORAL_AMOUNT));
+    }
 
-        return new Link[]{
-            WebMvcLinkBuilder.linkTo(
-                WebMvcLinkBuilder.methodOn(DataBackendDatabaseSchemaTableController.class).findDataBackendDatabaseSchemaTableStatisticsById(
-                    tableId,
-                    from,
-                    to
-                )
-            ).withSelfRel(),
-            WebMvcLinkBuilder.linkTo(
-                WebMvcLinkBuilder.methodOn(DataBackendDatabaseSchemaTableController.class).findDataBackendDatabaseSchemaTableById(tableId)
-            ).withRel("table"),
-        };
+    @Override
+    protected Date getTo() {
+        return new Date();
     }
 }

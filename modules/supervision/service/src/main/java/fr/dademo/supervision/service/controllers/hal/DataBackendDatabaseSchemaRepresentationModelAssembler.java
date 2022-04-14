@@ -47,7 +47,7 @@ public final class DataBackendDatabaseSchemaRepresentationModelAssembler impleme
             ).withSelfRel(),
             WebMvcLinkBuilder.linkTo(
                 WebMvcLinkBuilder.methodOn(DataBackendDatabaseController.class).findDatabaseSchemasForDatabase(databaseId, Pageable.unpaged())
-            ).withRel("database schemas"),
+            ).withRel("database-schemas"),
             WebMvcLinkBuilder.linkTo(
                 WebMvcLinkBuilder.methodOn(DataBackendDatabaseSchemaTableController.class).findDataBackendDatabaseSchemaTableById(databaseId)
             ).withRel("tables"),

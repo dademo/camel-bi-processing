@@ -29,14 +29,16 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public Page<DataBackendDatabaseDto> findDatabasesForDataBackend(@Nonnull Long dataBackendId, @Nonnull Pageable pageable) {
 
-        return repository.findDatabasesWithLinks(dataBackendId, pageable)
+        return repository
+            .findDatabasesWithLinks(dataBackendId, pageable)
             .map(DataBackendDatabaseEntityToDtoMapper.INSTANCE::viewToDto);
     }
 
     @Override
     public Optional<DataBackendDatabaseDto> findDatabaseById(@Nonnull Long id) {
 
-        return repository.findOneDatabaseWithLinks(id)
+        return repository
+            .findOneDatabaseWithLinks(id)
             .map(DataBackendDatabaseEntityToDtoMapper.INSTANCE::viewToDto);
     }
 }

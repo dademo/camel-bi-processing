@@ -29,4 +29,6 @@ public interface DatabaseSchemaIndexService {
     List<DataBackendDatabaseSchemaIndexStatisticsDto> findDatabaseSchemaIndexStatisticsBetween(
         @Nonnull @Min(1) Long id, @Nonnull Date from, @Nonnull Date to
     );
+
+    Optional<DataBackendDatabaseSchemaIndexStatisticsDto> findLatestDatabaseSchemaIndexStatistics(@Nonnull @Min(1) Long id);
 }

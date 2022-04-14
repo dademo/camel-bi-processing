@@ -61,7 +61,12 @@ public final class DataBackendDatabaseSchemaIndexRepresentationModelAssembler im
                     Date.from(LocalDateTime.now().minus(DEFAULT_TEMPORAL_AMOUNT).toInstant(ZoneOffset.UTC)),
                     new Date()
                 )
-            ).withRel("index_statistics"),
+            ).withRel("index-statistics"),
+            WebMvcLinkBuilder.linkTo(
+                WebMvcLinkBuilder.methodOn(DataBackendDatabaseSchemaIndexController.class).findLatestDataBackendDatabaseSchemaIndexStatisticsById(
+                    databaseSchemaIndexId
+                )
+            ).withRel("latest-index-statistic"),
             WebMvcLinkBuilder.linkTo(
                 WebMvcLinkBuilder.methodOn(DataBackendDatabaseSchemaIndexController.class).findDataBackendDatabaseSchemaIndexById(databaseSchemaId)
             ).withRel("schema"),

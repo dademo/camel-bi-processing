@@ -29,14 +29,16 @@ public class DatabaseSchemaServiceImpl implements DatabaseSchemaService {
     @Override
     public Page<DataBackendDatabaseSchemaDto> findSchemasForDatabase(@Nonnull Long databaseId, @Nonnull Pageable pageable) {
 
-        return repository.findDatabasesSchemasWithLinks(databaseId, pageable)
+        return repository
+            .findDatabasesSchemasWithLinks(databaseId, pageable)
             .map(DataBackendDatabaseSchemaEntityToDtoMapper.INSTANCE::viewToDto);
     }
 
     @Override
     public Optional<DataBackendDatabaseSchemaDto> findSchemaById(@Nonnull Long id) {
 
-        return repository.findOneDatabaseSchemaWithLinks(id)
+        return repository
+            .findOneDatabaseSchemaWithLinks(id)
             .map(DataBackendDatabaseSchemaEntityToDtoMapper.INSTANCE::viewToDto);
     }
 }

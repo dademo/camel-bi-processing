@@ -12,45 +12,45 @@
 
 package fr.dademo.supervision.service.controllers.hal;
 
-import fr.dademo.supervision.service.controllers.DataBackendDatabaseSchemaTableController;
 import fr.dademo.supervision.service.services.dto.DataBackendDatabaseSchemaViewStatisticsDto;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import lombok.Getter;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.RepresentationModelAssembler;
 
 import javax.annotation.Nonnull;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.temporal.TemporalAmount;
 import java.util.Date;
 
+@Getter(AccessLevel.PROTECTED)
 @AllArgsConstructor(staticName = "of")
-public final class DataBackendDatabaseSchemaViewStatisticsRepresentationModelAssembler {
+public final class DataBackendDatabaseSchemaViewStatisticsRepresentationModelAssembler
+    extends AbstractDataBackendDatabaseSchemaViewStatisticsRepresentationModelAssembler
+    implements RepresentationModelAssembler<DataBackendDatabaseSchemaViewStatisticsDto, EntityModel<DataBackendDatabaseSchemaViewStatisticsDto>> {
+
+    private static final TemporalAmount DEFAULT_TEMPORAL_AMOUNT = Duration.ofMinutes(15);
 
     private final Long viewId;
-    private final Date from;
-    private final Date to;
 
     @Nonnull
-    public CollectionModel<DataBackendDatabaseSchemaViewStatisticsDto> toCollectionModel(@Nonnull Iterable<DataBackendDatabaseSchemaViewStatisticsDto> entities) {
+    public EntityModel<DataBackendDatabaseSchemaViewStatisticsDto> toModel(@Nonnull DataBackendDatabaseSchemaViewStatisticsDto entity) {
 
-        return CollectionModel.of(
-            entities,
+        return EntityModel.of(
+            entity,
             getLinks()
         );
     }
 
-    private Link[] getLinks() {
+    @Override
+    protected Date getFrom() {
+        return Date.from(Instant.now().minus(DEFAULT_TEMPORAL_AMOUNT));
+    }
 
-        return new Link[]{
-            WebMvcLinkBuilder.linkTo(
-                WebMvcLinkBuilder.methodOn(DataBackendDatabaseSchemaTableController.class).findDataBackendDatabaseSchemaTableStatisticsById(
-                    viewId,
-                    from,
-                    to
-                )
-            ).withSelfRel(),
-            WebMvcLinkBuilder.linkTo(
-                WebMvcLinkBuilder.methodOn(DataBackendDatabaseSchemaTableController.class).findDataBackendDatabaseSchemaTableById(viewId)
-            ).withRel("view"),
-        };
+    @Override
+    protected Date getTo() {
+        return new Date();
     }
 }

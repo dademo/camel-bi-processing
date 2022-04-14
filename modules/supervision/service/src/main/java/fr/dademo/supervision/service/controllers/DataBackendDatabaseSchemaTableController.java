@@ -14,6 +14,7 @@ package fr.dademo.supervision.service.controllers;
 
 import fr.dademo.supervision.service.controllers.exceptions.DatabaseSchemaTableNotFoundException;
 import fr.dademo.supervision.service.controllers.hal.DataBackendDatabaseSchemaTableRepresentationModelAssembler;
+import fr.dademo.supervision.service.controllers.hal.DataBackendDatabaseSchemaTableStatisticsRepresentationCollectionModelAssembler;
 import fr.dademo.supervision.service.controllers.hal.DataBackendDatabaseSchemaTableStatisticsRepresentationModelAssembler;
 import fr.dademo.supervision.service.services.DatabaseSchemaTableService;
 import fr.dademo.supervision.service.services.dto.DataBackendDatabaseSchemaTableDto;
@@ -46,7 +47,7 @@ import java.util.Date;
  * @author dademo
  */
 @RestController
-@RequestMapping(path = "/database_schema_table/{id:\\d+}", produces = {
+@RequestMapping(path = "/database-schema-table/{id:\\d+}", produces = {
     MediaType.APPLICATION_JSON_VALUE,
     MediaTypes.HTTP_PROBLEM_DETAILS_JSON_VALUE,
     MediaTypes.HAL_JSON_VALUE,
@@ -99,7 +100,31 @@ public class DataBackendDatabaseSchemaTableController implements ProblemHandling
         @RequestParam("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @Parameter(name = "from", description = "The minimum date range", required = true) Date from,
         @RequestParam("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @Parameter(name = "to", description = "The maximum date range", required = true) Date to) {
 
-        return DataBackendDatabaseSchemaTableStatisticsRepresentationModelAssembler.of(tableId, from, to)
+        return DataBackendDatabaseSchemaTableStatisticsRepresentationCollectionModelAssembler.of(tableId, from, to)
             .toCollectionModel(databaseSchemaTableService.findDatabaseSchemaTableStatisticsBetween(tableId, from, to));
+    }
+
+    @PageableAsQueryParam
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Latest database schema table statistic",
+            content = {
+                @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DataBackendDescriptionDto.class))
+            }),
+        @ApiResponse(responseCode = "404", description = "Database schema table not found",
+            content = {
+                @Content(mediaType = MediaTypes.HTTP_PROBLEM_DETAILS_JSON_VALUE, schema = @Schema(implementation = DefaultProblem.class))
+            })
+    })
+    @GetMapping("/latest-statistic")
+    @ResponseStatus(HttpStatus.OK)
+    public EntityModel<DataBackendDatabaseSchemaTableStatisticsDto> findLatestDataBackendDatabaseSchemaTableStatisticById(
+        @PathVariable("id") @Min(1) @Nonnull Long tableId) {
+
+        return databaseSchemaTableService.findLatestDatabaseSchemaTableStatistics(tableId)
+            .map(
+                DataBackendDatabaseSchemaTableStatisticsRepresentationModelAssembler
+                    .of(tableId)::toModel
+            )
+            .orElseThrow(() -> new DatabaseSchemaTableNotFoundException(tableId));
     }
 }

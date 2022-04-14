@@ -52,7 +52,7 @@ public final class DataBackendDatabaseRepresentationModelAssembler implements Re
             ).withRel("databases"),
             WebMvcLinkBuilder.linkTo(
                 WebMvcLinkBuilder.methodOn(DataBackendController.class).findDataBackendById(backendDescriptionId)
-            ).withRel("data backend"),
+            ).withRel("data-backend"),
             WebMvcLinkBuilder.linkTo(
                 WebMvcLinkBuilder.methodOn(DataBackendDatabaseSchemaController.class).findDataBackendDatabaseSchemaById(databaseId)
             ).withRel("schemas"),

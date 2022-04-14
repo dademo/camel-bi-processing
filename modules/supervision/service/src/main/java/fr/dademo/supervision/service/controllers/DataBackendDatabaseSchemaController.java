@@ -50,7 +50,7 @@ import javax.validation.constraints.Min;
  * @author dademo
  */
 @RestController
-@RequestMapping(path = "/database_schema/{id:\\d+}", produces = {
+@RequestMapping(path = "/database-schema/{id:\\d+}", produces = {
     MediaType.APPLICATION_JSON_VALUE,
     MediaTypes.HTTP_PROBLEM_DETAILS_JSON_VALUE,
     MediaTypes.HAL_JSON_VALUE,

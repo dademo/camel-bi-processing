@@ -61,7 +61,12 @@ public final class DataBackendDatabaseSchemaTableRepresentationModelAssembler im
                     Date.from(LocalDateTime.now().minus(DEFAULT_TEMPORAL_AMOUNT).toInstant(ZoneOffset.UTC)),
                     new Date()
                 )
-            ).withRel("table_statistics"),
+            ).withRel("table-statistics"),
+            WebMvcLinkBuilder.linkTo(
+                WebMvcLinkBuilder.methodOn(DataBackendDatabaseSchemaTableController.class).findLatestDataBackendDatabaseSchemaTableStatisticById(
+                    databaseSchemaTableId
+                )
+            ).withRel("latest-table-statistics"),
             WebMvcLinkBuilder.linkTo(
                 WebMvcLinkBuilder.methodOn(DataBackendDatabaseSchemaTableController.class).findDataBackendDatabaseSchemaTableById(databaseSchemaId)
             ).withRel("schema"),

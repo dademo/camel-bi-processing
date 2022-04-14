@@ -29,14 +29,16 @@ public class DataBackendServiceImpl implements DataBackendService {
     @Override
     public Page<DataBackendDescriptionDto> findDataBackends(@Nonnull Pageable pageable) {
 
-        return repository.findDescriptionWithLinks(pageable)
+        return repository
+            .findDescriptionWithLinks(pageable)
             .map(DataBackendDescriptionEntityToDtoMapper.INSTANCE::viewToDto);
     }
 
     @Override
     public Optional<DataBackendDescriptionDto> findDataBackendById(@Nonnull Long id) {
 
-        return repository.findOneDescriptionWithLinks(id)
+        return repository
+            .findOneDescriptionWithLinks(id)
             .map(DataBackendDescriptionEntityToDtoMapper.INSTANCE::viewToDto);
     }
 }
