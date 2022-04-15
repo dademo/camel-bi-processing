@@ -15,5 +15,5 @@ public enum DataBackendState {
     UNAUTHORIZED,
     UNAVAILABLE,
     NOT_FOUND,
-    ERROR
+    ERROR,
 }

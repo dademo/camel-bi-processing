@@ -1,0 +1,4 @@
+{
+    "serviceRootUrl": "http://localhost:8080",
+    "serviceRootUrlAlt": "http://localhost:4200/api"
+}

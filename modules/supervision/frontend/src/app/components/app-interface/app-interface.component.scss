@@ -1,0 +1,52 @@
+@import "~@angular/material/theming";
+
+$toolbar-height: 56px;
+$app-sidenav-padding: 8px;
+$app-body-padding: 8px;
+$app-progress-height: 4px;
+
+div.app-interface {
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+mat-toolbar {
+    height: 56px;
+    padding: 8px 16px;
+}
+
+mat-progress-bar {
+    width: 100%;
+    height: $app-progress-height;
+}
+
+mat-drawer-container {
+
+    width: 100%;
+    height: calc(100% - $toolbar-height);
+
+    mat-drawer {
+        padding: $app-sidenav-padding;
+        padding-top: $app-sidenav-padding + $app-progress-height;
+        @include mat-elevation(2);
+    }
+
+    mat-drawer-content {
+        height: 100%;
+        width: 100%;
+        padding-top: $app-progress-height;
+        div.app-body {
+            padding: $app-body-padding;
+        }
+    }
+}
+
+mat-drawer-container.loading {
+    @extend mat-drawer-container;
+    height: calc(100% - $toolbar-height - $app-progress-height);
+
+    mat-drawer-content {
+        padding-top: 0px;
+    }
+}

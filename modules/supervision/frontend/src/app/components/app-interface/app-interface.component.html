@@ -1,0 +1,19 @@
+<div class="app-interface">
+    <mat-toolbar color="primary" class="mat-elevation-z8">
+        <button mat-icon-button aria-label="Toggle menu" (click)="drawer.toggle()">
+            <mat-icon>menu</mat-icon>
+        </button>
+        <span>{{ pageTitle | async }}</span>
+    </mat-toolbar>
+    <mat-drawer-container [class.loading]="isLoading | async">
+        <mat-drawer mode="side" opened #drawer>
+            <app-sidenav></app-sidenav>
+        </mat-drawer>
+        <mat-drawer-content>
+            <mat-progress-bar [mode]="(loadingStatus | async) || 'indeterminate'" *ngIf="isLoading | async"></mat-progress-bar>
+            <div class="app-body">
+                <ng-content></ng-content>
+            </div>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</div>
