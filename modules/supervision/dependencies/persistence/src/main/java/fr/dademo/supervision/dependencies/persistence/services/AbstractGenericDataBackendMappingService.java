@@ -79,14 +79,9 @@ public abstract class AbstractGenericDataBackendMappingService {
         );
 
         return dataBackendDescriptionRepository
-            .findOne(Example.of(
-                defaultEntity,
-                ExampleMatcher.matching()
-                    .withIgnorePaths(
-                        "backendStateExecutions",
-                        "databases"
-                    ))
-            )
+            .findOneByPrimaryUrl(defaultEntity.getPrimaryUrl())
+            // TODO : Update node URLs with a timestamp
+            //.map(defaultEntity)
             .orElseGet(() -> dataBackendDescriptionRepository.save(defaultEntity));
     }
 }

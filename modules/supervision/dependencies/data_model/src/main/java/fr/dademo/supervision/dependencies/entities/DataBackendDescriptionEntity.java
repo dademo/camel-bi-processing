@@ -89,11 +89,10 @@ public class DataBackendDescriptionEntity implements BaseEntity {
     @Column(name = "primary_url", updatable = false)
     private String primaryUrl;
 
-    // TODO
-    //@Size(min = 1)
+    //@Size(min = 0)
     //@Nonnull
     //@Column(name = "node_urls", updatable = false)
-    //private List<URL> nodeUrls;
+    //private List<String> nodeUrls;
 
     @Nonnull
     @Column(name = "backend_state", nullable = false, updatable = false)

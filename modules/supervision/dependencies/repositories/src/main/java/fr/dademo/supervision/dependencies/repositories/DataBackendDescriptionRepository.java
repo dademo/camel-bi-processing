@@ -13,7 +13,6 @@
 package fr.dademo.supervision.dependencies.repositories;
 
 import fr.dademo.supervision.dependencies.entities.DataBackendDescriptionEntity;
-import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.QueryHints;
 
@@ -28,9 +27,8 @@ public interface DataBackendDescriptionRepository extends
     JpaRepository<DataBackendDescriptionEntity, Long> {
 
     @Nonnull
-    @Override
     @QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
-    <S extends DataBackendDescriptionEntity> Optional<S> findOne(@Nonnull Example<S> example);
+    <S extends DataBackendDescriptionEntity> Optional<S> findOneByPrimaryUrl(String primaryUrl);
 
     @Nonnull
     @Override
