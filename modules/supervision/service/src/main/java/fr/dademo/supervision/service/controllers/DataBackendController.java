@@ -7,8 +7,8 @@
 package fr.dademo.supervision.service.controllers;
 
 import fr.dademo.supervision.service.controllers.exceptions.DataBackendNotFoundException;
-import fr.dademo.supervision.service.controllers.hal.DataBackendDatabaseRepresentationModelAssembler;
-import fr.dademo.supervision.service.controllers.hal.DataBackendRepresentationModelAssembler;
+import fr.dademo.supervision.service.controllers.hal.databackend.DataBackendRepresentationModelAssembler;
+import fr.dademo.supervision.service.controllers.hal.database.DataBackendDatabaseRepresentationModelAssembler;
 import fr.dademo.supervision.service.services.DataBackendService;
 import fr.dademo.supervision.service.services.DatabaseService;
 import fr.dademo.supervision.service.services.dto.DataBackendDatabaseDto;
@@ -77,6 +77,7 @@ public class DataBackendController implements ProblemHandling {
         );
     }
 
+    @Operation(summary = "Get a data backend description")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Found data backend",
             content = {
@@ -102,7 +103,7 @@ public class DataBackendController implements ProblemHandling {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Found databases for a data backend",
             content = {
-                @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DataBackendDescriptionDto.class))
+                @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DataBackendDatabaseDto.class))
             }),
         @ApiResponse(responseCode = "404", description = "Data backend does not exists or no databases are linked to the data backend",
             content = {

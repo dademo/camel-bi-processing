@@ -8,14 +8,19 @@ package fr.dademo.supervision.service.services;
 
 import fr.dademo.supervision.service.repository.ExtendedDataBackendDatabaseRepository;
 import fr.dademo.supervision.service.services.dto.DataBackendDatabaseDto;
+import fr.dademo.supervision.service.services.dto.DataBackendDatabaseStatisticsDto;
 import fr.dademo.supervision.service.services.mappers.DataBackendDatabaseEntityToDtoMapper;
+import fr.dademo.supervision.service.services.mappers.DataBackendDatabaseStatisticsEntityToDtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author dademo
@@ -40,5 +45,24 @@ public class DatabaseServiceImpl implements DatabaseService {
         return repository
             .findOneDatabaseWithLinks(id)
             .map(DataBackendDatabaseEntityToDtoMapper.INSTANCE::viewToDto);
+    }
+
+    @Override
+    public List<DataBackendDatabaseStatisticsDto> findDatabaseStatisticsBetween(
+        @Nonnull Long id, @Nonnull Date from, @Nonnull Date to) {
+
+        return repository
+            .findDatabaseStatisticsBetweenDates(id, from, to)
+            .stream()
+            .map(DataBackendDatabaseStatisticsEntityToDtoMapper.INSTANCE::viewToDto)
+            .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<DataBackendDatabaseStatisticsDto> findLatestDatabaseStatistics(@Nonnull Long id) {
+
+        return repository
+            .findLatestDatabaseStatistic(id)
+            .map(DataBackendDatabaseStatisticsEntityToDtoMapper.INSTANCE::viewToDto);
     }
 }

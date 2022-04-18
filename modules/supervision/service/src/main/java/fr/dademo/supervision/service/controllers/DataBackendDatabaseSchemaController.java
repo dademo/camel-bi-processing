@@ -4,24 +4,21 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
 package fr.dademo.supervision.service.controllers;
 
 import fr.dademo.supervision.service.controllers.exceptions.DatabaseSchemaNotFoundException;
-import fr.dademo.supervision.service.controllers.hal.DataBackendDatabaseSchemaIndexRepresentationModelAssembler;
-import fr.dademo.supervision.service.controllers.hal.DataBackendDatabaseSchemaRepresentationModelAssembler;
-import fr.dademo.supervision.service.controllers.hal.DataBackendDatabaseSchemaTableRepresentationModelAssembler;
-import fr.dademo.supervision.service.controllers.hal.DataBackendDatabaseSchemaViewRepresentationModelAssembler;
+import fr.dademo.supervision.service.controllers.hal.databaseschema.DataBackendDatabaseSchemaRepresentationModelAssembler;
+import fr.dademo.supervision.service.controllers.hal.databaseschemaindex.DataBackendDatabaseSchemaIndexRepresentationModelAssembler;
+import fr.dademo.supervision.service.controllers.hal.databaseschematable.DataBackendDatabaseSchemaTableRepresentationModelAssembler;
+import fr.dademo.supervision.service.controllers.hal.databaseschemaview.DataBackendDatabaseSchemaViewRepresentationModelAssembler;
 import fr.dademo.supervision.service.services.DatabaseSchemaIndexService;
 import fr.dademo.supervision.service.services.DatabaseSchemaService;
 import fr.dademo.supervision.service.services.DatabaseSchemaTableService;
 import fr.dademo.supervision.service.services.DatabaseSchemaViewService;
-import fr.dademo.supervision.service.services.dto.*;
+import fr.dademo.supervision.service.services.dto.DataBackendDatabaseSchemaDto;
+import fr.dademo.supervision.service.services.dto.DataBackendDatabaseSchemaIndexDto;
+import fr.dademo.supervision.service.services.dto.DataBackendDatabaseSchemaTableDto;
+import fr.dademo.supervision.service.services.dto.DataBackendDatabaseSchemaViewDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -75,11 +72,11 @@ public class DataBackendDatabaseSchemaController implements ProblemHandling {
     @Autowired
     private PagedResourcesAssembler<DataBackendDatabaseSchemaViewDto> databaseSchemaViewDescriptionDtoPagedResourcesAssembler;
 
-    @PageableAsQueryParam
+    @Operation(summary = "Get a data backend database schema description")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Found database schema",
             content = {
-                @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DataBackendDescriptionDto.class))
+                @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DataBackendDatabaseSchemaDto.class))
             }),
         @ApiResponse(responseCode = "404", description = "Database schema not found",
             content = {
@@ -101,7 +98,7 @@ public class DataBackendDatabaseSchemaController implements ProblemHandling {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Found database schemas for a database",
             content = {
-                @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DataBackendDatabaseSchemaDto.class))
+                @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DataBackendDatabaseSchemaTableDto.class))
             }),
         @ApiResponse(responseCode = "404", description = "Schema does not exists or no tables are linked to the schema",
             content = {
@@ -130,7 +127,7 @@ public class DataBackendDatabaseSchemaController implements ProblemHandling {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Found database schemas for a database",
             content = {
-                @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DataBackendDatabaseSchemaDto.class))
+                @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DataBackendDatabaseSchemaViewDto.class))
             }),
         @ApiResponse(responseCode = "404", description = "Schema does not exists or no views are linked to the schema",
             content = {
@@ -159,7 +156,7 @@ public class DataBackendDatabaseSchemaController implements ProblemHandling {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Found database schemas for a database",
             content = {
-                @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DataBackendDatabaseSchemaDto.class))
+                @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DataBackendDatabaseSchemaIndexDto.class))
             }),
         @ApiResponse(responseCode = "404", description = "Schema does not exists or no indexes are linked to the schema",
             content = {

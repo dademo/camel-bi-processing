@@ -33,8 +33,18 @@ management:
 
 springdoc:
   swagger-ui:
-    path: /swagger
+    path: /swagger-ui
+    configUrl: /openapi/swagger-config
     layout: StandaloneLayout
+    urlsPrimaryName: localhost
+    urls:
+      - name: localhost
+        url: /openapi
     #layout: BaseLayout
   show-actuator: false
   model-and-view-allowed: true
+  pre-loading-enabled: true
+  api-docs:
+    path: /openapi
+    groups:
+      enabled: false

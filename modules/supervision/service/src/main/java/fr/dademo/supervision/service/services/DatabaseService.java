@@ -7,11 +7,14 @@
 package fr.dademo.supervision.service.services;
 
 import fr.dademo.supervision.service.services.dto.DataBackendDatabaseDto;
+import fr.dademo.supervision.service.services.dto.DataBackendDatabaseStatisticsDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import javax.annotation.Nonnull;
 import javax.validation.constraints.Min;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -22,4 +25,11 @@ public interface DatabaseService {
     Page<DataBackendDatabaseDto> findDatabasesForDataBackend(@Nonnull @Min(1) Long dataBackendId, @Nonnull Pageable pageable);
 
     Optional<DataBackendDatabaseDto> findDatabaseById(@Nonnull @Min(1) Long id);
+
+    List<DataBackendDatabaseStatisticsDto> findDatabaseStatisticsBetween(
+        @Nonnull @Min(1) Long id, @Nonnull Date from, @Nonnull Date to
+    );
+
+    Optional<DataBackendDatabaseStatisticsDto> findLatestDatabaseStatistics(@Nonnull @Min(1) Long id);
+
 }

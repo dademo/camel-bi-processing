@@ -4,29 +4,21 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
 package fr.dademo.supervision.service.controllers;
 
 import fr.dademo.supervision.service.controllers.exceptions.DatabaseSchemaViewNotFoundException;
-import fr.dademo.supervision.service.controllers.hal.DataBackendDatabaseSchemaViewRepresentationModelAssembler;
-import fr.dademo.supervision.service.controllers.hal.DataBackendDatabaseSchemaViewStatisticsRepresentationCollectionModelAssembler;
-import fr.dademo.supervision.service.controllers.hal.DataBackendDatabaseSchemaViewStatisticsRepresentationModelAssembler;
+import fr.dademo.supervision.service.controllers.hal.databaseschemaview.DataBackendDatabaseSchemaViewRepresentationModelAssembler;
+import fr.dademo.supervision.service.controllers.hal.databaseschemaview.DataBackendDatabaseSchemaViewStatisticsRepresentationModelAssembler;
 import fr.dademo.supervision.service.services.DatabaseSchemaViewService;
 import fr.dademo.supervision.service.services.dto.DataBackendDatabaseSchemaViewDto;
 import fr.dademo.supervision.service.services.dto.DataBackendDatabaseSchemaViewStatisticsDto;
-import fr.dademo.supervision.service.services.dto.DataBackendDescriptionDto;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -60,11 +52,11 @@ public class DataBackendDatabaseSchemaViewController implements ProblemHandling 
     @Autowired
     private PagedResourcesAssembler<DataBackendDatabaseSchemaViewDto> databaseDescriptionDtoPagedResourcesAssembler;
 
-    @PageableAsQueryParam
+    @Operation(summary = "Get a data backend database schema view description")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Found database schema view",
             content = {
-                @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DataBackendDescriptionDto.class))
+                @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DataBackendDatabaseSchemaViewDto.class))
             }),
         @ApiResponse(responseCode = "404", description = "Database schema view not found",
             content = {
@@ -82,11 +74,11 @@ public class DataBackendDatabaseSchemaViewController implements ProblemHandling 
             );
     }
 
-    @PageableAsQueryParam
+    @Operation(summary = "Get a data backend database schema view statistics by id within a date range")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Database schema view statistics",
             content = {
-                @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DataBackendDescriptionDto.class))
+                @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DataBackendDatabaseSchemaViewStatisticsDto.class))
             }),
         @ApiResponse(responseCode = "404", description = "Database schema view not found",
             content = {
@@ -100,15 +92,15 @@ public class DataBackendDatabaseSchemaViewController implements ProblemHandling 
         @RequestParam("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @Parameter(name = "from", description = "The minimum date range", required = true) Date from,
         @RequestParam("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @Parameter(name = "to", description = "The maximum date range", required = true) Date to) {
 
-        return DataBackendDatabaseSchemaViewStatisticsRepresentationCollectionModelAssembler.of(viewId, from, to)
+        return DataBackendDatabaseSchemaViewStatisticsRepresentationModelAssembler.of(viewId, from, to)
             .toCollectionModel(databaseSchemaViewService.findDatabaseSchemaViewStatisticsBetween(viewId, from, to));
     }
 
-    @PageableAsQueryParam
+    @Operation(summary = "Get a data backend database schema view latest statistic")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Latest database schema view statistic",
             content = {
-                @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DataBackendDescriptionDto.class))
+                @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DataBackendDatabaseSchemaViewStatisticsDto.class))
             }),
         @ApiResponse(responseCode = "404", description = "Database schema view not found",
             content = {
@@ -123,7 +115,7 @@ public class DataBackendDatabaseSchemaViewController implements ProblemHandling 
         return databaseSchemaViewService.findLatestDatabaseSchemaViewStatistics(viewId)
             .map(
                 DataBackendDatabaseSchemaViewStatisticsRepresentationModelAssembler
-                    .of(viewId)::toModel
+                    .ofViewWithDefault(viewId)::toModel
             )
             .orElseThrow(() -> new DatabaseSchemaViewNotFoundException(viewId));
     }

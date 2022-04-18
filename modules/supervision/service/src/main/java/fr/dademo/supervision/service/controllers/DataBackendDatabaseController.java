@@ -4,23 +4,19 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
 package fr.dademo.supervision.service.controllers;
 
 import fr.dademo.supervision.service.controllers.exceptions.DatabaseNotFoundException;
-import fr.dademo.supervision.service.controllers.hal.DataBackendDatabaseRepresentationModelAssembler;
-import fr.dademo.supervision.service.controllers.hal.DataBackendDatabaseSchemaRepresentationModelAssembler;
+import fr.dademo.supervision.service.controllers.hal.database.DataBackendDatabaseRepresentationModelAssembler;
+import fr.dademo.supervision.service.controllers.hal.database.DataBackendDatabaseStatisticsRepresentationModelAssembler;
+import fr.dademo.supervision.service.controllers.hal.databaseschema.DataBackendDatabaseSchemaRepresentationModelAssembler;
 import fr.dademo.supervision.service.services.DatabaseSchemaService;
 import fr.dademo.supervision.service.services.DatabaseService;
 import fr.dademo.supervision.service.services.dto.DataBackendDatabaseDto;
 import fr.dademo.supervision.service.services.dto.DataBackendDatabaseSchemaDto;
-import fr.dademo.supervision.service.services.dto.DataBackendDescriptionDto;
+import fr.dademo.supervision.service.services.dto.DataBackendDatabaseStatisticsDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -31,6 +27,8 @@ import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.PagedModel;
@@ -43,6 +41,7 @@ import org.zalando.problem.spring.web.advice.ProblemHandling;
 
 import javax.annotation.Nonnull;
 import javax.validation.constraints.Min;
+import java.util.Date;
 
 /**
  * @author dademo
@@ -65,11 +64,11 @@ public class DataBackendDatabaseController implements ProblemHandling {
     @Autowired
     private PagedResourcesAssembler<DataBackendDatabaseSchemaDto> databaseSchemaDescriptionDtoPagedResourcesAssembler;
 
-    @PageableAsQueryParam
+    @Operation(summary = "Get a data backend database description")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Found database",
             content = {
-                @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DataBackendDescriptionDto.class))
+                @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DataBackendDatabaseDto.class))
             }),
         @ApiResponse(responseCode = "404", description = "Data backend not found",
             content = {
@@ -114,5 +113,51 @@ public class DataBackendDatabaseController implements ProblemHandling {
                 WebMvcLinkBuilder.linkTo(DataBackendDatabaseSchemaController.class, databaseId).withSelfRel()
             );
         }
+    }
+
+    @Operation(summary = "Get a data backend database statistics by id within a date range")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Database schema table statistics",
+            content = {
+                @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DataBackendDatabaseStatisticsDto.class))
+            }),
+        @ApiResponse(responseCode = "404", description = "Database schema table not found",
+            content = {
+                @Content(mediaType = MediaTypes.HTTP_PROBLEM_DETAILS_JSON_VALUE, schema = @Schema(implementation = DefaultProblem.class))
+            })
+    })
+    @GetMapping("/statistics")
+    @ResponseStatus(HttpStatus.OK)
+    public CollectionModel<DataBackendDatabaseStatisticsDto> findDataBackendDatabaseStatisticsById(
+        @PathVariable("id") @Min(1) @Nonnull Long tableId,
+        @RequestParam("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @Parameter(name = "from", description = "The minimum date range", required = true) Date from,
+        @RequestParam("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @Parameter(name = "to", description = "The maximum date range", required = true) Date to) {
+
+        return DataBackendDatabaseStatisticsRepresentationModelAssembler.of(tableId, from, to)
+            .toCollectionModel(databaseService.findDatabaseStatisticsBetween(tableId, from, to));
+    }
+
+    @Operation(summary = "Get a data backend database latest statistic")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Latest database schema table statistic",
+            content = {
+                @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DataBackendDatabaseStatisticsDto.class))
+            }),
+        @ApiResponse(responseCode = "404", description = "Database schema table not found",
+            content = {
+                @Content(mediaType = MediaTypes.HTTP_PROBLEM_DETAILS_JSON_VALUE, schema = @Schema(implementation = DefaultProblem.class))
+            })
+    })
+    @GetMapping("/latest-statistic")
+    @ResponseStatus(HttpStatus.OK)
+    public EntityModel<DataBackendDatabaseStatisticsDto> findLatestDataBackendDatabaseStatisticById(
+        @PathVariable("id") @Min(1) @Nonnull Long tableId) {
+
+        return databaseService.findLatestDatabaseStatistics(tableId)
+            .map(
+                DataBackendDatabaseStatisticsRepresentationModelAssembler
+                    .ofDatabaseWithDefault(tableId)::toModel
+            )
+            .orElseThrow(() -> new DatabaseNotFoundException(tableId));
     }
 }
