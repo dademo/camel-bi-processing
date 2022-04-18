@@ -59,7 +59,7 @@ public final class DataBackendDatabaseSchemaTableRepresentationModelAssembler
                 )
             ).withRel("latest-table-statistics"),
             WebMvcLinkBuilder.linkTo(
-                WebMvcLinkBuilder.methodOn(DataBackendDatabaseSchemaTableController.class).findDataBackendDatabaseSchemaTableById(databaseSchemaId)
+                WebMvcLinkBuilder.methodOn(DataBackendDatabaseSchemaTableController.class).findDataBackendDatabaseSchemaTableById(databaseSchemaTableId)
             ).withRel("schema"),
         };
     }

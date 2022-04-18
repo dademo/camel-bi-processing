@@ -11,6 +11,7 @@ import fr.dademo.supervision.dependencies.entities.DataBackendDescriptionEntity;
 import fr.dademo.supervision.dependencies.entities.DataBackendStateExecutionEntity;
 import fr.dademo.supervision.dependencies.entities.database.connection.DataBackendDatabaseConnectionEntity;
 import fr.dademo.supervision.dependencies.entities.database.database.DataBackendDatabaseEntity;
+import fr.dademo.supervision.dependencies.entities.database.databasereplicationpeer.DataBackendDatabaseReplicationPeerEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -29,10 +30,12 @@ public interface DataBackendDescriptionMapper {
     @Mapping(source = "backendStateExecutions", target = "backendStateExecutions")
     @Mapping(source = "databases", target = "databases")
     @Mapping(source = "databaseConnections", target = "databaseConnections")
+    @Mapping(source = "databaseReplicationPeers", target = "databaseReplicationPeers")
     DataBackendDescriptionEntity moduleDescriptionToEntity(
         DataBackendDescription source,
         List<DataBackendStateExecutionEntity> backendStateExecutions,
         List<DataBackendDatabaseEntity> databases,
-        List<DataBackendDatabaseConnectionEntity> databaseConnections
+        List<DataBackendDatabaseConnectionEntity> databaseConnections,
+        List<DataBackendDatabaseReplicationPeerEntity> databaseReplicationPeers
     );
 }

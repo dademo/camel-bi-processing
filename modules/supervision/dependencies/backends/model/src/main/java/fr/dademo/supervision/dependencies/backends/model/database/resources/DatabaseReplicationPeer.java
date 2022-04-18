@@ -8,73 +8,77 @@ package fr.dademo.supervision.dependencies.backends.model.database.resources;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.net.InetAddress;
-import java.util.Date;
+import java.time.Duration;
 
 /**
  * @author dademo
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public interface DatabaseConnection {
+public interface DatabaseReplicationPeer {
 
-    @Nullable
-    DatabaseConnectionState getConnectionState();
+    @Nonnull
+    Boolean getIsActive();
 
-    @Nullable
-    @Min(1)
-    Long getConnectionPID();
-
-    @Nullable
-    @Size(min = 1, max = 255)
-    String getConnectedDatabaseName();
+    @Nonnull
+    Boolean getIsPrimary();
 
     @Nullable
     @Size(min = 1, max = 255)
-    String getUserName();
+    String getTargetDatabase();
+
+    @Nullable
+    @Size(min = 1, max = 255)
+    String getStatus();
+
+    @Nullable
+    Long getReplicationPID();
+
+    @Nullable
+    @Size(min = 1, max = 255)
+    String getUseName();
 
     @Nullable
     @Size(min = 1, max = 255)
     String getApplicationName();
 
     @Nullable
-    InetAddress getClientAddress();
+    @Size(min = 1, max = 255)
+    String getSlotName();
+
+    @Nullable
+    InetAddress getPeerAddress();
 
     @Nullable
     @Size(min = 1, max = 255)
-    String getClientHostName();
+    String getPeerHostName();
 
     @Nullable
-    @Min(1)
-    Long getClientPort();
+    Long getPeerPort();
 
     @Nullable
-    Date getConnectionStart();
+    @Size(min = 1, max = 255)
+    String getState();
 
     @Nullable
-    Date getTransactionStart();
+    @Size(min = 1, max = 255)
+    String getSyncState();
 
     @Nullable
-    Date getLastQueryStart();
+    Duration getReplicationDelay();
 
     @Nullable
-    Date getLastStateChange();
+    Long getSendingDelaySize();
 
     @Nullable
-    @Size(min = 1)
-    String getWaitEventType();
+    Long getReceivingDelaySize();
 
     @Nullable
-    @Size(min = 1)
-    String getWaitEventName();
+    Long getReplayingDelaySize();
 
     @Nullable
-    @Size(min = 1)
-    String getLastQuery();
-
-    @Nullable
-    @Size(min = 1)
-    String getBackendTypeName();
+    Long getTotalDelaySize();
 }

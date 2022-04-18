@@ -48,21 +48,21 @@ public final class DataBackendDatabaseSchemaViewRepresentationModelAssembler
             ).withSelfRel(),
             WebMvcLinkBuilder.linkTo(
                 WebMvcLinkBuilder.methodOn(DataBackendDatabaseSchemaController.class).findDatabaseSchemaViewsForDatabase(databaseSchemaId, Pageable.unpaged())
-            ).withRel("tables"),
+            ).withRel("views"),
             WebMvcLinkBuilder.linkTo(
                 WebMvcLinkBuilder.methodOn(DataBackendDatabaseSchemaViewController.class).findDataBackendDatabaseSchemaViewStatisticsById(
                     databaseSchemaViewId,
                     DefaultHalValues.getDefaultFrom(),
                     DefaultHalValues.getDefaultTo()
                 )
-            ).withRel("table-statistics"),
+            ).withRel("view-statistics"),
             WebMvcLinkBuilder.linkTo(
                 WebMvcLinkBuilder.methodOn(DataBackendDatabaseSchemaViewController.class).findLatestDataBackendDatabaseSchemaViewStatisticById(
                     databaseSchemaViewId
                 )
-            ).withRel("latest-table-statistics"),
+            ).withRel("latest-view-statistics"),
             WebMvcLinkBuilder.linkTo(
-                WebMvcLinkBuilder.methodOn(DataBackendDatabaseSchemaViewController.class).findDataBackendDatabaseSchemaViewById(databaseSchemaId)
+                WebMvcLinkBuilder.methodOn(DataBackendDatabaseSchemaViewController.class).findDataBackendDatabaseSchemaViewById(databaseSchemaViewId)
             ).withRel("schema"),
         };
     }

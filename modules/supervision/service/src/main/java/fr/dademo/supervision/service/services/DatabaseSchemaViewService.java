@@ -32,4 +32,6 @@ public interface DatabaseSchemaViewService {
     );
 
     Optional<DataBackendDatabaseSchemaViewStatisticsDto> findLatestDatabaseSchemaViewStatistics(@Nonnull @Min(1) Long id);
+
+    Boolean existsById(@Nonnull @Min(1) Long id);
 }

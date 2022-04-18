@@ -22,4 +22,6 @@ public interface DatabaseSchemaService {
     Page<DataBackendDatabaseSchemaDto> findSchemasForDatabase(@Nonnull @Min(1) Long databaseId, @Nonnull Pageable pageable);
 
     Optional<DataBackendDatabaseSchemaDto> findSchemaById(@Nonnull @Min(1) Long id);
+
+    Boolean existsById(@Nonnull @Min(1) Long id);
 }

@@ -103,16 +103,14 @@ public class DataBackendDatabaseController implements ProblemHandling {
     public PagedModel<EntityModel<DataBackendDatabaseSchemaDto>> findDatabaseSchemasForDatabase(@PathVariable("id") @Min(1) Long databaseId,
                                                                                                 @ParameterObject Pageable pageable) {
 
-        final var databaseSchemas = databaseSchemaService.findSchemasForDatabase(databaseId, pageable);
-        if (databaseSchemas.getTotalElements() == 0) {
+        if (Boolean.FALSE.equals(databaseService.existsById(databaseId))) {
             throw new DatabaseNotFoundException(databaseId);
-        } else {
-            return databaseSchemaDescriptionDtoPagedResourcesAssembler.toModel(
-                databaseSchemas,
-                DataBackendDatabaseSchemaRepresentationModelAssembler.INSTANCE,
-                WebMvcLinkBuilder.linkTo(DataBackendDatabaseSchemaController.class, databaseId).withSelfRel()
-            );
         }
+        return databaseSchemaDescriptionDtoPagedResourcesAssembler.toModel(
+            databaseSchemaService.findSchemasForDatabase(databaseId, pageable),
+            DataBackendDatabaseSchemaRepresentationModelAssembler.INSTANCE,
+            WebMvcLinkBuilder.linkTo(DataBackendDatabaseSchemaController.class, databaseId).withSelfRel()
+        );
     }
 
     @Operation(summary = "Get a data backend database statistics by id within a date range")

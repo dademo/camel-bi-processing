@@ -39,7 +39,7 @@ public class DatabasesConnectionsQueryRepositoryImpl implements DatabasesConnect
         "    WHEN 0 THEN NULL" +
         "    ELSE APPLICATION_NAME" +
         "  END AS APPLICATION_NAME, " +
-        "  REGEXP_REPLACE(CLIENT_ADDR::VARCHAR, '\\/.+$', ''), " +
+        "  REGEXP_REPLACE(CLIENT_ADDR::VARCHAR, '\\/.+$', '')   AS CLIENT_ADDRESS, " +
         "  CLIENT_HOSTNAME, " +
         "  CLIENT_PORT, " +
         "  BACKEND_START, " +

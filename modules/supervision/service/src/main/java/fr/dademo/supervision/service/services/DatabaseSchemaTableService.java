@@ -31,4 +31,6 @@ public interface DatabaseSchemaTableService {
     );
 
     Optional<DataBackendDatabaseSchemaTableStatisticsDto> findLatestDatabaseSchemaTableStatistics(@Nonnull @Min(1) Long id);
+
+    Boolean existsById(@Nonnull @Min(1) Long id);
 }

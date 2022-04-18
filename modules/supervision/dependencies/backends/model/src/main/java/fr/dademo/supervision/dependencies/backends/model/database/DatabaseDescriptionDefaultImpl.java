@@ -33,61 +33,47 @@ import java.util.List;
 public class DatabaseDescriptionDefaultImpl extends DataBackendDescriptionBaseDefaultImpl implements DatabaseDescription {
 
     @Nullable
-    @Size(min = 1, max = 255)
-    private String name;
-
-    @Nullable
-    @Min(0)
-    private Long commitCounts;
-
-    @Nullable
-    @Min(0)
-    private Long rollbacksCounts;
-
-    @Nullable
-    @Min(0)
-    private Long bufferBlocksRead;
-
-    @Nullable
-    @Min(0)
-    private Long diskBlocksRead;
-
-    @Nullable
-    @Min(0)
-    private Long returnedRowsCount;
-
-    @Nullable
-    @Min(0)
-    private Long fetchedRowsCount;
-
-    @Nullable
-    @Min(0)
-    private Long insertedRowsCount;
-
-    @Nullable
-    @Min(0)
-    private Long updatedRowsCount;
-
-    @Nullable
-    @Min(0)
-    private Long deletedRowsCount;
-
-    @Nullable
-    @Min(0)
-    private Long conflictsCount;
-
-    @Nullable
-    @Min(0)
-    private Long deadlocksCount;
-
-    @Nullable
     @Min(0)
     Long memoryUsageBytes;
-
     @Nullable
     @Min(0)
     Long cpuUsageMilliCPU;
-
+    @Nullable
+    @Size(min = 1, max = 255)
+    private String name;
+    @Nullable
+    @Min(0)
+    private Long commitCounts;
+    @Nullable
+    @Min(0)
+    private Long rollbacksCounts;
+    @Nullable
+    @Min(0)
+    private Long bufferBlocksRead;
+    @Nullable
+    @Min(0)
+    private Long diskBlocksRead;
+    @Nullable
+    @Min(0)
+    private Long returnedRowsCount;
+    @Nullable
+    @Min(0)
+    private Long fetchedRowsCount;
+    @Nullable
+    @Min(0)
+    private Long insertedRowsCount;
+    @Nullable
+    @Min(0)
+    private Long updatedRowsCount;
+    @Nullable
+    @Min(0)
+    private Long deletedRowsCount;
+    @Nullable
+    @Min(0)
+    private Long conflictsCount;
+    @Nullable
+    @Min(0)
+    private Long deadlocksCount;
     @Nullable
     private Duration readTime;
 

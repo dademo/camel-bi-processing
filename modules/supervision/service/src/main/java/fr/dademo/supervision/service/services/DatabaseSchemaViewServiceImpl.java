@@ -65,4 +65,9 @@ public class DatabaseSchemaViewServiceImpl implements DatabaseSchemaViewService 
             .findLatestDatabaseSchemaViewStatistic(id)
             .map(DataBackendDatabaseSchemaViewStatisticsEntityToDtoMapper.INSTANCE::viewToDto);
     }
+
+    @Override
+    public Boolean existsById(@Nonnull Long id) {
+        return repository.existsById(id);
+    }
 }

@@ -75,13 +75,12 @@ public abstract class AbstractGenericDataBackendMappingService {
             dataBackendDescription,
             new ArrayList<>(),
             new ArrayList<>(),
+            new ArrayList<>(),
             new ArrayList<>()
         );
 
         return dataBackendDescriptionRepository
             .findOneByPrimaryUrl(defaultEntity.getPrimaryUrl())
-            // TODO : Update node URLs with a timestamp
-            //.map(defaultEntity)
             .orElseGet(() -> dataBackendDescriptionRepository.save(defaultEntity));
     }
 }

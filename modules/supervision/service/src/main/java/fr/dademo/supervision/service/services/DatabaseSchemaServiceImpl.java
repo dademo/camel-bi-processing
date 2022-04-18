@@ -41,4 +41,9 @@ public class DatabaseSchemaServiceImpl implements DatabaseSchemaService {
             .findOneDatabaseSchemaWithLinks(id)
             .map(DataBackendDatabaseSchemaEntityToDtoMapper.INSTANCE::viewToDto);
     }
+
+    @Override
+    public Boolean existsById(@Nonnull Long id) {
+        return repository.existsById(id);
+    }
 }

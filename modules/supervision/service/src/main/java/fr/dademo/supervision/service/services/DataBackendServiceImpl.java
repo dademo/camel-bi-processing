@@ -41,4 +41,9 @@ public class DataBackendServiceImpl implements DataBackendService {
             .findOneDescriptionWithLinks(id)
             .map(DataBackendDescriptionEntityToDtoMapper.INSTANCE::viewToDto);
     }
+
+    @Override
+    public Boolean existsById(@Nonnull Long id) {
+        return repository.existsById(id);
+    }
 }

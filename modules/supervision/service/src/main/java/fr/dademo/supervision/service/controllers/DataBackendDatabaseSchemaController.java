@@ -110,16 +110,14 @@ public class DataBackendDatabaseSchemaController implements ProblemHandling {
     public PagedModel<EntityModel<DataBackendDatabaseSchemaTableDto>> findDatabaseSchemaTablesForDatabase(@PathVariable("id") @Min(1) Long databaseSchemaId,
                                                                                                           @ParameterObject Pageable pageable) {
 
-        final var databaseSchemaTables = databaseSchemaTableService.findTablesForDatabaseSchema(databaseSchemaId, pageable);
-        if (databaseSchemaTables.getTotalElements() == 0) {
+        if (Boolean.FALSE.equals(databaseSchemaService.existsById(databaseSchemaId))) {
             throw new DatabaseSchemaNotFoundException(databaseSchemaId);
-        } else {
-            return databaseSchemaTableDescriptionDtoPagedResourcesAssembler.toModel(
-                databaseSchemaTables,
-                DataBackendDatabaseSchemaTableRepresentationModelAssembler.INSTANCE,
-                WebMvcLinkBuilder.linkTo(DataBackendDatabaseSchemaTableController.class, databaseSchemaId).withSelfRel()
-            );
         }
+        return databaseSchemaTableDescriptionDtoPagedResourcesAssembler.toModel(
+            databaseSchemaTableService.findTablesForDatabaseSchema(databaseSchemaId, pageable),
+            DataBackendDatabaseSchemaTableRepresentationModelAssembler.INSTANCE,
+            WebMvcLinkBuilder.linkTo(DataBackendDatabaseSchemaTableController.class, databaseSchemaId).withSelfRel()
+        );
     }
 
     @PageableAsQueryParam
@@ -139,16 +137,15 @@ public class DataBackendDatabaseSchemaController implements ProblemHandling {
     public PagedModel<EntityModel<DataBackendDatabaseSchemaViewDto>> findDatabaseSchemaViewsForDatabase(@PathVariable("id") @Min(1) Long databaseSchemaId,
                                                                                                         @ParameterObject Pageable pageable) {
 
-        final var databaseSchemaViews = databaseSchemaViewService.findViewsForDatabaseSchema(databaseSchemaId, pageable);
-        if (databaseSchemaViews.getTotalElements() == 0) {
+
+        if (Boolean.FALSE.equals(databaseSchemaService.existsById(databaseSchemaId))) {
             throw new DatabaseSchemaNotFoundException(databaseSchemaId);
-        } else {
-            return databaseSchemaViewDescriptionDtoPagedResourcesAssembler.toModel(
-                databaseSchemaViews,
-                DataBackendDatabaseSchemaViewRepresentationModelAssembler.INSTANCE,
-                WebMvcLinkBuilder.linkTo(DataBackendDatabaseSchemaViewController.class, databaseSchemaId).withSelfRel()
-            );
         }
+        return databaseSchemaViewDescriptionDtoPagedResourcesAssembler.toModel(
+            databaseSchemaViewService.findViewsForDatabaseSchema(databaseSchemaId, pageable),
+            DataBackendDatabaseSchemaViewRepresentationModelAssembler.INSTANCE,
+            WebMvcLinkBuilder.linkTo(DataBackendDatabaseSchemaViewController.class, databaseSchemaId).withSelfRel()
+        );
     }
 
     @PageableAsQueryParam
@@ -168,15 +165,14 @@ public class DataBackendDatabaseSchemaController implements ProblemHandling {
     public PagedModel<EntityModel<DataBackendDatabaseSchemaIndexDto>> findDatabaseSchemaIndexesForDatabase(@PathVariable("id") @Min(1) Long databaseSchemaId,
                                                                                                            @ParameterObject Pageable pageable) {
 
-        final var databaseSchemaIndexes = databaseSchemaIndexService.findIndexesForDatabaseSchema(databaseSchemaId, pageable);
-        if (databaseSchemaIndexes.getTotalElements() == 0) {
+
+        if (Boolean.FALSE.equals(databaseSchemaService.existsById(databaseSchemaId))) {
             throw new DatabaseSchemaNotFoundException(databaseSchemaId);
-        } else {
-            return databaseSchemaIndexDescriptionDtoPagedResourcesAssembler.toModel(
-                databaseSchemaIndexes,
-                DataBackendDatabaseSchemaIndexRepresentationModelAssembler.INSTANCE,
-                WebMvcLinkBuilder.linkTo(DataBackendDatabaseSchemaIndexController.class, databaseSchemaId).withSelfRel()
-            );
         }
+        return databaseSchemaIndexDescriptionDtoPagedResourcesAssembler.toModel(
+            databaseSchemaIndexService.findIndexesForDatabaseSchema(databaseSchemaId, pageable),
+            DataBackendDatabaseSchemaIndexRepresentationModelAssembler.INSTANCE,
+            WebMvcLinkBuilder.linkTo(DataBackendDatabaseSchemaIndexController.class, databaseSchemaId).withSelfRel()
+        );
     }
 }

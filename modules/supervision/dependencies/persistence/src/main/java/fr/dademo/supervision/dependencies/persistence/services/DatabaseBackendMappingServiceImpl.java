@@ -8,15 +8,13 @@ package fr.dademo.supervision.dependencies.persistence.services;
 
 import fr.dademo.supervision.dependencies.backends.model.database.DatabaseDescription;
 import fr.dademo.supervision.dependencies.backends.model.database.GlobalDatabaseDescription;
-import fr.dademo.supervision.dependencies.backends.model.database.resources.DatabaseIndex;
-import fr.dademo.supervision.dependencies.backends.model.database.resources.DatabaseSchema;
-import fr.dademo.supervision.dependencies.backends.model.database.resources.DatabaseTable;
-import fr.dademo.supervision.dependencies.backends.model.database.resources.DatabaseView;
+import fr.dademo.supervision.dependencies.backends.model.database.resources.*;
 import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendModuleMetaData;
 import fr.dademo.supervision.dependencies.entities.DataBackendDescriptionEntity;
 import fr.dademo.supervision.dependencies.entities.DataBackendStateExecutionEntity;
 import fr.dademo.supervision.dependencies.entities.database.database.DataBackendDatabaseEntity;
 import fr.dademo.supervision.dependencies.entities.database.databaseindex.DataBackendDatabaseSchemaIndexEntity;
+import fr.dademo.supervision.dependencies.entities.database.databasereplicationpeer.DataBackendDatabaseReplicationPeerEntity;
 import fr.dademo.supervision.dependencies.entities.database.databaseschema.DataBackendDatabaseSchemaEntity;
 import fr.dademo.supervision.dependencies.entities.database.databasetable.DataBackendDatabaseSchemaTableEntity;
 import fr.dademo.supervision.dependencies.entities.database.databaseview.DataBackendDatabaseSchemaViewEntity;
@@ -30,7 +28,10 @@ import fr.dademo.supervision.dependencies.persistence.services.mappers.database.
 import fr.dademo.supervision.dependencies.persistence.services.mappers.database.databasetable.DataBackendDatabaseSchemaTableStatisticsEntityMapper;
 import fr.dademo.supervision.dependencies.persistence.services.mappers.database.databaseview.DataBackendDatabaseSchemaViewEntityMapper;
 import fr.dademo.supervision.dependencies.persistence.services.mappers.database.databaseview.DataBackendDatabaseSchemaViewEntityStatisticsMapper;
+import fr.dademo.supervision.dependencies.persistence.services.mappers.database.replicationpeer.DataBackendDatabaseReplicationPeerEntityMapper;
+import fr.dademo.supervision.dependencies.persistence.services.mappers.database.replicationpeer.DataBackendDatabaseReplicationPeerStatisticsEntityMapper;
 import fr.dademo.supervision.dependencies.persistence.services.specialSpecifications.DataBackendDatabaseEntitySpecification;
+import fr.dademo.supervision.dependencies.repositories.DataBackendReplicationPeerRepository;
 import fr.dademo.supervision.dependencies.repositories.DatabaseBackendStateRepository;
 import fr.dademo.supervision.dependencies.repositories.database.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,9 @@ public class DatabaseBackendMappingServiceImpl extends AbstractGenericDataBacken
 
     @Autowired
     private DataBackendDatabaseRepository dataBackendDatabaseRepository;
+
+    @Autowired
+    private DataBackendReplicationPeerRepository dataBackendReplicationPeerRepository;
 
     @Autowired
     private DataBackendDatabaseSchemaRepository dataBackendDatabaseSchemaRepository;
@@ -114,6 +118,16 @@ public class DatabaseBackendMappingServiceImpl extends AbstractGenericDataBacken
                 ))
                 .collect(Collectors.toList())
         );
+
+        dataBackendDescription.getDatabaseReplicationPeers().addAll(
+            StreamSupport.stream(globalDatabaseDescription.getDatabaseReplicationPeers().spliterator(), false)
+                .map(databaseReplicationPeer -> mapToDataBackendDatabaseReplicationPeerEntity(
+                    databaseReplicationPeer,
+                    dataBackendDescription,
+                    dataBackendStateExecution
+                ))
+                .collect(Collectors.toList())
+        );
     }
 
     private DataBackendDatabaseEntity mapToDataBackendDatabaseDescriptionEntity(DatabaseDescription databaseDescription,
@@ -126,18 +140,7 @@ public class DatabaseBackendMappingServiceImpl extends AbstractGenericDataBacken
             new ArrayList<>(),
             new ArrayList<>()
         );
-/*
-        final var finalDatabaseDescriptionEntity = dataBackendDatabaseRepository
-            .findOne(Example.of(
-                databaseDescriptionEntity,
-                ExampleMatcher.matching()
-                    .withIgnorePaths(
-                        "databaseStatistics",
-                        "schemas"
-                    )
-            ))
-            .orElseGet(() -> dataBackendDatabaseRepository.save(databaseDescriptionEntity));
- */
+
         final var finalDatabaseDescriptionEntity = dataBackendDatabaseRepository
             .findOne(DataBackendDatabaseEntitySpecification.forEntity(databaseDescriptionEntity))
             .orElseGet(() -> dataBackendDatabaseRepository.save(databaseDescriptionEntity));
@@ -160,6 +163,40 @@ public class DatabaseBackendMappingServiceImpl extends AbstractGenericDataBacken
 
         return finalDatabaseDescriptionEntity;
     }
+
+    private DataBackendDatabaseReplicationPeerEntity mapToDataBackendDatabaseReplicationPeerEntity(DatabaseReplicationPeer databaseDescriptionPeer,
+                                                                                                   DataBackendDescriptionEntity backendDescription,
+                                                                                                   DataBackendStateExecutionEntity dataBackendStateExecution) {
+
+        final var databaseReplicationPeerEntity = DataBackendDatabaseReplicationPeerEntityMapper.INSTANCE.toDataBackendDatabaseReplicationPeerEntity(
+            databaseDescriptionPeer,
+            backendDescription,
+            new ArrayList<>()
+        );
+
+        final var finalDatabaseDescriptionEntity = dataBackendReplicationPeerRepository
+            .findOne(Example.of(
+                databaseReplicationPeerEntity,
+                ExampleMatcher.matching()
+                    .withIgnorePaths(
+                        "replicationPeerStatistics"
+                    )
+            ))
+            .orElseGet(() -> dataBackendReplicationPeerRepository.save(databaseReplicationPeerEntity));
+
+        finalDatabaseDescriptionEntity.getReplicationPeerStatistics().add(
+            DataBackendDatabaseReplicationPeerStatisticsEntityMapper.INSTANCE.toDataBackendDatabaseReplicationPeerStatisticsEntity(
+                databaseDescriptionPeer,
+                finalDatabaseDescriptionEntity,
+                dataBackendStateExecution
+            )
+        );
+
+        dataBackendReplicationPeerRepository.save(finalDatabaseDescriptionEntity);
+
+        return finalDatabaseDescriptionEntity;
+    }
+
 
     private DataBackendDatabaseSchemaEntity mapToDataBackendDatabaseSchemaEntity(DatabaseSchema databaseSchema,
                                                                                  DataBackendDatabaseEntity database,

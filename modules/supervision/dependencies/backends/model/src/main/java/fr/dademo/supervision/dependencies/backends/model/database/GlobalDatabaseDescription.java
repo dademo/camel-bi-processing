@@ -10,6 +10,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import fr.dademo.supervision.dependencies.backends.model.database.resources.DatabaseConnection;
 import fr.dademo.supervision.dependencies.backends.model.database.resources.DatabaseConnectionDefaultImpl;
+import fr.dademo.supervision.dependencies.backends.model.database.resources.DatabaseReplicationPeer;
+import fr.dademo.supervision.dependencies.backends.model.database.resources.DatabaseReplicationPeerDefaultImpl;
 import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendDescription;
 import lombok.NonNull;
 
@@ -28,4 +30,8 @@ public interface GlobalDatabaseDescription extends DataBackendDescription {
     @NonNull
     @JsonDeserialize(as = List.class, contentAs = DatabaseDescriptionDefaultImpl.class)
     Iterable<DatabaseDescription> getDatabasesDescriptions();
+
+    @NonNull
+    @JsonDeserialize(as = List.class, contentAs = DatabaseReplicationPeerDefaultImpl.class)
+    Iterable<DatabaseReplicationPeer> getDatabaseReplicationPeers();
 }

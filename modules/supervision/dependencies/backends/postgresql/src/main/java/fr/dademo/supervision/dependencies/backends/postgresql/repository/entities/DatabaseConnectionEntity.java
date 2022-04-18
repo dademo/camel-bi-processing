@@ -51,7 +51,7 @@ public class DatabaseConnectionEntity {
     InetAddress clientAddress;
 
     @Nullable
-    String clientHostname;
+    String clientHostName;
 
     @Nullable
     Long clientPort;
@@ -93,7 +93,7 @@ public class DatabaseConnectionEntity {
                 .userName(validateField(rs.getString(4), rs))
                 .applicationName(validateField(rs.getString(5), rs))
                 .clientAddress(mapToInet(validateField(rs.getString(6), rs)))
-                .clientHostname(validateField(rs.getString(7), rs))
+                .clientHostName(validateField(rs.getString(7), rs))
                 .clientPort(validateField(rs.getLong(8), rs))
                 .connectionStart(validateField(rs.getTimestamp(9), rs))
                 .transactionStart(validateField(rs.getTimestamp(10), rs))

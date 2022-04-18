@@ -31,7 +31,6 @@ import javax.annotation.Nullable;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -59,6 +58,9 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
     private DatabaseProductQueryRepository databaseProductQueryRepository;
 
     @Autowired
+    private DatabaseReplicationPeerQueryRepository databaseReplicationPeerQueryRepository;
+
+    @Autowired
     private DatabaseTablesAndViewsStatisticsQueryRepository databaseTablesAndViewsStatisticsQueryRepository;
 
     @Autowired
@@ -79,6 +81,7 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
     @Nonnull
     @Override
     public DataBackendModuleMetaData getModuleMetaData() {
+
         return DataBackendModuleMetaDataDefaultImpl.builder()
             .moduleName(PostgreSQLBackendStateFetchService.class.getPackage().getName())
             .moduleTitle(PostgreSQLBackendStateFetchService.class.getPackage().getImplementationTitle())
@@ -163,16 +166,22 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
 
     private void applyReplication(GlobalDatabaseDescriptionDefaultImpl.GlobalDatabaseDescriptionDefaultImplBuilder<?, ?> objectBuilder) {
 
-        // TODO: replication hosts
-        final var replicationHosts = Collections.<String>emptyList();
+        final var replicationHosts = Stream.concat(
+                databaseReplicationPeerQueryRepository.getDatabaseControllerReplicationInformations().stream(),
+                databaseReplicationPeerQueryRepository.getDatabaseClientReplicationInformations().stream()
+            )
+            .map(new DatabaseReplicationPeerValueMapper())
+            .collect(Collectors.toList());
+
         objectBuilder
             .nodeUrls(Stream.concat(
-                replicationHosts.stream(),
+                replicationHosts.stream().map(DatabaseReplicationPeer::getPeerHostName),
                 Stream.of(moduleConfiguration.getDatasource().getUrl())
             ).collect(Collectors.toList()))
             .clusterSize(replicationHosts.size() + 1)
             .primaryCount(1)
-            .replicaCount(replicationHosts.size());
+            .replicaCount(replicationHosts.size())
+            .databaseReplicationPeers(replicationHosts);
     }
 
     private List<? extends DatabaseSchema> getSchemas(boolean getRowsCount) {

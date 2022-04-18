@@ -65,4 +65,9 @@ public class DatabaseSchemaIndexServiceImpl implements DatabaseSchemaIndexServic
             .findLatestDatabaseSchemaIndexStatistic(id)
             .map(DataBackendDatabaseSchemaIndexStatisticsEntityToDtoMapper.INSTANCE::viewToDto);
     }
+
+    @Override
+    public Boolean existsById(@Nonnull Long id) {
+        return repository.existsById(id);
+    }
 }

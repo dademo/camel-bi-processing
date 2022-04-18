@@ -65,4 +65,9 @@ public class DatabaseServiceImpl implements DatabaseService {
             .findLatestDatabaseStatistic(id)
             .map(DataBackendDatabaseStatisticsEntityToDtoMapper.INSTANCE::viewToDto);
     }
+
+    @Override
+    public Boolean existsById(@Nonnull Long id) {
+        return repository.existsById(id);
+    }
 }

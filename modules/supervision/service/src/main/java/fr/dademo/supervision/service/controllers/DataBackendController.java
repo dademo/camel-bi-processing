@@ -115,15 +115,14 @@ public class DataBackendController implements ProblemHandling {
     public PagedModel<EntityModel<DataBackendDatabaseDto>> findDatabasesForDataBackend(@PathVariable("id") @Min(1) Long dataBackendId,
                                                                                        @ParameterObject Pageable pageable) {
 
-        final var databases = databaseService.findDatabasesForDataBackend(dataBackendId, pageable);
-        if (databases.getTotalElements() == 0) {
+        if (Boolean.FALSE.equals(dataBackendService.existsById(dataBackendId))) {
             throw new DataBackendNotFoundException(dataBackendId);
-        } else {
-            return databaseDescriptionDtoPagedResourcesAssembler.toModel(
-                databases,
-                DataBackendDatabaseRepresentationModelAssembler.INSTANCE,
-                WebMvcLinkBuilder.linkTo(DataBackendDatabaseController.class, dataBackendId).withSelfRel()
-            );
         }
+
+        return databaseDescriptionDtoPagedResourcesAssembler.toModel(
+            databaseService.findDatabasesForDataBackend(dataBackendId, pageable),
+            DataBackendDatabaseRepresentationModelAssembler.INSTANCE,
+            WebMvcLinkBuilder.linkTo(DataBackendDatabaseController.class, dataBackendId).withSelfRel()
+        );
     }
 }

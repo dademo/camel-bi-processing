@@ -8,7 +8,6 @@ package fr.dademo.supervision.service.controllers.hal.database;
 
 import fr.dademo.supervision.service.controllers.DataBackendController;
 import fr.dademo.supervision.service.controllers.DataBackendDatabaseController;
-import fr.dademo.supervision.service.controllers.DataBackendDatabaseSchemaController;
 import fr.dademo.supervision.service.controllers.hal.AppLinkedEntityRepresentationModelAssembler;
 import fr.dademo.supervision.service.services.dto.DataBackendDatabaseDto;
 import lombok.AccessLevel;
@@ -50,7 +49,7 @@ public final class DataBackendDatabaseRepresentationModelAssembler
                 WebMvcLinkBuilder.methodOn(DataBackendController.class).findDataBackendById(backendDescriptionId)
             ).withRel("data-backend"),
             WebMvcLinkBuilder.linkTo(
-                WebMvcLinkBuilder.methodOn(DataBackendDatabaseSchemaController.class).findDataBackendDatabaseSchemaById(databaseId)
+                WebMvcLinkBuilder.methodOn(DataBackendDatabaseController.class).findDatabaseSchemasForDatabase(databaseId, Pageable.unpaged())
             ).withRel("schemas"),
         };
     }

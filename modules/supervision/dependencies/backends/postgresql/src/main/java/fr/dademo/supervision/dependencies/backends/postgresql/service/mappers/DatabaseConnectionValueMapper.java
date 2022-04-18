@@ -27,7 +27,7 @@ public class DatabaseConnectionValueMapper implements Function<DatabaseConnectio
             .userName(sourceObject.getUserName())
             .applicationName(sourceObject.getApplicationName())
             .clientAddress(sourceObject.getClientAddress())
-            .clientHostname(sourceObject.getClientHostname())
+            .clientHostName(sourceObject.getClientHostName())
             .clientPort(sourceObject.getClientPort())
             .connectionStart(sourceObject.getConnectionStart())
             .transactionStart(sourceObject.getTransactionStart())

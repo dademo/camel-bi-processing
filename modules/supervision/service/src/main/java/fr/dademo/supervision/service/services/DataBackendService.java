@@ -22,4 +22,6 @@ public interface DataBackendService {
     Page<DataBackendDescriptionDto> findDataBackends(@Nonnull Pageable pageable);
 
     Optional<DataBackendDescriptionDto> findDataBackendById(@Nonnull @Min(1) Long id);
+
+    Boolean existsById(@Nonnull @Min(1) Long id);
 }

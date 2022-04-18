@@ -54,7 +54,7 @@
             <column name="client_address" type="CLOB">
                 <constraints nullable="true" unique="false"/>
             </column>
-            <column name="client_hostname" type="VARCHAR(255)">
+            <column name="client_host_name" type="VARCHAR(255)">
                 <constraints nullable="true" unique="false"/>
             </column>
             <column name="client_port" type="BIGINT">
@@ -107,14 +107,14 @@
             <column name="client_port" descending="true"/>
         </createIndex>
         <createIndex tableName="data_backend_database_connection"
-                     indexName="idx_data_backend_database_connection_client_hostname"
+                     indexName="idx_data_backend_database_connection_client_host_name"
                      schemaName="${schema_name}">
-            <column name="client_hostname" descending="true"/>
+            <column name="client_host_name" descending="true"/>
         </createIndex>
         <createIndex tableName="data_backend_database_connection"
-                     indexName="idx_data_backend_database_connection_client_hostname_port"
+                     indexName="idx_data_backend_database_connection_client_host_name_port"
                      schemaName="${schema_name}">
-            <column name="client_hostname" descending="true"/>
+            <column name="client_host_name" descending="true"/>
             <column name="client_port" descending="true"/>
         </createIndex>
 
@@ -224,6 +224,154 @@
             schemaName="${schema_name}"
         />
 
+        <!-- fr.dademo.supervision.dependencies.entities.database.databasereplicationpeer.DataBackendDatabaseReplicationPeerEntity -->
+        <createTable tableName="data_backend_database_replication_peer" schemaName="${schema_name}">
+            <column name="id" type="INTEGER" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="id_data_backend_description" type="INTEGER">
+                <constraints
+                    nullable="false" unique="false"
+                    foreignKeyName="fk_data_backend_database_replication_peer__data_backend_description_id"
+                    referencedTableSchemaName="${schema_name}"
+                    referencedTableName="data_backend_description"
+                    referencedColumnNames="id"
+                />
+            </column>
+            <column name="target_database" type="VARCHAR(255)">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="use_name" type="VARCHAR(255)">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="application_name" type="VARCHAR(255)">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="slot_name" type="VARCHAR(255)">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="peer_address" type="VARCHAR(255)">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="peer_host_name" type="VARCHAR(255)">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="peer_port" type="INTEGER">
+                <constraints nullable="true" unique="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint
+            constraintName="data_backend_database_replication_peer_uniq"
+            tableName="data_backend_database_replication_peer"
+            columnNames="id_data_backend_description, target_database, application_name, slot_name, peer_address, peer_host_name, peer_port"
+            schemaName="${schema_name}"
+        />
+        <createIndex tableName="data_backend_database_replication_peer"
+                     indexName="idx_data_backend_database_replication_peer_target_database"
+                     schemaName="${schema_name}">
+            <column name="target_database" descending="true"/>
+        </createIndex>
+        <createIndex tableName="data_backend_database_replication_peer"
+                     indexName="idx_data_backend_database_replication_peer_use_name"
+                     schemaName="${schema_name}">
+            <column name="use_name" descending="true"/>
+        </createIndex>
+        <createIndex tableName="data_backend_database_replication_peer"
+                     indexName="idx_data_backend_database_replication_peer_application_name"
+                     schemaName="${schema_name}">
+            <column name="application_name" descending="true"/>
+        </createIndex>
+        <createIndex tableName="data_backend_database_replication_peer"
+                     indexName="idx_data_backend_database_replication_peer_slot_name"
+                     schemaName="${schema_name}">
+            <column name="slot_name" descending="true"/>
+        </createIndex>
+        <createIndex tableName="data_backend_database_replication_peer"
+                     indexName="idx_data_backend_database_replication_peer_peer_address"
+                     schemaName="${schema_name}">
+            <column name="peer_address" descending="true"/>
+        </createIndex>
+        <createIndex tableName="data_backend_database_replication_peer"
+                     indexName="idx_data_backend_database_replication_peer_host_name"
+                     schemaName="${schema_name}">
+            <column name="peer_host_name" descending="true"/>
+        </createIndex>
+        <createIndex tableName="data_backend_database_replication_peer"
+                     indexName="idx_data_backend_database_replication_peer_port"
+                     schemaName="${schema_name}">
+            <column name="peer_port" descending="true"/>
+        </createIndex>
+
+
+        <!-- fr.dademo.supervision.dependencies.entities.database.databasereplicationpeer.DataBackendDatabaseReplicationPeerStatisticsEntity -->
+        <createTable tableName="data_backend_database_replication_peer_statistics" schemaName="${schema_name}">
+            <column name="id" type="INTEGER" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="id_replication_peer" type="INTEGER">
+                <constraints
+                    nullable="false" unique="false"
+                    foreignKeyName="fk_data_backend_db_repl_peer_statistics__data_backend_db_repl_peer_id"
+                    referencedTableSchemaName="${schema_name}"
+                    referencedTableName="data_backend_database_replication_peer"
+                    referencedColumnNames="id"
+                />
+            </column>
+            <column name="id_backend_state_execution" type="INTEGER">
+                <constraints
+                    nullable="false" unique="false"
+                    foreignKeyName="fk_data_backend_db_repl_peer_statistics__data_backend_state_execution_id"
+                    referencedTableSchemaName="${schema_name}"
+                    referencedTableName="data_backend_state_execution"
+                    referencedColumnNames="id"
+                />
+            </column>
+            <column name="is_primary" type="BOOLEAN">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="is_active" type="BOOLEAN">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="status" type="VARCHAR(255)">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="replication_pid" type="INTEGER">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="state" type="VARCHAR(50)">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="sync_state" type="VARCHAR(255)">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="replication_delay_milliseconds" type="INTEGER">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="sending_delay_size" type="INTEGER">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="receiving_delay_size" type="INTEGER">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="relaying_delay_size" type="INTEGER">
+                <constraints nullable="true" unique="false"/>
+            </column>
+            <column name="total_delay_size" type="INTEGER">
+                <constraints nullable="true" unique="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint
+            constraintName="data_backend_database_replication_peer_statistics_uniq"
+            tableName="data_backend_database_replication_peer_statistics"
+            columnNames="id_replication_peer, id_backend_state_execution"
+            schemaName="${schema_name}"
+        />
+        <createIndex tableName="data_backend_database_replication_peer_statistics"
+                     indexName="data_backend_database_replication_peer_statistics_replication_pid"
+                     schemaName="${schema_name}">
+            <column name="replication_pid" descending="true"/>
+        </createIndex>
+
         <!-- fr.dademo.supervision.entities.database.databaseschema.DataBackendDatabaseSchemaEntity -->
         <createTable tableName="data_backend_database_schema" schemaName="${schema_name}">
             <column name="id" type="INTEGER" autoIncrement="true">
@@ -232,7 +380,7 @@
             <column name="id_database" type="INTEGER">
                 <constraints
                     nullable="false" unique="false"
-                    foreignKeyName="fk_data_backend_database_description_id"
+                    foreignKeyName="fk_data_backend_database_schema__data_backend_database_id"
                     referencedTableSchemaName="${schema_name}"
                     referencedTableName="data_backend_database"
                     referencedColumnNames="id"
@@ -248,11 +396,6 @@
             columnNames="id_database, name"
             schemaName="${schema_name}"
         />
-        <createIndex tableName="data_backend_database_schema"
-                     indexName="idx_data_backend_database_schema_name"
-                     schemaName="${schema_name}">
-            <column name="name" descending="true"/>
-        </createIndex>
 
         <!-- fr.dademo.supervision.entities.database.databasetable.DataBackendDatabaseSchemaTableEntityEntity -->
         <createTable tableName="data_backend_database_schema_table" schemaName="${schema_name}">

@@ -12,11 +12,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.net.InetAddress;
-import java.util.Date;
+import java.time.Duration;
 
 /**
  * @author dademo
@@ -26,63 +26,67 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class DatabaseConnectionDefaultImpl implements DatabaseConnection {
+public class DatabaseReplicationPeerDefaultImpl implements DatabaseReplicationPeer {
 
-    @Nullable
-    private DatabaseConnectionState connectionState;
+    @Nonnull
+    private Boolean isActive;
 
-    @Nullable
-    @Min(1)
-    private Long connectionPID;
-
-    @Nullable
-    @Size(min = 1, max = 255)
-    private String connectedDatabaseName;
+    @Nonnull
+    private Boolean isPrimary;
 
     @Nullable
     @Size(min = 1, max = 255)
-    private String userName;
+    private String targetDatabase;
+
+    @Nullable
+    @Size(min = 1, max = 255)
+    private String status;
+
+    @Nullable
+    private Long replicationPID;
+
+    @Nullable
+    @Size(min = 1, max = 255)
+    private String useName;
 
     @Nullable
     @Size(min = 1, max = 255)
     private String applicationName;
 
     @Nullable
-    private InetAddress clientAddress;
+    @Size(min = 1, max = 255)
+    private String slotName;
+
+    @Nullable
+    private InetAddress peerAddress;
 
     @Nullable
     @Size(min = 1, max = 255)
-    private String clientHostName;
+    private String peerHostName;
 
     @Nullable
-    @Min(1)
-    private Long clientPort;
+    private Long peerPort;
 
     @Nullable
-    private Date connectionStart;
+    @Size(min = 1, max = 50)
+    private String state;
 
     @Nullable
-    private Date transactionStart;
+    @Size(min = 1, max = 255)
+    private String syncState;
 
     @Nullable
-    private Date lastQueryStart;
+    private Duration replicationDelay;
 
     @Nullable
-    private Date lastStateChange;
+    private Long sendingDelaySize;
 
     @Nullable
-    @Size(min = 1)
-    private String waitEventType;
+    private Long receivingDelaySize;
 
     @Nullable
-    @Size(min = 1)
-    private String waitEventName;
+    private Long replayingDelaySize;
 
     @Nullable
-    @Size(min = 1)
-    private String lastQuery;
-
-    @Nullable
-    @Size(min = 1)
-    private String backendTypeName;
+    private Long totalDelaySize;
 }

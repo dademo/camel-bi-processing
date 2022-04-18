@@ -31,4 +31,6 @@ public interface DatabaseSchemaIndexService {
     );
 
     Optional<DataBackendDatabaseSchemaIndexStatisticsDto> findLatestDatabaseSchemaIndexStatistics(@Nonnull @Min(1) Long id);
+
+    Boolean existsById(@Nonnull @Min(1) Long id);
 }

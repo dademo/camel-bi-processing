@@ -80,14 +80,14 @@ public class DataBackendDatabaseConnectionEntity implements BaseEntity {
 
 
     @Nullable
-    @Size(min = 1)
+    @Size(min = 1, max = 255)
     @Column(name = "client_address", updatable = false)
     private String clientAddress;
 
     @Nullable
     @Size(min = 1)
-    @Column(name = "client_hostname", updatable = false)
-    private String clientHostname;
+    @Column(name = "client_host_name", updatable = false)
+    private String clientHostName;
 
     @Nullable
     @Min(1)

@@ -6,7 +6,8 @@
 
 package fr.dademo.supervision.service.controllers.hal.databaseschema;
 
-import fr.dademo.supervision.service.controllers.*;
+import fr.dademo.supervision.service.controllers.DataBackendDatabaseController;
+import fr.dademo.supervision.service.controllers.DataBackendDatabaseSchemaController;
 import fr.dademo.supervision.service.controllers.hal.AppLinkedEntityRepresentationModelAssembler;
 import fr.dademo.supervision.service.services.dto.DataBackendDatabaseSchemaDto;
 import lombok.AccessLevel;
@@ -45,13 +46,13 @@ public final class DataBackendDatabaseSchemaRepresentationModelAssembler
                 WebMvcLinkBuilder.methodOn(DataBackendDatabaseController.class).findDatabaseSchemasForDatabase(databaseId, Pageable.unpaged())
             ).withRel("database-schemas"),
             WebMvcLinkBuilder.linkTo(
-                WebMvcLinkBuilder.methodOn(DataBackendDatabaseSchemaTableController.class).findDataBackendDatabaseSchemaTableById(databaseId)
+                WebMvcLinkBuilder.methodOn(DataBackendDatabaseSchemaController.class).findDatabaseSchemaTablesForDatabase(databaseSchemaId, Pageable.unpaged())
             ).withRel("tables"),
             WebMvcLinkBuilder.linkTo(
-                WebMvcLinkBuilder.methodOn(DataBackendDatabaseSchemaViewController.class).findDataBackendDatabaseSchemaViewById(databaseId)
+                WebMvcLinkBuilder.methodOn(DataBackendDatabaseSchemaController.class).findDatabaseSchemaViewsForDatabase(databaseSchemaId, Pageable.unpaged())
             ).withRel("views"),
             WebMvcLinkBuilder.linkTo(
-                WebMvcLinkBuilder.methodOn(DataBackendDatabaseSchemaIndexController.class).findDataBackendDatabaseSchemaIndexById(databaseId)
+                WebMvcLinkBuilder.methodOn(DataBackendDatabaseSchemaController.class).findDatabaseSchemaIndexesForDatabase(databaseSchemaId, Pageable.unpaged())
             ).withRel("indexes"),
             WebMvcLinkBuilder.linkTo(
                 WebMvcLinkBuilder.methodOn(DataBackendDatabaseController.class).findDataBackendDatabaseById(databaseId)

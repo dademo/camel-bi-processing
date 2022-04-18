@@ -23,8 +23,6 @@ import java.util.List;
 @Mapper
 public interface DataBackendDatabaseEntityMapper {
 
-    String DURATION_TO_MILLISECONDS_MAPPER_NAME = "durationToMilliseconds";
-
     DataBackendDatabaseEntityMapper INSTANCE = Mappers.getMapper(DataBackendDatabaseEntityMapper.class);
 
     @Mapping(target = "id", ignore = true)

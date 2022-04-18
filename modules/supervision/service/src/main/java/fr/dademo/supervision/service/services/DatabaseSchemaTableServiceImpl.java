@@ -65,4 +65,9 @@ public class DatabaseSchemaTableServiceImpl implements DatabaseSchemaTableServic
             .findLatestDatabaseSchemaTableStatistic(id)
             .map(DataBackendDatabaseSchemaTableStatisticsEntityToDtoMapper.INSTANCE::viewToDto);
     }
+
+    @Override
+    public Boolean existsById(@Nonnull Long id) {
+        return repository.existsById(id);
+    }
 }

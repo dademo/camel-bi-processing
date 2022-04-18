@@ -32,4 +32,6 @@ public interface DatabaseService {
 
     Optional<DataBackendDatabaseStatisticsDto> findLatestDatabaseStatistics(@Nonnull @Min(1) Long id);
 
+    Boolean existsById(@Nonnull @Min(1) Long id);
+
 }
