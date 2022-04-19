@@ -6,6 +6,7 @@
 
 package fr.dademo.supervision.dependencies.backends.model.shared;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,6 +18,7 @@ import javax.annotation.Nullable;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Description of a supervised data backend.
@@ -46,9 +48,9 @@ public abstract class DataBackendDescriptionDefaultImpl extends DataBackendDescr
     @Size(min = 1, max = 1000)
     private String primaryUrl;
 
-    @Size(min = 1)
     @Nonnull
-    private Iterable<String> nodeUrls;
+    @JsonDeserialize(as = List.class, contentAs = DataBackendClusterNodeDefaultImpl.class)
+    private Iterable<DataBackendClusterNode> backendNodes;
 
     @Nonnull
     private DataBackendState backendState;

@@ -6,13 +6,11 @@
 
 package fr.dademo.supervision.dependencies.repositories;
 
-import fr.dademo.supervision.dependencies.entities.DataBackendStateExecutionEntity;
+import fr.dademo.supervision.dependencies.entities.DataBackendClusterNodeEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 /**
  * @author dademo
  */
-@Repository
-public interface DatabaseBackendStateRepository extends JpaRepository<DataBackendStateExecutionEntity, Long> {
+public interface DataBackendClusterNodeRepository extends JpaRepository<DataBackendClusterNodeEntity, Long> {
 }

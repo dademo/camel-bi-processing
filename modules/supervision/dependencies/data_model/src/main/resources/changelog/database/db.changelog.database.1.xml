@@ -327,10 +327,10 @@
                 />
             </column>
             <column name="is_primary" type="BOOLEAN">
-                <constraints nullable="true" unique="false"/>
+                <constraints nullable="false" unique="false"/>
             </column>
             <column name="is_active" type="BOOLEAN">
-                <constraints nullable="true" unique="false"/>
+                <constraints nullable="false" unique="false"/>
             </column>
             <column name="status" type="VARCHAR(255)">
                 <constraints nullable="true" unique="false"/>

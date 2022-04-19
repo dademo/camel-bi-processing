@@ -11,10 +11,7 @@ import fr.dademo.supervision.dependencies.backends.model.database.DatabaseDescri
 import fr.dademo.supervision.dependencies.backends.model.database.DatabaseDescriptionDefaultImpl;
 import fr.dademo.supervision.dependencies.backends.model.database.GlobalDatabaseDescriptionDefaultImpl;
 import fr.dademo.supervision.dependencies.backends.model.database.resources.*;
-import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendDescription;
-import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendModuleMetaData;
-import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendModuleMetaDataDefaultImpl;
-import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendState;
+import fr.dademo.supervision.dependencies.backends.model.shared.*;
 import fr.dademo.supervision.dependencies.backends.postgresql.configuration.ModuleBeans;
 import fr.dademo.supervision.dependencies.backends.postgresql.configuration.ModuleConfiguration;
 import fr.dademo.supervision.dependencies.backends.postgresql.repository.*;
@@ -33,6 +30,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -46,6 +44,8 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
 
     public static final String MODULE_NAME = "";
     public static final String MODULE_VERSION = PostgreSQLBackendStateFetchService.class.getPackage().getImplementationVersion();
+    private static final String ROLE_PRIMARY = "primary";
+    private static final String ROLE_REPLICATION = "replication";
 
     @Autowired
     private ModuleConfiguration moduleConfiguration;
@@ -103,7 +103,7 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
             .databaseConnections(getAllDatabasesConnections())
             .databasesDescriptions(getAllDatabasesDescriptions(false));
         applyDatabaseVersion(objectBuilder);
-        applyReplication(objectBuilder);
+        applyReplicationAndNodes(objectBuilder);
 
         return objectBuilder.build();
     }
@@ -121,7 +121,7 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
             .databaseConnections(getAllDatabasesConnections())
             .databasesDescriptions(getAllDatabasesDescriptions(true));
         applyDatabaseVersion(objectBuilder);
-        applyReplication(objectBuilder);
+        applyReplicationAndNodes(objectBuilder);
 
         return objectBuilder.build();
     }
@@ -164,7 +164,7 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
             .backendProductVersion(databaseProductVersion.getProductVersion());
     }
 
-    private void applyReplication(GlobalDatabaseDescriptionDefaultImpl.GlobalDatabaseDescriptionDefaultImplBuilder<?, ?> objectBuilder) {
+    private void applyReplicationAndNodes(GlobalDatabaseDescriptionDefaultImpl.GlobalDatabaseDescriptionDefaultImplBuilder<?, ?> objectBuilder) {
 
         final var replicationHosts = Stream.concat(
                 databaseReplicationPeerQueryRepository.getDatabaseControllerReplicationInformations().stream(),
@@ -174,10 +174,14 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
             .collect(Collectors.toList());
 
         objectBuilder
-            .nodeUrls(Stream.concat(
-                replicationHosts.stream().map(DatabaseReplicationPeer::getPeerHostName),
-                Stream.of(moduleConfiguration.getDatasource().getUrl())
-            ).collect(Collectors.toList()))
+            .backendNodes(
+                Stream.concat(
+                    Stream.of(moduleConfiguration.getDatasource().getUrl())
+                        .map(backendNodeBuilder(true)),
+                    replicationHosts.stream()
+                        .map(DatabaseReplicationPeer::getPeerHostName)
+                        .map(backendNodeBuilder(false))
+                ).collect(Collectors.toList()))
             .clusterSize(replicationHosts.size() + 1)
             .primaryCount(1)
             .replicaCount(replicationHosts.size())
@@ -255,5 +259,13 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
                 .getRowCountForTable(databaseSchema.getName(), databaseTable.getName())
                 .getRowCount()
         );
+    }
+
+    private Function<String, DataBackendClusterNode> backendNodeBuilder(boolean isPrimary) {
+
+        return url -> DataBackendClusterNodeDefaultImpl.builder()
+            .url(url)
+            .role(isPrimary ? ROLE_PRIMARY : ROLE_REPLICATION)
+            .build();
     }
 }

@@ -182,6 +182,66 @@
                 <constraints nullable="false" unique="false"/>
             </column>
         </createTable>
+
+        <!-- fr.dademo.supervision.entities.DataBackendClusterNodeEntity -->
+        <createTable tableName="data_backend_cluster_node" schemaName="${schema_name}">
+            <column name="id" type="INTEGER" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="id_data_backend_description" type="INTEGER">
+                <constraints
+                    nullable="false" unique="false"
+                    foreignKeyName="fk_data_backend_cluster_node__data_backend_description_id"
+                    referencedTableSchemaName="${schema_name}"
+                    referencedTableName="data_backend_description"
+                    referencedColumnNames="id"
+                />
+            </column>
+            <column name="url" type="VARCHAR(1000)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="role" type="VARCHAR(255)">
+                <constraints nullable="true" unique="false"/>
+            </column>
+        </createTable>
+        <createIndex tableName="data_backend_cluster_node"
+                     indexName="idx_data_backend_cluster_node_url"
+                     schemaName="${schema_name}">
+            <column name="url" descending="true"/>
+        </createIndex>
+        <createIndex tableName="data_backend_cluster_node"
+                     indexName="idx_data_backend_cluster_node_role"
+                     schemaName="${schema_name}">
+            <column name="role" descending="true"/>
+        </createIndex>
+
+        <createTable tableName="data_backend_cluster_node__state_execution" schemaName="${schema_name}">
+            <column name="id_data_backend_cluster_node" type="INTEGER">
+                <constraints
+                    nullable="false" unique="false"
+                    foreignKeyName="fk_data_backend_cluster_node__state_execution__cluster_node_id"
+                    referencedTableSchemaName="${schema_name}"
+                    referencedTableName="data_backend_cluster_node"
+                    referencedColumnNames="id"
+                />
+            </column>
+            <column name="id_backend_state_execution" type="INTEGER">
+                <constraints
+                    nullable="false" unique="false"
+                    foreignKeyName="fk_data_backend_cluster_node__state_execution__backend_state_execution_id"
+                    referencedTableSchemaName="${schema_name}"
+                    referencedTableName="data_backend_state_execution"
+                    referencedColumnNames="id"
+                />
+            </column>
+        </createTable>
+        <createIndex tableName="data_backend_cluster_node__state_execution"
+                     indexName="idx_data_backend_cluster_node__state_execution__uniq"
+                     schemaName="${schema_name}"
+                     unique="true">
+            <column name="id_data_backend_cluster_node" descending="true"/>
+            <column name="id_backend_state_execution" descending="true"/>
+        </createIndex>
     </changeSet>
 
 </databaseChangeLog>

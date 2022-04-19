@@ -6,8 +6,9 @@
 
 package fr.dademo.supervision.dependencies.persistence.services.mappers;
 
-import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendModuleMetaData;
-import fr.dademo.supervision.dependencies.entities.DataBackendModuleMetaDataEntity;
+import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendClusterNode;
+import fr.dademo.supervision.dependencies.entities.DataBackendClusterNodeEntity;
+import fr.dademo.supervision.dependencies.entities.DataBackendDescriptionEntity;
 import fr.dademo.supervision.dependencies.entities.DataBackendStateExecutionEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -19,14 +20,16 @@ import java.util.List;
  * @author dademo
  */
 @Mapper
-public interface DataBackendModuleMetaDataMapper {
+public interface DataBackendClusterNodeEntityMapper {
 
-    DataBackendModuleMetaDataMapper INSTANCE = Mappers.getMapper(DataBackendModuleMetaDataMapper.class);
+    DataBackendClusterNodeEntityMapper INSTANCE = Mappers.getMapper(DataBackendClusterNodeEntityMapper.class);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(source = "backendDescription", target = "backendDescription")
     @Mapping(source = "backendStateExecutions", target = "backendStateExecutions")
-    DataBackendModuleMetaDataEntity moduleMetaDataToEntity(
-        DataBackendModuleMetaData source,
+    DataBackendClusterNodeEntity toDataBackendClusterNodeEntity(
+        DataBackendClusterNode source,
+        DataBackendDescriptionEntity backendDescription,
         List<DataBackendStateExecutionEntity> backendStateExecutions
     );
 }

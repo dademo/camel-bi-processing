@@ -63,9 +63,8 @@ public interface DataBackendDescription extends DataBackendDescriptionBase {
      *
      * @return the URL of all nodes across the cluster
      */
-    @Size(min = 1)
     @Nonnull
-    Iterable<String> getNodeUrls();
+    Iterable<DataBackendClusterNode> getBackendNodes();
 
     /**
      * Get the data backend kind.

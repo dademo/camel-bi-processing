@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static fr.dademo.supervision.dependencies.backends.postgresql.configuration.ModuleBeans.MODULE_JDBC_TEMPLATE_BEAN_NAME;
@@ -80,7 +81,8 @@ public class DatabaseReplicationPeerQueryRepositoryImpl implements DatabaseRepli
                 query,
                 new DatabaseReplicationPeerEntity.DatabaseReplicationPeerControllerRowMapper()
             ))
-            .filter(v -> !v.isEmpty())
+            .filter(Optional::isPresent)
+            .map(Optional::get)
             .findFirst()
             .orElse(Collections.emptyList());
     }
@@ -90,16 +92,17 @@ public class DatabaseReplicationPeerQueryRepositoryImpl implements DatabaseRepli
     public List<DatabaseReplicationPeerEntity> getDatabaseClientReplicationInformations() {
 
         log.debug("Getting client replication informations");
-        return applyQuery(CLIENT_QUERY, new DatabaseReplicationPeerEntity.DatabaseReplicationPeerClientRowMapper());
+        return applyQuery(CLIENT_QUERY, new DatabaseReplicationPeerEntity.DatabaseReplicationPeerClientRowMapper())
+            .orElse(Collections.emptyList());
     }
 
-    private <T> List<T> applyQuery(String query, RowMapper<T> mapper) {
+    private <T> Optional<List<T>> applyQuery(String query, RowMapper<T> mapper) {
 
         try {
-            return jdbcTemplate.query(query, mapper);
+            return Optional.of(jdbcTemplate.query(query, mapper));
         } catch (BadSqlGrammarException e) {
             log.debug("An error occurred while running query", e);
-            return Collections.emptyList();
+            return Optional.empty();
         }
     }
 }

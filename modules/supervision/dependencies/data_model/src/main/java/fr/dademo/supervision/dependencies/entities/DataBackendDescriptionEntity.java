@@ -73,6 +73,11 @@ public class DataBackendDescriptionEntity implements BaseEntity {
     private List<DataBackendDatabaseReplicationPeerEntity> databaseReplicationPeers;
 
     @Nonnull
+    @OneToMany(mappedBy = "backendDescription", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @ToString.Exclude
+    private List<DataBackendClusterNodeEntity> dataBackendClusterNodes;
+
+    @Nonnull
     @Size(min = 1, max = 255)
     @Column(name = "backend_product_name", nullable = false, updatable = false)
     private String backendProductName;
@@ -92,14 +97,9 @@ public class DataBackendDescriptionEntity implements BaseEntity {
     private Date startTime;
 
     @Nonnull
+    @Size(min = 1, max = 1000)
     @Column(name = "primary_url", updatable = false)
     private String primaryUrl;
-
-    // TODO
-    //@Size(min = 0)
-    //@Nonnull
-    //@Column(name = "node_urls", updatable = false)
-    //private List<String> nodeUrls;
 
     @Nonnull
     @Column(name = "backend_state", nullable = false, updatable = false)

@@ -11,8 +11,8 @@ import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendModul
 import fr.dademo.supervision.dependencies.entities.DataBackendDescriptionEntity;
 import fr.dademo.supervision.dependencies.entities.DataBackendModuleMetaDataEntity;
 import fr.dademo.supervision.dependencies.entities.DataBackendStateExecutionEntity;
-import fr.dademo.supervision.dependencies.persistence.services.mappers.DataBackendDescriptionMapper;
-import fr.dademo.supervision.dependencies.persistence.services.mappers.DataBackendModuleMetaDataMapper;
+import fr.dademo.supervision.dependencies.persistence.services.mappers.DataBackendDescriptionEntityMapper;
+import fr.dademo.supervision.dependencies.persistence.services.mappers.DataBackendModuleMetaDataEntityMapper;
 import fr.dademo.supervision.dependencies.repositories.DataBackendDescriptionRepository;
 import fr.dademo.supervision.dependencies.repositories.DataBackendModuleMetaDataRepository;
 import fr.dademo.supervision.dependencies.repositories.DatabaseBackendStateRepository;
@@ -54,7 +54,7 @@ public abstract class AbstractGenericDataBackendMappingService {
 
     private DataBackendModuleMetaDataEntity getDataBackendModuleMetaDataEntity(@Nonnull DataBackendModuleMetaData backendModuleMetaData) {
 
-        final var defaultEntity = DataBackendModuleMetaDataMapper.INSTANCE.moduleMetaDataToEntity(
+        final var defaultEntity = DataBackendModuleMetaDataEntityMapper.INSTANCE.toDataBackendModuleMetaDataEntity(
             backendModuleMetaData,
             new ArrayList<>()
         );
@@ -71,8 +71,9 @@ public abstract class AbstractGenericDataBackendMappingService {
 
     private DataBackendDescriptionEntity getDataBackendDescriptionEntity(@Nonnull DataBackendDescription dataBackendDescription) {
 
-        final var defaultEntity = DataBackendDescriptionMapper.INSTANCE.moduleDescriptionToEntity(
+        final var defaultEntity = DataBackendDescriptionEntityMapper.INSTANCE.toDataBackendDescriptionEntity(
             dataBackendDescription,
+            new ArrayList<>(),
             new ArrayList<>(),
             new ArrayList<>(),
             new ArrayList<>(),

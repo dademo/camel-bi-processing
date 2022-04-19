@@ -9,7 +9,9 @@ package fr.dademo.supervision.dependencies.persistence.services;
 import fr.dademo.supervision.dependencies.backends.model.database.DatabaseDescription;
 import fr.dademo.supervision.dependencies.backends.model.database.GlobalDatabaseDescription;
 import fr.dademo.supervision.dependencies.backends.model.database.resources.*;
+import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendClusterNode;
 import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendModuleMetaData;
+import fr.dademo.supervision.dependencies.entities.DataBackendClusterNodeEntity;
 import fr.dademo.supervision.dependencies.entities.DataBackendDescriptionEntity;
 import fr.dademo.supervision.dependencies.entities.DataBackendStateExecutionEntity;
 import fr.dademo.supervision.dependencies.entities.database.database.DataBackendDatabaseEntity;
@@ -18,6 +20,7 @@ import fr.dademo.supervision.dependencies.entities.database.databasereplicationp
 import fr.dademo.supervision.dependencies.entities.database.databaseschema.DataBackendDatabaseSchemaEntity;
 import fr.dademo.supervision.dependencies.entities.database.databasetable.DataBackendDatabaseSchemaTableEntity;
 import fr.dademo.supervision.dependencies.entities.database.databaseview.DataBackendDatabaseSchemaViewEntity;
+import fr.dademo.supervision.dependencies.persistence.services.mappers.DataBackendClusterNodeEntityMapper;
 import fr.dademo.supervision.dependencies.persistence.services.mappers.database.connection.DataBackendDatabaseConnectionEntityMapper;
 import fr.dademo.supervision.dependencies.persistence.services.mappers.database.database.DataBackendDatabaseEntityMapper;
 import fr.dademo.supervision.dependencies.persistence.services.mappers.database.database.DataBackendDatabaseStatisticsEntityMapper;
@@ -31,6 +34,7 @@ import fr.dademo.supervision.dependencies.persistence.services.mappers.database.
 import fr.dademo.supervision.dependencies.persistence.services.mappers.database.replicationpeer.DataBackendDatabaseReplicationPeerEntityMapper;
 import fr.dademo.supervision.dependencies.persistence.services.mappers.database.replicationpeer.DataBackendDatabaseReplicationPeerStatisticsEntityMapper;
 import fr.dademo.supervision.dependencies.persistence.services.specialSpecifications.DataBackendDatabaseEntitySpecification;
+import fr.dademo.supervision.dependencies.repositories.DataBackendClusterNodeRepository;
 import fr.dademo.supervision.dependencies.repositories.DataBackendReplicationPeerRepository;
 import fr.dademo.supervision.dependencies.repositories.DatabaseBackendStateRepository;
 import fr.dademo.supervision.dependencies.repositories.database.*;
@@ -52,6 +56,9 @@ public class DatabaseBackendMappingServiceImpl extends AbstractGenericDataBacken
 
     @Autowired
     private DatabaseBackendStateRepository databaseBackendStateRepository;
+
+    @Autowired
+    private DataBackendClusterNodeRepository dataBackendClusterNodeRepository;
 
     @Autowired
     private DataBackendDatabaseRepository dataBackendDatabaseRepository;
@@ -85,6 +92,12 @@ public class DatabaseBackendMappingServiceImpl extends AbstractGenericDataBacken
 
         databaseBackendStateRepository.save(backendStateExecutionEntity);
 
+        // Applying cluster-related values
+        applyNodeReplicationValues(
+            backendStateExecutionEntity,
+            globalDatabaseDescription
+        );
+
         // Applying database-related values
         applyDatabaseValues(
             backendStateExecutionEntity,
@@ -97,7 +110,7 @@ public class DatabaseBackendMappingServiceImpl extends AbstractGenericDataBacken
     private void applyDatabaseValues(DataBackendStateExecutionEntity dataBackendStateExecution,
                                      GlobalDatabaseDescription globalDatabaseDescription) {
 
-        var dataBackendDescription = dataBackendStateExecution.getDataBackendDescription();
+        final var dataBackendDescription = dataBackendStateExecution.getDataBackendDescription();
 
         dataBackendDescription.setDatabases(
             StreamSupport.stream(globalDatabaseDescription.getDatabasesDescriptions().spliterator(), false)
@@ -346,6 +359,40 @@ public class DatabaseBackendMappingServiceImpl extends AbstractGenericDataBacken
                 dataBackendStateExecution
             )
         );
+
+        return finalEntity;
+    }
+
+    private void applyNodeReplicationValues(DataBackendStateExecutionEntity dataBackendStateExecution,
+                                            GlobalDatabaseDescription globalDatabaseDescription) {
+
+        dataBackendStateExecution.getDataBackendDescription().setDataBackendClusterNodes(
+            StreamSupport.stream(globalDatabaseDescription.getBackendNodes().spliterator(), false)
+                .map(backendNode -> mapToDataBackendClusterNodeEntity(backendNode, dataBackendStateExecution))
+                .collect(Collectors.toList())
+        );
+    }
+
+    private DataBackendClusterNodeEntity mapToDataBackendClusterNodeEntity(DataBackendClusterNode dataBackendClusterNode,
+                                                                           DataBackendStateExecutionEntity dataBackendStateExecution) {
+
+        final var entity = DataBackendClusterNodeEntityMapper.INSTANCE.toDataBackendClusterNodeEntity(
+            dataBackendClusterNode,
+            dataBackendStateExecution.getDataBackendDescription(),
+            new ArrayList<>()
+        );
+
+        final var finalEntity = dataBackendClusterNodeRepository
+            .findOne(Example.of(
+                entity,
+                ExampleMatcher.matching()
+                    .withIgnorePaths(
+                        "backendStateExecutions"
+                    )
+            ))
+            .orElseGet(() -> dataBackendClusterNodeRepository.save(entity));
+
+        finalEntity.getBackendStateExecutions().add(dataBackendStateExecution);
 
         return finalEntity;
     }
