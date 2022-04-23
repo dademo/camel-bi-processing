@@ -67,7 +67,7 @@ public interface ExtendedDataBackendDatabaseRepository extends DataBackendDataba
     @Query("SELECT s " +
         "   FROM DataBackendDatabaseStatisticsEntity s " +
         "   INNER JOIN s.backendStateExecution b " +
-        "   WHERE s.database.id = :id" +
+        "   WHERE s.database.id = :id " +
         "   AND b.timestamp = (" +
         "       SELECT MAX(b.timestamp) AS timestamp " +
         "       FROM DataBackendDatabaseStatisticsEntity s " +

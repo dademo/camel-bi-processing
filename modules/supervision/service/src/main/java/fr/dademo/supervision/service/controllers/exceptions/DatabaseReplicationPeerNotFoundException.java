@@ -19,9 +19,9 @@ import java.util.Map;
  * @author dademo
  */
 @RequiredArgsConstructor
-public class DatabaseSchemaTableNotFoundException extends ThrowableProblem {
+public class DatabaseReplicationPeerNotFoundException extends ThrowableProblem {
 
-    private static final long serialVersionUID = 2207706126538012379L;
+    private static final long serialVersionUID = 1499910069926780424L;
 
     @Nonnull
     private final Long id;
@@ -38,7 +38,7 @@ public class DatabaseSchemaTableNotFoundException extends ThrowableProblem {
 
     @Override
     public String getDetail() {
-        return MessageFormat.format("Database schema table with id {0} not found", id);
+        return MessageFormat.format("Database replication peer with id {0} not found", id);
     }
 
     @Override

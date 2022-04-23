@@ -63,7 +63,7 @@ public interface ExtendedDataBackendDatabaseSchemaViewRepository extends DataBac
     @Query("SELECT s " +
         "   FROM DataBackendDatabaseSchemaViewStatisticsEntity s " +
         "   INNER JOIN s.backendStateExecution b " +
-        "   WHERE s.view.id = :id" +
+        "   WHERE s.view.id = :id " +
         "   AND b.timestamp = (" +
         "       SELECT MAX(b.timestamp) AS timestamp " +
         "       FROM DataBackendDatabaseSchemaViewStatisticsEntity s " +

@@ -6,15 +6,12 @@
 
 package fr.dademo.supervision.service.controllers.hal.databackend;
 
-import fr.dademo.supervision.service.controllers.DataBackendController;
 import fr.dademo.supervision.service.controllers.hal.AppRootEntityRepresentationModelAssembler;
 import fr.dademo.supervision.service.services.dto.DataBackendDescriptionDto;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 
 import javax.annotation.Nonnull;
 
@@ -30,7 +27,6 @@ public final class DataBackendRepresentationModelAssembler
     @Nonnull
     @Override
     public EntityModel<DataBackendDescriptionDto> toModel(@Nonnull DataBackendDescriptionDto entity) {
-
         return EntityModel.of(
             entity,
             getLinks(entity.getId())
@@ -39,17 +35,6 @@ public final class DataBackendRepresentationModelAssembler
 
     @Nonnull
     public Link[] getLinks(@Nonnull Long dataBackendId) {
-
-        return new Link[]{
-            WebMvcLinkBuilder.linkTo(
-                WebMvcLinkBuilder.methodOn(DataBackendController.class).findDataBackendById(dataBackendId)
-            ).withSelfRel(),
-            WebMvcLinkBuilder.linkTo(
-                WebMvcLinkBuilder.methodOn(DataBackendController.class).findDataBackends(Pageable.unpaged())
-            ).withRel("data-backends"),
-            WebMvcLinkBuilder.linkTo(
-                WebMvcLinkBuilder.methodOn(DataBackendController.class).findDatabasesForDataBackend(dataBackendId, Pageable.unpaged())
-            ).withRel("databases"),
-        };
+        return DataBackendRepresentationModelLinkProvider.usingDataBackendId(dataBackendId).get();
     }
 }

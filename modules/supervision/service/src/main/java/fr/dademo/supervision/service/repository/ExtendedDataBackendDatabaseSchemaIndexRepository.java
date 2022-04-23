@@ -63,7 +63,7 @@ public interface ExtendedDataBackendDatabaseSchemaIndexRepository extends DataBa
     @Query("SELECT s " +
         "   FROM DataBackendDatabaseSchemaIndexStatisticsEntity s " +
         "   INNER JOIN s.backendStateExecution b " +
-        "   WHERE s.index.id = :id" +
+        "   WHERE s.index.id = :id " +
         "   AND b.timestamp = (" +
         "       SELECT MAX(b.timestamp) AS timestamp " +
         "       FROM DataBackendDatabaseSchemaIndexStatisticsEntity s " +

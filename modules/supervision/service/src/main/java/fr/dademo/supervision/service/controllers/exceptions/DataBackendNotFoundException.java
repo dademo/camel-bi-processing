@@ -6,6 +6,7 @@
 
 package fr.dademo.supervision.service.controllers.exceptions;
 
+import lombok.RequiredArgsConstructor;
 import org.zalando.problem.Status;
 import org.zalando.problem.StatusType;
 import org.zalando.problem.ThrowableProblem;
@@ -17,15 +18,13 @@ import java.util.Map;
 /**
  * @author dademo
  */
+@RequiredArgsConstructor
 public class DataBackendNotFoundException extends ThrowableProblem {
 
     private static final long serialVersionUID = 2687728885181781343L;
 
+    @Nonnull
     private final Long id;
-
-    public DataBackendNotFoundException(@Nonnull Long id) {
-        this.id = id;
-    }
 
     @Override
     public String getTitle() {

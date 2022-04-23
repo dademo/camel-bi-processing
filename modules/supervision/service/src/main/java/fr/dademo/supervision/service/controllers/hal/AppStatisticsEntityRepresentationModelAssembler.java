@@ -24,7 +24,7 @@ public interface AppStatisticsEntityRepresentationModelAssembler<T> {
 
     @Nonnull
     default CollectionModel<T> toCollectionModel(@Nonnull Iterable<T> entities) {
-        return CollectionModel.of(entities);
+        return CollectionModel.of(entities, getLinks());
     }
 
     @Nonnull

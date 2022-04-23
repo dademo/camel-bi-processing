@@ -100,7 +100,7 @@ public class DataBackendDatabaseSchemaController implements ProblemHandling {
             content = {
                 @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DataBackendDatabaseSchemaTableDto.class))
             }),
-        @ApiResponse(responseCode = "404", description = "Schema does not exists or no tables are linked to the schema",
+        @ApiResponse(responseCode = "404", description = "Schema does not exists",
             content = {
                 @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DefaultProblem.class))
             })
@@ -127,7 +127,7 @@ public class DataBackendDatabaseSchemaController implements ProblemHandling {
             content = {
                 @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DataBackendDatabaseSchemaViewDto.class))
             }),
-        @ApiResponse(responseCode = "404", description = "Schema does not exists or no views are linked to the schema",
+        @ApiResponse(responseCode = "404", description = "Schema does not exists",
             content = {
                 @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DefaultProblem.class))
             })
@@ -155,7 +155,7 @@ public class DataBackendDatabaseSchemaController implements ProblemHandling {
             content = {
                 @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DataBackendDatabaseSchemaIndexDto.class))
             }),
-        @ApiResponse(responseCode = "404", description = "Schema does not exists or no indexes are linked to the schema",
+        @ApiResponse(responseCode = "404", description = "Schema does not exists",
             content = {
                 @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DefaultProblem.class))
             })

@@ -6,6 +6,7 @@
 
 package fr.dademo.supervision.service.controllers.exceptions;
 
+import lombok.RequiredArgsConstructor;
 import org.zalando.problem.Status;
 import org.zalando.problem.StatusType;
 import org.zalando.problem.ThrowableProblem;
@@ -17,15 +18,13 @@ import java.util.Map;
 /**
  * @author dademo
  */
+@RequiredArgsConstructor
 public class DatabaseSchemaNotFoundException extends ThrowableProblem {
 
     private static final long serialVersionUID = 2207706126538012379L;
 
+    @Nonnull
     private final Long id;
-
-    public DatabaseSchemaNotFoundException(@Nonnull Long id) {
-        this.id = id;
-    }
 
     @Override
     public String getTitle() {

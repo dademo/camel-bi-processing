@@ -60,8 +60,6 @@ public class DataBackendDatabaseController implements ProblemHandling {
     @Autowired
     private DatabaseSchemaService databaseSchemaService;
     @Autowired
-    private PagedResourcesAssembler<DataBackendDatabaseDto> databaseDescriptionDtoPagedResourcesAssembler;
-    @Autowired
     private PagedResourcesAssembler<DataBackendDatabaseSchemaDto> databaseSchemaDescriptionDtoPagedResourcesAssembler;
 
     @Operation(summary = "Get a data backend database description")
@@ -93,7 +91,7 @@ public class DataBackendDatabaseController implements ProblemHandling {
             content = {
                 @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DataBackendDatabaseSchemaDto.class))
             }),
-        @ApiResponse(responseCode = "404", description = "Database does not exists or no schemas are linked to the database",
+        @ApiResponse(responseCode = "404", description = "Database does not exists",
             content = {
                 @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DefaultProblem.class))
             })
@@ -115,11 +113,11 @@ public class DataBackendDatabaseController implements ProblemHandling {
 
     @Operation(summary = "Get a data backend database statistics by id within a date range")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Database schema table statistics",
+        @ApiResponse(responseCode = "200", description = "Database schema statistics",
             content = {
                 @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DataBackendDatabaseStatisticsDto.class))
             }),
-        @ApiResponse(responseCode = "404", description = "Database schema table not found",
+        @ApiResponse(responseCode = "404", description = "Database schema not found",
             content = {
                 @Content(mediaType = MediaTypes.HTTP_PROBLEM_DETAILS_JSON_VALUE, schema = @Schema(implementation = DefaultProblem.class))
             })
@@ -127,21 +125,21 @@ public class DataBackendDatabaseController implements ProblemHandling {
     @GetMapping("/statistics")
     @ResponseStatus(HttpStatus.OK)
     public CollectionModel<DataBackendDatabaseStatisticsDto> findDataBackendDatabaseStatisticsById(
-        @PathVariable("id") @Min(1) @Nonnull Long tableId,
+        @PathVariable("id") @Min(1) @Nonnull Long databaseId,
         @RequestParam("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @Parameter(name = "from", description = "The minimum date range", required = true) Date from,
         @RequestParam("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @Parameter(name = "to", description = "The maximum date range", required = true) Date to) {
 
-        return DataBackendDatabaseStatisticsRepresentationModelAssembler.of(tableId, from, to)
-            .toCollectionModel(databaseService.findDatabaseStatisticsBetween(tableId, from, to));
+        return DataBackendDatabaseStatisticsRepresentationModelAssembler.of(databaseId, from, to)
+            .toCollectionModel(databaseService.findDatabaseStatisticsBetween(databaseId, from, to));
     }
 
     @Operation(summary = "Get a data backend database latest statistic")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Latest database schema table statistic",
+        @ApiResponse(responseCode = "200", description = "Latest database schema statistic",
             content = {
                 @Content(mediaType = MediaTypes.HAL_JSON_VALUE, schema = @Schema(implementation = DataBackendDatabaseStatisticsDto.class))
             }),
-        @ApiResponse(responseCode = "404", description = "Database schema table not found",
+        @ApiResponse(responseCode = "404", description = "Database schema not found",
             content = {
                 @Content(mediaType = MediaTypes.HTTP_PROBLEM_DETAILS_JSON_VALUE, schema = @Schema(implementation = DefaultProblem.class))
             })
@@ -149,13 +147,13 @@ public class DataBackendDatabaseController implements ProblemHandling {
     @GetMapping("/latest-statistic")
     @ResponseStatus(HttpStatus.OK)
     public EntityModel<DataBackendDatabaseStatisticsDto> findLatestDataBackendDatabaseStatisticById(
-        @PathVariable("id") @Min(1) @Nonnull Long tableId) {
+        @PathVariable("id") @Min(1) @Nonnull Long databaseId) {
 
-        return databaseService.findLatestDatabaseStatistics(tableId)
+        return databaseService.findLatestDatabaseStatistics(databaseId)
             .map(
                 DataBackendDatabaseStatisticsRepresentationModelAssembler
-                    .ofDatabaseWithDefault(tableId)::toModel
+                    .ofDatabaseWithDefault(databaseId)::toModel
             )
-            .orElseThrow(() -> new DatabaseNotFoundException(tableId));
+            .orElseThrow(() -> new DatabaseNotFoundException(databaseId));
     }
 }
