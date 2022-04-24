@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DataBackendsComponent } from './components/pages/data-backends/data-backends.component';
+import { DataBackendsComponent } from './pages/data-backends/data-backends.component';
 
 const routes: Routes = [
   { path: '', component: DataBackendsComponent },

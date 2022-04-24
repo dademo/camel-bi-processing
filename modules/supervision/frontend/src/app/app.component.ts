@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { firstValueFrom, map, Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { AppConfigService, ApplicationState } from './services';
 
 @Component({

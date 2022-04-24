@@ -17,7 +17,7 @@ import { Location } from '@angular/common';
 import { AppGuardComponent } from './components/app-guard/app-guard.component';
 import { AppInterfaceComponent } from './components/app-interface/app-interface.component';
 import { AppSidenavComponent } from './components/app-sidenav/app-sidenav.component';
-import { DataBackendsComponent } from './components/pages/data-backends/data-backends.component';
+import { DataBackendsComponent } from './pages/data-backends/data-backends.component';
 
 @NgModule({
   declarations: [
