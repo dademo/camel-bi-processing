@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DataBackendsComponent } from './pages/data-backends/data-backends.component';
+import { GenericPageViewComponent } from './components/generic-page-view/generic-page-view.component';
 
 const routes: Routes = [
-  { path: '', component: DataBackendsComponent },
+  { path: '', component: GenericPageViewComponent },
 ];
 
 @NgModule({

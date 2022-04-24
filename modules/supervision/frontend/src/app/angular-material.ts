@@ -5,6 +5,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 // Rendering
@@ -30,6 +31,7 @@ export function getAngularMaterialModules(): Array<any> {
         MatMenuModule,
         MatButtonModule,
         MatSlideToggleModule,
+        MatButtonToggleModule,
         MatSelectModule,
         MatSliderModule,
         MatBadgeModule,

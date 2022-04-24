@@ -33,11 +33,12 @@ mat-drawer-container {
     }
 
     mat-drawer-content {
-        height: 100%;
-        width: 100%;
+        height: calc(100% - $app-progress-height);
+        width: auto;
         padding-top: $app-progress-height;
         div.app-body {
             padding: $app-body-padding;
+            padding-top: $app-body-padding - $app-progress-height;
         }
     }
 }
