@@ -7,7 +7,7 @@
         *ngFor="let theme of themes | async">
         <mat-radio-button [checked]="theme.enabled" (click)="setApplicationTheme(theme.theme)">
             {{ theme.displayName }}
-        </mat-radio-button>        
+        </mat-radio-button>
         <span fxFlex></span>
     </button>
     

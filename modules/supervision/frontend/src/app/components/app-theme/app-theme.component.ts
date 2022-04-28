@@ -37,7 +37,7 @@ export class AppThemeComponent implements OnInit {
 
     this.appConfig
       .themeChange
-      .subscribe(() => this.onThemeChange());
+      .subscribe(newTheme => this.onThemeChange(newTheme));
   }
 
   ngOnInit(): void {
@@ -51,7 +51,9 @@ export class AppThemeComponent implements OnInit {
     this.appConfig.setIsDark(value);
   }
 
-  private onThemeChange(): void {
+  private onThemeChange(newTheme: ApplicationTheme): void {
+
+    this._applicationTheme = newTheme;
     this.themesSubject.next(this._themes);
     this.cdRef.markForCheck();
   }
