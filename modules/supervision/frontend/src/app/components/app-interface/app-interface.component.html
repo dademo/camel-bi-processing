@@ -4,6 +4,8 @@
             <mat-icon>menu</mat-icon>
         </button>
         <span>{{ pageTitle | async }}</span>
+        <span fxFlex></span>
+        <app-theme></app-theme>
     </mat-toolbar>
     <mat-drawer-container [class.loading]="isLoading | async">
         <mat-drawer mode="side" opened #drawer>
@@ -15,5 +17,6 @@
                 <ng-content></ng-content>
             </div>
         </mat-drawer-content>
+
     </mat-drawer-container>
 </div>

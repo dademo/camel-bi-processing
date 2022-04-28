@@ -17,11 +17,12 @@ import { Location } from '@angular/common';
 import { AppGuardComponent } from './components/app-guard/app-guard.component';
 import { AppInterfaceComponent } from './components/app-interface/app-interface.component';
 import { AppSidenavComponent } from './components/app-sidenav/app-sidenav.component';
-import { DataBackendsComponent } from './pages/data-backends/data-backends.component';
 import { GenericPageViewComponent } from './components/generic-page-view/generic-page-view.component';
 import { GenericPageViewDisplayListComponent } from './components/generic-page-view/generic-page-view-display-list/generic-page-view-display-list.component';
 import { GenericPageViewDisplayCardsComponent } from './components/generic-page-view/generic-page-view-display-cards/generic-page-view-display-cards.component';
 import { GenericPageViewRouteComponent } from './components/generic-page-view/generic-page-view-route/generic-page-view-route.component';
+import { AppThemeComponent } from './components/app-theme/app-theme.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -29,14 +30,15 @@ import { GenericPageViewRouteComponent } from './components/generic-page-view/ge
     AppGuardComponent,
     AppInterfaceComponent,
     AppSidenavComponent,
-    DataBackendsComponent,
     GenericPageViewComponent,
     GenericPageViewDisplayListComponent,
     GenericPageViewDisplayCardsComponent,
-    GenericPageViewRouteComponent
+    GenericPageViewRouteComponent,
+    AppThemeComponent
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     FlexLayoutModule,

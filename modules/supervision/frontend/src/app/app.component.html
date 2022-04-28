@@ -1,4 +1,4 @@
-<div class="app">
+<div class="app" [class]="(theme | async) || 'theme-deep-purple-amber'" [class.theme-dark]="isDark | async">
   <ng-template [ngIf]="isStarting | async" [ngIfElse]="app_guard">
     <app-guard></app-guard>
   </ng-template>

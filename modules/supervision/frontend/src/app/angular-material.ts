@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSelectModule } from '@angular/material/select';
+import { MatRadioModule } from '@angular/material/radio';
 import { MatSliderModule } from '@angular/material/slider';
 // Rendering
 import { MatBadgeModule } from '@angular/material/badge';
@@ -33,6 +34,7 @@ export function getAngularMaterialModules(): Array<any> {
         MatSlideToggleModule,
         MatButtonToggleModule,
         MatSelectModule,
+        MatRadioModule,
         MatSliderModule,
         MatBadgeModule,
         MatIconModule,

@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DataBackendsComponent } from './data-backends.component';
+import { AppThemeComponent } from './app-theme.component';
 
-describe('DataBackendsComponent', () => {
-  let component: DataBackendsComponent;
-  let fixture: ComponentFixture<DataBackendsComponent>;
+describe('AppThemeComponent', () => {
+  let component: AppThemeComponent;
+  let fixture: ComponentFixture<AppThemeComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DataBackendsComponent ]
+      declarations: [ AppThemeComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DataBackendsComponent);
+    fixture = TestBed.createComponent(AppThemeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

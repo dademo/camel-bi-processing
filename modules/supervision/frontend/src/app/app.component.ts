@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { AppConfigService, ApplicationState } from './services';
 
 @Component({
@@ -8,12 +8,23 @@ import { AppConfigService, ApplicationState } from './services';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+
+  public readonly isStarting: Observable<boolean>;
+  public readonly theme: Observable<string>;
+  public readonly isDark: Observable<boolean>;
+
+  public get isApplicationError(): boolean {
+    return this.appConfig.applicationState === ApplicationState.APPLICATION_ERROR;
+  }
   
   constructor(private appConfig: AppConfigService) {
     
+    this.isStarting = this._isStarting;
+    this.theme = this._theme;
+    this.isDark = this._isDark;
   }
 
-  public get isStarting(): Observable<boolean> {
+  private get _isStarting(): Observable<boolean> {
 
     return this.appConfig.events
       .pipe(
@@ -21,7 +32,17 @@ export class AppComponent {
       );
   }
 
-  public get isApplicationError(): boolean {
-    return this.appConfig.applicationState === ApplicationState.APPLICATION_ERROR;
+  private get _theme(): Observable<string> {
+
+    return this.appConfig
+      .themeChange
+      .pipe(map(theme => `theme-${theme.theme}`));
+  }
+
+  private get _isDark(): Observable<boolean> {
+
+    return this.appConfig
+      .themeChange
+      .pipe(map(theme => theme.isDark));
   }
 }

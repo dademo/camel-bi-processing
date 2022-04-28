@@ -9,6 +9,11 @@ export interface ApplicationConfiguration {
     proxyUrl?: string,
 }
 
+export interface ApplicationTheme {
+    theme: string,
+    isDark: boolean,
+}
+
 export interface FavouriteLink {
     url: string,
     name?: string,

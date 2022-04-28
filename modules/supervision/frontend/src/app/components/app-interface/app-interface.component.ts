@@ -10,21 +10,28 @@ import { AppConfigService } from 'src/app/services';
 })
 export class AppInterfaceComponent implements OnInit {
 
-  public get pageTitle(): Observable<string> {
+  public readonly pageTitle: Observable<string>;
+  public readonly loadingStatus: Observable<ProgressBarMode>;
+  public readonly isLoading: Observable<boolean>;
+
+  constructor(private appConfig: AppConfigService) {
+    this.pageTitle = this._pageTitle;
+    this.loadingStatus = this._loadingStatus;
+    this.isLoading = this._isLoading;
+  }
+
+  ngOnInit(): void {
+  }
+
+  private get _pageTitle(): Observable<string> {
     return this.appConfig.pageTitle;
   }
 
-  public get loadingStatus(): Observable<ProgressBarMode> {
+  private get _loadingStatus(): Observable<ProgressBarMode> {
     return this.appConfig.loadingStatus;
   }
 
-  public get isLoading(): Observable<boolean> {
-
+  private get _isLoading(): Observable<boolean> {
     return this.appConfig.isLoading;
-  }
-
-  constructor(private appConfig: AppConfigService) { }
-
-  ngOnInit(): void {
   }
 }
