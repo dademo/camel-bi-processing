@@ -3,7 +3,7 @@
     <a
         mat-list-item
         routerLinkActive="active-route"
-        routerLink="/">
+        routerLink="/home">
         <mat-icon mat-list-icon>home</mat-icon>
         <div mat-line>Home</div>
     </a>
@@ -13,6 +13,13 @@
         routerLink="/data-backends">
         <mat-icon mat-list-icon>explore</mat-icon>
         <div mat-line>Explore</div>
+    </a>
+    <a
+        mat-list-item
+        routerLinkActive="active-route"
+        routerLink="/dashboards">
+        <mat-icon mat-list-icon>dashboard</mat-icon>
+        <div mat-line>Dashboards</div>
     </a>
     <div mat-subheader>Other dashboards</div>
     <ng-container *ngFor="let menuEntry of (favouriteDashboards | async)">

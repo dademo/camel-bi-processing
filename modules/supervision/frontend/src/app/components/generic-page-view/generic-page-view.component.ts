@@ -1,4 +1,5 @@
 import { Component, ComponentRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ViewRoute } from './data-model';
 import { GenericPageViewDisplayCardsComponent } from './generic-page-view-display-cards/generic-page-view-display-cards.component';
 import { GenericPageViewDisplayListComponent } from './generic-page-view-display-list/generic-page-view-display-list.component';
 
@@ -15,7 +16,10 @@ export class GenericPageViewComponent implements OnInit, OnChanges {
 
   // TODO
   @Input()
-  public values: object[] | undefined;
+  public values: Array<object> | undefined;
+
+  @Input()
+  public viewRoutes: Array<ViewRoute> | undefined;
 
   @Input()
   public valuesChanged: boolean = false;

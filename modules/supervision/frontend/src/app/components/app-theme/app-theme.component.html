@@ -12,9 +12,9 @@
     </button>
     
     <mat-divider></mat-divider>
-    <button mat-menu-item fxLayoutAlign="space-evenly center">
+    <button mat-menu-item fxLayoutAlign="space-evenly center" (click)="setIsDark(!dark_slide.checked)">
         <mat-icon aria-label="Theme chooser">dark_mode</mat-icon>
         <span style="padding-right: 16px;">Dark theme</span>
-        <mat-slide-toggle [checked]="isDarkTheme | async" (change)="setIsDark($event.checked)"></mat-slide-toggle>
+        <mat-slide-toggle [checked]="isDarkTheme | async" (change)="setIsDark($event.checked)" (click)="$event.stopPropagation()" #dark_slide></mat-slide-toggle>
     </button>
 </mat-menu>

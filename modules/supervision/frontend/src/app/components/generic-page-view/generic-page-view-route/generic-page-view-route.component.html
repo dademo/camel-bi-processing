@@ -1,1 +1,7 @@
-<span fxFlex fxFlexFill fxLayout="row" class="current-path">Home <mat-icon>chevron_right</mat-icon> Data backends</span>
+<!--<span fxFlex fxFlexFill fxLayout="row" class="current-path">Home <mat-icon>chevron_right</mat-icon> Data backends</span>-->
+<span fxFlex fxFlexFill fxLayout="row" class="current-path">
+    <a routerLink="/">Home</a>
+    <ng-container *ngFor="let viewRoute of viewRoutes">
+        <mat-icon>chevron_right</mat-icon> <a [routerLink]="viewRoute.applicationRoute">{{ viewRoute.displayName }}</a>
+    </ng-container>
+</span>

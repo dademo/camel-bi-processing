@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ViewRoute } from 'src/app/components/generic-page-view';
 
 @Component({
   selector: 'app-generic-page-view-route',
@@ -7,7 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GenericPageViewRouteComponent implements OnInit {
 
-  constructor() { }
+  @Input()
+  public viewRoutes: Array<ViewRoute> | undefined;
+
+  constructor() {
+    this.viewRoutes = [];
+  }
 
   ngOnInit(): void {
   }

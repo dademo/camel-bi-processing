@@ -23,6 +23,10 @@ import { GenericPageViewDisplayCardsComponent } from './components/generic-page-
 import { GenericPageViewRouteComponent } from './components/generic-page-view/generic-page-view-route/generic-page-view-route.component';
 import { AppThemeComponent } from './components/app-theme/app-theme.component';
 import { FormsModule } from '@angular/forms';
+import { DataBackendsComponent } from './pages/data-backends/data-backends.component';
+import { HomeComponent } from './pages/home/home.component';
+import { DashboardsComponent } from './pages/dashboards/dashboards.component';
+import { DashboardViewComponent } from './pages/dashboard-view/dashboard-view.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +38,11 @@ import { FormsModule } from '@angular/forms';
     GenericPageViewDisplayListComponent,
     GenericPageViewDisplayCardsComponent,
     GenericPageViewRouteComponent,
-    AppThemeComponent
+    AppThemeComponent,
+    DataBackendsComponent,
+    HomeComponent,
+    DashboardsComponent,
+    DashboardViewComponent
   ],
   imports: [
     BrowserModule,

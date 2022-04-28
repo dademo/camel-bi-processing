@@ -52,13 +52,18 @@ $purple-green-theme-dark: mat.define-dark-theme(
 $default-theme: $deep-purple-amber-theme-light;
 
 // Tools
+@function theme-color($theme, $kind) {
+
+    @return map.get(
+        mat.get-color-config($theme),
+        $kind
+    );
+}
+
 @function theme-color-view($theme, $kind) {
 
     @return mat.get-color-from-palette(
-        map.get(
-            mat.get-color-config($theme),
-            $kind
-        ),
+        theme-color($theme, $kind),
         500
     );
 }
@@ -80,46 +85,64 @@ $default-theme: $deep-purple-amber-theme-light;
     }
 }
 
+@mixin customs-theme-light($theme) {
+
+    span.current-path * {
+        font-weight: bold;
+        text-decoration: none;
+        color: map_get(mat.$light-theme-foreground-palette, text);
+    }
+}
+
+@mixin customs-theme-dark($theme) {
+
+    span.current-path * {
+        font-weight: bold;
+        text-decoration: none;
+        color: map_get(mat.$dark-theme-foreground-palette, text);
+    }
+}
+
 
 .theme-indigo-pink:not(.theme-dark) {
     @include app-theme($indigo-pink-theme-light);
+    @include customs-theme-light($indigo-pink-theme-light);
 }
 .theme-indigo-pink.theme-dark {
     @include app-theme($indigo-pink-theme-dark);
+    @include customs-theme-dark($indigo-pink-theme-dark);
 }
 
 .theme-deep-purple-amber:not(.theme-dark) {
     @include app-theme($deep-purple-amber-theme-light);
+    @include customs-theme-light($deep-purple-amber-theme-light);
 }
 .theme-deep-purple-amber.theme-dark {
     @include app-theme($deep-purple-amber-theme-dark);
+    @include customs-theme-dark($deep-purple-amber-theme-dark);
 }
 
 .theme-pink-blue-grey:not(.theme-dark) {
     @include app-theme($pink-blue-grey-theme-light);
+    @include customs-theme-light($pink-blue-grey-theme-light);
 }
 .theme-pink-blue-grey.theme-dark {
     @include app-theme($pink-blue-grey-theme-dark);
+    @include customs-theme-dark($pink-blue-grey-theme-dark);
 }
 
 .theme-purple-green:not(.theme-dark) {
     @include app-theme($purple-green-theme-light);
+    @include customs-theme-light($purple-green-theme-light);
 }
 .theme-purple-green.theme-dark {
     @include app-theme($purple-green-theme-dark);
+    @include customs-theme-dark($purple-green-theme-dark);
 }
 
 
-a.active-route {
-    font-weight: bold;
-}
-
-a.active-route:not(.theme-dark) {
-    background-color: #44444411;
-}
-
-a.active-route.theme-dark {
-    background-color: #fafafa33;
+a.active-route * {
+    font-weight: bold !important;
 }
 
 body {

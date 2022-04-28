@@ -1,6 +1,6 @@
 <div class="page-view-body" fxFlex  fxFlexFill fxLayout="column">
     <div class="page-view-heading" fxFlex fxFlexFill fxLayout="row">
-        <app-generic-page-view-route></app-generic-page-view-route>
+        <app-generic-page-view-route [viewRoutes]="viewRoutes"></app-generic-page-view-route>
         <span fxFlex></span>
         <mat-button-toggle-group [multiple]="false" [(value)]="displayKind">
             <mat-button-toggle value="list" aria-label="List display"><mat-icon>view_list</mat-icon></mat-button-toggle>

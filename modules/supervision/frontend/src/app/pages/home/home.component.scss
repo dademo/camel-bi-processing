@@ -1,0 +1,11 @@
+$page-view-heading-padding-left-right: 16px;
+$page-view-heading-padding-bottom: 8px;
+
+div.page-view-body {
+    overflow: auto;
+}
+
+div.page-view-heading {
+    padding: 0 $page-view-heading-padding-left-right;
+    padding-bottom: $page-view-heading-padding-bottom;
+}

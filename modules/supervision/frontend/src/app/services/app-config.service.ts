@@ -101,7 +101,7 @@ export class AppConfigService {
     this._events.subscribe(applicationState => this._applicationState = applicationState);
   }
 
-  public setpageTitle(pageTitle: string): void {
+  public setPageTitle(pageTitle: string): void {
     this._pageTitle.next(pageTitle);
   }
 
