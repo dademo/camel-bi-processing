@@ -1,17 +1,20 @@
 import { Location } from '@angular/common';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, JsonpClientBackend } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ProgressBarMode } from '@angular/material/progress-bar';
 import { Title } from '@angular/platform-browser';
-import { BehaviorSubject, Observable, Subject, lastValueFrom } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
-import { ApplicationConfiguration, ApplicationState, ApplicationTheme } from './data-model';
+import { ApplicationConfiguration, ApplicationRuntimeConfiguration, ApplicationState, ApplicationTheme, FavouriteLink } from './data-model';
+import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppConfigService {
+
+  private static readonly KEY_APPLICATION_CONFIGURATION = 'app_config';
 
   private static readonly DEFAULT_APP_TITLE = "No title";
   public static readonly DEFAULT_THEME: ApplicationTheme = {
@@ -40,7 +43,7 @@ export class AppConfigService {
     return this._applicationState;
   }
 
-  public get applicationConfiguration(): ApplicationConfiguration | undefined {
+  public get applicationRuntimeConfiguration(): ApplicationRuntimeConfiguration | undefined {
     return Object.assign({}, this._applicationConfiguration);
   }
 
@@ -54,13 +57,10 @@ export class AppConfigService {
 
 
   private readonly _events: Subject<ApplicationState>;
-
   private _applicationState: ApplicationState;
-
   private _theme: ApplicationTheme;
-
-  private _applicationConfiguration: ApplicationConfiguration | undefined;
-
+  private _favouriteLinks: Array<FavouriteLink>;
+  private _applicationConfiguration: ApplicationRuntimeConfiguration | undefined;
   private _error: Error | undefined;
 
 
@@ -70,14 +70,22 @@ export class AppConfigService {
   private readonly _isLoading: Subject<boolean>;
   private readonly _themeChange: Subject<ApplicationTheme>;
 
+  private readonly storage: Storage;
+
 
   constructor(
     private location: Location,
     private http: HttpClient,
-    private title: Title) {
+    private title: Title,
+    localStorageService: LocalStorageService) {
+
+      this.storage = localStorageService.localStorage;
+
+      const appConfig = this.loadApplicationConfiguration();
 
       this._applicationState = ApplicationState.APPLICATION_STARTING;
-      this._theme = AppConfigService.DEFAULT_THEME;
+      this._theme = appConfig?.theme || AppConfigService.DEFAULT_THEME;
+      this._favouriteLinks = appConfig?.favouriteLinks || [];
 
       this._events = new BehaviorSubject<ApplicationState>(ApplicationState.APPLICATION_STARTING);
       this._pageTitle = new BehaviorSubject(AppConfigService.DEFAULT_APP_TITLE);
@@ -112,23 +120,31 @@ export class AppConfigService {
   public setIsDark(value: boolean): void {
     this._theme.isDark = value;
     this._themeChange.next(this._theme);
+    this.onConfigurationChanged();
   }
 
   public setTheme(name: string): void {
     this._theme.theme = name;
     this._themeChange.next(this._theme);
+    this.onConfigurationChanged();
+  }
+
+  // Internal actions
+
+  private get appConfigurationUrl(): string {
+    return this.location.prepareExternalUrl(environment.applicationConfigurationRelativePath);
   }
 
   private fetchConfiguration(): void {
 
-    this.http.get<ApplicationConfiguration>(this.appConfigurationUrl)
+    this.http.get<ApplicationRuntimeConfiguration>(this.appConfigurationUrl)
       .subscribe({
         next: this.onConfigurationFetchSuccess.bind(this),
         error: this.onConfigurationFetchError.bind(this),
       });
   }
 
-  private onConfigurationFetchSuccess(applicationConfiguration: ApplicationConfiguration): void {
+  private onConfigurationFetchSuccess(applicationConfiguration: ApplicationRuntimeConfiguration): void {
 
     this._applicationConfiguration = applicationConfiguration;
     this._events.next(ApplicationState.APPLICATION_READY);
@@ -140,7 +156,30 @@ export class AppConfigService {
     this._events.next(ApplicationState.APPLICATION_ERROR);
   }
 
-  private get appConfigurationUrl(): string {
-    return this.location.prepareExternalUrl(environment.applicationConfigurationRelativePath);
+  // Events
+  private onConfigurationChanged(): void {
+    this.persistApplicationConfiguration();
+  }
+
+  private persistApplicationConfiguration(): void {
+    this.storage.setItem(AppConfigService.KEY_APPLICATION_CONFIGURATION, JSON.stringify(this.applicationConfiguration));
+  }
+
+  private loadApplicationConfiguration(): ApplicationConfiguration | undefined {
+
+    try {
+      return JSON.parse(this.storage.getItem(AppConfigService.KEY_APPLICATION_CONFIGURATION) || '') || undefined;
+    } catch {
+      return undefined;
+    }
+  }
+
+  // Configuration
+  private get applicationConfiguration(): ApplicationConfiguration {
+
+    return {
+      favouriteLinks: this._favouriteLinks,
+      theme: this._theme,
+    }
   }
 }

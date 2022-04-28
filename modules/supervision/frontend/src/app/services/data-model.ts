@@ -4,25 +4,30 @@ export enum ApplicationState {
     APPLICATION_ERROR = 'APPLICATION_ERROR',
 }
 
-export interface ApplicationConfiguration {
-    serviceRootUrl: string,
-    proxyUrl?: string,
+export interface ApplicationRuntimeConfiguration {
+    serviceRootUrl: string;
+    proxyUrl?: string;
 }
 
 export interface ApplicationTheme {
-    theme: string,
-    isDark: boolean,
+    theme: string;
+    isDark: boolean;
 }
 
 export interface FavouriteLink {
-    url: string,
-    name?: string,
+    url: string;
+    name?: string;
 }
 
 export interface FavouriteLinkDashboard extends FavouriteLink {
-    type: 'dashboard',
+    type: 'dashboard';
 }
 
 export interface FavouriteLinkChart extends FavouriteLink {
-    type: 'chart',
+    type: 'chart';
+}
+
+export interface ApplicationConfiguration {
+    favouriteLinks: Array<FavouriteLink>;
+    theme: ApplicationTheme;
 }

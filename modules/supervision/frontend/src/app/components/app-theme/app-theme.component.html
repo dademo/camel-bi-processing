@@ -15,6 +15,6 @@
     <button mat-menu-item fxLayoutAlign="space-evenly center">
         <mat-icon aria-label="Theme chooser">dark_mode</mat-icon>
         <span style="padding-right: 16px;">Dark theme</span>
-        <mat-slide-toggle (change)="setIsDark($event.checked)"></mat-slide-toggle>
+        <mat-slide-toggle [checked]="isDarkTheme | async" (change)="setIsDark($event.checked)"></mat-slide-toggle>
     </button>
 </mat-menu>

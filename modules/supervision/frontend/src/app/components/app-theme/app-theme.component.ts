@@ -17,6 +17,7 @@ interface ThemeDefinition {
 export class AppThemeComponent implements OnInit {
 
   public readonly theme: Observable<string>;
+  public readonly isDarkTheme: Observable<boolean>;
   public readonly themes: Observable<Array<ThemeDefinition>>;
   private readonly themesSubject: Subject<Array<ThemeDefinition>>;
 
@@ -30,6 +31,7 @@ export class AppThemeComponent implements OnInit {
 
     this._applicationTheme = AppConfigService.DEFAULT_THEME;
     this.theme = this._theme;
+    this.isDarkTheme = this._isDarkTheme;
     this.themesSubject = new BehaviorSubject<Array<ThemeDefinition>>(this._themes);
     this.themes = this.themesSubject.asObservable();
 
@@ -59,6 +61,13 @@ export class AppThemeComponent implements OnInit {
     return this.appConfig
       .themeChange
       .pipe(map(theme => `theme-${theme.theme}`));
+  }
+
+  private get _isDarkTheme(): Observable<boolean> {
+
+    return this.appConfig
+      .themeChange
+      .pipe(map(theme => theme.isDark));
   }
 
   private get _themes(): Array<ThemeDefinition> {

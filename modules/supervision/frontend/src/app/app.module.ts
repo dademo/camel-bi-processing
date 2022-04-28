@@ -75,8 +75,8 @@ export class AppModule {
 
     this.hateoasConfig.configure({
       http: {
-        rootUrl: this.appConfig.applicationConfiguration?.serviceRootUrl || this.location.prepareExternalUrl('/'),
-        proxyUrl: this.appConfig.applicationConfiguration?.proxyUrl,
+        rootUrl: this.appConfig.applicationRuntimeConfiguration?.serviceRootUrl || this.location.prepareExternalUrl('/'),
+        proxyUrl: this.appConfig.applicationRuntimeConfiguration?.proxyUrl,
       },
       isProduction: false,
       logs: { verboseLogs: true, },
