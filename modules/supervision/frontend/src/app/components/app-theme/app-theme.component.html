@@ -1,12 +1,13 @@
 <button mat-button [matMenuTriggerFor]="theme_menu">
     <mat-icon aria-label="Theme chooser">format_color_fill</mat-icon>
 </button>
-<mat-menu [class]="(theme | async) ||''" #theme_menu="matMenu" yPosition="below" xPosition="before">
+<mat-menu [class]="((currentThemeClass | async) || 'theme-deep-purple-amber') + ((isDarkTheme | async)? ' theme-dark' : '')"
+    #theme_menu="matMenu" yPosition="below" xPosition="before">
     <button mat-menu-item fxLayoutAlign="space-around center"
-        (click)="setApplicationTheme(theme.theme)"
-        *ngFor="let theme of themes | async">
-        <mat-radio-button [checked]="theme.enabled" (click)="setApplicationTheme(theme.theme)">
-            {{ theme.displayName }}
+        (click)="setApplicationTheme(availableTheme.theme)"
+        *ngFor="let availableTheme of availableThemes | async">
+        <mat-radio-button [checked]="availableTheme.enabled" (click)="setApplicationTheme(availableTheme.theme)">
+            {{ availableTheme.displayName }}
         </mat-radio-button>
         <span fxFlex></span>
     </button>

@@ -16,12 +16,11 @@ interface ThemeDefinition {
 })
 export class AppThemeComponent implements OnInit {
 
-  public readonly theme: Observable<string>;
+  public readonly currentThemeClass: Observable<string>;
   public readonly isDarkTheme: Observable<boolean>;
-  public readonly themes: Observable<Array<ThemeDefinition>>;
-  private readonly themesSubject: Subject<Array<ThemeDefinition>>;
+  public readonly availableThemes: Observable<Array<ThemeDefinition>>;
 
-
+  private readonly availableThemesSubject: Subject<Array<ThemeDefinition>>;
   private _applicationTheme: ApplicationTheme;
 
   constructor(
@@ -30,10 +29,10 @@ export class AppThemeComponent implements OnInit {
   ) {
 
     this._applicationTheme = AppConfigService.DEFAULT_THEME;
-    this.theme = this._theme;
+    this.currentThemeClass = this._theme;
     this.isDarkTheme = this._isDarkTheme;
-    this.themesSubject = new BehaviorSubject<Array<ThemeDefinition>>(this._themes);
-    this.themes = this.themesSubject.asObservable();
+    this.availableThemesSubject = new BehaviorSubject<Array<ThemeDefinition>>(this._themes);
+    this.availableThemes = this.availableThemesSubject.asObservable();
 
     this.appConfig
       .themeChange
@@ -54,7 +53,7 @@ export class AppThemeComponent implements OnInit {
   private onThemeChange(newTheme: ApplicationTheme): void {
 
     this._applicationTheme = newTheme;
-    this.themesSubject.next(this._themes);
+    this.availableThemesSubject.next(this._themes);
     this.cdRef.markForCheck();
   }
 

@@ -10,8 +10,8 @@ import { AppConfigService, ApplicationState } from './services';
 export class AppComponent {
 
   public readonly isStarting: Observable<boolean>;
-  public readonly theme: Observable<string>;
-  public readonly isDark: Observable<boolean>;
+  public readonly isDarkTheme: Observable<boolean>;
+  public readonly themeClass: Observable<string>;
 
   public get isApplicationError(): boolean {
     return this.appConfig.applicationState === ApplicationState.APPLICATION_ERROR;
@@ -20,8 +20,8 @@ export class AppComponent {
   constructor(private appConfig: AppConfigService) {
     
     this.isStarting = this._isStarting;
-    this.theme = this._theme;
-    this.isDark = this._isDark;
+    this.isDarkTheme = this._isDark;
+    this.themeClass = this._theme;
   }
 
   private get _isStarting(): Observable<boolean> {

@@ -70,7 +70,7 @@ $default-theme: $deep-purple-amber-theme-light;
 
 @mixin app-theme($theme) {
 
-    @include mat.all-component-themes($theme);
+    @include mat.all-component-colors($theme);
 
     .primary-color-bg {
         background-color: theme-color-view($theme, 'primary');

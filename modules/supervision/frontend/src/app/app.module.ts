@@ -27,6 +27,8 @@ import { DataBackendsComponent } from './pages/data-backends/data-backends.compo
 import { HomeComponent } from './pages/home/home.component';
 import { DashboardsComponent } from './pages/dashboards/dashboards.component';
 import { DashboardViewComponent } from './pages/dashboard-view/dashboard-view.component';
+import { OverlayContainer } from '@angular/cdk/overlay';
+import { AppOverlayContainer } from './tools/app-overlay-container.service';
 
 @NgModule({
   declarations: [
@@ -60,7 +62,9 @@ import { DashboardViewComponent } from './pages/dashboard-view/dashboard-view.co
   .concat(getAngularMaterialModules())
   // Application modules
   .concat(getAllAppModules()),
-  providers: [],
+  providers: [
+    { provide: OverlayContainer, useClass: AppOverlayContainer }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
