@@ -9,13 +9,12 @@ import { ViewRoute } from 'src/app/components/generic-page-view';
 export class GenericPageViewRouteComponent implements OnInit {
 
   @Input()
-  public viewRoutes: Array<ViewRoute> | undefined;
+  public viewRoutes: readonly ViewRoute[] | undefined;
 
   constructor() {
     this.viewRoutes = [];
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
 }

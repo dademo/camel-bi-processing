@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { AppOverlayContainer } from './app-overlay-container.service';
+import { AppOverlayContainer } from './app-overlay-container';
 
 describe('AppOverlayContainerService', () => {
   let service: AppOverlayContainer;

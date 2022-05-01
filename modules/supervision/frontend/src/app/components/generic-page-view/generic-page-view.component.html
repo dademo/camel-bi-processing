@@ -10,10 +10,10 @@
     <mat-divider></mat-divider>
     <div class="page-view-body">
         <ng-template [ngIf]="displayKind === 'card'" [ngIfElse]="displayList" #displayCard>
-            <app-generic-page-view-display-cards></app-generic-page-view-display-cards>
+            <app-generic-page-view-display-cards [pagedValuesProvider]="pagedValuesProvider"></app-generic-page-view-display-cards>
         </ng-template>
         <ng-template #displayList>
-            <app-generic-page-view-display-list></app-generic-page-view-display-list>
+            <app-generic-page-view-display-list [pagedValuesProvider]="pagedValuesProvider"></app-generic-page-view-display-list>
         </ng-template>
     </div>
 </div>

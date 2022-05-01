@@ -11,14 +11,7 @@ export class BasicMapper<T> extends AbstractMapper<T, string> {
     }
 
 
-    public map<V extends object>(data: Array<object>): Array<T> {
-        
-        /*
-        return data
-        .filter(v => Boolean(v))
-        .filter(v => v.keys().indexof(this.field))
-        .map(v => v[this.field]);
-        */
+    public map<V extends object>(data: readonly object[]): readonly T[] {
        return [];
     }
     

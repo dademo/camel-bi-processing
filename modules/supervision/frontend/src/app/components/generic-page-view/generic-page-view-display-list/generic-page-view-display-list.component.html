@@ -1,1 +1,30 @@
-<p>generic-page-view-display-list works!</p>
+<table mat-table matSort (matSortChange)="onSortChange($event)" [dataSource]="dataSource || []" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="name" sortActionDescription="Sort by name"> Name </th>
+        <td mat-cell *matCellDef="let entry"> {{ entry.name }} </td>
+    </ng-container>
+
+    <ng-container *ngFor="let attribute of attributes | keyvalue">
+        <ng-container matColumnDef="{{ attribute.key }}">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="{{ attribute.value }}" sortActionDescription="Sort by {{ attribute.key | titlecase }}"> {{ attribute.key | titlecase }} </th>
+            <td mat-cell *matCellDef="let entry"> {{ entry[attribute.key] }} </td>
+        </ng-container>
+    </ng-container>
+    
+    <ng-container matColumnDef="mainLink">
+        <th mat-header-cell *matHeaderCellDef>Open</th>
+        <td mat-cell *matCellDef="let element">
+          <mat-icon>more_vert</mat-icon>
+        </td>
+      </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+<mat-paginator [length]="length"
+              [pageSize]="pageSize"
+              [pageSizeOptions]="pageSizeOptions"
+              (page)="onPageChange($event)"
+              aria-label="Select page">
+</mat-paginator>

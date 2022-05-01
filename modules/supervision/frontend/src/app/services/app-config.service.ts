@@ -59,7 +59,7 @@ export class AppConfigService {
   private readonly _events: Subject<ApplicationState>;
   private _applicationState: ApplicationState;
   private _theme: ApplicationTheme;
-  private _favouriteLinks: Array<FavouriteLink>;
+  private _favouriteLinks: readonly FavouriteLink[];
   private _applicationConfiguration: ApplicationRuntimeConfiguration | undefined;
   private _error: Error | undefined;
 

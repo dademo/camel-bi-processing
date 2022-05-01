@@ -9,23 +9,23 @@ import { FavouriteLinkDashboard, FavouriteLinkChart } from 'src/app/services';
 })
 export class AppSidenavComponent implements OnInit {
 
-  public get favouriteDashboards(): Observable<Array<FavouriteLinkDashboard>> {
+  public get favouriteDashboards(): Observable<readonly FavouriteLinkDashboard[]> {
     return this._favouriteDashboards.asObservable();
   }
 
-  public get favouriteCharts(): Observable<Array<FavouriteLinkChart>> {
+  public get favouriteCharts(): Observable<readonly FavouriteLinkChart[]> {
     return this._favouriteCharts.asObservable();
   }
 
-  private readonly _favouriteDashboards: Subject<Array<FavouriteLinkDashboard>>;
-  private readonly _favouriteCharts: Subject<Array<FavouriteLinkChart>>;
+  private readonly _favouriteDashboards: Subject<readonly FavouriteLinkDashboard[]>;
+  private readonly _favouriteCharts: Subject<readonly FavouriteLinkChart[]>;
 
   constructor() {
     
-    this._favouriteDashboards = new BehaviorSubject<Array<FavouriteLinkDashboard>>([
+    this._favouriteDashboards = new BehaviorSubject<readonly FavouriteLinkDashboard[]>([
       { url: '/dashboard/1', name: 'Favourite dashboard 1', type: 'dashboard'},
     ]);
-    this._favouriteCharts = new BehaviorSubject<Array<FavouriteLinkChart>>([
+    this._favouriteCharts = new BehaviorSubject<readonly FavouriteLinkChart[]>([
       { url: '/toto', name: 'Favourite chart 1', type: 'chart'},
     ]);
   }

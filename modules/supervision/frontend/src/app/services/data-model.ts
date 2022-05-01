@@ -5,8 +5,8 @@ export enum ApplicationState {
 }
 
 export interface ApplicationRuntimeConfiguration {
-    serviceRootUrl: string;
-    proxyUrl?: string;
+    readonly serviceRootUrl: string;
+    readonly proxyUrl?: string;
 }
 
 export interface ApplicationTheme {
@@ -15,19 +15,19 @@ export interface ApplicationTheme {
 }
 
 export interface FavouriteLink {
-    url: string;
+    readonly url: string;
     name?: string;
 }
 
 export interface FavouriteLinkDashboard extends FavouriteLink {
-    type: 'dashboard';
+    readonly type: 'dashboard';
 }
 
 export interface FavouriteLinkChart extends FavouriteLink {
-    type: 'chart';
+    readonly type: 'chart';
 }
 
 export interface ApplicationConfiguration {
-    favouriteLinks: Array<FavouriteLink>;
+    favouriteLinks: readonly FavouriteLink[];
     theme: ApplicationTheme;
 }

@@ -1,0 +1,10 @@
+$paginator-height: 56px;
+
+mat-paginator {
+    height: $paginator-height;
+}
+
+table {
+    height: calc(100% - $paginator-height);
+    width: 100%;
+}

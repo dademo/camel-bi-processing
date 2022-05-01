@@ -9,14 +9,9 @@ import { AppConfigService } from 'src/app/services';
 })
 export class DashboardsComponent implements OnInit {
 
-  // TODO
-  public values: Array<object> | undefined = [];
-
-  public readonly viewRoutes: Array<ViewRoute> = [
+  public readonly viewRoutes: readonly ViewRoute[] = [
     { applicationRoute: '/dashboards', displayName: 'Dashboards' },
   ];
-
-  public valuesChanged: boolean = false;
 
   constructor(private readonly appConfig: AppConfigService) {
 

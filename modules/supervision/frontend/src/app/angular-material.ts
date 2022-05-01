@@ -1,6 +1,7 @@
 // Core UI
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSortModule } from '@angular/material/sort';
 // User interaction
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
@@ -24,11 +25,12 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
-export function getAngularMaterialModules(): Array<any> {
+export function getAngularMaterialModules(): readonly any[] {
 
     return [
         MatSidenavModule,
         MatToolbarModule,
+        MatSortModule,
         MatMenuModule,
         MatButtonModule,
         MatSlideToggleModule,

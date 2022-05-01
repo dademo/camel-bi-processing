@@ -18,9 +18,9 @@ export class AppThemeComponent implements OnInit {
 
   public readonly currentThemeClass: Observable<string>;
   public readonly isDarkTheme: Observable<boolean>;
-  public readonly availableThemes: Observable<Array<ThemeDefinition>>;
+  public readonly availableThemes: Observable<readonly ThemeDefinition[]>;
 
-  private readonly availableThemesSubject: Subject<Array<ThemeDefinition>>;
+  private readonly availableThemesSubject: Subject<readonly ThemeDefinition[]>;
   private _applicationTheme: ApplicationTheme;
 
   constructor(
@@ -31,7 +31,7 @@ export class AppThemeComponent implements OnInit {
     this._applicationTheme = AppConfigService.DEFAULT_THEME;
     this.currentThemeClass = this._theme;
     this.isDarkTheme = this._isDarkTheme;
-    this.availableThemesSubject = new BehaviorSubject<Array<ThemeDefinition>>(this._themes);
+    this.availableThemesSubject = new BehaviorSubject<readonly ThemeDefinition[]>(this._themes);
     this.availableThemes = this.availableThemesSubject.asObservable();
 
     this.appConfig
@@ -71,7 +71,7 @@ export class AppThemeComponent implements OnInit {
       .pipe(map(theme => theme.isDark));
   }
 
-  private get _themes(): Array<ThemeDefinition> {
+  private get _themes(): readonly ThemeDefinition[] {
 
     return [
       { theme: 'indigo-pink', displayName: 'Indigo & Pink' },

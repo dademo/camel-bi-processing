@@ -1,4 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, Input } from '@angular/core';
+import { PagedValuesProvider } from '../data-model';
 
 @Component({
   selector: 'app-generic-page-view-display-cards',
@@ -8,9 +9,16 @@ import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@
 })
 export class GenericPageViewDisplayCardsComponent implements OnInit {
 
+  @Input('pagedValuesProvider')
+  public pagedValuesProvider: PagedValuesProvider | undefined;
+
   constructor() { }
 
   ngOnInit(): void {
+
+    if(!Boolean(this.pagedValuesProvider)) {
+      throw new Error('GenericPageViewDisplayCardsComponent: [this.pagedValuesProvider] must be defined');
+    }
   }
 
 }

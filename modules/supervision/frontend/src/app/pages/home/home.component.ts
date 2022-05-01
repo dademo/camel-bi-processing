@@ -10,9 +10,9 @@ import { AppConfigService } from 'src/app/services';
 export class HomeComponent implements OnInit {
 
   // TODO
-  public values: Array<object> | undefined = [];
+  public values: readonly object[] | undefined = [];
 
-  public readonly viewRoutes: Array<ViewRoute> = [];
+  public readonly viewRoutes: readonly ViewRoute[] = [];
 
   public valuesChanged: boolean = false;
 

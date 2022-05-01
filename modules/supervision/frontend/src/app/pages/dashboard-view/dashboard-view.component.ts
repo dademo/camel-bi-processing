@@ -9,7 +9,7 @@ import { AppConfigService } from 'src/app/services';
 })
 export class DashboardViewComponent implements OnInit {
 
-  public readonly viewRoutes: Array<ViewRoute> = [
+  public readonly viewRoutes: readonly ViewRoute[] = [
     { applicationRoute: '/dashboards', displayName: 'Dashboards' },
     { applicationRoute: '/dashboard/1', displayName: 'This dashboard (#TODO)' },
   ];

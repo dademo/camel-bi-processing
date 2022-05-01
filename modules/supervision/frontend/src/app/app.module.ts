@@ -28,7 +28,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { DashboardsComponent } from './pages/dashboards/dashboards.component';
 import { DashboardViewComponent } from './pages/dashboard-view/dashboard-view.component';
 import { OverlayContainer } from '@angular/cdk/overlay';
-import { AppOverlayContainer } from './tools/app-overlay-container.service';
+import { AppOverlayContainer } from './tools/app-overlay-container';
 
 @NgModule({
   declarations: [

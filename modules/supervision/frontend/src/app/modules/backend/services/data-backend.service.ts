@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HateoasResourceOperation, HttpMethod, PagedGetOption } from '@lagoshny/ngx-hateoas-client';
+import { HateoasResourceOperation, HttpMethod, PagedGetOption, PagedResourceCollection } from '@lagoshny/ngx-hateoas-client';
 import { Observable } from 'rxjs';
 import { DataBackendDatabaseResource, DataBackendResource } from '../dto';
 
@@ -12,7 +12,7 @@ export class DataBackendService extends HateoasResourceOperation<DataBackendReso
     super(DataBackendResource);
   }
 
-  public listAllDatabases(dataBackend: DataBackendResource, options?: PagedGetOption | undefined): Observable<DataBackendDatabaseResource> {
-    return this.customQuery<DataBackendDatabaseResource>(HttpMethod.GET, `/${dataBackend.id}/databases`, undefined, options);
+  public listAllDatabases(dataBackend: DataBackendResource, options?: PagedGetOption | undefined): Observable<PagedResourceCollection<DataBackendDatabaseResource>> {
+    return this.customQuery<PagedResourceCollection<DataBackendDatabaseResource>>(HttpMethod.GET, `/${dataBackend.id}/databases`, undefined, options);
   }
 }

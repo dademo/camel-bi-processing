@@ -1,4 +1,4 @@
 export interface EnvironmentConfig {
-    production: boolean,
-    applicationConfigurationRelativePath: string,
+    readonly production: boolean,
+    readonly applicationConfigurationRelativePath: string,
 };
