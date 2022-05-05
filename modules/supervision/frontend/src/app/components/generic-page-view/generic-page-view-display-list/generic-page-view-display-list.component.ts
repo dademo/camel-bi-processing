@@ -1,10 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { Sort } from '@angular/material/sort';
 import { SortedPageParam } from '@lagoshny/ngx-hateoas-client/lib/model/declarations';
 import { map, Observable, Subject, tap } from 'rxjs';
 import { GenericPageViewDataCollectionRepresentation, GenericPageViewDataRepresentation, PagedValuesProvider } from '../data-model';
-import { GenericPageViewDataSource } from '../generic-page-view-data-source';
 
 @Component({
   selector: 'app-generic-page-view-display-list',

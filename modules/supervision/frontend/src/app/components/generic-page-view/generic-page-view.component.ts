@@ -1,9 +1,5 @@
 import { AfterViewInit, Component, ComponentRef, Input, OnInit, ViewChild } from '@angular/core';
-import { PagedResourceCollection, Resource } from '@lagoshny/ngx-hateoas-client';
-import { SortedPageParam } from '@lagoshny/ngx-hateoas-client/lib/model/declarations';
-import { Observable } from 'rxjs';
-import { GenericPageViewDataCollectionRepresentation, GenericPageViewDataRepresentation, PagedValuesProvider, ViewRoute } from './data-model';
-import { GenericPageViewDataSource } from './generic-page-view-data-source';
+import { PagedValuesProvider, ViewRoute } from './data-model';
 import { GenericPageViewDisplayCardsComponent } from './generic-page-view-display-cards/generic-page-view-display-cards.component';
 import { GenericPageViewDisplayListComponent } from './generic-page-view-display-list/generic-page-view-display-list.component';
 
@@ -24,10 +20,8 @@ export class GenericPageViewComponent implements OnInit, AfterViewInit {
   @Input()
   public viewRoutes: readonly ViewRoute[] | undefined;
   
-  @Input()
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  public pagedValuesProvider: PagedValuesProvider;
+  @Input('pagedValuesProvider')
+  public _pagedValuesProvider: PagedValuesProvider | undefined;
 
   @ViewChild(GenericPageViewDisplayListComponent)
   public displayListViewRef: ComponentRef<any> | undefined;
@@ -35,14 +29,18 @@ export class GenericPageViewComponent implements OnInit, AfterViewInit {
   @ViewChild(GenericPageViewDisplayCardsComponent)
   public displayCardsViewRef: ComponentRef<any> | undefined;
 
-  constructor() { }
+  public get pagedValuesProvider(): PagedValuesProvider {
 
-  ngOnInit(): void {
-
-    if(!Boolean(this.pagedValuesProvider)) {
+    if(this._pagedValuesProvider === undefined) {
       throw new Error('GenericPageViewComponent: [this.pagedValuesProvider] must be defined');
+    } else {
+      return this._pagedValuesProvider;
     }
   }
+
+  constructor() { }
+
+  ngOnInit(): void { }
 
   ngAfterViewInit(): void { }
 }

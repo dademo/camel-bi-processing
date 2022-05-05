@@ -12,7 +12,7 @@
             <app-sidenav></app-sidenav>
         </mat-drawer>
         <mat-drawer-content>
-            <mat-progress-bar [mode]="(loadingStatus | async) || 'indeterminate'" *ngIf="isLoading | async"></mat-progress-bar>
+            <mat-progress-bar [mode]="(loadingStatus | async) || 'indeterminate'" *ngIf="isLoading | async" color="accent"></mat-progress-bar>
             <div class="app-body">
                 <ng-content></ng-content>
             </div>
