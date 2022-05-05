@@ -2,7 +2,6 @@
 
 $toolbar-height: 56px;
 $app-sidenav-padding: 8px;
-$app-body-padding: 0px;
 $app-progress-height: 4px;
 
 div.app-interface {
@@ -12,7 +11,7 @@ div.app-interface {
 }
 
 mat-toolbar {
-    height: 56px;
+    height: $toolbar-height;
     padding: 8px 16px;
 }
 
@@ -33,21 +32,27 @@ mat-drawer-container {
     }
 
     mat-drawer-content {
-        height: calc(100% - $app-progress-height);
+        
+        height: 100%;
         width: auto;
-        padding-top: $app-progress-height;
+
         div.app-body {
-            padding: $app-body-padding;
-            padding-top: $app-body-padding - $app-progress-height;
+            width: 100%;
+            height: 100%;
         }
     }
 }
 
 mat-drawer-container.loading {
-    @extend mat-drawer-container;
-    height: calc(100% - $toolbar-height - $app-progress-height);
+    
+    height: calc(100% - $toolbar-height);
 
     mat-drawer-content {
-        padding-top: 0px;
+        mat-progress-bar {
+            padding-top: 0px;
+        }
+        div.app-body {
+            height: calc(100% - $app-progress-height);
+        }
     }
 }

@@ -32,6 +32,8 @@ export class DataBackendsComponent implements OnInit {
           resources: pagedResourceCollection.resources.map(
             resource => <GenericPageViewDataRepresentation>{
               name: resource.backendName,
+              description: `Data backend with URL [${resource.primaryUrl}]`,
+              statisticsLink: `/data-backend/${resource.id}/statistics`,
               attributes: {
                 primaryUrl: resource.primaryUrl,
                 backendState: resource.backendState,
@@ -42,14 +44,16 @@ export class DataBackendsComponent implements OnInit {
               mainLink: {
                 displayName: 'View database informations',
                 link: `/database/${resource.id}`,
+                icon: 'storage',
               },
               fullPageDisplayLink: {
                 displayName: 'Data backend view',
                 link: `/data-backend/${resource.id}`,
+                icon: 'open_in_full',
               },
               otherLinks: [
-                { displayName: 'Replication informations', link: `/database/${resource.id}` },
-                { displayName: 'Nodes informations', link: `/database/${resource.id}` },
+                { displayName: 'Replication informations', link: `/database/${resource.id}`, icon: 'copy_all' },
+                { displayName: 'Nodes informations', link: `/database/${resource.id}`, icon: 'share' },
               ],
             },
           ),

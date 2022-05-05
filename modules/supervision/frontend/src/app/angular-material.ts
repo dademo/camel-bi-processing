@@ -4,6 +4,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSortModule } from '@angular/material/sort';
 // User interaction
 import { MatMenuModule } from '@angular/material/menu';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -20,9 +21,10 @@ import { MatRippleModule } from '@angular/material/core';
 // Visualization
 import { MatListModule } from '@angular/material/list'; 
 import { MatTableModule } from '@angular/material/table';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatCardModule } from '@angular/material/card';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatChipsModule } from '@angular/material/chips'; 
 
 
 export function getAngularMaterialModules(): readonly any[] {
@@ -32,6 +34,7 @@ export function getAngularMaterialModules(): readonly any[] {
         MatToolbarModule,
         MatSortModule,
         MatMenuModule,
+        MatSnackBarModule,
         MatButtonModule,
         MatSlideToggleModule,
         MatButtonToggleModule,
@@ -46,8 +49,9 @@ export function getAngularMaterialModules(): readonly any[] {
         MatRippleModule,
         MatListModule,
         MatTableModule,
+        MatExpansionModule,
         MatPaginatorModule,
         MatCardModule,
-        MatSnackBarModule,
+        MatChipsModule,
     ]
 }

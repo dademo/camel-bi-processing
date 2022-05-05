@@ -17,6 +17,8 @@ type GenericPageViewDataRepresentationSortableAttributes = { [attr: string]: str
 
 export interface GenericPageViewDataRepresentation {
     readonly name: string;
+    readonly description: string;
+    readonly statisticsLink?: string;
     readonly attributes: GenericPageViewDataRepresentationAttributes;
     readonly mainLink: GenericPageViewDataRepresentationLink;
     readonly fullPageDisplayLink: GenericPageViewDataRepresentationLink;

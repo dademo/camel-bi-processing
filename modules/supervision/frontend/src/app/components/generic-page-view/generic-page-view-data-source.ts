@@ -2,7 +2,7 @@ import { CollectionViewer, DataSource } from "@angular/cdk/collections";
 import { PageEvent } from "@angular/material/paginator";
 import { Sort } from "@angular/material/sort";
 import { SortedPageParam } from "@lagoshny/ngx-hateoas-client/lib/model/declarations";
-import { first, firstValueFrom, map, Observable, of, ReplaySubject, zip } from "rxjs";
+import { first, firstValueFrom, map, Observable, of, ReplaySubject, tap, zip } from "rxjs";
 import { GenericPageViewDataCollectionRepresentation, GenericPageViewDataRepresentation, PagedValuesProvider } from "./data-model";
 
 export class GenericPageViewDataSource extends DataSource<GenericPageViewDataRepresentation> {
@@ -12,8 +12,16 @@ export class GenericPageViewDataSource extends DataSource<GenericPageViewDataRep
 
     private readonly valuesSubject: ReplaySubject<readonly GenericPageViewDataRepresentation[]>;
 
-    private page: PageEvent | undefined;
-    private sort: Sort | undefined;
+    private _page: PageEvent;
+    private _sort: Sort;
+
+    public get page(): PageEvent {
+        return this._page;
+    }
+
+    public get sort(): Sort {
+        return this._sort;
+    }
 
     constructor(
         private readonly pagedValuesProvider: PagedValuesProvider,
@@ -21,12 +29,24 @@ export class GenericPageViewDataSource extends DataSource<GenericPageViewDataRep
         private readonly sortChangeEvent?: Observable<Sort>,) {
 
             super();
+
+            this._sort = {
+                active: '',
+                direction: 'asc',
+            };
+            this._page = {
+                length: 0,
+                pageIndex: GenericPageViewDataSource.DEFAULT_PAGE_INDEX,
+                pageSize: GenericPageViewDataSource.DEFAULT_PAGE_SIZE,
+            };
+
             this.valuesSubject = new ReplaySubject<readonly GenericPageViewDataRepresentation[]>(1);
             if(this.pageChangeEvent && this.sortChangeEvent) {
                 this.pageChangeEvent.subscribe(pageEvent => this.onPageChangeEvent(pageEvent));
                 this.sortChangeEvent.subscribe(sortEvent => this.onSortChangeEvent(sortEvent));
+                this.getCurrentPage().subscribe(v => this.valuesSubject.next(v));
             } else {
-                this.fetchAllPages().then(allPages => this.valuesSubject.next(allPages));
+                this.fetchAllPages().then(v => this.valuesSubject.next(v));
             }
         }
 
@@ -37,18 +57,34 @@ export class GenericPageViewDataSource extends DataSource<GenericPageViewDataRep
     disconnect(collectionViewer: CollectionViewer): void {
     }
 
-    private fetchPage(sortedPageParam: SortedPageParam): Observable<GenericPageViewDataCollectionRepresentation> {
-        return this.pagedValuesProvider(sortedPageParam);
+    private getCurrentPage(): Observable<readonly GenericPageViewDataRepresentation[]> {
+        
+        console.log('getCurrentPage');
+        const _sort: {[key: string]: 'ASC' | 'DESC'} = {};
+        if(this._sort) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            _sort[this._sort.active] = this._sort?.direction.toUpperCase();
+        }
+
+        return this.fetchPage({
+            pageParams: {
+                page: this._page?.pageIndex,
+                size: this._page?.pageSize,
+            },
+            sort: _sort,
+        }).pipe(map(pageViewDataRepresentation => pageViewDataRepresentation.resources));
     }
 
     private async fetchAllPages(): Promise<readonly GenericPageViewDataRepresentation[]> {
 
+        const sort = {};
         const firstPage = await firstValueFrom(this.fetchPage({
             pageParams: {
                 page: GenericPageViewDataSource.DEFAULT_PAGE_INDEX,
                 size: GenericPageViewDataSource.DEFAULT_PAGE_SIZE,
             },
-            sort: {},
+            sort: sort,
         }));
 
         let _observables: Observable<GenericPageViewDataCollectionRepresentation>[] = [];
@@ -61,7 +97,7 @@ export class GenericPageViewDataSource extends DataSource<GenericPageViewDataRep
                         page: it,
                         size: GenericPageViewDataSource.DEFAULT_PAGE_SIZE,
                     },
-                    sort: {},
+                    sort: sort,
                 }).pipe(
                     first(),
                 )
@@ -69,34 +105,47 @@ export class GenericPageViewDataSource extends DataSource<GenericPageViewDataRep
         }
 
         return (await firstValueFrom(zip(..._observables)))
-            .flatMap(results => results.resources);
+            .map(pageViewDataRepresentation => pageViewDataRepresentation.resources)
+            .reduce((previousValue, currentValue) => previousValue.concat(currentValue), []);
     }
 
     private onPageChangeEvent(pageEvent: PageEvent): void {
-        this.page = pageEvent;
+        this._page = pageEvent;
+        this.refreshPage();
     }
 
     private onSortChangeEvent(sortEvent: Sort): void {
-        this.sort = sortEvent;
+        this._sort = sortEvent;
+        this.refreshPage();
     }
 
-    private refreshPage() {
+    private refreshPage(): void {
 
         const _sort: {[key: string]: 'ASC' | 'DESC'} = {};
-        if(this.sort) {
+        if(this._sort) {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            _sort[this.sort.active] = (this.sort?.direction.toUpperCase() || 'ASC');
+            _sort[this._sort.active] = (this._sort?.direction.toUpperCase() || 'ASC');
         }
 
         this.fetchPage({
                 pageParams: {
-                    page: this.page?.pageIndex,
-                    size: this.page?.pageSize,
+                    page: this._page?.pageIndex,
+                    size: this._page?.pageSize,
                 },
                 sort: _sort,
             })
-            .pipe(map(v => v.resources))
+            .pipe(map(pageViewDataRepresentation => pageViewDataRepresentation.resources))
             .subscribe(this.valuesSubject.next);
+    }
+
+    private fetchPage(sortedPageParam: SortedPageParam): Observable<GenericPageViewDataCollectionRepresentation> {
+
+        return this.pagedValuesProvider(sortedPageParam)
+            .pipe(tap({
+                next: (pageViewDataRepresentation: GenericPageViewDataCollectionRepresentation) => {
+                    this._page.length = pageViewDataRepresentation.totalElements;
+                }
+            }));
     }
 }

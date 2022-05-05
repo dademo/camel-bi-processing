@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
-import { Subject } from 'rxjs';
-import { PagedValuesProvider } from '../data-model';
+import { SortedPageParam } from '@lagoshny/ngx-hateoas-client/lib/model/declarations';
+import { map, Observable, Subject, tap } from 'rxjs';
+import { GenericPageViewDataCollectionRepresentation, GenericPageViewDataRepresentation, PagedValuesProvider } from '../data-model';
 import { GenericPageViewDataSource } from '../generic-page-view-data-source';
 
 @Component({
@@ -13,50 +14,69 @@ import { GenericPageViewDataSource } from '../generic-page-view-data-source';
 })
 export class GenericPageViewDisplayListComponent implements OnInit {
 
+  private static readonly DEFAULT_PAGE_INDEX: number = 0;
+  private static readonly DEFAULT_PAGE_SIZE: number = 25;
+
   public readonly pageSizeOptions: number[] = [10, 25, 100];
 
-  public readonly displayedColumns: string[] = [
-      'name',
-      'mainLink',
-  ]
-
-  public get attributes(): {[key: string]: string} {
-    return {};
-  }
-
-  public dataSource: GenericPageViewDataSource | undefined;
-
-  public length: number | undefined;
+  public totalElements: number | undefined;
   public pageSize: number | undefined;
+  public pageIndex: number | undefined;
+  public readonly dataRepresentations: Observable<readonly GenericPageViewDataRepresentation[]>;
 
   @Input('pagedValuesProvider')
-  public pagedValuesProvider: PagedValuesProvider | undefined;
+  public _pagedValuesProvider: PagedValuesProvider | undefined;
 
-  private readonly pageChangeEvent: Subject<PageEvent>;
-  private readonly sortChangeEvent: Subject<Sort>;
+  private get pagedValuesProvider(): PagedValuesProvider {
+
+    if(this._pagedValuesProvider === undefined) {
+      throw new Error('GenericPageViewDisplayListComponent: [this.pagedValuesProvider] must be defined');
+    } else {
+      return this._pagedValuesProvider;
+    }
+  }
+  
+  private _dataRepresentations: Subject<readonly GenericPageViewDataRepresentation[]>;
 
   constructor() {
 
-    this.pageChangeEvent = new Subject<PageEvent>();
-    this.sortChangeEvent = new Subject<Sort>();
+    this._dataRepresentations = new Subject<readonly GenericPageViewDataRepresentation[]>();
+    this.dataRepresentations = this._dataRepresentations.asObservable();
   }
 
   ngOnInit(): void {
-
-    if(!Boolean(this.pagedValuesProvider)) {
-      throw new Error('GenericPageViewDisplayListComponent: [this.pagedValuesProvider] must be defined');
-    }
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    this.dataSource = new GenericPageViewDataSource(this.pagedValuesProvider, this.pageChangeEvent.asObservable(), this.sortChangeEvent.asObservable());
-  }
-
-  public onSortChange(sortEvent: Sort) {
-
+    this.refreshPageValues();
   }
 
   public onPageChange(pageEvent: PageEvent): void {
-    // TODO
+    
+    this.pageIndex = pageEvent.pageIndex;
+    this.pageSize = pageEvent.pageSize;
+    this.refreshPageValues();
   }
 
+  private refreshPageValues(): void {
+
+    const _sort: {[key: string]: 'ASC' | 'DESC'} = {};
+
+    this.fetchPage({
+        pageParams: {
+            page: this.pageIndex || GenericPageViewDisplayListComponent.DEFAULT_PAGE_INDEX,
+            size: this.pageSize || GenericPageViewDisplayListComponent.DEFAULT_PAGE_SIZE,
+        },
+        sort: _sort,
+      })
+      .pipe(map(pageViewDataRepresentation => pageViewDataRepresentation.resources))
+      .subscribe(v => this._dataRepresentations.next(v));
+  }
+
+  private fetchPage(sortedPageParam: SortedPageParam): Observable<GenericPageViewDataCollectionRepresentation> {
+
+    return this.pagedValuesProvider(sortedPageParam)
+        .pipe(tap({
+            next: (pageViewDataRepresentation: GenericPageViewDataCollectionRepresentation) => {
+                this.totalElements = pageViewDataRepresentation.totalElements;
+            }
+        }));
+  }
 }
