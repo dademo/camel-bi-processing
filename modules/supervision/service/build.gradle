@@ -24,7 +24,7 @@ java {
 }
 
 application {
-    mainClassName "fr.dademo.supervision.service.Application"
+    mainClass.set("fr.dademo.supervision.service.Application")
 }
 
 dependencies {

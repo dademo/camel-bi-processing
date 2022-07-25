@@ -1,0 +1,14 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+/*
+ * Will include all batch related sub-modules
+ */
+include 'modules:dependencies:batch:batch_configuration'
+include 'modules:dependencies:batch:batch_datasources:batch_jdbc'
+include 'modules:dependencies:batch:batch_datasources:batch_mongodb'
+include 'modules:dependencies:batch:batch_datasources:batch_rabbitmq'
+include 'modules:dependencies:batch:batch_support'

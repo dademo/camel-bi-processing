@@ -23,7 +23,7 @@ java {
 
 dependencies {
 
-    api project(':modules:dependencies:data:generic:stream_definitions')
+    api project(':modules:dependencies:generic:stream_definitions')
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
@@ -34,6 +34,7 @@ dependencies {
     // Other libraries
     implementation "com.squareup.okhttp3:okhttp:${okHttpVersion}"
     implementation "com.squareup.okhttp3:logging-interceptor:${okHttpVersion}"
+    implementation "org.apache.commons:commons-lang3:${apacheCommonsLang3Version}"
     implementation "com.google.code.findbugs:jsr305:${findBugsJsr305Version}"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

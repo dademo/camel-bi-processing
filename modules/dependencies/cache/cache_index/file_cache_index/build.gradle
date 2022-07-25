@@ -1,0 +1,47 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+plugins {
+    id 'org.springframework.boot' version "${springBootVersion}"
+    id 'io.spring.dependency-management' version "${springDependencyManagement}"
+    id 'java-library'
+}
+
+group 'fr.dademo.tools.cache'
+archivesBaseName = 'dademo-dependencies-tools-cache'
+version '1.0.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+    withJavadocJar()
+    withSourcesJar()
+}
+
+dependencies {
+
+    api project(':modules:dependencies:cache:cache_commons')
+    api project(':modules:dependencies:generic:stream_definitions')
+    api project(':modules:dependencies:tools:generic_tools')
+    api project(':modules:dependencies:cache:cache_commons')
+    api project(':modules:dependencies:cache:cache_lock:file_cache_lock')
+
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+    implementation 'org.springframework.boot:spring-boot-starter'
+
+    // Other libraries
+    implementation "commons-io:commons-io:${apacheCommonsIOVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-core:${jacksonCoreVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonCoreVersion}"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonCoreVersion}"
+    implementation "com.google.code.findbugs:jsr305:${findBugsJsr305Version}"
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+

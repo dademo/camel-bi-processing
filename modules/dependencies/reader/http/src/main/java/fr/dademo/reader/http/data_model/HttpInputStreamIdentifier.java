@@ -9,6 +9,8 @@ package fr.dademo.reader.http.data_model;
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 import lombok.*;
 import okhttp3.RequestBody;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -21,7 +23,6 @@ import java.net.URL;
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
 @Builder
 public class HttpInputStreamIdentifier implements InputStreamIdentifier<URL> {
 
@@ -49,5 +50,36 @@ public class HttpInputStreamIdentifier implements InputStreamIdentifier<URL> {
     @Override
     public String getDescription() {
         return String.format("Http input stream of `%s` using method `%s`", getUrl(), getMethod());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return new HashCodeBuilder(17, 41)
+            .append(url)
+            .append(method)
+            .append(requestBody)
+            .hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+
+        final var compared = (HttpInputStreamIdentifier) obj;
+        return new EqualsBuilder()
+            .append(url, compared.getUrl())
+            .append(method, compared.getMethod())
+            .append(requestBody, compared.getRequestBody())
+            .isEquals();
     }
 }

@@ -46,11 +46,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
 
     // Generic modules
-    api project(':modules:dependencies:data:generic:stream_definitions')
+    api project(':modules:dependencies:generic:stream_definitions')
 
     // Custom modules
     toolsSupportApi project(':modules:dependencies:tools:generic_tools')
-    cacheSupportApi project(':modules:dependencies:tools:cache')
+    cacheSupportApi project(':modules:dependencies:cache:cache_commons')
     httpSupportApi project(':modules:dependencies:reader:http')
     httpCacheSupportApi project(':modules:dependencies:reader:http_cache')
     dataGouvFrSupportApi project(':modules:dependencies:data:helpers:data_gouv_fr')

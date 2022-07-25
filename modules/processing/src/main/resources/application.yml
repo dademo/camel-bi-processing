@@ -111,7 +111,7 @@ batch:
       writer-type: NO_ACTION
       max-threads: null
     association:
-      enabled: true
+      enabled: false
       chunk-size: 100000
       writer-type: AMQP
       max-threads: null

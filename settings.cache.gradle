@@ -1,0 +1,20 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+/*
+ * Will include all cache related sub-modules
+ */
+include 'modules:dependencies:cache:cache_commons'
+include 'modules:dependencies:cache:cache_lock:file_cache_lock'
+include 'modules:dependencies:cache:cache_lock:vfs_cache_lock'
+include 'modules:dependencies:cache:cache_lock:jdbc_cache_lock'
+include 'modules:dependencies:cache:cache_validators'
+include 'modules:dependencies:cache:cache_index:file_cache_index'
+include 'modules:dependencies:cache:cache_index:vfs_cache_index'
+include 'modules:dependencies:cache:cache_index:jdbc_cache_index'
+include 'modules:dependencies:cache:cache_repository:file_cache_repository'
+include 'modules:dependencies:cache:cache_repository:vfs_cache_repository'
+include 'modules:dependencies:cache:cache_repository:jdbc_cache_repository'

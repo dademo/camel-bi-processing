@@ -36,8 +36,8 @@ public class DefaultJobExecutionListener implements JobExecutionListener {
 
     private static int getTerminalWidth() {
 
-        try {
-            return Math.max(TerminalBuilder.terminal().getWidth(), MINIMUM_TERMINAL_WIDTH);
+        try (final var term = TerminalBuilder.terminal()) {
+            return Math.max(term.getWidth(), MINIMUM_TERMINAL_WIDTH);
         } catch (IOException e) {
             // Unable to get terminal width, will use a default value
             return MINIMUM_TERMINAL_WIDTH;
@@ -72,7 +72,7 @@ public class DefaultJobExecutionListener implements JobExecutionListener {
                 "%s",
             jobExecution.getJobInstance().getJobName(),
             jobExecution.getJobId(),
-            formatDate(jobExecution.getStartTime()),
+            Optional.ofNullable(jobExecution.getStartTime()).map(this::formatDate).orElse("-"),
             sbParametersFormat
         )));
     }
@@ -92,8 +92,8 @@ public class DefaultJobExecutionListener implements JobExecutionListener {
                 "%s",
             jobExecution.getJobInstance().getJobName(),
             jobExecution.getJobId(),
-            formatDate(jobExecution.getStartTime()),
-            formatDate(jobExecution.getEndTime()),
+            Optional.ofNullable(jobExecution.getStartTime()).map(this::formatDate).orElse("-"),
+            Optional.ofNullable(jobExecution.getEndTime()).map(this::formatDate).orElse("-"),
             Duration.between(
                 jobExecution.getStartTime().toInstant(),
                 jobExecution.getEndTime().toInstant()

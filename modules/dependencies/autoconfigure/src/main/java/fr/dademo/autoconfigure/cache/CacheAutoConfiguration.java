@@ -22,6 +22,6 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnClass(CachedInputStreamIdentifier.class)
 @AutoConfigureAfter(GenericDefinitionsAutoConfiguration.class)
 @EnableConfigurationProperties(CacheConfiguration.class)
-@ComponentScan("fr.dademo.tools.cacheZ")
+@ComponentScan("fr.dademo.tools.cache")
 public class CacheAutoConfiguration {
 }

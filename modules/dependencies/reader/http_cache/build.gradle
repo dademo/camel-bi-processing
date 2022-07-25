@@ -24,7 +24,7 @@ java {
 dependencies {
 
     api project(':modules:dependencies:reader:http')
-    api project(':modules:dependencies:tools:cache')
+    api project(':modules:dependencies:cache:cache_commons')
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"

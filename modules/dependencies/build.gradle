@@ -42,6 +42,7 @@ task generateDependenciesJavadoc(type: Javadoc) {
         'https://commons.apache.org/proper/commons-csv/apidocs/',
         'https://commons.apache.org/proper/commons-compress/apidocs/',
         'https://commons.apache.org/proper/commons-codec/apidocs/',
+        'https://commons.apache.org/proper/commons-vfs/apidocs/',
         'https://javadoc.io/doc/com.fasterxml.jackson.core/jackson-core/latest/',
         'https://javadoc.io/doc/com.fasterxml.jackson.core/jackson-databind/latest/',
         'https://javadoc.io/doc/com.google.code.findbugs/jsr305/latest/',
