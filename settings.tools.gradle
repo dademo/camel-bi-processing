@@ -9,4 +9,3 @@
  */
 include 'modules:dependencies:tools:generic_tools'
 include 'modules:dependencies:tools:liquibase'
-include 'modules:dependencies:tools:vfs_beans'

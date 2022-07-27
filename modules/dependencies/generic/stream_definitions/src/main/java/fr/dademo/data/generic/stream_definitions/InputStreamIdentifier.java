@@ -13,8 +13,8 @@ import javax.annotation.Nonnull;
 /**
  * @author dademo
  */
-@JsonIgnoreProperties({"description", "verboseDescription"})
-public interface InputStreamIdentifier<T> {
+@JsonIgnoreProperties({"uniqueIdentifier", "description", "verboseDescription"})
+public interface InputStreamIdentifier<T> extends Describable, Cacheable {
 
     /**
      * Returning the flow identified by this class.
@@ -27,14 +27,4 @@ public interface InputStreamIdentifier<T> {
     T getSource();
 
     void setSource(@Nonnull T source);
-
-    @Nonnull
-    default String getDescription() {
-        return toString();
-    }
-
-    @Nonnull
-    default String getVerboseDescription() {
-        return getDescription();
-    }
 }

@@ -7,32 +7,19 @@
 package fr.dademo.tools.cache.repository.cache_repository;
 
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
-import fr.dademo.tools.cache.repository.lock.CacheLock;
-import fr.dademo.tools.cache.repository.lock.CacheLockProvider;
-import fr.dademo.tools.cache.repository.lock.MemoryCacheLockProvider;
+import fr.dademo.tools.lock.repository.LockFactory;
+import fr.dademo.tools.lock.repository.model.Lock;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Nonnull;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 public abstract class BaseCacheRepository<T extends InputStreamIdentifier<?>> implements CacheRepository<T> {
 
-    private final Map<T, CacheLockProvider> fileCacheLockMap = new HashMap<>();
+    @Autowired
+    private LockFactory lockFactory;
 
     @Override
-    public CacheLock acquireCacheLockForIdentifier(@Nonnull T inputStreamIdentifier) {
-
-        return (
-            Optional.ofNullable(fileCacheLockMap.get(inputStreamIdentifier))
-                .orElseGet(() -> createAndGetProviderForIdentifier(inputStreamIdentifier))
-        ).acquireLock();
-    }
-
-    private CacheLockProvider createAndGetProviderForIdentifier(T fileIdentifier) {
-
-        final var lockProvider = new MemoryCacheLockProvider();
-        fileCacheLockMap.put(fileIdentifier, lockProvider);
-        return lockProvider;
+    public Lock acquireCacheLockForIdentifier(@Nonnull T inputStreamIdentifier) {
+        return lockFactory.createLock(inputStreamIdentifier);
     }
 }

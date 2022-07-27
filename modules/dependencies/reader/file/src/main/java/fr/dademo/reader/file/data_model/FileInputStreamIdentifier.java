@@ -7,10 +7,12 @@
 package fr.dademo.reader.file.data_model;
 
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
+import fr.dademo.tools.tools.HashTools;
 import lombok.*;
 
 import javax.annotation.Nonnull;
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author dademo
@@ -22,6 +24,8 @@ import java.io.File;
 @EqualsAndHashCode
 @Builder
 public class FileInputStreamIdentifier implements InputStreamIdentifier<File> {
+
+    private static final long serialVersionUID = 6946849889586524778L;
 
     @Nonnull
     private File file;
@@ -40,5 +44,14 @@ public class FileInputStreamIdentifier implements InputStreamIdentifier<File> {
     @Override
     public String getDescription() {
         return String.format("File input stream of file `%s`", getFile());
+    }
+
+    @Nonnull
+    @Override
+    public String getUniqueIdentifier() {
+        return HashTools.computeHashString(
+            HashTools.getHashComputerForAlgorithm("SHA256"),
+            file.getAbsolutePath().getBytes(StandardCharsets.UTF_8)
+        );
     }
 }

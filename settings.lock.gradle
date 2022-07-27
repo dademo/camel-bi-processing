@@ -1,0 +1,18 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+/*
+ * Will include all lock related sub-modules
+ */
+include 'modules:dependencies:lock:lock_commons'
+
+// Backends
+include 'modules:dependencies:lock:lock_memory'
+include 'modules:dependencies:lock:lock_redis'
+include 'modules:dependencies:lock:lock_infinispan'
+include 'modules:dependencies:lock:lock_hazelcast'
+
+include 'modules:dependencies:lock'

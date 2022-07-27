@@ -23,6 +23,7 @@ include 'modules:dependencies:autoconfigure'
 apply from: 'settings.generic.gradle'
 apply from: 'settings.tools.gradle'
 apply from: 'settings.testing.gradle'
+apply from: 'settings.lock.gradle'
 apply from: 'settings.cache.gradle'
 apply from: 'settings.reader.gradle'
 

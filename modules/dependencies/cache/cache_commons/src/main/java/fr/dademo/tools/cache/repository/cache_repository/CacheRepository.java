@@ -8,8 +8,8 @@ package fr.dademo.tools.cache.repository.cache_repository;
 
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 import fr.dademo.tools.cache.data_model.CachedInputStreamIdentifier;
-import fr.dademo.tools.cache.repository.lock.CacheLock;
 import fr.dademo.tools.cache.validators.CacheValidator;
+import fr.dademo.tools.lock.repository.model.Lock;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -23,7 +23,7 @@ import java.util.stream.Stream;
  */
 public interface CacheRepository<T extends InputStreamIdentifier<?>> {
 
-    CacheLock acquireCacheLockForIdentifier(@Nonnull T inputStreamIdentifier);
+    Lock acquireCacheLockForIdentifier(@Nonnull T inputStreamIdentifier);
 
     @Nonnull
     Optional<CachedInputStreamIdentifier<T>> getCachedInputStreamIdentifierOf(InputStreamIdentifier<?> inputStreamIdentifier);

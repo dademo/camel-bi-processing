@@ -7,6 +7,7 @@
 package fr.dademo.reader.http.data_model;
 
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
+import fr.dademo.tools.tools.HashTools;
 import lombok.*;
 import okhttp3.RequestBody;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -15,6 +16,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author dademo
@@ -25,6 +27,8 @@ import java.net.URL;
 @Setter
 @Builder
 public class HttpInputStreamIdentifier implements InputStreamIdentifier<URL> {
+
+    private static final long serialVersionUID = 4345017808760161411L;
 
     @Nonnull
     private URL url;
@@ -81,5 +85,14 @@ public class HttpInputStreamIdentifier implements InputStreamIdentifier<URL> {
             .append(method, compared.getMethod())
             .append(requestBody, compared.getRequestBody())
             .isEquals();
+    }
+
+    @Nonnull
+    @Override
+    public String getUniqueIdentifier() {
+        return HashTools.computeHashString(
+            HashTools.getHashComputerForAlgorithm("SHA256"),
+            (url + method + requestBody).getBytes(StandardCharsets.UTF_8)
+        );
     }
 }

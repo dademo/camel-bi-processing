@@ -29,8 +29,26 @@ logging:
     #'okhttp3': DEBUG
     'okhttp3': INFO
 
+lock:
+  backend: memory
+  #backend: hazelcast
+  hazelcast:
+    clusterName: dev
+    multicastEnabled: true
+    restEnabled: false
+
 cache:
   enabled: true
+  cacheBackend: vfs
+
+  vfs:
+    tempResourcesPath: "file:///tmp/tmp__dev_cache"
+    randomTempPath: true
+    cacheResourcesPath: "file:///home/dademo/.cache/dev_cache"
+    authentication:
+      domain: null
+      username: null
+      password: null
 
 datasources:
   jdbc:

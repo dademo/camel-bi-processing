@@ -50,6 +50,7 @@ dependencies {
 
     // Custom modules
     toolsSupportApi project(':modules:dependencies:tools:generic_tools')
+    cacheSupportApi project(':modules:dependencies:lock:lock_commons')
     cacheSupportApi project(':modules:dependencies:cache:cache_commons')
     httpSupportApi project(':modules:dependencies:reader:http')
     httpCacheSupportApi project(':modules:dependencies:reader:http_cache')

@@ -27,12 +27,11 @@ dependencies {
 //        }
     }
     implementation project(':modules:dependencies:reader:http')
-    implementation project(':modules:dependencies:cache:cache_commons')
-    implementation project(':modules:dependencies:cache:cache_index:file_cache_index')
-    implementation project(':modules:dependencies:cache:cache_repository:file_cache_repository')
-    implementation project(':modules:dependencies:reader:http_cache')
+    implementation project(':modules:dependencies:lock')
     implementation project(':modules:dependencies:cache:cache_commons')
     implementation project(':modules:dependencies:cache:cache_validators')
+    implementation project(':modules:dependencies:cache:cache_backends')
+    implementation project(':modules:dependencies:reader:http_cache')
     implementation project(':modules:dependencies:data:helpers:data_gouv_fr')
     implementation project(':modules:dependencies:batch:batch_support')
 

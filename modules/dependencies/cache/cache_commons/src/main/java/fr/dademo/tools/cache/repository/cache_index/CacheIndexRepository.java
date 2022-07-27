@@ -8,6 +8,7 @@ package fr.dademo.tools.cache.repository.cache_index;
 
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 import fr.dademo.tools.cache.data_model.CachedInputStreamIdentifier;
+import fr.dademo.tools.lock.repository.model.Lock;
 
 import java.io.IOException;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
  */
 public interface CacheIndexRepository<T extends InputStreamIdentifier<?>> {
 
+    Lock acquireLock();
 
     List<CachedInputStreamIdentifier<T>> readIndex();
 

@@ -8,13 +8,19 @@
  * Will include all cache related sub-modules
  */
 include 'modules:dependencies:cache:cache_commons'
-include 'modules:dependencies:cache:cache_lock:file_cache_lock'
-include 'modules:dependencies:cache:cache_lock:vfs_cache_lock'
-include 'modules:dependencies:cache:cache_lock:jdbc_cache_lock'
 include 'modules:dependencies:cache:cache_validators'
-include 'modules:dependencies:cache:cache_index:file_cache_index'
-include 'modules:dependencies:cache:cache_index:vfs_cache_index'
-include 'modules:dependencies:cache:cache_index:jdbc_cache_index'
-include 'modules:dependencies:cache:cache_repository:file_cache_repository'
-include 'modules:dependencies:cache:cache_repository:vfs_cache_repository'
-include 'modules:dependencies:cache:cache_repository:jdbc_cache_repository'
+
+// Backends
+/// File
+include 'modules:dependencies:cache:cache_backends:cache_backend_file:cache_backend_file_index'
+include 'modules:dependencies:cache:cache_backends:cache_backend_file:cache_backend_file_repository'
+/// VFS
+include 'modules:dependencies:cache:cache_backends:cache_backend_vfs:cache_backend_vfs_beans'
+include 'modules:dependencies:cache:cache_backends:cache_backend_vfs:cache_backend_vfs_index'
+include 'modules:dependencies:cache:cache_backends:cache_backend_vfs:cache_backend_vfs_repository'
+/// JDBC
+include 'modules:dependencies:cache:cache_backends:cache_backend_jdbc:cache_backend_jdbc_beans'
+include 'modules:dependencies:cache:cache_backends:cache_backend_jdbc:cache_backend_jdbc_index'
+include 'modules:dependencies:cache:cache_backends:cache_backend_jdbc:cache_backend_jdbc_repository'
+
+include 'modules:dependencies:cache:cache_backends'
