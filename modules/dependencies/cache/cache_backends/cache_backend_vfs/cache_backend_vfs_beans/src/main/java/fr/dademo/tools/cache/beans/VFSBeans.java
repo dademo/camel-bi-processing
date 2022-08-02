@@ -58,19 +58,6 @@ public class VFSBeans {
     @SneakyThrows
     public FileSystemManager fileSystemManager(FileSystemOptions fileSystemOptions,
                                                CacheVFSConfiguration cacheVfsConfiguration) {
-
-//        final var fileSystemManager = new DefaultFileSystemManager();
-//
-//        fileSystemManager.setDefaultProvider(new DefaultLocalFileProvider());
-//        fileSystemManager.setCacheStrategy(CacheStrategy.MANUAL);
-//
-//        fileSystemManager.init();
-//
-//        Optional.ofNullable(cacheVfsConfiguration.getCacheResourcesPath())
-//            .map(fileResolverUsingFileSystemManager(fileSystemManager))
-//            .ifPresent(fileSystemManager::setBaseFile);
-//
-//        return fileSystemManager;
         return VFS.getManager();
     }
 

@@ -35,6 +35,18 @@ dependencies {
 
     // Other libraries
     implementation "org.apache.commons:commons-vfs2:${apacheCommonsVFSVersion}"
+    implementation "org.apache.commons:commons-vfs2-jackrabbit1:${apacheCommonsVFSVersion}"
+    implementation "org.apache.commons:commons-vfs2-jackrabbit2:${apacheCommonsVFSVersion}"
+    implementation "commons-net:commons-net:${apacheComonsNetVersion}"
+    implementation "org.apache.httpcomponents.client5:httpclient5:${apacheHttpClientVersion}"
+    implementation "com.jcraft:jsch:${jschVersion}"
+    implementation("org.apache.hadoop:hadoop-common:${hadoopVersion}") {
+        exclude group: 'ch.qos.reload4j', module: 'reload4j'
+        exclude group: 'org.slf4j', module: 'slf4j-reload4j'
+    }
+    implementation "com.fasterxml.jackson.core:jackson-core:${jacksonCoreVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonCoreVersion}"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonCoreVersion}"
     implementation "com.fasterxml.jackson.core:jackson-core:${jacksonCoreVersion}"
     implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonCoreVersion}"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonCoreVersion}"
