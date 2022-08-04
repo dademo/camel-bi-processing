@@ -9,11 +9,12 @@ package fr.dademo.data.generic.stream_definitions;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author dademo
  */
-@JsonIgnoreProperties({"uniqueIdentifier", "description", "verboseDescription"})
+@JsonIgnoreProperties({"uniqueIdentifier", "description", "verboseDescription", "contentType"})
 public interface InputStreamIdentifier<T> extends Describable, Cacheable {
 
     /**
@@ -27,4 +28,7 @@ public interface InputStreamIdentifier<T> extends Describable, Cacheable {
     T getSource();
 
     void setSource(@Nonnull T source);
+
+    @Nullable
+    String getContentType();
 }

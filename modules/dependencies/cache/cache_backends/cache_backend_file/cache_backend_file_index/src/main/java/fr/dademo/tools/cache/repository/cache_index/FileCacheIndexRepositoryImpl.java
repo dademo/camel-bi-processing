@@ -31,7 +31,7 @@ import java.util.List;
 @Slf4j
 @Repository
 @ConditionalOnBean(CacheFileEnabledConditional.class)
-class FileCacheIndexRepositoryImpl<T extends InputStreamIdentifier<?>> extends FileCacheIndexRepositoryBase<T> implements CacheIndexRepository<T> {
+class FileCacheIndexRepositoryImpl<T extends InputStreamIdentifier<?>> extends FileCacheIndexRepositoryBeanLifecycle<T> implements CacheIndexRepository<T> {
 
     public static final String DIRECTORY_ROOT_URI_SCHEME = "file";
 

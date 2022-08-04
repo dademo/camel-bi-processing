@@ -15,26 +15,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class BeanValues {
 
-    // DataSourcesFactory
-    public static final String BATCH_DATASOURCE_NAME = "batch";
-    public static final String STG_DATASOURCE_NAME = "stg";
-
-    public static final String DEFAULT_SPRING_APPLICATION_NAME = "JAVA_SPRING";
-    public static final String DIALECT_PROVIDER_EXTENSION = "_dialect_provider";
-    public static final String DSL_CONTEXT_EXTENSION = "_dsl_context";
-
-    // Config
-    public static final String CONFIG_JOBS_REPOSITORY_BASE = "batch.jobs";
-    public static final String CONFIG_JOBS_REPOSITORY_ENABLED = CONFIG_JOBS_REPOSITORY_BASE + ".enabled";
-    public static final String CONFIG_JOBS_BASE = "batch.jobs";
-    public static final String CONFIG_FLYWAY_BASE = "flyway";
-    public static final String CONFIG_FLYWAY_MIGRATIONS = CONFIG_FLYWAY_BASE + ".migrations";
-    public static final String CONFIG_DATASOURCE_BASE = "datasources";
-    public static final String CONFIG_DATASOURCE_JDBC = CONFIG_DATASOURCE_BASE + ".jdbc";
-    public static final String CONFIG_DATASOURCE_MONGODB = CONFIG_DATASOURCE_BASE + ".mongodb";
-    // Config constants
-    public static final String CONFIG_ENABLED = "enabled";
-    public static final String CONFIG_WRITER_TYPE = "writer-type";
     // Constants
     public static final String FLYWAY_CONFIG = "flyway";
     public static final String DATASOURCE_CONFIG = "datasource";
@@ -47,9 +27,32 @@ public final class BeanValues {
     public static final String CONFIG_MONGODB_TYPE = "MONGODB";
     public static final String CONFIG_AMQP_TYPE = "AMQP";
 
+    // DataSources factory
+    public static final String BATCH_DATASOURCE_NAME = "batch";
+    public static final String BATCH_DATASOURCE_TRANSACTION_MANAGER_NAME = BATCH_DATASOURCE_NAME + "-transaction_manager";
+    public static final String STG_DATASOURCE_NAME = "stg";
+
+    public static final String DEFAULT_SPRING_APPLICATION_NAME = "JAVA_SPRING";
+    public static final String DIALECT_PROVIDER_EXTENSION = "_dialect_provider";
+    public static final String DSL_CONTEXT_EXTENSION = "_dsl_context";
+    public static final String BATCH_DATASOURCE_TRANSACTION_MANAGER_BEAN_NAME = DATASOURCE_CONFIG + "_" + BATCH_DATASOURCE_TRANSACTION_MANAGER_NAME;
+    public static final String CONFIG_JOBS_BASE = "batch.jobs";
+    public static final String CONFIG_FLYWAY_BASE = "flyway";
+    public static final String CONFIG_FLYWAY_MIGRATIONS = CONFIG_FLYWAY_BASE + ".migrations";
+    public static final String CONFIG_DATASOURCE_BASE = "datasources";
+    public static final String CONFIG_DATASOURCE_JDBC = CONFIG_DATASOURCE_BASE + ".jdbc";
+    public static final String CONFIG_DATASOURCE_MONGODB = CONFIG_DATASOURCE_BASE + ".mongodb";
+    // Config
+    public static final String CONFIG_JOBS_REPOSITORY_BASE = "batch.repository";
+    public static final String CONFIG_JOBS_REPOSITORY_ENABLED = CONFIG_JOBS_REPOSITORY_BASE + ".enabled";
+    public static final String CONFIG_DATASOURCE_AMQP_TEMPLATE = CONFIG_DATASOURCE_BASE + ".rabbitmq";
+    public static final String CONFIG_WRITER_TYPE = "writer-type";
+
     //// Beans ////
     // Database connectors
     public static final String BATCH_DATASOURCE_BEAN_NAME = DATASOURCE_CONFIG + "_" + BATCH_DATASOURCE_NAME;
+    // Config constants
+    public static final String CONFIG_ENABLED = ".enabled";
     // Dialect providers
     public static final String BATCH_DATASOURCE_DIALECT_PROVIDER_BEAN_NAME = BATCH_DATASOURCE_BEAN_NAME + DIALECT_PROVIDER_EXTENSION;
     public static final String STG_DATASOURCE_BEAN_NAME = DATASOURCE_CONFIG + "_" + STG_DATASOURCE_NAME;
@@ -64,4 +67,8 @@ public final class BeanValues {
     // Flyway
     public static final String FLYWAY_BATCH_BEAN_NAME = FLYWAY_CONFIG + "_" + BATCH_DATASOURCE_NAME;
     public static final String FLYWAY_STG_BEAN_NAME = FLYWAY_CONFIG + "_" + STG_DATASOURCE_NAME;
+
+    //// Values ////
+    public static final int DEFAULT_THREAD_POOL_SIZE = 10;
+    public static final String TASK_EXECUTOR_BEAN_NAME = "batch_task_executor";
 }

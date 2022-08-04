@@ -39,6 +39,7 @@ public abstract class VFSCacheRepositoryBeanLifecycle<T extends InputStreamIdent
 
     @Autowired
     private CacheVFSConfiguration cacheVFSConfiguration;
+
     @Autowired
     private FileSystemManager fileSystemManager;
 
@@ -83,8 +84,8 @@ public abstract class VFSCacheRepositoryBeanLifecycle<T extends InputStreamIdent
     protected FileObject getTempFile(@Nonnull String baseName) {
         final var file = getTempDirectoryResourcePath()
             .resolveFile(
-                getBase64Random(TEMP_FILE_RANDOM_LENGTH) +
-                    ((baseName.length() > 0) ? "-" + baseName : "")
+                ((baseName.length() > 0) ? "-" + baseName : "") +
+                    getBase64Random(TEMP_FILE_RANDOM_LENGTH)
             );
         // We ensure the file exists
         file.createFile();
@@ -131,6 +132,6 @@ public abstract class VFSCacheRepositoryBeanLifecycle<T extends InputStreamIdent
 
         final var bytes = new byte[length];
         new Random().nextBytes(bytes);
-        return Base64.getEncoder().encodeToString(bytes);
+        return Base64.getUrlEncoder().encodeToString(bytes);
     }
 }

@@ -48,16 +48,10 @@ public class BatchConfiguration {
     @AllArgsConstructor
     public static class BatchRepositoryConfiguration {
 
-        public static final String DEFAULT_TABLE_PREFIX = "BATCH_";
-
         private boolean enabled = false;
 
         @Nullable
-        private String tablePrefix;
-
-        public static String getDefaultTablePrefix() {
-            return DEFAULT_TABLE_PREFIX;
-        }
+        private Integer executorThreadPoolSize;
     }
 
     @Data

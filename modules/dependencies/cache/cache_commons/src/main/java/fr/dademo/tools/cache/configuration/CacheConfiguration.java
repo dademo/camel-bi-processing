@@ -44,11 +44,13 @@ public class CacheConfiguration {
     public enum CacheBackend {
         FILE("FILE"),
         VFS("VFS"),
-        JDBC("JDBC");
+        JDBC("JDBC"),
+        MINIO("MINIO");
 
         public static final String CACHE_BACKEND_FILE = "file";
         public static final String CACHE_BACKEND_VFS = "vfs";
         public static final String CACHE_BACKEND_JDBC = "jdbc";
+        public static final String CACHE_BACKEND_MINIO = "minio";
         private final String value;
     }
 }

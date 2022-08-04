@@ -37,6 +37,4 @@ nb-configuration.xml
 
 *.sqlite
 
-liquibase*.properties
-!liquibase.tpl.properties
 *.log

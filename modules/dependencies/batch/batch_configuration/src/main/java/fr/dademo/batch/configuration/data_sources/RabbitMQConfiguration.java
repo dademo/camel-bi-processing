@@ -29,6 +29,8 @@ public class RabbitMQConfiguration {
 
     public static final String DEFAULT_SPRING_APPLICATION_NAME = "JAVA_SPRING";
 
+    private boolean enabled = true;
+
     @Nonnull
     @NotEmpty
     private URI connectionString;

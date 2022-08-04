@@ -18,8 +18,8 @@ amqp:
 
 logging:
   level:
-    #'org.springframework': DEBUG
-    'org.springframework': INFO
+    'org.springframework': DEBUG
+    #'org.springframework': INFO
     'fr.dademo': DEBUG
     'fr.dademo.tools': TRACE
     'org.flywaydb.core': DEBUG
@@ -39,8 +39,8 @@ lock:
 
 cache:
   enabled: true
-  cacheBackend: vfs
-
+  #cacheBackend: vfs
+  cacheBackend: minio
   vfs:
     tempResourcesPath: "file:///tmp/tmp__dev_cache"
     randomTempPath: true
@@ -50,6 +50,12 @@ cache:
       domain: null
       username: null
       password: null
+  minio:
+    endpoint: http://172.18.0.11:9000
+    accessKey: dev
+    secretKey: password
+    bucketName: dev
+    createBucket: true
 
 datasources:
   jdbc:
@@ -59,27 +65,25 @@ datasources:
       #url: "jdbc:sqlite:jobs.sqlite"
       url: jdbc:postgresql://localhost:5432/bi
       minimum-idle: 5
-      maximum-pool-size: 10
+      maximum-pool-size: 20
       username: bi_rw
       password: bi_rw
     stg:
       enabled: true
       url: jdbc:postgresql://localhost:5432/bi
-      minimum-idle: 5
+      minimum-idle: 10
       maximum-pool-size: 100
+      connection-timeout-millis: 0
       username: bi_rw
       password: bi_rw
   mongodb:
-    batch-repository:
-      connection-string: mongodb://root:root@localhost:27017/batch
-      database: batch
     stg:
-      enabled: true
+      enabled: false
       connection-string: mongodb://root:root@localhost:27017/stg
       database: stg
   rabbitmq:
     stg:
-      enabled: true
+      enabled: false
       connection-string: amqp://guest:guest@localhost:5672
       confirms: false
       queues: { }
@@ -95,7 +99,6 @@ datasources:
 batch:
   repository:
     enabled: true
-    table-prefix: BATCH_
   jobs:
     naf:
       enabled: true
@@ -130,13 +133,13 @@ batch:
       writer-type: NO_ACTION
       max-threads: null
     association:
-      enabled: true
+      enabled: false
       chunk-size: 100000
       #writer-type: AMQP
       writer-type: NO_ACTION
       max-threads: null
     association-waldec:
-      enabled: true
+      enabled: false
       chunk-size: 100000
       writer-type: NO_ACTION
       max-threads: null

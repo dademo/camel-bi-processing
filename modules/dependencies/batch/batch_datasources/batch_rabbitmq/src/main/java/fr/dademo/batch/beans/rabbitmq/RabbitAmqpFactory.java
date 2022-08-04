@@ -48,11 +48,20 @@ public class RabbitAmqpFactory {
     }
 
     public Stream<QueueBuilder> getAllQueuesBuilder() {
-        return batchDataSourcesConfiguration.getRabbitmq().keySet().stream().flatMap(this::getQueueBuilderFor);
+        return batchDataSourcesConfiguration.getRabbitmq()
+            .keySet()
+            .stream()
+            .filter(v -> batchDataSourcesConfiguration.getRabbitmq().get(v).isEnabled())
+            .flatMap(this::getQueueBuilderFor);
     }
 
     public Stream<ExchangeBuilder> getAllExchangesBuilder() {
-        return batchDataSourcesConfiguration.getRabbitmq().keySet().stream().flatMap(this::getExchangeBuilderFor);
+
+        return batchDataSourcesConfiguration.getRabbitmq()
+            .keySet()
+            .stream()
+            .filter(v -> batchDataSourcesConfiguration.getRabbitmq().get(v).isEnabled())
+            .flatMap(this::getExchangeBuilderFor);
     }
 
     private Stream<QueueBuilder> getQueueBuilderFor(@NotEmpty String rabbitMQDataSourceName) {

@@ -29,7 +29,7 @@ final IMPORT_ROOT = ':modules:dependencies:cache:cache_backends'
 
 dependencies {
 
-    ['file', 'vfs', 'jdbc'].each {
+    ['file', 'vfs', 'jdbc', 'minio'].each {
         api project(String.format("%s:cache_backend_%s", IMPORT_ROOT, it))
     }
 }

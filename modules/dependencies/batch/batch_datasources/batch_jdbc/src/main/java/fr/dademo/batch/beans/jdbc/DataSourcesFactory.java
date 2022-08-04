@@ -101,10 +101,17 @@ public class DataSourcesFactory {
         hikariConfig.setJdbcUrl(configuration.getUrl());
         hikariConfig.setMinimumIdle(configuration.getMinimumIdle());
         hikariConfig.setMaximumPoolSize(configuration.getMaximumPoolSize());
+        hikariConfig.setConnectionTimeout(configuration.getConnectionTimeoutMillis());
+        hikariConfig.setIdleTimeout(configuration.getIdleTimeoutMillis());
+        hikariConfig.setValidationTimeout(configuration.getValidationTimeoutMillis());
         Optional.ofNullable(configuration.getUsername()).ifPresent(hikariConfig::setUsername);
         Optional.ofNullable(configuration.getPassword()).ifPresent(hikariConfig::setPassword);
+        Optional.ofNullable(configuration.getSchema()).ifPresent(hikariConfig::setSchema);
         Optional.ofNullable(configuration.getDriverClassName()).ifPresent(hikariConfig::setDriverClassName);
-        hikariConfig.setConnectionTimeout(configuration.getConnectionTimeoutMS());
+
+        if ("batch".equals(dataSourceName)) {
+            applyBatchConfiguration(hikariConfig);
+        }
 
         return new HikariDataSource(hikariConfig);
     }
@@ -112,5 +119,13 @@ public class DataSourcesFactory {
     @Nonnull
     private DatabaseSQLDialectSupplier databaseSQLDialectProviderForDataSource(@Nonnull String dataSourceName) {
         return new DatabaseSQLDialectSupplier(getDataSource(dataSourceName));
+    }
+
+    private void applyBatchConfiguration(HikariConfig hikariConfig) {
+
+        hikariConfig.setSchema(null);
+        hikariConfig.setMinimumIdle(Math.max(hikariConfig.getMinimumIdle(), 5));
+        hikariConfig.setMaximumPoolSize(Math.max(hikariConfig.getMinimumIdle(), 10));
+        hikariConfig.setConnectionTimeout(0);
     }
 }

@@ -48,16 +48,16 @@ public class PersistenceBeans {
     @Bean(name = PERSISTENCE_DATASOURCE_BEAN_NAME)
     public DataSource dataSource(PersistenceConfiguration persistenceConfiguration) {
 
-        final var hikariConfiguration = new HikariConfig();
+        final var hikariConfig = new HikariConfig();
 
-        hikariConfiguration.setJdbcUrl(persistenceConfiguration.getDatasource().getUrl());
-        hikariConfiguration.setUsername(persistenceConfiguration.getDatasource().getUsername());
-        hikariConfiguration.setPassword(persistenceConfiguration.getDatasource().getPassword());
-        hikariConfiguration.setMinimumIdle(persistenceConfiguration.getMinimumIdle());
-        hikariConfiguration.setMaximumPoolSize(persistenceConfiguration.getMaximumPoolSize());
-        hikariConfiguration.setAutoCommit(false);
+        hikariConfig.setJdbcUrl(persistenceConfiguration.getDatasource().getUrl());
+        hikariConfig.setUsername(persistenceConfiguration.getDatasource().getUsername());
+        hikariConfig.setPassword(persistenceConfiguration.getDatasource().getPassword());
+        hikariConfig.setMinimumIdle(persistenceConfiguration.getMinimumIdle());
+        hikariConfig.setMaximumPoolSize(persistenceConfiguration.getMaximumPoolSize());
+        hikariConfig.setAutoCommit(false);
 
-        return new HikariDataSource(hikariConfiguration);
+        return new HikariDataSource(hikariConfig);
     }
 
     @Profile("!dev")

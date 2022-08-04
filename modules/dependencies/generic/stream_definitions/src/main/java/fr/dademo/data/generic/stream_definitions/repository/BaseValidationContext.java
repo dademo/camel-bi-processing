@@ -6,6 +6,7 @@
 
 package fr.dademo.data.generic.stream_definitions.repository;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifierValidator;
 import fr.dademo.data.generic.stream_definitions.exception.InputStreamIdentifierValidationException;
@@ -43,7 +44,12 @@ public abstract class BaseValidationContext<T extends InputStreamIdentifier<?>> 
     ) throws IOException {
 
         this.inputStreamIdentifier = inputStreamIdentifier;
-        this.validatorsExecutorService = Executors.newFixedThreadPool(streamValidators.size());
+        this.validatorsExecutorService = Executors.newFixedThreadPool(
+            streamValidators.size(),
+            new ThreadFactoryBuilder()
+                .setNameFormat(getStreamValidatorThreadNameTemplate(inputStreamIdentifier))
+                .build()
+        );
         this.validatorTasks = new ArrayList<>(streamValidators.size());
         this.delegate = applyValidators(inputStream, streamValidators);
     }
@@ -77,19 +83,24 @@ public abstract class BaseValidationContext<T extends InputStreamIdentifier<?>> 
     @SneakyThrows({InterruptedException.class, ExecutionException.class})
     public void close() throws IOException {
 
-        // We close the delegate
-        delegate.close();
-        // ... and we complete all validators
-        for (var validatorTask : validatorTasks) {
-            try {
-                validatorTask.get();
-            } catch (ExecutionException e) {
-                if (e.getCause() instanceof InputStreamIdentifierValidationException) {
-                    throw (InputStreamIdentifierValidationException) e.getCause();
-                } else {
-                    throw e;
+        try {
+            // We close the delegate
+            delegate.close();
+            // ... and we complete all validators
+            for (var validatorTask : validatorTasks) {
+                try {
+                    validatorTask.get();
+                } catch (ExecutionException e) {
+                    if (e.getCause() instanceof InputStreamIdentifierValidationException) {
+                        throw (InputStreamIdentifierValidationException) e.getCause();
+                    } else {
+                        throw e;
+                    }
                 }
             }
+        } finally {
+            // We will shutdown the thread pool to avoid zombies threads
+            validatorsExecutorService.shutdown();
         }
     }
 
@@ -124,5 +135,19 @@ public abstract class BaseValidationContext<T extends InputStreamIdentifier<?>> 
             validator.validate(inputStreamIdentifier, inputStream);
             return null;
         };
+    }
+
+    private String getStreamValidatorThreadNameTemplate(@Nonnull T inputStreamIdentifier) {
+
+        var className = inputStreamIdentifier.getClass().getSimpleName();
+        if (className.isEmpty()) {
+            className = inputStreamIdentifier.getClass().getName();
+        }
+
+        return String.format(
+            "stream-validation-%s-%s-%%d",
+            className,
+            inputStreamIdentifier.getUniqueIdentifier()
+        );
     }
 }

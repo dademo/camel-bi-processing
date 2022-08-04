@@ -40,6 +40,9 @@ public class HttpInputStreamIdentifier implements InputStreamIdentifier<URL> {
     @Nullable
     private RequestBody requestBody;
 
+    @Nullable
+    private String contentType;
+
     @Nonnull
     @Override
     public URL getSource() {

@@ -29,12 +29,13 @@ import java.io.UncheckedIOException;
 public abstract class VFSCacheIndexRepositoryBase<T extends InputStreamIdentifier<?>> extends BaseCacheIndexRepository<T> implements InitializingBean {
 
     public static final String DIRECTORY_ROOT_URI_SCHEME = "file";
-    protected static final String LOCK_FILE_NAME = "index.lock";
+    public static final String LOCK_FILE_NAME = "index.lock";
 
 
     @Getter
     @Autowired
     private CacheVFSConfiguration cacheVFSConfiguration;
+
     @Getter
     @Autowired
     private FileSystemManager fileSystemManager;

@@ -81,7 +81,7 @@ public class DefaultJobExecutionListener implements JobExecutionListener {
     public void afterJob(JobExecution jobExecution) {
 
         final var exceptionStr = jobExecution.getAllFailureExceptions().stream()
-            .map(throwable -> String.format("  - %s", throwable.toString()))
+            .map(throwable -> String.format("  - %s", throwable.getMessage()))
             .collect(Collectors.joining("\n"));
 
         log.info(formatBatchInfo(String.format(

@@ -22,5 +22,9 @@ include 'modules:dependencies:cache:cache_backends:cache_backend_vfs:cache_backe
 include 'modules:dependencies:cache:cache_backends:cache_backend_jdbc:cache_backend_jdbc_beans'
 include 'modules:dependencies:cache:cache_backends:cache_backend_jdbc:cache_backend_jdbc_index'
 include 'modules:dependencies:cache:cache_backends:cache_backend_jdbc:cache_backend_jdbc_repository'
+/// Minio
+include 'modules:dependencies:cache:cache_backends:cache_backend_minio:cache_backend_minio_beans'
+include 'modules:dependencies:cache:cache_backends:cache_backend_minio:cache_backend_minio_index'
+include 'modules:dependencies:cache:cache_backends:cache_backend_minio:cache_backend_minio_repository'
 
 include 'modules:dependencies:cache:cache_backends'

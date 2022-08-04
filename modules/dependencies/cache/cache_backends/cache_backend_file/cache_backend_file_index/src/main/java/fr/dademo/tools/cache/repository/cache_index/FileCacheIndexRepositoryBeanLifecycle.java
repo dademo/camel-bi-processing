@@ -26,11 +26,12 @@ import java.util.Optional;
  */
 @Slf4j
 @NoArgsConstructor
-public abstract class FileCacheIndexRepositoryBase<T extends InputStreamIdentifier<?>> extends BaseCacheIndexRepository<T> implements InitializingBean {
+public abstract class FileCacheIndexRepositoryBeanLifecycle<T extends InputStreamIdentifier<?>> extends BaseCacheIndexRepository<T> implements InitializingBean {
 
     public static final String DIRECTORY_ROOT_URI_SCHEME = "file";
-    protected static final String LOCK_FILE_NAME = "index.lock";
-    protected static final String RESOURCES_DIRECTORY_NAME = "resources";
+    public static final String LOCK_FILE_NAME = "index.lock";
+    public static final String RESOURCES_DIRECTORY_NAME = "resources";
+
 
     @Autowired
     @Getter

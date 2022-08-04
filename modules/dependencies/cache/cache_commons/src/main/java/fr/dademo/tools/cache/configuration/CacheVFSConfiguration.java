@@ -24,7 +24,6 @@ import java.util.Optional;
 @Data
 public class CacheVFSConfiguration {
 
-
     private static final String TEMP_PREFIX = normalizedName(CacheVFSConfiguration.class.getName());
     @Nullable
     private String tempResourcesPath = null;

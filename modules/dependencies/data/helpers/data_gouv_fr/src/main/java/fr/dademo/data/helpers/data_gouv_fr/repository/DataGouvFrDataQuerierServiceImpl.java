@@ -146,6 +146,7 @@ public class DataGouvFrDataQuerierServiceImpl extends BaseDataGouvFrDataQuerierS
 
         return HttpInputStreamIdentifier.builder()
             .url(new URL(dataGouvFrDataSetResource.getUrl()))
+            .contentType(dataGouvFrDataSetResource.getMime())
             .method("GET")
             .build();
     }

@@ -33,6 +33,9 @@ public class JDBCDataSourceConfiguration {
     private String password;
 
     @Nullable
+    private String schema;
+
+    @Nullable
     private String driverClassName;
 
     @Min(0)
@@ -41,6 +44,12 @@ public class JDBCDataSourceConfiguration {
     @Min(1)
     private int maximumPoolSize = 10;
 
-    @Min(1)
-    private long connectionTimeoutMS = Duration.ofSeconds(30).toMillis();
+    @Min(0)
+    private long connectionTimeoutMillis = Duration.ofSeconds(30).toMillis();
+
+    @Min(0)
+    private long idleTimeoutMillis = Duration.ofSeconds(10).toMillis();
+
+    @Min(0)
+    private long validationTimeoutMillis = Duration.ofSeconds(5).toMillis();
 }

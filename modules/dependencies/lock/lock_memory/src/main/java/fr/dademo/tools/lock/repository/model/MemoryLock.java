@@ -31,7 +31,7 @@ public class MemoryLock implements Lock {
         final var uniqueIdentifier = lockedResource.getUniqueIdentifier();
         log.debug("Acquiring lock {}", uniqueIdentifier);
         lock.lock();
-        log.debug("Lock {} acquired", uniqueIdentifier);
+        log.debug("Lock {} acquired ({})", uniqueIdentifier, lock);
     }
 
     public static MemoryLock of(@Nonnull Cacheable lockedResource, @Nonnull ReentrantLock lock) {
@@ -40,7 +40,9 @@ public class MemoryLock implements Lock {
 
     @Override
     public void close() {
+        log.debug("Releasing lock {}", lock);
         lock.unlock();
+        log.debug("Lock {} released", lock);
     }
 
     @Nonnull

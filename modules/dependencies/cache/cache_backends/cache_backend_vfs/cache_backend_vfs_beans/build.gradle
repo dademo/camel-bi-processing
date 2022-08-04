@@ -43,9 +43,6 @@ dependencies {
         exclude group: 'ch.qos.reload4j', module: 'reload4j'
         exclude group: 'org.slf4j', module: 'slf4j-reload4j'
     }
-    implementation "com.fasterxml.jackson.core:jackson-core:${jacksonCoreVersion}"
-    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonCoreVersion}"
-    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonCoreVersion}"
     implementation "com.google.code.findbugs:jsr305:${findBugsJsr305Version}"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

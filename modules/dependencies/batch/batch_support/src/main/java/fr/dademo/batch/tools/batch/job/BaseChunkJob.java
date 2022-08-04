@@ -76,7 +76,7 @@ public abstract class BaseChunkJob<I, O> implements BatchJobProvider {
             threadPoolExecutor.setMaxPoolSize(poolSize);
             threadPoolExecutor.setQueueCapacity(poolSize * MAX_THREAD_POOL_QUEUE_SIZE_FACTOR);
             threadPoolExecutor.setDaemon(false);
-            threadPoolExecutor.setThreadNamePrefix(jobName);
+            threadPoolExecutor.setThreadNamePrefix(String.format("bi-job-%s-", jobName));
 
             threadPoolExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
             threadPoolExecutor.initialize();

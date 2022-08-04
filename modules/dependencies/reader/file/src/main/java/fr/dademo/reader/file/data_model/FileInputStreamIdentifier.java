@@ -11,6 +11,7 @@ import fr.dademo.tools.tools.HashTools;
 import lombok.*;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 
@@ -29,6 +30,9 @@ public class FileInputStreamIdentifier implements InputStreamIdentifier<File> {
 
     @Nonnull
     private File file;
+
+    @Nullable
+    private String contentType;
 
     @Nonnull
     @Override
