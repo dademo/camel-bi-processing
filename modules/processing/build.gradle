@@ -34,6 +34,7 @@ dependencies {
     implementation project(':modules:dependencies:reader:http_cache')
     implementation project(':modules:dependencies:data:helpers:data_gouv_fr')
     implementation project(':modules:dependencies:batch:batch_support')
+    implementation project(':modules:dependencies:batch:batch_resources_reader_wrapper')
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
