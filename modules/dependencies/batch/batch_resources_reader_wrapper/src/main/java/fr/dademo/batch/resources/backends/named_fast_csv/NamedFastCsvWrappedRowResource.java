@@ -7,17 +7,17 @@
 package fr.dademo.batch.resources.backends.named_fast_csv;
 
 import de.siegmar.fastcsv.reader.NamedCsvRow;
-import fr.dademo.batch.resources.BaseWrappedResource;
+import fr.dademo.batch.resources.BaseWrappedRowResource;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class NamedFastCsvWrappedResource extends BaseWrappedResource {
+public class NamedFastCsvWrappedRowResource extends BaseWrappedRowResource {
 
     @Nonnull
     private final NamedCsvRow delegate;
 
-    public NamedFastCsvWrappedResource(@Nonnull NamedCsvRow delegate) {
+    public NamedFastCsvWrappedRowResource(@Nonnull NamedCsvRow delegate) {
         this.delegate = delegate;
     }
 

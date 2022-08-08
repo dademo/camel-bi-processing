@@ -9,14 +9,16 @@ package fr.dademo.batch.resources.backends.fast_csv;
 import de.siegmar.fastcsv.reader.CsvReader;
 import de.siegmar.fastcsv.reader.CsvRow;
 import fr.dademo.batch.resources.ResourcesReaderWrapper;
-import fr.dademo.batch.resources.WrappedResource;
+import fr.dademo.batch.resources.WrappedRowResource;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.StreamSupport;
 
 public class FastCsvResourcesReaderWrapper implements ResourcesReaderWrapper {
 
@@ -25,7 +27,7 @@ public class FastCsvResourcesReaderWrapper implements ResourcesReaderWrapper {
 
     private final boolean closeDelegate;
 
-    private final Iterator<WrappedResource> iterator;
+    private final Iterator<WrappedRowResource> iterator;
 
 
     @Nullable
@@ -36,17 +38,17 @@ public class FastCsvResourcesReaderWrapper implements ResourcesReaderWrapper {
         this.delegate = delegate;
         this.closeDelegate = closeDelegate;
 
-        final var delegateStream = delegate.stream();
+        final var spliterator = delegate.spliterator();
         if (hasHeader) {
             // Opening the stream to read the header
-            columnsIndexMapping = delegateStream.findFirst()
-                .map(this::mapTocolumnsIndexMapping)
-                .orElse(null);
+            AtomicReference<Map<String, Integer>> workMapping = new AtomicReference<>(null);
+            spliterator.tryAdvance(row -> workMapping.set(mapToColumnsIndexMapping(row)));
+            columnsIndexMapping = workMapping.get();
         } else {
             columnsIndexMapping = null;
         }
 
-        iterator = delegateStream
+        iterator = StreamSupport.stream(spliterator, false)
             .map(this::toWrappedResource)
             .iterator();
     }
@@ -60,20 +62,20 @@ public class FastCsvResourcesReaderWrapper implements ResourcesReaderWrapper {
     }
 
     @Override
-    public Iterator<WrappedResource> iterator() {
+    public Iterator<WrappedRowResource> iterator() {
         return iterator;
     }
 
-    private WrappedResource toWrappedResource(CsvRow csvRow) {
-        return new FastCsvWrappedResource(csvRow, columnsIndexMapping);
+    private WrappedRowResource toWrappedResource(CsvRow csvRow) {
+        return new FastCsvWrappedRowResource(csvRow, columnsIndexMapping);
     }
 
-    private Map<String, Integer> mapTocolumnsIndexMapping(CsvRow row) {
+    private Map<String, Integer> mapToColumnsIndexMapping(CsvRow row) {
 
         return IntStream.rangeClosed(1, row.getFieldCount())
             .boxed()
             .collect(Collectors.toMap(
-                row::getField,
+                columnIndex -> row.getField(columnIndex - 1),
                 Integer::intValue
             ));
     }

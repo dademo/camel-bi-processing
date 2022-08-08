@@ -7,6 +7,7 @@
 package fr.dademo.bi.companies.jobs.stg.company_legal.datamodel;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -128,4 +129,45 @@ public class CompanyLegal {
     private String headquartersNic;
     private String isSocialAndSolidarityEconomy;
     private String isEmployer;
+
+    @AllArgsConstructor
+    @Getter
+    @Builder
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    public static class CompanyLegalCsvColumnsMapping {
+
+        int sirenField;
+        int diffusionStatusField;
+        int isPurgedField;
+        int creationDateField;
+        int acronymField;
+        int sexField;
+        int firstName1Field;
+        int firstName2Field;
+        int firstName3Field;
+        int firstName4Field;
+        int usualFirstNameField;
+        int pseudonymField;
+        int associationIdentifierField;
+        int staffNumberRangeField;
+        int staffNumberYearField;
+        int lastProcessingField;
+        int periodsCountField;
+        int companyCategoryField;
+        int companyCategoryYearField;
+        int beginDateField;
+        int administrativeStateField;
+        int nameField;
+        int usualNameField;
+        int denominationField;
+        int usualDenomination1Field;
+        int usualDenomination2Field;
+        int usualDenomination3Field;
+        int legalCategoryField;
+        int principalActivityField;
+        int principalActivityNomenclatureField;
+        int headquartersNicField;
+        int isSocialAndSolidarityEconomyField;
+        int isEmployerField;
+    }
 }

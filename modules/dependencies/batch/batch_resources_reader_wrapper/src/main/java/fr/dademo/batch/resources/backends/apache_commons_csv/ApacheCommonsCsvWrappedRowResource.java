@@ -4,20 +4,20 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package fr.dademo.batch.resources.backends.commons_csv;
+package fr.dademo.batch.resources.backends.apache_commons_csv;
 
-import fr.dademo.batch.resources.BaseWrappedResource;
+import fr.dademo.batch.resources.BaseWrappedRowResource;
 import org.apache.commons.csv.CSVRecord;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ApacheCommonsCsvWrappedResource extends BaseWrappedResource {
+public class ApacheCommonsCsvWrappedRowResource extends BaseWrappedRowResource {
 
     @Nonnull
     private final CSVRecord delegate;
 
-    public ApacheCommonsCsvWrappedResource(@Nonnull CSVRecord delegate) {
+    public ApacheCommonsCsvWrappedRowResource(@Nonnull CSVRecord delegate) {
 
         this.delegate = delegate;
         setColumnsIndexMapping(delegate.getParser().getHeaderMap());
@@ -26,7 +26,7 @@ public class ApacheCommonsCsvWrappedResource extends BaseWrappedResource {
     @Nullable
     @Override
     public String getString(int columnIndex) {
-        return delegate.get(columnIndex - 1);
+        return delegate.get(columnIndex);
     }
 
     @Nullable

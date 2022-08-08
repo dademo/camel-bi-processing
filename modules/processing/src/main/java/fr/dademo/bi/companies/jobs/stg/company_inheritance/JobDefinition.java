@@ -7,9 +7,9 @@
 package fr.dademo.bi.companies.jobs.stg.company_inheritance;
 
 import fr.dademo.batch.configuration.BatchConfiguration;
+import fr.dademo.batch.resources.WrappedRowResource;
 import fr.dademo.batch.tools.batch.job.BaseChunkJob;
 import fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel.CompanyInheritance;
-import org.apache.commons.csv.CSVRecord;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
  * @author dademo
  */
 @Component(JobDefinition.COMPANY_INHERITANCE_JOB_NAME)
-public class JobDefinition extends BaseChunkJob<CSVRecord, CompanyInheritance> {
+public class JobDefinition extends BaseChunkJob<WrappedRowResource, CompanyInheritance> {
 
     public static final String COMPANY_INHERITANCE_CONFIG_JOB_NAME = "company-inheritance";
     public static final String COMPANY_INHERITANCE_NORMALIZED_CONFIG_JOB_NAME = "company_inheritance";
@@ -51,13 +51,13 @@ public class JobDefinition extends BaseChunkJob<CSVRecord, CompanyInheritance> {
 
     @Nonnull
     @Override
-    public ItemReader<CSVRecord> getItemReader() {
+    public ItemReader<WrappedRowResource> getItemReader() {
         return companyInheritanceItemReader;
     }
 
     @Nonnull
     @Override
-    public ItemProcessor<CSVRecord, CompanyInheritance> getItemProcessor() {
+    public ItemProcessor<WrappedRowResource, CompanyInheritance> getItemProcessor() {
         return companyInheritanceItemMapper;
     }
 

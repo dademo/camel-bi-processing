@@ -4,10 +4,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package fr.dademo.batch.resources.backends.commons_csv;
+package fr.dademo.batch.resources.backends.apache_commons_csv;
 
 import fr.dademo.batch.resources.ResourcesReaderWrapper;
-import fr.dademo.batch.resources.WrappedResource;
+import fr.dademo.batch.resources.WrappedRowResource;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
@@ -29,7 +29,7 @@ public class ApacheCommonsCsvResourcesReaderWrapper implements ResourcesReaderWr
     }
 
     @Override
-    public Iterator<WrappedResource> iterator() {
+    public Iterator<WrappedRowResource> iterator() {
 
         return delegate.stream()
             .map(this::toWrappedResource)
@@ -44,7 +44,7 @@ public class ApacheCommonsCsvResourcesReaderWrapper implements ResourcesReaderWr
         }
     }
 
-    private WrappedResource toWrappedResource(CSVRecord csvRecord) {
-        return new ApacheCommonsCsvWrappedResource(csvRecord);
+    private WrappedRowResource toWrappedResource(CSVRecord csvRecord) {
+        return new ApacheCommonsCsvWrappedRowResource(csvRecord);
     }
 }

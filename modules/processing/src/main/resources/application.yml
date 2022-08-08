@@ -18,8 +18,8 @@ amqp:
 
 logging:
   level:
-    'org.springframework': DEBUG
-    #'org.springframework': INFO
+    #'org.springframework': DEBUG
+    'org.springframework': INFO
     'fr.dademo': DEBUG
     'fr.dademo.tools': TRACE
     'org.flywaydb.core': DEBUG
@@ -39,8 +39,9 @@ lock:
 
 cache:
   enabled: true
+  cacheBackend: file
   #cacheBackend: vfs
-  cacheBackend: minio
+  #cacheBackend: minio
   vfs:
     tempResourcesPath: "file:///tmp/tmp__dev_cache"
     randomTempPath: true
@@ -107,39 +108,39 @@ batch:
       #writer-type: MONGODB
       max-threads: null
     company:
-      enabled: false
+      enabled: true
       chunk-size: 100000
       writer-type: NO_ACTION
       #writer-type: MONGODB
       max-threads: null
     company-history:
-      enabled: false
+      enabled: true
       chunk-size: 100000
       writer-type: NO_ACTION
       max-threads: null
     company-inheritance:
-      enabled: false
+      enabled: true
       chunk-size: 100000
       writer-type: NO_ACTION
       max-threads: null
     company-legal:
-      enabled: false
+      enabled: true
       chunk-size: 100000
       writer-type: NO_ACTION
       max-threads: null
     company-legal-history:
-      enabled: false
+      enabled: true
       chunk-size: 100000
       writer-type: NO_ACTION
       max-threads: null
     association:
-      enabled: false
+      enabled: true
       chunk-size: 100000
       #writer-type: AMQP
       writer-type: NO_ACTION
       max-threads: null
     association-waldec:
-      enabled: false
+      enabled: true
       chunk-size: 100000
       writer-type: NO_ACTION
       max-threads: null

@@ -6,9 +6,9 @@
 
 package fr.dademo.bi.companies.jobs.stg.association;
 
+import fr.dademo.batch.resources.WrappedRowResource;
 import fr.dademo.batch.tools.batch.mapper.BatchMapperTools;
 import fr.dademo.bi.companies.jobs.stg.association.datamodel.Association;
-import org.apache.commons.csv.CSVRecord;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
@@ -24,42 +24,81 @@ import static fr.dademo.bi.companies.jobs.stg.association.datamodel.Association.
  * @author dademo
  */
 @Component
-public class AssociationItemMapper implements ItemProcessor<CSVRecord, Association> {
+public class AssociationItemMapper implements ItemProcessor<WrappedRowResource, Association> {
+
+    private AssociationCsvColumnsMapping columnsIndexMapping;
 
     @Override
-    public Association process(@Nonnull CSVRecord item) {
+    public Association process(@Nonnull WrappedRowResource item) {
         return mappedToCompanyHistory(item);
     }
 
-    private Association mappedToCompanyHistory(CSVRecord csvRecord) {
+    private Association mappedToCompanyHistory(WrappedRowResource item) {
+
+        if (columnsIndexMapping == null) {
+            // Filling the mapping
+            columnsIndexMapping = getHeaderMapping(item);
+        }
 
         return Association.builder()
-            .id(csvRecord.get(CSV_FIELD_ASSOCIATION_ID))
-            .idEx(csvRecord.get(CSV_FIELD_ASSOCIATION_ID_EX))
-            .siret(csvRecord.get(CSV_FIELD_ASSOCIATION_SIRET))
-            .gestion(csvRecord.get(CSV_FIELD_ASSOCIATION_GESTION))
-            .creationDate(toLocalDate(csvRecord.get(CSV_FIELD_ASSOCIATION_CREATION_DATE)))
-            .publicationDate(toLocalDate(csvRecord.get(CSV_FIELD_ASSOCIATION_PUBLICATION_DATE)))
-            .nature(csvRecord.get(CSV_FIELD_ASSOCIATION_NATURE))
-            .groupement(csvRecord.get(CSV_FIELD_ASSOCIATION_GROUPEMENT))
-            .title(csvRecord.get(CSV_FIELD_ASSOCIATION_TITLE))
-            .object(csvRecord.get(CSV_FIELD_ASSOCIATION_OBJECT))
-            .socialObject1(csvRecord.get(CSV_FIELD_ASSOCIATION_SOCIAL_OBJECT_1))
-            .socialObject2(csvRecord.get(CSV_FIELD_ASSOCIATION_SOCIAL_OBJECT_2))
-            .address1(csvRecord.get(CSV_FIELD_ASSOCIATION_ADDRESS_1))
-            .address2(csvRecord.get(CSV_FIELD_ASSOCIATION_ADDRESS_2))
-            .address3(csvRecord.get(CSV_FIELD_ASSOCIATION_ADDRESS_3))
-            .addressPostalCode(csvRecord.get(CSV_FIELD_ASSOCIATION_ADDRESS_POSTAL_CODE))
-            .addressInseeCode(csvRecord.get(CSV_FIELD_ASSOCIATION_ADDRESS_INSEE_CODE))
-            .addressCityLibelle(csvRecord.get(CSV_FIELD_ASSOCIATION_ADDRESS_CITY_LIBELLE))
-            .leaderCivility(csvRecord.get(CSV_FIELD_ASSOCIATION_LEADER_CIVILITY))
-            //.telephone(csvRecord.get(CSV_FIELD_ASSOCIATION_TELEPHONE))
-            .website(csvRecord.get(CSV_FIELD_ASSOCIATION_WEBSITE))
-            //.email(csvRecord.get(CSV_FIELD_ASSOCIATION_EMAIL))
-            .observation(csvRecord.get(CSV_FIELD_ASSOCIATION_OBSERVATION))
-            .position(csvRecord.get(CSV_FIELD_ASSOCIATION_POSITION))
-            .rupCode(csvRecord.get(CSV_FIELD_ASSOCIATION_RUP_CODE))
-            .lastUpdated(parseLastUpdatedDate(csvRecord.get(CSV_FIELD_ASSOCIATION_LAST_UPDATED)))
+            .id(item.getString(columnsIndexMapping.getAssociationIdField()))
+            .idEx(item.getString(columnsIndexMapping.getAssociationIdExField()))
+            .siret(item.getString(columnsIndexMapping.getAssociationSiretField()))
+            .gestion(item.getString(columnsIndexMapping.getAssociationGestionField()))
+            .creationDate(toLocalDate(item.getString(columnsIndexMapping.getAssociationCreationDateField())))
+            .publicationDate(toLocalDate(item.getString(columnsIndexMapping.getAssociationPublicationDateField())))
+            .nature(item.getString(columnsIndexMapping.getAssociationNatureField()))
+            .groupement(item.getString(columnsIndexMapping.getAssociationGroupementField()))
+            .title(item.getString(columnsIndexMapping.getAssociationTitleField()))
+            .object(item.getString(columnsIndexMapping.getAssociationObjectField()))
+            .socialObject1(item.getString(columnsIndexMapping.getAssociationSocialObject1Field()))
+            .socialObject2(item.getString(columnsIndexMapping.getAssociationSocialObject2Field()))
+            .address1(item.getString(columnsIndexMapping.getAssociationAddress1Field()))
+            .address2(item.getString(columnsIndexMapping.getAssociationAddress2Field()))
+            .address3(item.getString(columnsIndexMapping.getAssociationAddress3Field()))
+            .addressPostalCode(item.getString(columnsIndexMapping.getAssociationAddressPostalCodeField()))
+            .addressInseeCode(item.getString(columnsIndexMapping.getAssociationAddressCityLibelleField()))
+            .addressCityLibelle(item.getString(columnsIndexMapping.getAssociationAddressInseeCodeField()))
+            .leaderCivility(item.getString(columnsIndexMapping.getAssociationLeaderCivilityField()))
+            //.telephone(item.getString(columnsIndexMapping.getAssociationTelephoneField()))
+            .website(item.getString(columnsIndexMapping.getAssociationWebsiteField()))
+            //.email(item.getString(columnsIndexMapping.getAssociationEmailField()))
+            .observation(item.getString(columnsIndexMapping.getAssociationObservationField()))
+            .position(item.getString(columnsIndexMapping.getAssociationPositionField()))
+            .rupCode(item.getString(columnsIndexMapping.getAssociationRupCodeField()))
+            .lastUpdated(parseLastUpdatedDate(item.getString(columnsIndexMapping.getAssociationLastUpdatedField())))
+            .build();
+    }
+
+    private AssociationCsvColumnsMapping getHeaderMapping(WrappedRowResource item) {
+
+        return AssociationCsvColumnsMapping.builder()
+            .associationIdField(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_ID))
+            .associationIdExField(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_ID_EX))
+            .associationSiretField(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_SIRET))
+            .associationGestionField(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_GESTION))
+            .associationCreationDateField(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_CREATION_DATE))
+            .associationPublicationDateField(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_PUBLICATION_DATE))
+            .associationNatureField(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_NATURE))
+            .associationGroupementField(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_GROUPEMENT))
+            .associationTitleField(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_TITLE))
+            .associationObjectField(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_OBJECT))
+            .associationSocialObject1Field(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_SOCIAL_OBJECT_1))
+            .associationSocialObject2Field(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_SOCIAL_OBJECT_2))
+            .associationAddress1Field(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_ADDRESS_1))
+            .associationAddress2Field(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_ADDRESS_2))
+            .associationAddress3Field(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_ADDRESS_3))
+            .associationAddressPostalCodeField(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_ADDRESS_POSTAL_CODE))
+            .associationAddressCityLibelleField(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_ADDRESS_CITY_LIBELLE))
+            .associationAddressInseeCodeField(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_ADDRESS_INSEE_CODE))
+            .associationLeaderCivilityField(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_LEADER_CIVILITY))
+            //.associationTelephoneField(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_TELEPHONE))
+            .associationWebsiteField(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_WEBSITE))
+            //.associationEmailField(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_EMAIL))
+            .associationObservationField(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_OBSERVATION))
+            .associationPositionField(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_POSITION))
+            .associationRupCodeField(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_RUP_CODE))
+            .associationLastUpdatedField(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_LAST_UPDATED))
             .build();
     }
 

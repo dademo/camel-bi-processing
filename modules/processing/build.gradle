@@ -58,10 +58,12 @@ dependencies {
     // Other libraries
     implementation "org.jooq:jooq:${jooqVersion}"
     implementation "org.apache.commons:commons-lang3:${apacheCommonsLang3Version}"
-    implementation "org.apache.commons:commons-csv:${apacheCommonsCsvVersion}"
     implementation "org.apache.commons:commons-compress:${apacheCommonsCompressVersion}"
     implementation "commons-io:commons-io:${apacheCommonsIOVersion}"
     implementation "com.google.code.findbugs:jsr305:${findBugsJsr305Version}"
+    // Csv readers
+    implementation "org.apache.commons:commons-csv:${apacheCommonsCsvVersion}"
+    implementation "de.siegmar:fastcsv:${fastCsvVersion}"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.amqp:spring-rabbit-test'

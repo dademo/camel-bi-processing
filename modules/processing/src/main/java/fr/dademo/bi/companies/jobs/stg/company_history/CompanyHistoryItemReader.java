@@ -6,6 +6,8 @@
 
 package fr.dademo.bi.companies.jobs.stg.company_history;
 
+import fr.dademo.batch.resources.ResourcesReaderWrapperProvider;
+import fr.dademo.batch.resources.WrappedRowResource;
 import fr.dademo.batch.tools.batch.reader.UnidirectionalItemStreamReaderSupport;
 import fr.dademo.data.definitions.data_gouv_fr.dimensions.DataGouvFrDataSetResource;
 import fr.dademo.data.helpers.data_gouv_fr.helpers.DataGouvFrFilterHelpers;
@@ -16,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVRecord;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,7 +36,7 @@ import static fr.dademo.bi.companies.jobs.stg.company_history.datamodel.CompanyH
  */
 @Slf4j
 @Component
-public class CompanyHistoryItemReader extends UnidirectionalItemStreamReaderSupport<CSVRecord> {
+public class CompanyHistoryItemReader extends UnidirectionalItemStreamReaderSupport<WrappedRowResource> {
 
     private static final String DATASET_TITLE = "base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret";
     private static final String DATA_TITLE_PREFIX = "Sirene : Fichier StockEtablissementHistorique";
@@ -44,7 +45,7 @@ public class CompanyHistoryItemReader extends UnidirectionalItemStreamReaderSupp
     private DataGouvFrDataQuerierService dataGouvFrDataQuerierService;
 
     private ZipArchiveInputStream archiveInputStream;
-    private Iterator<CSVRecord> iterator = Collections.emptyIterator();
+    private Iterator<WrappedRowResource> iterator = Collections.emptyIterator();
 
     @SneakyThrows
     public void open(@Nonnull ExecutionContext executionContext) {
@@ -68,12 +69,12 @@ public class CompanyHistoryItemReader extends UnidirectionalItemStreamReaderSupp
     }
 
     @Override
-    public CSVRecord read() {
+    public WrappedRowResource read() {
         return nextItem().orElse(null);
     }
 
     @SneakyThrows
-    private synchronized Optional<CSVRecord> nextItem() {   // NOSONAR
+    private synchronized Optional<WrappedRowResource> nextItem() {   // NOSONAR
 
         if (iterator.hasNext()) {
             return Optional.of(iterator.next());
@@ -82,7 +83,11 @@ public class CompanyHistoryItemReader extends UnidirectionalItemStreamReaderSupp
                 ArchiveEntry archiveEntry;
                 if ((archiveEntry = archiveInputStream.getNextEntry()) != null) {
                     if (!archiveEntry.isDirectory()) {
-                        iterator = getCsvStreamIterator();
+                        iterator = ResourcesReaderWrapperProvider.of(
+                            csvFormat()
+                                .parse(new InputStreamReader(archiveInputStream)),
+                            false
+                        ).iterator();
                         if (iterator.hasNext()) {
                             return Optional.of(iterator.next());
                         }
@@ -92,14 +97,6 @@ public class CompanyHistoryItemReader extends UnidirectionalItemStreamReaderSupp
                 }
             }
         }
-    }
-
-    @SneakyThrows
-    private Iterator<CSVRecord> getCsvStreamIterator() {
-
-        return csvFormat()
-            .parse(new InputStreamReader(archiveInputStream))
-            .iterator();
     }
 
     private CSVFormat csvFormat() {

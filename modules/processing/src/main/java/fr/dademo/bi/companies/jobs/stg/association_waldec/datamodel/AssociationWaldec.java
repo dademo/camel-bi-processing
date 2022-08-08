@@ -7,6 +7,7 @@
 package fr.dademo.bi.companies.jobs.stg.association_waldec.datamodel;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 
@@ -143,4 +144,51 @@ public class AssociationWaldec {
     private String email;
     private String publicWebsite;
     private String observation;
+
+    @AllArgsConstructor
+    @Getter
+    @Builder
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    public static class AssociationWaldecCsvColumnsMapping {
+
+        int idField;
+        int idExField;
+        int siretField;
+        int rupCodeField;
+        int gestionField;
+        int creationDateField;
+        int declarationDateField;
+        int publicationDateField;
+        int dissolutionDateField;
+        int natureField;
+        int groupementField;
+        int titleField;
+        int titleShortField;
+        int objectField;
+        int socialObject1Field;
+        int socialObject2Field;
+        int addressComplementField;
+        int addressStreetNumberField;
+        int addressRepetitionField;
+        int addressStreetTypeField;
+        int addressStreetLibelleField;
+        int addressDistributionField;
+        int addressPostalCodeField;
+        int addressInseeCodeField;
+        int addressCityLibelleField;
+        int gestionDeclarantSurnameField;
+        int gestionAddressComplementIdField;
+        int gestionAddressComplementGeoField;
+        int gestionAddressStreetLibelleField;
+        int gestionAddressDistributionField;
+        int gestionAddressPostalCodeField;
+        int gestionForwardField;
+        int gestionCountryField;
+        int leaderCivilityField;
+        int phoneField;
+        int websiteField;
+        int emailField;
+        int publicWebsiteField;
+        int observationField;
+    }
 }

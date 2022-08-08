@@ -7,6 +7,7 @@
 package fr.dademo.bi.companies.jobs.stg.company_history.datamodel;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -88,4 +89,30 @@ public class CompanyHistory {
     private Boolean institutionPrimaryActivityChange;
     private String institutionEmployerNature;
     private Boolean institutionEmployerNatureChange;
+
+    @AllArgsConstructor
+    @Getter
+    @Builder
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    public static class CompanyHistoryCsvColumnsMapping {
+
+        int sirenField;
+        int nicField;
+        int siretField;
+        int endDateField;
+        int beginDateField;
+        int institutionAdministrativeStateField;
+        int institutionAdministrativeStateChangeField;
+        int institution1NameField;
+        int institution2NameField;
+        int institution3NameField;
+        int institutionNameChangeField;
+        int institutionUsualNameField;
+        int institutionUsualNameChangeField;
+        int institutionPrimaryActivityField;
+        int institutionPrimaryActivityNomenclatureField;
+        int institutionPrimaryActivityChangeField;
+        int institutionEmployerNatureField;
+        int institutionEmployerNatureChangeField;
+    }
 }

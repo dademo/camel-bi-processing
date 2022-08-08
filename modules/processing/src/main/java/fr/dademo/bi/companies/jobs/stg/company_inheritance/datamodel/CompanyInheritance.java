@@ -7,6 +7,7 @@
 package fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -42,4 +43,18 @@ public class CompanyInheritance {
     private Boolean companyHeaderChanged;
     private Boolean companyEconomicalContinuity;
     private LocalDateTime companyProcessingTimestamp;
+
+    @AllArgsConstructor
+    @Getter
+    @Builder
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    public static class CompanyInheritanceCsvColumnsMapping {
+
+        int companyPredecessorSirenField;
+        int companySuccessorSirenField;
+        int companySuccessionDateField;
+        int companyHeaderChangedField;
+        int companyEconomicalContinuityField;
+        int companyProcessingTimestampField;
+    }
 }

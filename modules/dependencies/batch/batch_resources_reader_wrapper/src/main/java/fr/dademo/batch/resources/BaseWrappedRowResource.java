@@ -17,7 +17,7 @@ import java.sql.Date;
 import java.util.Map;
 import java.util.Optional;
 
-public abstract class BaseWrappedResource implements WrappedResource {
+public abstract class BaseWrappedRowResource implements WrappedRowResource {
 
     @Nullable
     @Setter(AccessLevel.PROTECTED)

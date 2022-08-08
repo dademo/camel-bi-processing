@@ -7,6 +7,7 @@
 package fr.dademo.bi.companies.jobs.stg.association.datamodel;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 
@@ -98,4 +99,38 @@ public class Association {
     private String position;
     private String rupCode;
     private LocalDate lastUpdated;
+
+    @AllArgsConstructor
+    @Getter
+    @Builder
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    public static class AssociationCsvColumnsMapping {
+
+        int associationIdField;
+        int associationIdExField;
+        int associationSiretField;
+        int associationGestionField;
+        int associationCreationDateField;
+        int associationPublicationDateField;
+        int associationNatureField;
+        int associationGroupementField;
+        int associationTitleField;
+        int associationObjectField;
+        int associationSocialObject1Field;
+        int associationSocialObject2Field;
+        int associationAddress1Field;
+        int associationAddress2Field;
+        int associationAddress3Field;
+        int associationAddressPostalCodeField;
+        int associationAddressCityLibelleField;
+        int associationAddressInseeCodeField;
+        int associationLeaderCivilityField;
+        //int associationTelephoneField;
+        int associationWebsiteField;
+        //int associationEmailField;
+        int associationObservationField;
+        int associationPositionField;
+        int associationRupCodeField;
+        int associationLastUpdatedField;
+    }
 }

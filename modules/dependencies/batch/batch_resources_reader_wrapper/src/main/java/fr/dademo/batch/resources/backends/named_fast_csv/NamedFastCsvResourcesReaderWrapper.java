@@ -9,7 +9,7 @@ package fr.dademo.batch.resources.backends.named_fast_csv;
 import de.siegmar.fastcsv.reader.NamedCsvReader;
 import de.siegmar.fastcsv.reader.NamedCsvRow;
 import fr.dademo.batch.resources.ResourcesReaderWrapper;
-import fr.dademo.batch.resources.WrappedResource;
+import fr.dademo.batch.resources.WrappedRowResource;
 
 import javax.annotation.Nonnull;
 import java.util.Iterator;
@@ -37,13 +37,13 @@ public class NamedFastCsvResourcesReaderWrapper implements ResourcesReaderWrappe
     }
 
     @Override
-    public Iterator<WrappedResource> iterator() {
+    public Iterator<WrappedRowResource> iterator() {
         return delegate.stream()
             .map(this::toWrappedResource)
             .iterator();
     }
 
-    private WrappedResource toWrappedResource(NamedCsvRow namedCsvRow) {
-        return new NamedFastCsvWrappedResource(namedCsvRow);
+    private WrappedRowResource toWrappedResource(NamedCsvRow namedCsvRow) {
+        return new NamedFastCsvWrappedRowResource(namedCsvRow);
     }
 }

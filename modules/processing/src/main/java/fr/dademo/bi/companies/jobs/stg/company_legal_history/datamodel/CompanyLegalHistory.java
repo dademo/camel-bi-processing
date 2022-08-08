@@ -7,6 +7,7 @@
 package fr.dademo.bi.companies.jobs.stg.company_legal_history.datamodel;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -106,4 +107,38 @@ public class CompanyLegalHistory {
     private Boolean legalUnitIsSocialAndSolidarityEconomyChange;
     private String legalUnitIsEmployer;
     private Boolean legalUnitIsEmployerChange;
+
+    @AllArgsConstructor
+    @Getter
+    @Builder
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    public static class CompanyLegalHistoryCsvColumnsMapping {
+
+        int sirenField;
+        int endDateField;
+        int beginDateField;
+        int legalUnitAdministrativeStateField;
+        int legalUnitAdministrativeStateChangeField;
+        int legalUnitLegalUnitNameField;
+        int legalUnitLegalUnitNameChangeField;
+        int legalUnitUsualNameField;
+        int legalUnitUsualNameChangeField;
+        int legalUnitDenominationField;
+        int legalUnitDenominationChangeField;
+        int legalUnitUsualDenomination1Field;
+        int legalUnitUsualDenomination2Field;
+        int legalUnitUsualDenomination3Field;
+        int legalUnitUsualDenominationChangeField;
+        int legalUnitLegalCategoryField;
+        int legalUnitLegalCategoryChangeField;
+        int legalUnitPrincipalActivityField;
+        int legalUnitPrincipalActivityNomenclatureField;
+        int legalUnitPrincipalActivityNomenclatureChangeField;
+        int legalUnitHeadquarterNicField;
+        int legalUnitHeadquarterNicChangeField;
+        int legalUnitIsSocialAndSolidarityEconomyField;
+        int legalUnitIsSocialAndSolidarityEconomyChangeField;
+        int legalUnitIsEmployerField;
+        int legalUnitIsEmployerChangeField;
+    }
 }

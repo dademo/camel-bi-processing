@@ -13,7 +13,7 @@ import javax.annotation.Nullable;
 import javax.validation.constraints.Min;
 import java.sql.Date;
 
-public interface WrappedResource {
+public interface WrappedRowResource {
 
     /**
      * Get a column index from its name.
@@ -31,7 +31,7 @@ public interface WrappedResource {
     int getColumnIndexByName(String columnName) throws MissingColumnException;
 
     /**
-     * Get the curent row number (1-based) if available.
+     * Get the curent row number (0-based) if available.
      *
      * @return the current row number
      */

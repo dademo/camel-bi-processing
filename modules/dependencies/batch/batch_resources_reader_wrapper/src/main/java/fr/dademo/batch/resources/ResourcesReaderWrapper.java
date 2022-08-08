@@ -6,5 +6,5 @@
 
 package fr.dademo.batch.resources;
 
-public interface ResourcesReaderWrapper extends Iterable<WrappedResource>, AutoCloseable {
+public interface ResourcesReaderWrapper extends Iterable<WrappedRowResource>, AutoCloseable {
 }

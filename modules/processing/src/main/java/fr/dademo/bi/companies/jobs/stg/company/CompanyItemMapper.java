@@ -6,8 +6,8 @@
 
 package fr.dademo.bi.companies.jobs.stg.company;
 
+import fr.dademo.batch.resources.WrappedRowResource;
 import fr.dademo.bi.companies.jobs.stg.company.datamodel.Company;
-import org.apache.commons.csv.CSVRecord;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
@@ -20,64 +20,125 @@ import static fr.dademo.bi.companies.jobs.stg.company.datamodel.Company.*;
  * @author dademo
  */
 @Component
-public class CompanyItemMapper implements ItemProcessor<CSVRecord, Company> {
+public class CompanyItemMapper implements ItemProcessor<WrappedRowResource, Company> {
+
+    private CompanyCsvColumnsMapping columnsIndexMapping;
 
     @Override
-    public Company process(@Nonnull CSVRecord item) {
-        return mappedToCompanyHistory(item);
+    public Company process(@Nonnull WrappedRowResource item) {
+        return mappedToCompany(item);
     }
 
-    private Company mappedToCompanyHistory(CSVRecord csvRecord) {
+    private Company mappedToCompany(WrappedRowResource item) {
+
+        if (columnsIndexMapping == null) {
+            // Filling the mapping
+            columnsIndexMapping = getHeaderMapping(item);
+        }
 
         return Company.builder()
-            .siren(csvRecord.get(CSV_FIELD_COMPANY_SIREN))
-            .nic(csvRecord.get(CSV_FIELD_COMPANY_NIC))
-            .siret(csvRecord.get(CSV_FIELD_COMPANY_SIRET))
-            .companyDiffusionStatut(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_DIFFUSION_STATUT))
-            .companyCreationDate(toLocalDate(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_CREATION_DATE)))
-            .companyStaffNumberRange(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_STAFF_NUMBER_RANGE))
-            .companyStaffNumberYear(toInteger(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_STAFF_NUMBER_YEAR)))
-            .companyPrincipalRegisteredActivity(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_PRINCIPAL_REGISTERED_ACTIVITY))
-            .companyLastProcessingTimestamp(toLocalDateTime(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_LAST_PROCESSING_DATE)))
-            .companyIsHeadquarters(toBoolean(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_IS_HEADQUARTERS)))
-            .companyPeriodCount(toInteger(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_PERIOD_COUNT)))
-            .companyAddressComplement(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_ADDRESS_COMPLEMENT))
-            .companyAddressStreetNumber(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_ADDRESS_STREET_NUMBER))
-            .companyAddressStreetNumberRepetition(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_ADDRESS_STREET_NUMBER_REPETITION))
-            .companyAddressStreetType(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_ADDRESS_STREET_TYPE))
-            .companyAddressStreetName(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_ADDRESS_STREET_NAME))
-            .companyAddressPostalCode(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_ADDRESS_POSTAL_CODE))
-            .companyAddressCity(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_ADDRESS_CITY))
-            .companyForeignAddressCity(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_FOREIGN_ADDRESS_CITY))
-            .companyAddressSpecialDistribution(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_ADDRESS_SPECIAL_DISTRIBUTION))
-            .companyAddressCityCode(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_ADDRESS_CITY_CODE))
-            .companyAddressCedexCode(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_ADDRESS_CEDEX_CODE))
-            .companyAddressCedexName(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_ADDRESS_CEDEX_NAME))
-            .companyForeignAddressCountryCode(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_FOREIGN_ADDRESS_COUNTRY_CODE))
-            .companyForeignAddressCountryName(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_FOREIGN_ADDRESS_COUNTRY_NAME))
-            .companyAddressComplement2(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_ADDRESS_COMPLEMENT_2))
-            .companyAddressStreetNumber2(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_ADDRESS_STREET_NUMBER_2))
-            .companyAddressStreetNumberRepetition2(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_ADDRESS_STREET_NUMBER_REPETITION_2))
-            .companyAddressStreetType2(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_ADDRESS_STREET_TYPE_2))
-            .companyAddressStreetName2(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_ADDRESS_STREET_NAME_2))
-            .companyAddressPostalCode2(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_ADDRESS_POSTAL_CODE_2))
-            .companyAddressCity2(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_ADDRESS_CITY_2))
-            .companyForeignAddressCity2(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_FOREIGN_ADDRESS_CITY_2))
-            .companyAddressSpecialDistribution2(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_ADDRESS_SPECIAL_DISTRIBUTION_2))
-            .companyAddressCityCode2(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_ADDRESS_CITY_CODE_2))
-            .companyAddressCedexCode2(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_ADDRESS_CEDEX_CODE_2))
-            .companyAddressCedexName2(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_ADDRESS_CEDEX_NAME_2))
-            .companyForeignAddressCountryCode2(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_FOREIGN_ADDRESS_COUNTRY_CODE_2))
-            .companyForeignAddressCountryName2(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_FOREIGN_ADDRESS_COUNTRY_NAME_2))
-            .beginDate(toLocalDate(csvRecord.get(CSV_FIELD_COMPANY_BEGIN_DATE)))
-            .companyAdministativeState(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_ADMINISTATIVE_STATE))
-            .companyName1(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_NAME_1))
-            .companyName2(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_NAME_2))
-            .companyName3(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_NAME_3))
-            .companyUsualName(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_USUAL_NAME))
-            .companyActivity(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_ACTIVITY))
-            .companyPrincipalActivityName(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_PRINCIPAL_ACTIVITY_NAME))
-            .companyIsEmployer(csvRecord.get(CSV_FIELD_COMPANY_COMPANY_IS_EMPLOYER))
+            .siren(item.getString(columnsIndexMapping.getSirenField()))
+            .nic(item.getString(columnsIndexMapping.getNicField()))
+            .siret(item.getString(columnsIndexMapping.getSiretField()))
+            .companyDiffusionStatut(item.getString(columnsIndexMapping.getCompanyDiffusionStatutField()))
+            .companyCreationDate(toLocalDate(item.getString(columnsIndexMapping.getCompanyCreationDateField())))
+            .companyStaffNumberRange(item.getString(columnsIndexMapping.getCompanyStaffNumberRangeField()))
+            .companyStaffNumberYear(toInteger(item.getString(columnsIndexMapping.getCompanyStaffNumberYearField())))
+            .companyPrincipalRegisteredActivity(item.getString(columnsIndexMapping.getCompanyPrincipalRegisteredActivityField()))
+            .companyLastProcessingTimestamp(toLocalDateTime(item.getString(columnsIndexMapping.getCompanyLastProcessingTimestampField())))
+            .companyIsHeadquarters(toBoolean(item.getString(columnsIndexMapping.getCompanyIsHeadquartersField())))
+            .companyPeriodCount(toInteger(item.getString(columnsIndexMapping.getCompanyPeriodCountField())))
+            .companyAddressComplement(item.getString(columnsIndexMapping.getCompanyAddressComplementField()))
+            .companyAddressStreetNumber(item.getString(columnsIndexMapping.getCompanyAddressStreetNumberField()))
+            .companyAddressStreetNumberRepetition(item.getString(columnsIndexMapping.getCompanyAddressStreetNumberRepetitionField()))
+            .companyAddressStreetType(item.getString(columnsIndexMapping.getCompanyAddressStreetTypeField()))
+            .companyAddressStreetName(item.getString(columnsIndexMapping.getCompanyAddressStreetNameField()))
+            .companyAddressPostalCode(item.getString(columnsIndexMapping.getCompanyAddressPostalCodeField()))
+            .companyAddressCity(item.getString(columnsIndexMapping.getCompanyAddressCityField()))
+            .companyForeignAddressCity(item.getString(columnsIndexMapping.getCompanyForeignAddressCityField()))
+            .companyAddressSpecialDistribution(item.getString(columnsIndexMapping.getCompanyAddressSpecialDistributionField()))
+            .companyAddressCityCode(item.getString(columnsIndexMapping.getCompanyAddressCityCodeField()))
+            .companyAddressCedexCode(item.getString(columnsIndexMapping.getCompanyAddressCedexCodeField()))
+            .companyAddressCedexName(item.getString(columnsIndexMapping.getCompanyAddressCedexNameField()))
+            .companyForeignAddressCountryCode(item.getString(columnsIndexMapping.getCompanyForeignAddressCountryCodeField()))
+            .companyForeignAddressCountryName(item.getString(columnsIndexMapping.getCompanyForeignAddressCountryNameField()))
+            .companyAddressComplement2(item.getString(columnsIndexMapping.getCompanyAddressComplement2Field()))
+            .companyAddressStreetNumber2(item.getString(columnsIndexMapping.getCompanyAddressStreetNumber2Field()))
+            .companyAddressStreetNumberRepetition2(item.getString(columnsIndexMapping.getCompanyAddressStreetNumberRepetition2Field()))
+            .companyAddressStreetType2(item.getString(columnsIndexMapping.getCompanyAddressStreetType2Field()))
+            .companyAddressStreetName2(item.getString(columnsIndexMapping.getCompanyAddressStreetName2Field()))
+            .companyAddressPostalCode2(item.getString(columnsIndexMapping.getCompanyAddressPostalCode2Field()))
+            .companyAddressCity2(item.getString(columnsIndexMapping.getCompanyAddressCity2Field()))
+            .companyForeignAddressCity2(item.getString(columnsIndexMapping.getCompanyForeignAddressCity2Field()))
+            .companyAddressSpecialDistribution2(item.getString(columnsIndexMapping.getCompanyAddressSpecialDistribution2Field()))
+            .companyAddressCityCode2(item.getString(columnsIndexMapping.getCompanyAddressCityCode2Field()))
+            .companyAddressCedexCode2(item.getString(columnsIndexMapping.getCompanyAddressCedexCode2Field()))
+            .companyAddressCedexName2(item.getString(columnsIndexMapping.getCompanyAddressCedexName2Field()))
+            .companyForeignAddressCountryCode2(item.getString(columnsIndexMapping.getCompanyForeignAddressCountryCode2Field()))
+            .companyForeignAddressCountryName2(item.getString(columnsIndexMapping.getCompanyForeignAddressCountryName2Field()))
+            .beginDate(toLocalDate(item.getString(columnsIndexMapping.getBeginDateField())))
+            .companyAdministativeState(item.getString(columnsIndexMapping.getCompanyAdministativeStateField()))
+            .companyName1(item.getString(columnsIndexMapping.getCompanyName1Field()))
+            .companyName2(item.getString(columnsIndexMapping.getCompanyName2Field()))
+            .companyName3(item.getString(columnsIndexMapping.getCompanyName3Field()))
+            .companyUsualName(item.getString(columnsIndexMapping.getCompanyUsualNameField()))
+            .companyActivity(item.getString(columnsIndexMapping.getCompanyActivityField()))
+            .companyPrincipalActivityName(item.getString(columnsIndexMapping.getCompanyPrincipalActivityNameField()))
+            .companyIsEmployer(item.getString(columnsIndexMapping.getCompanyIsEmployerField()))
+            .build();
+    }
+
+    private CompanyCsvColumnsMapping getHeaderMapping(WrappedRowResource item) {
+
+        return CompanyCsvColumnsMapping.builder()
+            .sirenField(item.getColumnIndexByName(CSV_FIELD_COMPANY_SIREN))
+            .nicField(item.getColumnIndexByName(CSV_FIELD_COMPANY_NIC))
+            .siretField(item.getColumnIndexByName(CSV_FIELD_COMPANY_SIRET))
+            .companyDiffusionStatutField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_DIFFUSION_STATUT))
+            .companyCreationDateField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_CREATION_DATE))
+            .companyStaffNumberRangeField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_STAFF_NUMBER_RANGE))
+            .companyStaffNumberYearField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_STAFF_NUMBER_YEAR))
+            .companyPrincipalRegisteredActivityField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_PRINCIPAL_REGISTERED_ACTIVITY))
+            .companyLastProcessingTimestampField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_LAST_PROCESSING_DATE))
+            .companyIsHeadquartersField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_IS_HEADQUARTERS))
+            .companyPeriodCountField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_PERIOD_COUNT))
+            .companyAddressComplementField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_ADDRESS_COMPLEMENT))
+            .companyAddressStreetNumberField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_ADDRESS_STREET_NUMBER))
+            .companyAddressStreetNumberRepetitionField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_ADDRESS_STREET_NUMBER_REPETITION))
+            .companyAddressStreetTypeField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_ADDRESS_STREET_TYPE))
+            .companyAddressStreetNameField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_ADDRESS_STREET_NAME))
+            .companyAddressPostalCodeField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_ADDRESS_POSTAL_CODE))
+            .companyAddressCityField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_ADDRESS_CITY))
+            .companyForeignAddressCityField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_FOREIGN_ADDRESS_CITY))
+            .companyAddressSpecialDistributionField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_ADDRESS_SPECIAL_DISTRIBUTION))
+            .companyAddressCityCodeField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_ADDRESS_CITY_CODE))
+            .companyAddressCedexCodeField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_ADDRESS_CEDEX_CODE))
+            .companyAddressCedexNameField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_ADDRESS_CEDEX_NAME))
+            .companyForeignAddressCountryCodeField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_FOREIGN_ADDRESS_COUNTRY_CODE))
+            .companyForeignAddressCountryNameField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_FOREIGN_ADDRESS_COUNTRY_NAME))
+            .companyAddressComplement2Field(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_ADDRESS_COMPLEMENT_2))
+            .companyAddressStreetNumber2Field(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_ADDRESS_STREET_NUMBER_2))
+            .companyAddressStreetNumberRepetition2Field(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_ADDRESS_STREET_NUMBER_REPETITION_2))
+            .companyAddressStreetType2Field(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_ADDRESS_STREET_TYPE_2))
+            .companyAddressStreetName2Field(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_ADDRESS_STREET_NAME_2))
+            .companyAddressPostalCode2Field(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_ADDRESS_POSTAL_CODE_2))
+            .companyAddressCity2Field(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_ADDRESS_CITY_2))
+            .companyForeignAddressCity2Field(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_FOREIGN_ADDRESS_CITY_2))
+            .companyAddressSpecialDistribution2Field(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_ADDRESS_SPECIAL_DISTRIBUTION_2))
+            .companyAddressCityCode2Field(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_ADDRESS_CITY_CODE_2))
+            .companyAddressCedexCode2Field(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_ADDRESS_CEDEX_CODE_2))
+            .companyAddressCedexName2Field(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_ADDRESS_CEDEX_NAME_2))
+            .companyForeignAddressCountryCode2Field(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_FOREIGN_ADDRESS_COUNTRY_CODE_2))
+            .companyForeignAddressCountryName2Field(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_FOREIGN_ADDRESS_COUNTRY_NAME_2))
+            .beginDateField(item.getColumnIndexByName(CSV_FIELD_COMPANY_BEGIN_DATE))
+            .companyAdministativeStateField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_ADMINISTATIVE_STATE))
+            .companyName1Field(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_NAME_1))
+            .companyName2Field(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_NAME_2))
+            .companyName3Field(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_NAME_3))
+            .companyUsualNameField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_USUAL_NAME))
+            .companyActivityField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_ACTIVITY))
+            .companyPrincipalActivityNameField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_PRINCIPAL_ACTIVITY_NAME))
+            .companyIsEmployerField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_IS_EMPLOYER))
             .build();
     }
 }

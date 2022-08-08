@@ -7,9 +7,9 @@
 package fr.dademo.bi.companies.jobs.stg.company_history;
 
 import fr.dademo.batch.configuration.BatchConfiguration;
+import fr.dademo.batch.resources.WrappedRowResource;
 import fr.dademo.batch.tools.batch.job.BaseChunkJob;
 import fr.dademo.bi.companies.jobs.stg.company_history.datamodel.CompanyHistory;
-import org.apache.commons.csv.CSVRecord;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
  * @author dademo
  */
 @Component(JobDefinition.COMPANY_HISTORY_JOB_NAME)
-public class JobDefinition extends BaseChunkJob<CSVRecord, CompanyHistory> {
+public class JobDefinition extends BaseChunkJob<WrappedRowResource, CompanyHistory> {
 
     public static final String COMPANY_HISTORY_CONFIG_JOB_NAME = "company-history";
     public static final String COMPANY_HISTORY_NORMALIZED_CONFIG_JOB_NAME = "company_history";
@@ -51,13 +51,13 @@ public class JobDefinition extends BaseChunkJob<CSVRecord, CompanyHistory> {
 
     @Nonnull
     @Override
-    public ItemReader<CSVRecord> getItemReader() {
+    public ItemReader<WrappedRowResource> getItemReader() {
         return companyHistoryItemReader;
     }
 
     @Nonnull
     @Override
-    public ItemProcessor<CSVRecord, CompanyHistory> getItemProcessor() {
+    public ItemProcessor<WrappedRowResource, CompanyHistory> getItemProcessor() {
         return companyHistoryItemMapper;
     }
 

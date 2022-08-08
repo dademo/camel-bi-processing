@@ -7,6 +7,7 @@
 package fr.dademo.bi.companies.jobs.stg.company.datamodel;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -177,4 +178,60 @@ public class Company {
     private String companyActivity;
     private String companyPrincipalActivityName;
     private String companyIsEmployer;
+
+    @AllArgsConstructor
+    @Getter
+    @Builder
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    public static class CompanyCsvColumnsMapping {
+
+        int sirenField;
+        int nicField;
+        int siretField;
+        int companyDiffusionStatutField;
+        int companyCreationDateField;
+        int companyStaffNumberRangeField;
+        int companyStaffNumberYearField;
+        int companyPrincipalRegisteredActivityField;
+        int companyLastProcessingTimestampField;
+        int companyIsHeadquartersField;
+        int companyPeriodCountField;
+        int companyAddressComplementField;
+        int companyAddressStreetNumberField;
+        int companyAddressStreetNumberRepetitionField;
+        int companyAddressStreetTypeField;
+        int companyAddressStreetNameField;
+        int companyAddressPostalCodeField;
+        int companyAddressCityField;
+        int companyForeignAddressCityField;
+        int companyAddressSpecialDistributionField;
+        int companyAddressCityCodeField;
+        int companyAddressCedexCodeField;
+        int companyAddressCedexNameField;
+        int companyForeignAddressCountryCodeField;
+        int companyForeignAddressCountryNameField;
+        int companyAddressComplement2Field;
+        int companyAddressStreetNumber2Field;
+        int companyAddressStreetNumberRepetition2Field;
+        int companyAddressStreetType2Field;
+        int companyAddressStreetName2Field;
+        int companyAddressPostalCode2Field;
+        int companyAddressCity2Field;
+        int companyForeignAddressCity2Field;
+        int companyAddressSpecialDistribution2Field;
+        int companyAddressCityCode2Field;
+        int companyAddressCedexCode2Field;
+        int companyAddressCedexName2Field;
+        int companyForeignAddressCountryCode2Field;
+        int companyForeignAddressCountryName2Field;
+        int beginDateField;
+        int companyAdministativeStateField;
+        int companyName1Field;
+        int companyName2Field;
+        int companyName3Field;
+        int companyUsualNameField;
+        int companyActivityField;
+        int companyPrincipalActivityNameField;
+        int companyIsEmployerField;
+    }
 }

@@ -7,9 +7,9 @@
 package fr.dademo.bi.companies.jobs.stg.company_legal_history;
 
 import fr.dademo.batch.configuration.BatchConfiguration;
+import fr.dademo.batch.resources.WrappedRowResource;
 import fr.dademo.batch.tools.batch.job.BaseChunkJob;
 import fr.dademo.bi.companies.jobs.stg.company_legal_history.datamodel.CompanyLegalHistory;
-import org.apache.commons.csv.CSVRecord;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
  * @author dademo
  */
 @Component(JobDefinition.COMPANY_LEGAL_HISTORY_JOB_NAME)
-public class JobDefinition extends BaseChunkJob<CSVRecord, CompanyLegalHistory> {
+public class JobDefinition extends BaseChunkJob<WrappedRowResource, CompanyLegalHistory> {
 
     public static final String COMPANY_LEGAL_HISTORY_CONFIG_JOB_NAME = "company-legal-history";
     public static final String COMPANY_LEGAL_HISTORY_NORMALIZED_CONFIG_JOB_NAME = "company_legal_history";
@@ -51,13 +51,13 @@ public class JobDefinition extends BaseChunkJob<CSVRecord, CompanyLegalHistory> 
 
     @Nonnull
     @Override
-    public ItemReader<CSVRecord> getItemReader() {
+    public ItemReader<WrappedRowResource> getItemReader() {
         return companyLegalHistoryItemReader;
     }
 
     @Nonnull
     @Override
-    public ItemProcessor<CSVRecord, CompanyLegalHistory> getItemProcessor() {
+    public ItemProcessor<WrappedRowResource, CompanyLegalHistory> getItemProcessor() {
         return companyLegalHistoryItemMapper;
     }
 

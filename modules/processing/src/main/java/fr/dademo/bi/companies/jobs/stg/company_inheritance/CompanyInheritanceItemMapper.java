@@ -6,8 +6,8 @@
 
 package fr.dademo.bi.companies.jobs.stg.company_inheritance;
 
+import fr.dademo.batch.resources.WrappedRowResource;
 import fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel.CompanyInheritance;
-import org.apache.commons.csv.CSVRecord;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
@@ -20,22 +20,41 @@ import static fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel.Comp
  * @author dademo
  */
 @Component
-public class CompanyInheritanceItemMapper implements ItemProcessor<CSVRecord, CompanyInheritance> {
+public class CompanyInheritanceItemMapper implements ItemProcessor<WrappedRowResource, CompanyInheritance> {
+
+    private CompanyInheritanceCsvColumnsMapping columnsIndexMapping;
 
     @Override
-    public CompanyInheritance process(@Nonnull CSVRecord item) {
+    public CompanyInheritance process(@Nonnull WrappedRowResource item) {
         return mappedToCompanyInheritance(item);
     }
 
-    private CompanyInheritance mappedToCompanyInheritance(CSVRecord csvRecord) {
+    private CompanyInheritance mappedToCompanyInheritance(WrappedRowResource item) {
+
+        if (columnsIndexMapping == null) {
+            // Filling the mapping
+            columnsIndexMapping = getHeaderMapping(item);
+        }
 
         return CompanyInheritance.builder()
-            .companyPredecessorSiren(csvRecord.get(CSV_FIELD_COMPANY_INHERITANCE_PREDECESSOR_SIREN))
-            .companySuccessorSiren(csvRecord.get(CSV_FIELD_COMPANY_INHERITANCE_SUCCESSOR_SIREN))
-            .companySuccessionDate(toLocalDate(csvRecord.get(CSV_FIELD_COMPANY_INHERITANCE_SUCCESSION_DATE)))
-            .companyHeaderChanged(toBoolean(csvRecord.get(CSV_FIELD_COMPANY_INHERITANCE_HEADQUARTER_CHANGE)))
-            .companyEconomicalContinuity(toBoolean(csvRecord.get(CSV_FIELD_COMPANY_INHERITANCE_ECONOMICAL_CONTINUITY)))
-            .companyProcessingTimestamp(toLocalDateTime(csvRecord.get(CSV_FIELD_COMPANY_INHERITANCE_PROCESSING_DATE)))
+            .companyPredecessorSiren(item.getString(columnsIndexMapping.getCompanyPredecessorSirenField()))
+            .companySuccessorSiren(item.getString(columnsIndexMapping.getCompanySuccessorSirenField()))
+            .companySuccessionDate(toLocalDate(item.getString(columnsIndexMapping.getCompanySuccessionDateField())))
+            .companyHeaderChanged(toBoolean(item.getString(columnsIndexMapping.getCompanyHeaderChangedField())))
+            .companyEconomicalContinuity(toBoolean(item.getString(columnsIndexMapping.getCompanyEconomicalContinuityField())))
+            .companyProcessingTimestamp(toLocalDateTime(item.getString(columnsIndexMapping.getCompanyProcessingTimestampField())))
+            .build();
+    }
+
+    private CompanyInheritanceCsvColumnsMapping getHeaderMapping(WrappedRowResource item) {
+
+        return CompanyInheritanceCsvColumnsMapping.builder()
+            .companyPredecessorSirenField(item.getColumnIndexByName(CSV_FIELD_COMPANY_INHERITANCE_PREDECESSOR_SIREN))
+            .companySuccessorSirenField(item.getColumnIndexByName(CSV_FIELD_COMPANY_INHERITANCE_SUCCESSOR_SIREN))
+            .companySuccessionDateField(item.getColumnIndexByName(CSV_FIELD_COMPANY_INHERITANCE_SUCCESSION_DATE))
+            .companyHeaderChangedField(item.getColumnIndexByName(CSV_FIELD_COMPANY_INHERITANCE_HEADQUARTER_CHANGE))
+            .companyEconomicalContinuityField(item.getColumnIndexByName(CSV_FIELD_COMPANY_INHERITANCE_ECONOMICAL_CONTINUITY))
+            .companyProcessingTimestampField(item.getColumnIndexByName(CSV_FIELD_COMPANY_INHERITANCE_PROCESSING_DATE))
             .build();
     }
 }

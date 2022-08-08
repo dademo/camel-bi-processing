@@ -7,9 +7,9 @@
 package fr.dademo.bi.companies.jobs.stg.association_waldec;
 
 import fr.dademo.batch.configuration.BatchConfiguration;
+import fr.dademo.batch.resources.WrappedRowResource;
 import fr.dademo.batch.tools.batch.job.BaseChunkJob;
 import fr.dademo.bi.companies.jobs.stg.association_waldec.datamodel.AssociationWaldec;
-import org.apache.commons.csv.CSVRecord;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
  * @author dademo
  */
 @Component(JobDefinition.ASSOCIATION_WALDEC_JOB_NAME)
-public class JobDefinition extends BaseChunkJob<CSVRecord, AssociationWaldec> {
+public class JobDefinition extends BaseChunkJob<WrappedRowResource, AssociationWaldec> {
 
     public static final String ASSOCIATION_WALDEC_CONFIG_JOB_NAME = "association-waldec";
     public static final String ASSOCIATION_WALDEC_NORMALIZED_CONFIG_JOB_NAME = "association_waldec";
@@ -51,13 +51,13 @@ public class JobDefinition extends BaseChunkJob<CSVRecord, AssociationWaldec> {
 
     @Nonnull
     @Override
-    public ItemReader<CSVRecord> getItemReader() {
+    public ItemReader<WrappedRowResource> getItemReader() {
         return associationWaldecItemReader;
     }
 
     @Nonnull
     @Override
-    public ItemProcessor<CSVRecord, AssociationWaldec> getItemProcessor() {
+    public ItemProcessor<WrappedRowResource, AssociationWaldec> getItemProcessor() {
         return associationWaldecItemMapper;
     }
 

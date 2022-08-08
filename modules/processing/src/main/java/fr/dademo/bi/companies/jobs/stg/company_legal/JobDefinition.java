@@ -7,9 +7,9 @@
 package fr.dademo.bi.companies.jobs.stg.company_legal;
 
 import fr.dademo.batch.configuration.BatchConfiguration;
+import fr.dademo.batch.resources.WrappedRowResource;
 import fr.dademo.batch.tools.batch.job.BaseChunkJob;
 import fr.dademo.bi.companies.jobs.stg.company_legal.datamodel.CompanyLegal;
-import org.apache.commons.csv.CSVRecord;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
  * @author dademo
  */
 @Component(JobDefinition.COMPANY_LEGAL_JOB_NAME)
-public class JobDefinition extends BaseChunkJob<CSVRecord, CompanyLegal> {
+public class JobDefinition extends BaseChunkJob<WrappedRowResource, CompanyLegal> {
 
     public static final String COMPANY_LEGAL_CONFIG_JOB_NAME = "company-legal";
     public static final String COMPANY_LEGAL_NORMALIZED_CONFIG_JOB_NAME = "company_legal";
@@ -51,13 +51,13 @@ public class JobDefinition extends BaseChunkJob<CSVRecord, CompanyLegal> {
 
     @Nonnull
     @Override
-    public ItemReader<CSVRecord> getItemReader() {
+    public ItemReader<WrappedRowResource> getItemReader() {
         return companyLegalItemReader;
     }
 
     @Nonnull
     @Override
-    public ItemProcessor<CSVRecord, CompanyLegal> getItemProcessor() {
+    public ItemProcessor<WrappedRowResource, CompanyLegal> getItemProcessor() {
         return companyLegalItemMapper;
     }
 

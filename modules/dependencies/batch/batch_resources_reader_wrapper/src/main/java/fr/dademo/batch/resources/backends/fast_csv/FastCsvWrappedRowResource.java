@@ -7,18 +7,18 @@
 package fr.dademo.batch.resources.backends.fast_csv;
 
 import de.siegmar.fastcsv.reader.CsvRow;
-import fr.dademo.batch.resources.BaseWrappedResource;
+import fr.dademo.batch.resources.BaseWrappedRowResource;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class FastCsvWrappedResource extends BaseWrappedResource {
+public class FastCsvWrappedRowResource extends BaseWrappedRowResource {
 
     @Nonnull
     private final CsvRow delegate;
 
-    public FastCsvWrappedResource(@Nonnull CsvRow delegate, @Nullable Map<String, Integer> columnsIndexMapping) {
+    public FastCsvWrappedRowResource(@Nonnull CsvRow delegate, @Nullable Map<String, Integer> columnsIndexMapping) {
 
         this.delegate = delegate;
         setColumnsIndexMapping(columnsIndexMapping);

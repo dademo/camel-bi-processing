@@ -6,6 +6,9 @@
 
 package fr.dademo.bi.companies.jobs.stg.association;
 
+import fr.dademo.batch.resources.ResourcesReaderWrapper;
+import fr.dademo.batch.resources.ResourcesReaderWrapperProvider;
+import fr.dademo.batch.resources.WrappedRowResource;
 import fr.dademo.batch.tools.batch.reader.UnidirectionalItemStreamReaderSupport;
 import fr.dademo.data.definitions.data_gouv_fr.dimensions.DataGouvFrDataSetResource;
 import fr.dademo.data.helpers.data_gouv_fr.helpers.DataGouvFrFilterHelpers;
@@ -16,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVRecord;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,7 +38,7 @@ import static fr.dademo.bi.companies.jobs.stg.association.datamodel.Association.
 @Slf4j
 @Component
 @SuppressWarnings("java:S112")
-public class AssociationItemReader extends UnidirectionalItemStreamReaderSupport<CSVRecord> {
+public class AssociationItemReader extends UnidirectionalItemStreamReaderSupport<WrappedRowResource> {
 
     private static final String DATASET_TITLE = "repertoire-national-des-associations";
     private static final String DATA_TITLE_PREFIX = "Fichier Import ";
@@ -45,7 +47,8 @@ public class AssociationItemReader extends UnidirectionalItemStreamReaderSupport
     private DataGouvFrDataQuerierService dataGouvFrDataQuerierService;
 
     private ZipArchiveInputStream archiveInputStream;
-    private Iterator<CSVRecord> iterator = Collections.emptyIterator();
+    private ResourcesReaderWrapper resourcesReaderWrapper;
+    private Iterator<WrappedRowResource> iterator = Collections.emptyIterator();
 
     @SneakyThrows
     public void open(@Nonnull ExecutionContext executionContext) {
@@ -69,12 +72,12 @@ public class AssociationItemReader extends UnidirectionalItemStreamReaderSupport
     }
 
     @Override
-    public CSVRecord read() {
+    public WrappedRowResource read() {
         return nextItem().orElse(null);
     }
 
     @SneakyThrows
-    private synchronized Optional<CSVRecord> nextItem() {   // NOSONAR
+    private synchronized Optional<WrappedRowResource> nextItem() {   // NOSONAR
 
         if (iterator.hasNext()) {
             return Optional.of(iterator.next());
@@ -83,7 +86,11 @@ public class AssociationItemReader extends UnidirectionalItemStreamReaderSupport
                 ArchiveEntry archiveEntry;
                 if ((archiveEntry = archiveInputStream.getNextEntry()) != null) {
                     if (!archiveEntry.isDirectory()) {
-                        iterator = getCsvStreamIterator();
+                        iterator = ResourcesReaderWrapperProvider.of(
+                            csvFormat()
+                                .parse(new InputStreamReader(archiveInputStream)),
+                            false
+                        ).iterator();
                         if (iterator.hasNext()) {
                             return Optional.of(iterator.next());
                         }
@@ -93,14 +100,6 @@ public class AssociationItemReader extends UnidirectionalItemStreamReaderSupport
                 }
             }
         }
-    }
-
-    @SneakyThrows
-    private Iterator<CSVRecord> getCsvStreamIterator() {
-
-        return csvFormat()
-            .parse(new InputStreamReader(archiveInputStream))
-            .iterator();
     }
 
     private CSVFormat csvFormat() {

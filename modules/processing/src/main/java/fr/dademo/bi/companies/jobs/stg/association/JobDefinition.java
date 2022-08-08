@@ -7,9 +7,9 @@
 package fr.dademo.bi.companies.jobs.stg.association;
 
 import fr.dademo.batch.configuration.BatchConfiguration;
+import fr.dademo.batch.resources.WrappedRowResource;
 import fr.dademo.batch.tools.batch.job.BaseChunkJob;
 import fr.dademo.bi.companies.jobs.stg.association.datamodel.Association;
-import org.apache.commons.csv.CSVRecord;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
  * @author dademo
  */
 @Component(JobDefinition.ASSOCIATION_JOB_NAME)
-public class JobDefinition extends BaseChunkJob<CSVRecord, Association> {
+public class JobDefinition extends BaseChunkJob<WrappedRowResource, Association> {
 
     public static final String ASSOCIATION_CONFIG_JOB_NAME = "association";
     public static final String ASSOCIATION_NORMALIZED_CONFIG_JOB_NAME = "association";
@@ -51,13 +51,13 @@ public class JobDefinition extends BaseChunkJob<CSVRecord, Association> {
 
     @Nonnull
     @Override
-    public ItemReader<CSVRecord> getItemReader() {
+    public ItemReader<WrappedRowResource> getItemReader() {
         return associationItemReader;
     }
 
     @Nonnull
     @Override
-    public ItemProcessor<CSVRecord, Association> getItemProcessor() {
+    public ItemProcessor<WrappedRowResource, Association> getItemProcessor() {
         return associationItemMapper;
     }
 
