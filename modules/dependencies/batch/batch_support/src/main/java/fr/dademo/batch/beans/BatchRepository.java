@@ -114,7 +114,7 @@ public class BatchRepository {
     public JobTaskExecutorWrapper taskExecutor(BatchConfiguration batchConfiguration) {
 
         final var poolSize = Math.max(
-            Optional.ofNullable(batchConfiguration.getRepository().getExecutorThreadPoolSize())
+            Optional.ofNullable(batchConfiguration.getExecutorThreadPoolSize())
                 .orElse(DEFAULT_THREAD_POOL_SIZE),
             1
         );
@@ -123,7 +123,8 @@ public class BatchRepository {
 
         threadPoolTaskExecutor.setCorePoolSize(Math.max(poolSize / 2, 1));
         threadPoolTaskExecutor.setMaxPoolSize(poolSize);
-        threadPoolTaskExecutor.setQueueCapacity(poolSize * 2);
+        // Will ache all incoming jobs
+        threadPoolTaskExecutor.setQueueCapacity(Integer.MAX_VALUE);
         threadPoolTaskExecutor.setPrestartAllCoreThreads(true);
         threadPoolTaskExecutor.setDaemon(false);
         threadPoolTaskExecutor.setWaitForTasksToCompleteOnShutdown(true);

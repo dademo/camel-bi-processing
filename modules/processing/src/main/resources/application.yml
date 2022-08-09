@@ -98,6 +98,7 @@ datasources:
           internal: false
 
 batch:
+  executor-thread-pool-size: 1
   repository:
     enabled: true
   jobs:

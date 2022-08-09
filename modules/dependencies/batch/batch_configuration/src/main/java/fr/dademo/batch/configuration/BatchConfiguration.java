@@ -36,6 +36,9 @@ public class BatchConfiguration {
     @Nonnull
     private BatchRepositoryConfiguration repository = new BatchRepositoryConfiguration();
 
+    @Nullable
+    private Integer executorThreadPoolSize;
+
 
     public JobConfiguration getJobConfigurationByName(@Nonnull String jobName) {
 
@@ -49,9 +52,6 @@ public class BatchConfiguration {
     public static class BatchRepositoryConfiguration {
 
         private boolean enabled = false;
-
-        @Nullable
-        private Integer executorThreadPoolSize;
     }
 
     @Data

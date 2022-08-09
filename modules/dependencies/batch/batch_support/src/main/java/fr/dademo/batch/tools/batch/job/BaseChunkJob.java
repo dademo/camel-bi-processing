@@ -7,8 +7,13 @@
 package fr.dademo.batch.tools.batch.job;
 
 import fr.dademo.batch.configuration.BatchConfiguration;
+import fr.dademo.batch.tools.batch.job.listeners.DefaultJobExecutionListener;
+import fr.dademo.batch.tools.batch.job.listeners.DefaultStepExecutionListener;
+import fr.dademo.batch.tools.batch.job.listeners.StepThreadPoolListener;
+import org.springframework.batch.core.ChunkListener;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
+import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
@@ -19,8 +24,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import javax.annotation.Nonnull;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author dademo
@@ -55,8 +64,33 @@ public abstract class BaseChunkJob<I, O> implements BatchJobProvider {
     protected abstract ItemWriter<O> getItemWriter();
 
     @Nonnull
-    protected JobExecutionListener getJobExecutionListener() {
-        return new DefaultJobExecutionListener();
+    protected List<JobExecutionListener> getJobExecutionListeners() {
+        return Collections.singletonList(new DefaultJobExecutionListener());
+    }
+
+    protected List<StepExecutionListener> getStepExecutionListeners() {
+        return Collections.singletonList(new DefaultStepExecutionListener());
+    }
+
+    protected List<ChunkListener> getChunkListeners() {
+        return Collections.emptyList();
+    }
+
+    @Nonnull
+    private List<JobExecutionListener> getAllJobExecutionListener() {
+        return getJobExecutionListeners();
+    }
+
+    private List<StepExecutionListener> getAllStepExecutionListeners(ThreadPoolTaskExecutor threadPoolTaskExecutor) {
+
+        return Stream.concat(
+            Stream.of(new StepThreadPoolListener(threadPoolTaskExecutor)),
+            getStepExecutionListeners().stream()
+        ).collect(Collectors.toList());
+    }
+
+    protected List<ChunkListener> getAllChunkListeners() {
+        return getChunkListeners();
     }
 
 
@@ -68,20 +102,22 @@ public abstract class BaseChunkJob<I, O> implements BatchJobProvider {
                 .orElseGet(BatchConfiguration.JobConfiguration::getDefaultIsEnabled))) {
 
             final var jobName = getJobName();
-            final var threadPoolExecutor = new ThreadPoolTaskExecutor();
+            final var threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
             final int poolSize = Optional.ofNullable(getJobConfiguration().getMaxThreads())
                 .orElseGet(BatchConfiguration.JobConfiguration::getDefaultMaxThreads);
 
-            threadPoolExecutor.setCorePoolSize(poolSize);
-            threadPoolExecutor.setMaxPoolSize(poolSize);
-            threadPoolExecutor.setQueueCapacity(poolSize * MAX_THREAD_POOL_QUEUE_SIZE_FACTOR);
-            threadPoolExecutor.setDaemon(false);
-            threadPoolExecutor.setThreadNamePrefix(String.format("bi-job-%s-", jobName));
+            threadPoolTaskExecutor.setCorePoolSize(poolSize);
+            threadPoolTaskExecutor.setMaxPoolSize(poolSize);
+            threadPoolTaskExecutor.setQueueCapacity(poolSize * MAX_THREAD_POOL_QUEUE_SIZE_FACTOR);
 
-            threadPoolExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
-            threadPoolExecutor.initialize();
+            threadPoolTaskExecutor.setPrestartAllCoreThreads(true);
+            threadPoolTaskExecutor.setDaemon(false);
+            threadPoolTaskExecutor.setWaitForTasksToCompleteOnShutdown(true);
+            threadPoolTaskExecutor.setThreadNamePrefix(String.format("bi-job-%s-", jobName));
 
-            final var jobProcessStep = stepBuilderFactory
+            threadPoolTaskExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+
+            final var jobStep = stepBuilderFactory
                 .get(jobName)
                 .<I, O>chunk(
                     Optional.ofNullable(getJobConfiguration().getChunkSize())
@@ -89,16 +125,23 @@ public abstract class BaseChunkJob<I, O> implements BatchJobProvider {
                 .reader(getItemReader())
                 .processor(getItemProcessor())
                 .writer(getItemWriter())
-                .taskExecutor(threadPoolExecutor)
-                .build();
+                .taskExecutor(threadPoolTaskExecutor)
+                .throttleLimit(poolSize);   // Our thread pool size;
 
-            return jobBuilderFactory
+            getAllStepExecutionListeners(threadPoolTaskExecutor).forEach(jobStep::listener);
+            getAllChunkListeners().forEach(jobStep::listener);
+
+            final var jobProcessStep = jobStep.build();
+
+            final var jobBuilder = jobBuilderFactory
                 .get(jobName)
                 .incrementer(new RunIdIncrementer())
-                .listener(getJobExecutionListener())
                 .preventRestart()
-                .start(jobProcessStep)
-                .build();
+                .start(jobProcessStep);
+
+            getAllJobExecutionListener().forEach(jobBuilder::listener);
+
+            return jobBuilder.build();
         } else {
             return null;
         }
