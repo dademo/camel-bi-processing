@@ -8,10 +8,12 @@ package fr.dademo.bi.companies.jobs.stg.company_history.writers;
 
 import fr.dademo.bi.companies.jobs.stg.company_history.CompanyHistoryItemWriter;
 import fr.dademo.bi.companies.jobs.stg.company_history.datamodel.CompanyHistory;
+import fr.dademo.bi.companies.jobs.stg.company_history.datamodel.CompanyHistoryRecord;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
+import org.jooq.InsertOnDuplicateStep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -46,7 +48,28 @@ public class CompanyHistoryJdbcItemWriterImpl implements CompanyHistoryItemWrite
 
         log.info("Writing {} company history documents", items.size());
 
-        final var batchInsertStatement = dslContext.batch(dslContext.insertInto(COMPANY_HISTORY,
+        try (final var insertStatement = getInsertStatement()) {
+
+            final var batchInsertStatement = dslContext.batch(insertStatement);
+
+            items.stream()
+                .map(this::companyHistoryBind)
+                .forEach(consumer -> consumer.accept(batchInsertStatement));
+
+            final var batchResult = batchInsertStatement.execute();
+            if (batchResult.length > 0) {
+                final int totalUpdated = Arrays.stream(batchResult).sum();
+                log.info("{} rows affected", totalUpdated);
+            } else {
+                log.error("An error occurred while running batch");
+            }
+        }
+    }
+
+    @SuppressWarnings("resource")
+    private InsertOnDuplicateStep<CompanyHistoryRecord> getInsertStatement() {
+
+        return dslContext.insertInto(COMPANY_HISTORY,
             COMPANY_HISTORY.FIELD_SIREN,
             COMPANY_HISTORY.FIELD_NIC,
             COMPANY_HISTORY.FIELD_SIRET,
@@ -63,22 +86,11 @@ public class CompanyHistoryJdbcItemWriterImpl implements CompanyHistoryItemWrite
             COMPANY_HISTORY.FIELD_INSTITUTION_PRIMARY_ACTIVITY,
             COMPANY_HISTORY.FIELD_INSTITUTION_PRIMARY_ACTIVITY_NOMENCLATURE,
             COMPANY_HISTORY.FIELD_INSTITUTION_PRIMARY_ACTIVITY_CHANGE,
-            COMPANY_HISTORY.FIELD_INSTITUTION_EMPLOYER_NATURE
+            COMPANY_HISTORY.FIELD_INSTITUTION_EMPLOYER_NATURE,
+            COMPANY_HISTORY.FIELD_INSTITUTION_EMPLOYER_NATURE_CHANGE
         ).values((String) null, null, null, null, null, null, null,
-            null, null, null, null, null, null, null, null, null, null
-        ));
-
-        items.stream()
-            .map(this::companyHistoryBind)
-            .forEach(consumer -> consumer.accept(batchInsertStatement));
-
-        final var batchResult = batchInsertStatement.execute();
-        if (batchResult.length > 0) {
-            final int totalUpdated = Arrays.stream(batchResult).sum();
-            log.info("{} rows affected", totalUpdated);
-        } else {
-            log.error("An error occurred while running batch");
-        }
+            null, null, null, null, null, null, null, null, null, null, null
+        );
     }
 
     private Consumer<BatchBindStep> companyHistoryBind(CompanyHistory companyHistory) {

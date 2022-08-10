@@ -8,10 +8,12 @@ package fr.dademo.bi.companies.jobs.stg.company_legal_history.writers;
 
 import fr.dademo.bi.companies.jobs.stg.company_legal_history.CompanyLegalHistoryItemWriter;
 import fr.dademo.bi.companies.jobs.stg.company_legal_history.datamodel.CompanyLegalHistory;
+import fr.dademo.bi.companies.jobs.stg.company_legal_history.datamodel.CompanyLegalHistoryRecord;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
+import org.jooq.InsertOnDuplicateStep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -46,7 +48,28 @@ public class CompanyLegalHistoryJdbcItemWriterImpl implements CompanyLegalHistor
 
         log.info("Writing {} company legal history documents", items.size());
 
-        final var batchInsertStatement = dslContext.batch(dslContext.insertInto(COMPANY_LEGAL_HISTORY,
+        try (final var insertStatement = getInsertStatement()) {
+
+            final var batchInsertStatement = dslContext.batch(insertStatement);
+
+            items.stream()
+                .map(this::companyHistoryBind)
+                .forEach(consumer -> consumer.accept(batchInsertStatement));
+
+            final var batchResult = batchInsertStatement.execute();
+            if (batchResult.length > 0) {
+                final int totalUpdated = Arrays.stream(batchResult).sum();
+                log.info("{} rows affected", totalUpdated);
+            } else {
+                log.error("An error occurred while running batch");
+            }
+        }
+    }
+
+    @SuppressWarnings("resource")
+    private InsertOnDuplicateStep<CompanyLegalHistoryRecord> getInsertStatement() {
+
+        return dslContext.insertInto(COMPANY_LEGAL_HISTORY,
             COMPANY_LEGAL_HISTORY.FIELD_COMPANY_LEGAL_HISTORY_SIREN,
             COMPANY_LEGAL_HISTORY.FIELD_COMPANY_LEGAL_HISTORY_END_DATE,
             COMPANY_LEGAL_HISTORY.FIELD_COMPANY_LEGAL_HISTORY_BEGIN_DATE,
@@ -75,19 +98,7 @@ public class CompanyLegalHistoryJdbcItemWriterImpl implements CompanyLegalHistor
             COMPANY_LEGAL_HISTORY.FIELD_COMPANY_LEGAL_HISTORY_LEGAL_UNIT_IS_EMPLOYER_CHANGE
         ).values((String) null, null, null, null, null, null, null, null, null, null, null, null,
             null, null, null, null, null, null, null, null, null, null, null, null, null, null
-        ));
-
-        items.stream()
-            .map(this::companyHistoryBind)
-            .forEach(consumer -> consumer.accept(batchInsertStatement));
-
-        final var batchResult = batchInsertStatement.execute();
-        if (batchResult.length > 0) {
-            final int totalUpdated = Arrays.stream(batchResult).sum();
-            log.info("{} rows affected", totalUpdated);
-        } else {
-            log.error("An error occurred while running batch");
-        }
+        );
     }
 
     private Consumer<BatchBindStep> companyHistoryBind(CompanyLegalHistory companyLegalHistory) {

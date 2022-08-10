@@ -41,7 +41,7 @@ import static fr.dademo.bi.companies.jobs.stg.association.datamodel.Association.
 public class AssociationItemReader extends UnidirectionalItemStreamReaderSupport<WrappedRowResource> {
 
     private static final String DATASET_TITLE = "repertoire-national-des-associations";
-    private static final String DATA_TITLE_PREFIX = "Fichier Import ";
+    private static final String DATA_TITLE_PREFIX = " Import ";
 
     @Autowired
     private DataGouvFrDataQuerierService dataGouvFrDataQuerierService;
@@ -57,9 +57,9 @@ public class AssociationItemReader extends UnidirectionalItemStreamReaderSupport
         final var dataGouvFrDataSet = dataGouvFrDataQuerierService.getDataSet(DATASET_TITLE);
         final var dataGouvFrDataSetResource = dataGouvFrDataSet
             .getResources().stream()
-            .filter(DataGouvFrFilterHelpers.fieldStartingWith(DataGouvFrDataSetResource::getTitle, DATA_TITLE_PREFIX))
+            .filter(DataGouvFrFilterHelpers.fieldContaining(DataGouvFrDataSetResource::getTitle, DATA_TITLE_PREFIX))
             .max(Comparator.comparing(DataGouvFrDataSetResource::dateTimeKeyExtractor))
-            .orElseThrow(() -> new ResourceNotFoundException(DATA_TITLE_PREFIX + "*", dataGouvFrDataSet));
+            .orElseThrow(() -> new ResourceNotFoundException("*" + DATA_TITLE_PREFIX + "*", dataGouvFrDataSet));
 
         log.info("Reading values");
         archiveInputStream = new ZipArchiveInputStream(dataGouvFrDataQuerierService.queryForStream(dataGouvFrDataSetResource));

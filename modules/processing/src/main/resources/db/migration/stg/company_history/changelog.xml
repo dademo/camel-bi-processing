@@ -15,7 +15,7 @@
         <createTable tableName="company_history">
             <column name="siren" type="VARCHAR(9)"/>
             <column name="nic" type="VARCHAR(5)"/>
-            <column name="siret" type="VARCHAR(5)"/>
+            <column name="siret" type="VARCHAR(14)"/>
             <column name="end_date" type="DATE"/>
             <column name="begin_date" type="DATE"/>
             <column name="institution_administrative_state" type="VARCHAR(1)"/>
@@ -28,7 +28,8 @@
             <column name="institution_usual_name_change" type="BOOLEAN"/>
             <column name="institution_primary_activity" type="VARCHAR(6)"/>
             <column name="institution_primary_activity_nomenclature" type="VARCHAR(8)"/>
-            <column name="institution_primary_activity_change" type="VARCHAR(1)"/>
+            <column name="institution_primary_activity_change" type="BOOLEAN"/>
+            <column name="institution_employer_nature" type="VARCHAR(1)"/>
             <column name="institution_employer_nature_change" type="BOOLEAN"/>
         </createTable>
     </changeSet>

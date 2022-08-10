@@ -33,8 +33,10 @@ public class CompanyHistoryItemMapper implements ItemProcessor<WrappedRowResourc
     private CompanyHistory mappedToCompanyHistory(WrappedRowResource item) {
 
         if (columnsIndexMapping == null) {
-            // Filling the mapping
-            columnsIndexMapping = getHeaderMapping(item);
+            synchronized (this) {
+                // Filling the mapping
+                columnsIndexMapping = getHeaderMapping(item);
+            }
         }
 
         return CompanyHistory.builder()

@@ -32,8 +32,10 @@ public class CompanyInheritanceItemMapper implements ItemProcessor<WrappedRowRes
     private CompanyInheritance mappedToCompanyInheritance(WrappedRowResource item) {
 
         if (columnsIndexMapping == null) {
-            // Filling the mapping
-            columnsIndexMapping = getHeaderMapping(item);
+            synchronized (this) {
+                // Filling the mapping
+                columnsIndexMapping = getHeaderMapping(item);
+            }
         }
 
         return CompanyInheritance.builder()

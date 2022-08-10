@@ -121,9 +121,9 @@ public class BatchRepository {
 
         final var threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
 
-        threadPoolTaskExecutor.setCorePoolSize(Math.max(poolSize / 2, 1));
+        threadPoolTaskExecutor.setCorePoolSize(poolSize);
         threadPoolTaskExecutor.setMaxPoolSize(poolSize);
-        // Will ache all incoming jobs
+        // Will cache all incoming jobs
         threadPoolTaskExecutor.setQueueCapacity(Integer.MAX_VALUE);
         threadPoolTaskExecutor.setPrestartAllCoreThreads(true);
         threadPoolTaskExecutor.setDaemon(false);

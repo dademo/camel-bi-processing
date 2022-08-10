@@ -30,7 +30,7 @@ public class CompanyHistoryTable extends CustomTable<CompanyHistoryRecord> {
 
     public final TableField<CompanyHistoryRecord, String> FIELD_SIREN = createField(name("siren"), SQLDataType.VARCHAR(9), this);
     public final TableField<CompanyHistoryRecord, String> FIELD_NIC = createField(name("nic"), SQLDataType.VARCHAR(5), this);
-    public final TableField<CompanyHistoryRecord, String> FIELD_SIRET = createField(name("siret"), SQLDataType.VARCHAR(5), this);
+    public final TableField<CompanyHistoryRecord, String> FIELD_SIRET = createField(name("siret"), SQLDataType.VARCHAR(14), this);
     public final TableField<CompanyHistoryRecord, LocalDate> FIELD_END_DATE = createField(name("end_date"), SQLDataType.LOCALDATE, this);
     public final TableField<CompanyHistoryRecord, LocalDate> FIELD_BEGIN_DATE = createField(name("begin_date"), SQLDataType.LOCALDATE, this);
     public final TableField<CompanyHistoryRecord, String> FIELD_INSTITUTION_ADMINISTRATIVE_STATE = createField(name("institution_administrative_state"), SQLDataType.VARCHAR(1), this);
@@ -43,8 +43,9 @@ public class CompanyHistoryTable extends CustomTable<CompanyHistoryRecord> {
     public final TableField<CompanyHistoryRecord, Boolean> FIELD_INSTITUTION_USUAL_NAME_CHANGE = createField(name("institution_usual_name_change"), SQLDataType.BOOLEAN, this);
     public final TableField<CompanyHistoryRecord, String> FIELD_INSTITUTION_PRIMARY_ACTIVITY = createField(name("institution_primary_activity"), SQLDataType.VARCHAR(6), this);
     public final TableField<CompanyHistoryRecord, String> FIELD_INSTITUTION_PRIMARY_ACTIVITY_NOMENCLATURE = createField(name("institution_primary_activity_nomenclature"), SQLDataType.VARCHAR(8), this);
-    public final TableField<CompanyHistoryRecord, String> FIELD_INSTITUTION_PRIMARY_ACTIVITY_CHANGE = createField(name("institution_primary_activity_change"), SQLDataType.VARCHAR(1), this);
-    public final TableField<CompanyHistoryRecord, Boolean> FIELD_INSTITUTION_EMPLOYER_NATURE = createField(name("institution_employer_nature_change"), SQLDataType.BOOLEAN, this);
+    public final TableField<CompanyHistoryRecord, Boolean> FIELD_INSTITUTION_PRIMARY_ACTIVITY_CHANGE = createField(name("institution_primary_activity_change"), SQLDataType.BOOLEAN, this);
+    public final TableField<CompanyHistoryRecord, String> FIELD_INSTITUTION_EMPLOYER_NATURE = createField(name("institution_employer_nature"), SQLDataType.VARCHAR(1), this);
+    public final TableField<CompanyHistoryRecord, Boolean> FIELD_INSTITUTION_EMPLOYER_NATURE_CHANGE = createField(name("institution_employer_nature_change"), SQLDataType.BOOLEAN, this);
 
     protected CompanyHistoryTable() {
         super(name(TABLE_NAME), schema(TABLE_NAMESPACE));

@@ -8,11 +8,13 @@ package fr.dademo.bi.companies.jobs.stg.company.writers;
 
 import fr.dademo.bi.companies.jobs.stg.company.CompanyItemWriter;
 import fr.dademo.bi.companies.jobs.stg.company.datamodel.Company;
+import fr.dademo.bi.companies.jobs.stg.company.datamodel.CompanyRecord;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
+import org.jooq.InsertOnDuplicateStep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -48,7 +50,28 @@ public class CompanyJdbcItemWriterImpl implements CompanyItemWriter {
 
         log.info("Writing {} company documents", items.size());
 
-        final var batchInsertStatement = dslContext.batch(dslContext.insertInto(COMPANY,
+        try (final var insertStatement = getInsertStatement()) {
+
+            final var batchInsertStatement = dslContext.batch(insertStatement);
+
+            items.stream()
+                .map(this::companyBind)
+                .forEach(consumer -> consumer.accept(batchInsertStatement));
+
+            final var batchResult = batchInsertStatement.execute();
+            if (batchResult.length > 0) {
+                final int totalUpdated = Arrays.stream(batchResult).sum();
+                log.info("{} rows affected", totalUpdated);
+            } else {
+                log.error("An error occurred while running batch");
+            }
+        }
+    }
+
+    @SuppressWarnings("resource")
+    private InsertOnDuplicateStep<CompanyRecord> getInsertStatement() {
+
+        return dslContext.insertInto(COMPANY,
             COMPANY.FIELD_SIREN,
             COMPANY.FIELD_NIC,
             COMPANY.FIELD_SIRET,
@@ -100,19 +123,7 @@ public class CompanyJdbcItemWriterImpl implements CompanyItemWriter {
         ).values((String) null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
             null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
             null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null
-        ));
-
-        items.stream()
-            .map(this::companyBind)
-            .forEach(consumer -> consumer.accept(batchInsertStatement));
-
-        final var batchResult = batchInsertStatement.execute();
-        if (batchResult.length > 0) {
-            final int totalUpdated = Arrays.stream(batchResult).sum();
-            log.info("{} rows affected", totalUpdated);
-        } else {
-            log.error("An error occurred while running batch");
-        }
+        );
     }
 
     private Consumer<BatchBindStep> companyBind(Company company) {

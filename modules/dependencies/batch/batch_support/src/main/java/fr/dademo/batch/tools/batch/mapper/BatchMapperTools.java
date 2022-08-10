@@ -9,6 +9,7 @@ package fr.dademo.batch.tools.batch.mapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -47,6 +48,14 @@ public final class BatchMapperTools {
 
         return Optional.ofNullable(str)
             .map(DateTimeFormatter.ISO_LOCAL_DATE_TIME::parse)
+            .map(LocalDateTime::from)
+            .orElse(null);
+    }
+
+    public static LocalDateTime toLocalDateTimeUsingPattern(@Nullable String str, @Nonnull String pattern) {
+
+        return Optional.ofNullable(str)
+            .map(DateTimeFormatter.ofPattern(pattern)::parse)
             .map(LocalDateTime::from)
             .orElse(null);
     }

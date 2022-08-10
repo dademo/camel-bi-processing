@@ -12,6 +12,7 @@ import org.jooq.impl.SQLDataType;
 
 import javax.annotation.Nonnull;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.schema;
@@ -68,7 +69,7 @@ public class AssociationWaldecTable extends CustomTable<AssociationWaldecRecord>
     public final TableField<AssociationWaldecRecord, String> FIELD_ASSOCIATION_PUBLIC_WEBSITE = createField(name("public_website"), SQLDataType.VARCHAR(1), this);
     public final TableField<AssociationWaldecRecord, String> FIELD_ASSOCIATION_OBSERVATION = createField(name("observation"), SQLDataType.VARCHAR(255), this);
     public final TableField<AssociationWaldecRecord, String> FIELD_ASSOCIATION_POSITION = createField(name("position"), SQLDataType.VARCHAR(1), this);
-    public final TableField<AssociationWaldecRecord, LocalDate> FIELD_ASSOCIATION_LAST_UPDATED = createField(name("last_updated"), SQLDataType.LOCALDATE, this);
+    public final TableField<AssociationWaldecRecord, LocalDateTime> FIELD_ASSOCIATION_LAST_UPDATED = createField(name("last_updated"), SQLDataType.LOCALDATETIME, this);
 
     protected AssociationWaldecTable() {
         super(name(TABLE_NAME), schema(TABLE_NAMESPACE));

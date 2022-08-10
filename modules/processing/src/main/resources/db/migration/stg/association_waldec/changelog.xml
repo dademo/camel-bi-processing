@@ -30,7 +30,7 @@
             <column name="social_object_1" type="VARCHAR(6)"/>
             <column name="social_object_2" type="VARCHAR(6)"/>
             <column name="address_complement" type="VARCHAR(76)"/>
-            <column name="address_street_number" type="VARCHAR(5)"/>
+            <column name="address_street_number" type="VARCHAR(10)"/>
             <column name="address_repetition" type="VARCHAR(1)"/>
             <column name="address_street_type" type="VARCHAR(5)"/>
             <column name="address_street_libelle" type="VARCHAR(42)"/>
@@ -47,13 +47,11 @@
             <column name="gestion_forward" type="VARCHAR(32)"/>
             <column name="gestion_country" type="VARCHAR(38)"/>
             <column name="leader_civility" type="VARCHAR(2)"/>
-            <column name="phone" type="VARCHAR(10)"/>
             <column name="website" type="VARCHAR(64)"/>
-            <column name="email" type="VARCHAR(64)"/>
             <column name="public_website" type="VARCHAR(1)"/>
             <column name="observation" type="VARCHAR(255)"/>
             <column name="position" type="VARCHAR(1)"/>
-            <column name="last_updated" type="DATE"/>
+            <column name="last_updated" type="DATETIME"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>

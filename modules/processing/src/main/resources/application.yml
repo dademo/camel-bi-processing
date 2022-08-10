@@ -105,54 +105,54 @@ batch:
     enabled: true
   jobs:
     naf:
-      enabled: false
+      enabled: true
       data-source-name: stg
       chunk-size: 1000
-      writer-type: NO_ACTION
+      writer-type: JDBC
       #writer-type: MONGODB
       max-threads: null
     company:
-      enabled: false
+      enabled: true
       data-source-name: stg
-      chunk-size: 10000
-      writer-type: NO_ACTION
+      chunk-size: 1000000
+      writer-type: JDBC
       #writer-type: MONGODB
       max-threads: null
     company-history:
-      enabled: false
+      enabled: true
       data-source-name: stg
-      chunk-size: 10000
-      writer-type: NO_ACTION
+      chunk-size: 1000000
+      writer-type: JDBC
       max-threads: null
     company-inheritance:
-      enabled: false
+      enabled: true
       data-source-name: stg
-      chunk-size: 10000
-      writer-type: NO_ACTION
+      chunk-size: 1000000
+      writer-type: JDBC
       max-threads: null
     company-legal:
-      enabled: false
+      enabled: true
       data-source-name: stg
-      chunk-size: 10000
-      writer-type: NO_ACTION
+      chunk-size: 1000000
+      writer-type: JDBC
       max-threads: null
     company-legal-history:
-      enabled: false
+      enabled: true
       data-source-name: stg
-      chunk-size: 10000
-      writer-type: NO_ACTION
+      chunk-size: 1000000
+      writer-type: JDBC
       max-threads: null
     association:
       enabled: true
       data-source-name: stg
-      chunk-size: 10000
+      chunk-size: 1000000
       #writer-type: AMQP
       #writer-type: NO_ACTION
       writer-type: JDBC
       max-threads: null
     association-waldec:
-      enabled: false
+      enabled: true
       data-source-name: stg
-      chunk-size: 10000
-      writer-type: NO_ACTION
+      chunk-size: 1000000
+      writer-type: JDBC
       max-threads: null

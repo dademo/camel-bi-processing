@@ -8,10 +8,12 @@ package fr.dademo.bi.companies.jobs.stg.company_legal.writers;
 
 import fr.dademo.bi.companies.jobs.stg.company_legal.CompanyLegalItemWriter;
 import fr.dademo.bi.companies.jobs.stg.company_legal.datamodel.CompanyLegal;
+import fr.dademo.bi.companies.jobs.stg.company_legal.datamodel.CompanyLegalRecord;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
+import org.jooq.InsertOnDuplicateStep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -46,7 +48,28 @@ public class CompanyLegalJdbcItemWriterImpl implements CompanyLegalItemWriter {
 
         log.info("Writing {} company legal documents", items.size());
 
-        final var batchInsertStatement = dslContext.batch(dslContext.insertInto(COMPANY_LEGAL,
+        try (final var insertStatement = getInsertStatement()) {
+
+            final var batchInsertStatement = dslContext.batch(insertStatement);
+
+            items.stream()
+                .map(this::companyHistoryBind)
+                .forEach(consumer -> consumer.accept(batchInsertStatement));
+
+            final var batchResult = batchInsertStatement.execute();
+            if (batchResult.length > 0) {
+                final int totalUpdated = Arrays.stream(batchResult).sum();
+                log.info("{} rows affected", totalUpdated);
+            } else {
+                log.error("An error occurred while running batch");
+            }
+        }
+    }
+
+    @SuppressWarnings("resource")
+    private InsertOnDuplicateStep<CompanyLegalRecord> getInsertStatement() {
+
+        return dslContext.insertInto(COMPANY_LEGAL,
             COMPANY_LEGAL.FIELD_COMPANY_LEGAL_UNIT_SIREN,
             COMPANY_LEGAL.FIELD_COMPANY_LEGAL_UNIT_DIFFUSION_STATUS,
             COMPANY_LEGAL.FIELD_COMPANY_LEGAL_UNIT_IS_PURGED,
@@ -84,19 +107,7 @@ public class CompanyLegalJdbcItemWriterImpl implements CompanyLegalItemWriter {
             null, null, null, null, null, null, null, null, null,
             null, null, null, null, null, null, null, null, null,
             null, null, null, null, null, null, null, null
-        ));
-
-        items.stream()
-            .map(this::companyHistoryBind)
-            .forEach(consumer -> consumer.accept(batchInsertStatement));
-
-        final var batchResult = batchInsertStatement.execute();
-        if (batchResult.length > 0) {
-            final int totalUpdated = Arrays.stream(batchResult).sum();
-            log.info("{} rows affected", totalUpdated);
-        } else {
-            log.error("An error occurred while running batch");
-        }
+        );
     }
 
     private Consumer<BatchBindStep> companyHistoryBind(CompanyLegal companyLegal) {

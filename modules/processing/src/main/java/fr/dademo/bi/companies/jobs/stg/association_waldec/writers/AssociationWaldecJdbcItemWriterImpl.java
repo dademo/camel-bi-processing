@@ -8,11 +8,13 @@ package fr.dademo.bi.companies.jobs.stg.association_waldec.writers;
 
 import fr.dademo.bi.companies.jobs.stg.association_waldec.AssociationWaldecItemWriter;
 import fr.dademo.bi.companies.jobs.stg.association_waldec.datamodel.AssociationWaldec;
+import fr.dademo.bi.companies.jobs.stg.association_waldec.datamodel.AssociationWaldecRecord;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
+import org.jooq.InsertOnDuplicateStep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -48,7 +50,28 @@ public class AssociationWaldecJdbcItemWriterImpl implements AssociationWaldecIte
 
         log.info("Writing {} company documents", items.size());
 
-        final var batchInsertStatement = dslContext.batch(dslContext.insertInto(ASSOCIATION_WALDEC,
+        try (final var insertStatement = getInsertStatement()) {
+
+            final var batchInsertStatement = dslContext.batch(insertStatement);
+
+            items.stream()
+                .map(this::companyBind)
+                .forEach(consumer -> consumer.accept(batchInsertStatement));
+
+            final var batchResult = batchInsertStatement.execute();
+            if (batchResult.length > 0) {
+                final int totalUpdated = Arrays.stream(batchResult).sum();
+                log.info("{} rows affected", totalUpdated);
+            } else {
+                log.error("An error occurred while running batch");
+            }
+        }
+    }
+
+    @SuppressWarnings("resource")
+    private InsertOnDuplicateStep<AssociationWaldecRecord> getInsertStatement() {
+
+        return dslContext.insertInto(ASSOCIATION_WALDEC,
             ASSOCIATION_WALDEC.FIELD_ASSOCIATION_ID,
             ASSOCIATION_WALDEC.FIELD_ASSOCIATION_ID_EX,
             ASSOCIATION_WALDEC.FIELD_ASSOCIATION_SIRET,
@@ -83,29 +106,15 @@ public class AssociationWaldecJdbcItemWriterImpl implements AssociationWaldecIte
             ASSOCIATION_WALDEC.FIELD_ASSOCIATION_GESTION_FORWARD,
             ASSOCIATION_WALDEC.FIELD_ASSOCIATION_GESTION_COUNTRY,
             ASSOCIATION_WALDEC.FIELD_ASSOCIATION_LEADER_CIVILITY,
-            ASSOCIATION_WALDEC.FIELD_ASSOCIATION_PHONE,
             ASSOCIATION_WALDEC.FIELD_ASSOCIATION_WEBSITE,
-            ASSOCIATION_WALDEC.FIELD_ASSOCIATION_EMAIL,
             ASSOCIATION_WALDEC.FIELD_ASSOCIATION_PUBLIC_WEBSITE,
             ASSOCIATION_WALDEC.FIELD_ASSOCIATION_OBSERVATION,
             ASSOCIATION_WALDEC.FIELD_ASSOCIATION_POSITION,
             ASSOCIATION_WALDEC.FIELD_ASSOCIATION_LAST_UPDATED
         ).values((String) null, null, null, null, null, null, null, null, null, null, null, null, null, null,
             null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-            null, null, null, null, null, null, null, null, null, null, null
-        ));
-
-        items.stream()
-            .map(this::companyBind)
-            .forEach(consumer -> consumer.accept(batchInsertStatement));
-
-        final var batchResult = batchInsertStatement.execute();
-        if (batchResult.length > 0) {
-            final int totalUpdated = Arrays.stream(batchResult).sum();
-            log.info("{} rows affected", totalUpdated);
-        } else {
-            log.error("An error occurred while running batch");
-        }
+            null, null, null, null, null, null, null, null, null
+        );
     }
 
     private Consumer<BatchBindStep> companyBind(AssociationWaldec associationWaldec) {
@@ -145,11 +154,11 @@ public class AssociationWaldecJdbcItemWriterImpl implements AssociationWaldecIte
             associationWaldec.getGestionForward(),
             associationWaldec.getGestionCountry(),
             associationWaldec.getLeaderCivility(),
-            associationWaldec.getPhone(),
             associationWaldec.getWebsite(),
-            associationWaldec.getEmail(),
             associationWaldec.getPublicWebsite(),
-            associationWaldec.getObservation()
+            associationWaldec.getObservation(),
+            associationWaldec.getPosition(),
+            associationWaldec.getLastUpdated()
         );
     }
 }

@@ -8,10 +8,12 @@ package fr.dademo.bi.companies.jobs.stg.company_inheritance.writers;
 
 import fr.dademo.bi.companies.jobs.stg.company_inheritance.CompanyInheritanceItemWriter;
 import fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel.CompanyInheritance;
+import fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel.CompanyInheritanceRecord;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
+import org.jooq.InsertOnDuplicateStep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -46,26 +48,35 @@ public class CompanyInheritanceJdbcItemWriterImpl implements CompanyInheritanceI
 
         log.info("Writing {} company inheritance documents", items.size());
 
-        final var batchInsertStatement = dslContext.batch(dslContext.insertInto(COMPANY_INHERITANCE,
+        try (final var insertStatement = getInsertStatement()) {
+
+            final var batchInsertStatement = dslContext.batch(insertStatement);
+
+            items.stream()
+                .map(this::companyInheritanceBind)
+                .forEach(consumer -> consumer.accept(batchInsertStatement));
+
+            final var batchResult = batchInsertStatement.execute();
+            if (batchResult.length > 0) {
+                final int totalUpdated = Arrays.stream(batchResult).sum();
+                log.info("{} rows affected", totalUpdated);
+            } else {
+                log.error("An error occurred while running batch");
+            }
+        }
+    }
+
+    @SuppressWarnings("resource")
+    private InsertOnDuplicateStep<CompanyInheritanceRecord> getInsertStatement() {
+
+        return dslContext.insertInto(COMPANY_INHERITANCE,
             COMPANY_INHERITANCE.FIELD_COMPANY_PREDECESSOR_SIREN,
             COMPANY_INHERITANCE.FIELD_COMPANY_SUCCESSOR_SIREN,
             COMPANY_INHERITANCE.FIELD_COMPANY_SUCCESSION_DATE,
             COMPANY_INHERITANCE.FIELD_COMPANY_HEADQUARTER_CHANGE,
             COMPANY_INHERITANCE.FIELD_COMPANY_ECONOMICAL_CONTINUITY,
             COMPANY_INHERITANCE.FIELD_COMPANY_PROCESSING_DATE
-        ).values((String) null, null, null, null, null, null));
-
-        items.stream()
-            .map(this::companyInheritanceBind)
-            .forEach(consumer -> consumer.accept(batchInsertStatement));
-
-        final var batchResult = batchInsertStatement.execute();
-        if (batchResult.length > 0) {
-            final int totalUpdated = Arrays.stream(batchResult).sum();
-            log.info("{} rows affected", totalUpdated);
-        } else {
-            log.error("An error occurred while running batch");
-        }
+        ).values((String) null, null, null, null, null, null);
     }
 
     private Consumer<BatchBindStep> companyInheritanceBind(CompanyInheritance companyInheritance) {

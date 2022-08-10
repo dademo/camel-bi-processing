@@ -25,6 +25,7 @@ import org.springframework.core.io.ResourceLoader;
 import javax.annotation.Nonnull;
 import javax.sql.DataSource;
 import javax.validation.constraints.NotEmpty;
+import java.util.Collections;
 import java.util.Optional;
 
 @Slf4j
@@ -49,7 +50,7 @@ public class LiquibaseMigrationTasklet implements Tasklet {
             )
             .databaseCatalog(databaseCatalog)
             .databaseSchema(databaseSchema)
-            .contexts(jobConfiguration.getMigrationContexts())
+            .contexts(Optional.ofNullable(jobConfiguration.getMigrationContexts()).orElse(Collections.emptyList()))
             .dataSource(dataSource)
             .resourceLoader(resourceLoader)
             .build();

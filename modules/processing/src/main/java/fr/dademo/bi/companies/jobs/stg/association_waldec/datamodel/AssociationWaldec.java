@@ -10,6 +10,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * @author dademo
@@ -55,9 +56,7 @@ public class AssociationWaldec {
     public static final String CSV_FIELD_ASSOCIATION_WALDEC_GESTION_FORWARD = "adrg_achemine";
     public static final String CSV_FIELD_ASSOCIATION_WALDEC_GESTION_COUNTRY = "adrg_pays";
     public static final String CSV_FIELD_ASSOCIATION_WALDEC_LEADER_CIVILITY = "dir_civilite";
-    public static final String CSV_FIELD_ASSOCIATION_WALDEC_PHONE = "telephone";
     public static final String CSV_FIELD_ASSOCIATION_WALDEC_WEBSITE = "siteweb";
-    public static final String CSV_FIELD_ASSOCIATION_WALDEC_EMAIL = "email";
     public static final String CSV_FIELD_ASSOCIATION_WALDEC_PUBLIC_WEBSITE = "publiweb";
     public static final String CSV_FIELD_ASSOCIATION_WALDEC_OBSERVATION = "observation";
     public static final String CSV_FIELD_ASSOCIATION_WALDEC_POSITION = "position";
@@ -98,11 +97,11 @@ public class AssociationWaldec {
         CSV_FIELD_ASSOCIATION_WALDEC_GESTION_FORWARD,
         CSV_FIELD_ASSOCIATION_WALDEC_GESTION_COUNTRY,
         CSV_FIELD_ASSOCIATION_WALDEC_LEADER_CIVILITY,
-        CSV_FIELD_ASSOCIATION_WALDEC_PHONE,
         CSV_FIELD_ASSOCIATION_WALDEC_WEBSITE,
-        CSV_FIELD_ASSOCIATION_WALDEC_EMAIL,
         CSV_FIELD_ASSOCIATION_WALDEC_PUBLIC_WEBSITE,
         CSV_FIELD_ASSOCIATION_WALDEC_OBSERVATION,
+        CSV_FIELD_ASSOCIATION_WALDEC_POSITION,
+        CSV_FIELD_ASSOCIATION_WALDEC_LAST_UPDATED,
     };
 
     private String id;
@@ -139,11 +138,12 @@ public class AssociationWaldec {
     private String gestionForward;
     private String gestionCountry;
     private String leaderCivility;
-    private String phone;
     private String website;
-    private String email;
     private String publicWebsite;
     private String observation;
+    private String position;
+    private LocalDateTime lastUpdated;
+
 
     @AllArgsConstructor
     @Getter
@@ -185,10 +185,10 @@ public class AssociationWaldec {
         int gestionForwardField;
         int gestionCountryField;
         int leaderCivilityField;
-        int phoneField;
         int websiteField;
-        int emailField;
         int publicWebsiteField;
         int observationField;
+        int position;
+        int lastUpdated;
     }
 }

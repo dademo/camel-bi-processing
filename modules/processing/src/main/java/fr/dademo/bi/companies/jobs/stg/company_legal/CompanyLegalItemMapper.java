@@ -33,8 +33,10 @@ public class CompanyLegalItemMapper implements ItemProcessor<WrappedRowResource,
     private CompanyLegal mappedToCompanyLegal(WrappedRowResource item) {
 
         if (columnsIndexMapping == null) {
-            // Filling the mapping
-            columnsIndexMapping = getHeaderMapping(item);
+            synchronized (this) {
+                // Filling the mapping
+                columnsIndexMapping = getHeaderMapping(item);
+            }
         }
 
         return CompanyLegal.builder()

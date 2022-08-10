@@ -36,8 +36,10 @@ public class AssociationItemMapper implements ItemProcessor<WrappedRowResource, 
     private Association mappedToCompanyHistory(WrappedRowResource item) {
 
         if (columnsIndexMapping == null) {
-            // Filling the mapping
-            columnsIndexMapping = getHeaderMapping(item);
+            synchronized (this) {
+                // Filling the mapping
+                columnsIndexMapping = getHeaderMapping(item);
+            }
         }
 
         return Association.builder()

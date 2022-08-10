@@ -33,8 +33,10 @@ public class CompanyLegalHistoryItemMapper implements ItemProcessor<WrappedRowRe
     private CompanyLegalHistory mappedToCompanyLegalHistory(WrappedRowResource item) {
 
         if (columnsIndexMapping == null) {
-            // Filling the mapping
-            columnsIndexMapping = getHeaderMapping(item);
+            synchronized (this) {
+                // Filling the mapping
+                columnsIndexMapping = getHeaderMapping(item);
+            }
         }
 
         return CompanyLegalHistory.builder()

@@ -69,15 +69,17 @@ public class LiquibaseMigrationsSupplier {
     @SneakyThrows
     public void applyMigrations() {
 
-        try (final var connection = dataSource.getConnection()) {
+        synchronized (dataSource) {
+            try (final var connection = dataSource.getConnection()) {
 
-            final var database = DatabaseFactory.getInstance()
-                .findCorrectDatabaseImplementation(new JdbcConnection(connection));
-            Optional.ofNullable(databaseSchema).ifPresent(safeApplyDatabaseOperation(database::setDefaultSchemaName));
-            Optional.ofNullable(databaseCatalog).ifPresent(safeApplyDatabaseOperation(database::setDefaultCatalogName));
+                final var database = DatabaseFactory.getInstance()
+                    .findCorrectDatabaseImplementation(new JdbcConnection(connection));
+                Optional.ofNullable(databaseSchema).ifPresent(safeApplyDatabaseOperation(database::setDefaultSchemaName));
+                Optional.ofNullable(databaseCatalog).ifPresent(safeApplyDatabaseOperation(database::setDefaultCatalogName));
 
-            try (final var liquibase = new Liquibase(getChangeLogFile(), new SpringResourceAccessor(resourceLoader), database)) {
-                liquibase.update(new Contexts(contexts));
+                try (final var liquibase = new Liquibase(getChangeLogFile(), new SpringResourceAccessor(resourceLoader), database)) {
+                    liquibase.update(new Contexts(contexts));
+                }
             }
         }
     }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Nonnull;
 
 import static fr.dademo.batch.tools.batch.mapper.BatchMapperTools.toLocalDate;
+import static fr.dademo.batch.tools.batch.mapper.BatchMapperTools.toLocalDateTimeUsingPattern;
 import static fr.dademo.bi.companies.jobs.stg.association_waldec.datamodel.AssociationWaldec.*;
 
 /**
@@ -21,6 +22,8 @@ import static fr.dademo.bi.companies.jobs.stg.association_waldec.datamodel.Assoc
  */
 @Component
 public class AssociationWaldecItemMapper implements ItemProcessor<WrappedRowResource, AssociationWaldec> {
+
+    public static final String ASSOCIATION_WALDEC_DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
     private AssociationWaldecCsvColumnsMapping columnsIndexMapping;
 
@@ -32,8 +35,10 @@ public class AssociationWaldecItemMapper implements ItemProcessor<WrappedRowReso
     private AssociationWaldec mappedToAssociationWaldec(WrappedRowResource item) {
 
         if (columnsIndexMapping == null) {
-            // Filling the mapping
-            columnsIndexMapping = getHeaderMapping(item);
+            synchronized (this) {
+                // Filling the mapping
+                columnsIndexMapping = getHeaderMapping(item);
+            }
         }
 
         return AssociationWaldec.builder()
@@ -71,11 +76,11 @@ public class AssociationWaldecItemMapper implements ItemProcessor<WrappedRowReso
             .gestionForward(item.getString(columnsIndexMapping.getGestionForwardField()))
             .gestionCountry(item.getString(columnsIndexMapping.getGestionCountryField()))
             .leaderCivility(item.getString(columnsIndexMapping.getLeaderCivilityField()))
-            .phone(item.getString(columnsIndexMapping.getPhoneField()))
             .website(item.getString(columnsIndexMapping.getWebsiteField()))
-            .email(item.getString(columnsIndexMapping.getEmailField()))
             .publicWebsite(item.getString(columnsIndexMapping.getPublicWebsiteField()))
             .observation(item.getString(columnsIndexMapping.getObservationField()))
+            .position(item.getString(columnsIndexMapping.getPosition()))
+            .lastUpdated(toLocalDateTimeUsingPattern(item.getString(columnsIndexMapping.getLastUpdated()), ASSOCIATION_WALDEC_DATE_TIME_PATTERN))
             .build();
     }
 
@@ -116,11 +121,11 @@ public class AssociationWaldecItemMapper implements ItemProcessor<WrappedRowReso
             .gestionForwardField(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_WALDEC_GESTION_FORWARD))
             .gestionCountryField(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_WALDEC_GESTION_COUNTRY))
             .leaderCivilityField(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_WALDEC_LEADER_CIVILITY))
-            .phoneField(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_WALDEC_PHONE))
             .websiteField(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_WALDEC_WEBSITE))
-            .emailField(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_WALDEC_EMAIL))
             .publicWebsiteField(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_WALDEC_PUBLIC_WEBSITE))
             .observationField(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_WALDEC_OBSERVATION))
+            .position(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_WALDEC_POSITION))
+            .lastUpdated(item.getColumnIndexByName(CSV_FIELD_ASSOCIATION_WALDEC_LAST_UPDATED))
             .build();
     }
 }

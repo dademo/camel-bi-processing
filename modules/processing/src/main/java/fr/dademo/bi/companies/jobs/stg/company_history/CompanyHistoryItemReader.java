@@ -79,21 +79,23 @@ public class CompanyHistoryItemReader extends UnidirectionalItemStreamReaderSupp
         if (iterator.hasNext()) {
             return Optional.of(iterator.next());
         } else {
-            while (true) {
-                ArchiveEntry archiveEntry;
-                if ((archiveEntry = archiveInputStream.getNextEntry()) != null) {
-                    if (!archiveEntry.isDirectory()) {
-                        iterator = ResourcesReaderWrapperProvider.of(
-                            csvFormat()
-                                .parse(new InputStreamReader(archiveInputStream)),
-                            false
-                        ).iterator();
-                        if (iterator.hasNext()) {
-                            return Optional.of(iterator.next());
+            synchronized (this) {
+                while (true) {
+                    ArchiveEntry archiveEntry;
+                    if ((archiveEntry = archiveInputStream.getNextEntry()) != null) {
+                        if (!archiveEntry.isDirectory()) {
+                            iterator = ResourcesReaderWrapperProvider.of(
+                                csvFormat()
+                                    .parse(new InputStreamReader(archiveInputStream)),
+                                false
+                            ).iterator();
+                            if (iterator.hasNext()) {
+                                return Optional.of(iterator.next());
+                            }
                         }
+                    } else {
+                        return Optional.empty();
                     }
-                } else {
-                    return Optional.empty();
                 }
             }
         }

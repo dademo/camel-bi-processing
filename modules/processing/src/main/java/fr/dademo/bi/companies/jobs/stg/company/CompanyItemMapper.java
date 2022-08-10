@@ -32,8 +32,10 @@ public class CompanyItemMapper implements ItemProcessor<WrappedRowResource, Comp
     private Company mappedToCompany(WrappedRowResource item) {
 
         if (columnsIndexMapping == null) {
-            // Filling the mapping
-            columnsIndexMapping = getHeaderMapping(item);
+            synchronized (this) {
+                // Filling the mapping
+                columnsIndexMapping = getHeaderMapping(item);
+            }
         }
 
         return Company.builder()

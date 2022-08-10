@@ -69,6 +69,6 @@ public final class BeanValues {
     public static final String FLYWAY_STG_BEAN_NAME = FLYWAY_CONFIG + "_" + STG_DATA_SOURCE_NAME;
 
     //// Values ////
-    public static final int DEFAULT_THREAD_POOL_SIZE = 10;
+    public static final int DEFAULT_THREAD_POOL_SIZE = 2;
     public static final String TASK_EXECUTOR_BEAN_NAME = "batch_task_executor";
 }

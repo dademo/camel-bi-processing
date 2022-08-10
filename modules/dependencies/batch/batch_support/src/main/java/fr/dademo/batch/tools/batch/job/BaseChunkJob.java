@@ -17,6 +17,7 @@ import fr.dademo.batch.tools.batch.job.listeners.StepThreadPoolListener;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.job.builder.SimpleJobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemProcessor;
@@ -33,6 +34,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -84,9 +86,9 @@ public abstract class BaseChunkJob<I, O> implements BatchJobProvider {
         return null;
     }
 
-    @Nullable
-    protected Tasklet getInitTask() {
-        return null;
+    @Nonnull
+    protected List<Tasklet> getInitTasks() {
+        return Collections.emptyList();
     }
 
     protected Tasklet getLiquibaseMigrationTasklet() {
@@ -165,21 +167,25 @@ public abstract class BaseChunkJob<I, O> implements BatchJobProvider {
                 .orElseGet(BatchConfiguration.JobConfiguration::getDefaultIsEnabled))) {
 
             final var jobName = getJobName();
-            final var jobProcessStep = getJobStep(jobName);
 
             final var jobBuilder = jobBuilderFactory
                 .get(jobName)
                 .incrementer(new RunIdIncrementer())
                 .preventRestart();
 
-            final var initStep = getInitStep(jobName);
+            final var jobInitSteps = getInitSteps(jobName);
+            final var jobInitFirstStep = jobInitSteps.stream().findFirst();
+            final var jobInitOtherSteps = jobInitSteps.size() > 0 ? jobInitSteps.subList(1, jobInitSteps.size()) : Collections.emptyList();
             final var jobStep = getJobStep(jobName);
 
-            final var stepJobBuilder = initStep.map(
-                step -> jobBuilder
-                    .start(step)
-                    .next(jobStep)
-            ).orElseGet(() -> jobBuilder.start(jobStep));
+            SimpleJobBuilder stepJobBuilder;
+            if (jobInitFirstStep.isPresent()) {
+                stepJobBuilder = jobBuilder.start(jobInitFirstStep.get());
+                jobInitOtherSteps.forEach(step -> stepJobBuilder.next((Step) step));
+                stepJobBuilder.next(jobStep);
+            } else {
+                stepJobBuilder = jobBuilder.start(jobStep);
+            }
 
             getAllJobExecutionListener().forEach(stepJobBuilder::listener);
 
@@ -189,15 +195,21 @@ public abstract class BaseChunkJob<I, O> implements BatchJobProvider {
         }
     }
 
-    private Optional<Step> getInitStep(String jobName) {
+    private List<Step> getInitSteps(String jobName) {
 
-        return Optional.ofNullable(getInitTask())
-            .map(
-                initTask -> stepBuilderFactory
-                    .get(jobName)
-                    .tasklet(initTask)
+        final var tasks = getInitTasks();
+        if (!tasks.isEmpty()) {
+            return IntStream.rangeClosed(1, tasks.size())
+                .mapToObj(stepIndex -> stepBuilderFactory
+                    .get(String.format("%s-%d", jobName, stepIndex))
+                    .tasklet(tasks.get(stepIndex - 1))
+                    .startLimit(1)
+                    .throttleLimit(1)
                     .build()
-            );
+                ).collect(Collectors.toList());
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     private Step getJobStep(String jobName) {

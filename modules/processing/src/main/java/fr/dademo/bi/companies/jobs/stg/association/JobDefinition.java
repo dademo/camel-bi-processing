@@ -9,17 +9,28 @@ package fr.dademo.bi.companies.jobs.stg.association;
 import fr.dademo.batch.configuration.BatchConfiguration;
 import fr.dademo.batch.resources.WrappedRowResource;
 import fr.dademo.batch.tools.batch.job.BaseChunkJob;
+import fr.dademo.batch.tools.batch.job.JooqTruncateTasklet;
+import fr.dademo.bi.companies.jobs.exceptions.MissingBeanException;
 import fr.dademo.bi.companies.jobs.stg.association.datamodel.Association;
 import fr.dademo.bi.companies.jobs.stg.association.writers.AssociationJdbcItemWriterImpl;
+import org.jooq.DSLContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import static fr.dademo.batch.beans.BeanValues.STG_DATA_SOURCE_DSL_CONTEXT_BEAN_NAME;
+import static fr.dademo.bi.companies.jobs.stg.association.datamodel.AssociationTable.ASSOCIATION;
 
 /**
  * @author dademo
@@ -31,10 +42,15 @@ public class JobDefinition extends BaseChunkJob<WrappedRowResource, Association>
     public static final String ASSOCIATION_NORMALIZED_CONFIG_JOB_NAME = "association";
     public static final String ASSOCIATION_JOB_NAME = "stg_" + ASSOCIATION_NORMALIZED_CONFIG_JOB_NAME;
     public static final String ASSOCIATION_MIGRATION_FOLDER = "stg/association";
-    public static final String DEFAULT_JDBC_DATA_SOURCE_NAME = "stg";
+    public static final String ASSOCIATION_DEFAULT_JDBC_DATA_SOURCE_NAME = "stg";
 
     @Autowired
     private BatchConfiguration batchConfiguration;
+
+    @Nullable
+    @Autowired(required = false)
+    @Qualifier(STG_DATA_SOURCE_DSL_CONTEXT_BEAN_NAME)
+    private DSLContext dslContext;
 
     @Autowired
     private AssociationItemReader associationItemReader;
@@ -54,16 +70,34 @@ public class JobDefinition extends BaseChunkJob<WrappedRowResource, Association>
         return ASSOCIATION_JOB_NAME;
     }
 
-    @Nullable
+    @Nonnull
     @Override
-    protected Tasklet getInitTask() {
-        return (associationItemWriter instanceof AssociationJdbcItemWriterImpl) ? getLiquibaseMigrationTasklet() : null;
+    protected List<Tasklet> getInitTasks() {
+
+        if (associationItemWriter instanceof AssociationJdbcItemWriterImpl) {
+
+            return Arrays.asList(
+                getLiquibaseMigrationTasklet(),
+                getJooqTruncateTasklet()
+            );
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    private Tasklet getJooqTruncateTasklet() {
+
+        return new JooqTruncateTasklet<>(
+            Optional.ofNullable(dslContext)
+                .orElseThrow(() -> new MissingBeanException(DSLContext.class, STG_DATA_SOURCE_DSL_CONTEXT_BEAN_NAME)),
+            ASSOCIATION
+        );
     }
 
     @Nullable
     @Override
     protected String getDefaultJdbcDataSourceName() {
-        return DEFAULT_JDBC_DATA_SOURCE_NAME;
+        return ASSOCIATION_DEFAULT_JDBC_DATA_SOURCE_NAME;
     }
 
     @Nullable

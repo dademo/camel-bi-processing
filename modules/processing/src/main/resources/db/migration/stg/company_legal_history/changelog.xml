@@ -12,7 +12,7 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 
     <changeSet id="1" author="dademo">
-        <createTable tableName="company_legal_history">
+        <createTable tableName="company_legal_unit_history">
             <column name="siren" type="VARCHAR(9)"/>
             <column name="end_date" type="DATE"/>
             <column name="begin_date" type="DATE"/>

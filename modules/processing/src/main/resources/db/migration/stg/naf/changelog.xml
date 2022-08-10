@@ -12,8 +12,10 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 
     <changeSet id="1" author="dademo">
-        <createTable tableName="naf">
-            <column name="naf_code" type="VARCHAR(5)"/>
+        <createTable tableName="naf_codes">
+            <column name="naf_code" type="VARCHAR(5)">
+                <constraints unique="true" nullable="false" primaryKey="true"/>
+            </column>
             <column name="title" type="CLOB"/>
             <column name="title_65" type="VARCHAR(65)"/>
             <column name="title_40" type="VARCHAR(40)"/>
