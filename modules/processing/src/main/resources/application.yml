@@ -75,6 +75,8 @@ datasources:
       minimum-idle: 10
       maximum-pool-size: 100
       connection-timeout-millis: 0
+      catalog: null
+      schema: stg
       username: bi_rw
       password: bi_rw
   mongodb:
@@ -103,45 +105,54 @@ batch:
     enabled: true
   jobs:
     naf:
-      enabled: true
+      enabled: false
+      data-source-name: stg
       chunk-size: 1000
       writer-type: NO_ACTION
       #writer-type: MONGODB
       max-threads: null
     company:
-      enabled: true
-      chunk-size: 100000
+      enabled: false
+      data-source-name: stg
+      chunk-size: 10000
       writer-type: NO_ACTION
       #writer-type: MONGODB
       max-threads: null
     company-history:
-      enabled: true
-      chunk-size: 100000
+      enabled: false
+      data-source-name: stg
+      chunk-size: 10000
       writer-type: NO_ACTION
       max-threads: null
     company-inheritance:
-      enabled: true
-      chunk-size: 100000
+      enabled: false
+      data-source-name: stg
+      chunk-size: 10000
       writer-type: NO_ACTION
       max-threads: null
     company-legal:
-      enabled: true
-      chunk-size: 100000
+      enabled: false
+      data-source-name: stg
+      chunk-size: 10000
       writer-type: NO_ACTION
       max-threads: null
     company-legal-history:
-      enabled: true
-      chunk-size: 100000
+      enabled: false
+      data-source-name: stg
+      chunk-size: 10000
       writer-type: NO_ACTION
       max-threads: null
     association:
       enabled: true
-      chunk-size: 100000
+      data-source-name: stg
+      chunk-size: 10000
       #writer-type: AMQP
-      writer-type: NO_ACTION
+      #writer-type: NO_ACTION
+      writer-type: JDBC
       max-threads: null
     association-waldec:
-      enabled: true
-      chunk-size: 100000
+      enabled: false
+      data-source-name: stg
+      chunk-size: 10000
       writer-type: NO_ACTION
       max-threads: null

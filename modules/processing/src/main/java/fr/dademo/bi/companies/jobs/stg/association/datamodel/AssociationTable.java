@@ -22,13 +22,12 @@ import static org.jooq.impl.DSL.schema;
 @SuppressWarnings({"java:S110", "java:S116", "java:S2055", "java:S2160"})
 public class AssociationTable extends CustomTable<AssociationRecord> {
 
+    // TODO handle schemas declaration
     public static final AssociationTable ASSOCIATION = new AssociationTable();
-    public static final String TABLE_NAME = "company";
+    public static final String TABLE_NAME = "association";
     public static final String TABLE_NAMESPACE = "stg";
 
     private static final long serialVersionUID = 2388048002240918898L;
-
-    public final TableField<AssociationRecord, String> FIELD_SIREN = createField(name("siren"), SQLDataType.VARCHAR(9), this);
 
     public final TableField<AssociationRecord, String> FIELD_ASSOCIATION_ID = createField(name("id"), SQLDataType.VARCHAR(14), this);
     public final TableField<AssociationRecord, String> FIELD_ASSOCIATION_ID_EX = createField(name("id_ex"), SQLDataType.VARCHAR(10), this);

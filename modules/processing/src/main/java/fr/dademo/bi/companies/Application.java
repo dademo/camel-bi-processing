@@ -10,6 +10,7 @@ import fr.dademo.batch.services.AppJobLauncher;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
@@ -20,6 +21,7 @@ import org.springframework.boot.autoconfigure.couchbase.CouchbaseAutoConfigurati
 import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration;
+import org.springframework.boot.autoconfigure.liquibase.LiquibaseAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.autoconfigure.r2dbc.R2dbcAutoConfiguration;
 import org.springframework.boot.autoconfigure.sql.init.SqlInitializationAutoConfiguration;
@@ -39,13 +41,16 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
     KafkaAutoConfiguration.class,
     RabbitAutoConfiguration.class,
     FlywayAutoConfiguration.class,
+    LiquibaseAutoConfiguration.class,
 })
 @ImportAutoConfiguration
 //@EnableBatchProcessing
-public class Application implements CommandLineRunner {
+public class Application implements CommandLineRunner, ExitCodeGenerator {
 
     @Autowired
     private AppJobLauncher appJobLauncher;
+
+    private boolean successfull = false;
 
     public static void main(String[] args) {
 
@@ -59,7 +64,12 @@ public class Application implements CommandLineRunner {
     @Override
     public void run(String... args) {
         log.info("Running all jobs");
-        appJobLauncher.runAll();
+        successfull = appJobLauncher.runAll();
         log.info("Job finished");
+    }
+
+    @Override
+    public int getExitCode() {
+        return successfull ? 0 : 1;
     }
 }

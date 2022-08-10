@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ This Source Code Form is subject to the terms of the Mozilla Public
+  ~ License, v. 2.0. If a copy of the MPL was not distributed with this
+  ~ file, You can obtain one at https://mozilla.org/MPL/2.0/.
+  -->
+
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="1" author="dademo">
+        <createTable tableName="company_history">
+            <column name="siren" type="VARCHAR(9)"/>
+            <column name="nic" type="VARCHAR(5)"/>
+            <column name="siret" type="VARCHAR(5)"/>
+            <column name="end_date" type="DATE"/>
+            <column name="begin_date" type="DATE"/>
+            <column name="institution_administrative_state" type="VARCHAR(1)"/>
+            <column name="institution_administrative_state_change" type="BOOLEAN"/>
+            <column name="institution_1_name" type="VARCHAR(50)"/>
+            <column name="institution_2_name" type="VARCHAR(50)"/>
+            <column name="institution_3_name" type="VARCHAR(50)"/>
+            <column name="institution_name_change" type="BOOLEAN"/>
+            <column name="institution_usual_name" type="VARCHAR(100)"/>
+            <column name="institution_usual_name_change" type="BOOLEAN"/>
+            <column name="institution_primary_activity" type="VARCHAR(6)"/>
+            <column name="institution_primary_activity_nomenclature" type="VARCHAR(8)"/>
+            <column name="institution_primary_activity_change" type="VARCHAR(1)"/>
+            <column name="institution_employer_nature_change" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

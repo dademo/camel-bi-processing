@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ This Source Code Form is subject to the terms of the Mozilla Public
+  ~ License, v. 2.0. If a copy of the MPL was not distributed with this
+  ~ file, You can obtain one at https://mozilla.org/MPL/2.0/.
+  -->
+
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="1" author="dademo">
+        <createTable tableName="naf">
+            <column name="naf_code" type="VARCHAR(5)"/>
+            <column name="title" type="CLOB"/>
+            <column name="title_65" type="VARCHAR(65)"/>
+            <column name="title_40" type="VARCHAR(40)"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

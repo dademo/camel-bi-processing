@@ -40,12 +40,12 @@ import static fr.dademo.supervision.dependencies.persistence.PersistenceBeans.TA
 @EnableTransactionManagement
 public class PersistenceBeans {
 
-    public static final String PERSISTENCE_DATASOURCE_BEAN_NAME = "PERSISTENCE_DATASOURCE_BEAN";
+    public static final String PERSISTENCE_DATA_SOURCE_BEAN_NAME = "PERSISTENCE_DATA_SOURCE_BEAN";
     public static final String JPA_PROPERTIES_BEAN_NAME = "JPA_PROPERTIES_BEAN";
     public static final String TASK_CONTAINER_ENTITY_MANAGER_FACTORY_BEAN_NAME = "TASK_CONTAINER_ENTITY_MANAGER_FACTORY_BEAN";
     public static final String PERSISTENCE_TRANSACTION_MANAGER_BEAN_NAME = "TASK_TRANSACTION_MANAGER_BEAN";
 
-    @Bean(name = PERSISTENCE_DATASOURCE_BEAN_NAME)
+    @Bean(name = PERSISTENCE_DATA_SOURCE_BEAN_NAME)
     public DataSource dataSource(PersistenceConfiguration persistenceConfiguration) {
 
         final var hikariConfig = new HikariConfig();
@@ -103,7 +103,7 @@ public class PersistenceBeans {
 
     @Bean(name = TASK_CONTAINER_ENTITY_MANAGER_FACTORY_BEAN_NAME)
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
-        @Qualifier(PERSISTENCE_DATASOURCE_BEAN_NAME) DataSource dataSource,
+        @Qualifier(PERSISTENCE_DATA_SOURCE_BEAN_NAME) DataSource dataSource,
         @Qualifier(JPA_PROPERTIES_BEAN_NAME) Properties jpaProperties,
         PersistenceConfiguration persistenceConfiguration) {
 

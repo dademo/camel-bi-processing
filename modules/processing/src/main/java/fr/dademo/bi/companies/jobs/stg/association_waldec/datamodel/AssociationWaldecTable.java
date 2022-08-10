@@ -23,7 +23,7 @@ import static org.jooq.impl.DSL.schema;
 public class AssociationWaldecTable extends CustomTable<AssociationWaldecRecord> {
 
     public static final AssociationWaldecTable ASSOCIATION_WALDEC = new AssociationWaldecTable();
-    public static final String TABLE_NAME = "company";
+    public static final String TABLE_NAME = "association_waldec";
     public static final String TABLE_NAMESPACE = "stg";
 
     private static final long serialVersionUID = -3509123209084990428L;

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ This Source Code Form is subject to the terms of the Mozilla Public
+  ~ License, v. 2.0. If a copy of the MPL was not distributed with this
+  ~ file, You can obtain one at https://mozilla.org/MPL/2.0/.
+  -->
+
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="1" author="dademo">
+        <createTable tableName="company_legal">
+            <column name="siren" type="VARCHAR(9)"/>
+            <column name="diffusion_status" type="VARCHAR(1)"/>
+            <column name="is_purged" type="BOOLEAN"/>
+            <column name="creation_date" type="DATE"/>
+            <column name="acronym" type="VARCHAR(20)"/>
+            <column name="sex" type="VARCHAR(1)"/>
+            <column name="first_name_1" type="VARCHAR(20)"/>
+            <column name="first_name_2" type="VARCHAR(20)"/>
+            <column name="first_name_3" type="VARCHAR(20)"/>
+            <column name="first_name_4" type="VARCHAR(20)"/>
+            <column name="usual_first_name" type="VARCHAR(20)"/>
+            <column name="pseudonym" type="VARCHAR(100)"/>
+            <column name="association_identifier" type="VARCHAR(10)"/>
+            <column name="staff_number_range" type="VARCHAR(2)"/>
+            <column name="staff_number_year" type="INTEGER"/>
+            <column name="last_processing" type="DATETIME"/>
+            <column name="periods_count" type="INTEGER"/>
+            <column name="company_category" type="VARCHAR(3)"/>
+            <column name="company_category_year" type="INTEGER"/>
+            <column name="begin_date" type="DATE"/>
+            <column name="administrative_state" type="VARCHAR(1)"/>
+            <column name="name" type="VARCHAR(100)"/>
+            <column name="usual_name" type="VARCHAR(100)"/>
+            <column name="denomination" type="VARCHAR(120)"/>
+            <column name="usual_denomination_1" type="VARCHAR(70)"/>
+            <column name="usual_denomination_2" type="VARCHAR(70)"/>
+            <column name="usual_denomination_3" type="VARCHAR(70)"/>
+            <column name="legal_category" type="VARCHAR(4)"/>
+            <column name="principal_activity" type="VARCHAR(6)"/>
+            <column name="principal_activity_nomenclature" type="VARCHAR(8)"/>
+            <column name="headquarters_nic" type="VARCHAR(5)"/>
+            <column name="is_social_and_solidarity_economy" type="VARCHAR(1)"/>
+            <column name="is_employer" type="VARCHAR(1)"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

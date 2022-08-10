@@ -42,7 +42,7 @@ import static org.jooq.impl.DSL.name;
 public class NafJdbcDefinitionItemWriterImpl implements NafDefinitionItemWriter {
 
     @Autowired
-    @Qualifier(STG_DATASOURCE_DSL_CONTEXT_BEAN_NAME)
+    @Qualifier(STG_DATA_SOURCE_DSL_CONTEXT_BEAN_NAME)
     @Getter
     private DSLContext dslContext;
 

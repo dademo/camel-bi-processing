@@ -50,7 +50,7 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
     @Autowired
     private ModuleConfiguration moduleConfiguration;
 
-    @Qualifier(ModuleBeans.MODULE_DATASOURCE_BEAN_NAME)
+    @Qualifier(ModuleBeans.MODULE_DATA_SOURCE_BEAN_NAME)
     @Autowired
     private DataSource dataSource;
 

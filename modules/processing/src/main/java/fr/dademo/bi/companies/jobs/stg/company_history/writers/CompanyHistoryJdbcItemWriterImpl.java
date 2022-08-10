@@ -37,7 +37,7 @@ import static fr.dademo.bi.companies.jobs.stg.company_history.datamodel.CompanyH
 public class CompanyHistoryJdbcItemWriterImpl implements CompanyHistoryItemWriter {
 
     @Autowired
-    @Qualifier(STG_DATASOURCE_DSL_CONTEXT_BEAN_NAME)
+    @Qualifier(STG_DATA_SOURCE_DSL_CONTEXT_BEAN_NAME)
     @Getter
     private DSLContext dslContext;
 

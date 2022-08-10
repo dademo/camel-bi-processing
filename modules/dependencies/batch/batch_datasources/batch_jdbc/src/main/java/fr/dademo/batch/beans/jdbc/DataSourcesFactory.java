@@ -106,8 +106,10 @@ public class DataSourcesFactory {
         hikariConfig.setValidationTimeout(configuration.getValidationTimeoutMillis());
         Optional.ofNullable(configuration.getUsername()).ifPresent(hikariConfig::setUsername);
         Optional.ofNullable(configuration.getPassword()).ifPresent(hikariConfig::setPassword);
+        Optional.ofNullable(configuration.getCatalog()).ifPresent(hikariConfig::setCatalog);
         Optional.ofNullable(configuration.getSchema()).ifPresent(hikariConfig::setSchema);
         Optional.ofNullable(configuration.getDriverClassName()).ifPresent(hikariConfig::setDriverClassName);
+
 
         if ("batch".equals(dataSourceName)) {
             applyBatchConfiguration(hikariConfig);

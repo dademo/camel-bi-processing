@@ -20,11 +20,11 @@ import javax.sql.DataSource;
 @Configuration
 public class ModuleBeans {
 
-    public static final String MODULE_DATASOURCE_BEAN_NAME = "POSTGRESQL_DATASOURCE_MODULE_NAME";
+    public static final String MODULE_DATA_SOURCE_BEAN_NAME = "POSTGRESQL_DATA_SOURCE_MODULE_NAME";
     public static final String MODULE_JDBC_TEMPLATE_BEAN_NAME = "POSTGRESQL_JDBC_TEMPLATE_MODULE_NAME";
     public static final String DRIVER_CLASS_POSTGRESQL = "org.postgresql.Driver";
 
-    @Bean(name = MODULE_DATASOURCE_BEAN_NAME)
+    @Bean(name = MODULE_DATA_SOURCE_BEAN_NAME)
     public DataSource moduleDataSource(ModuleConfiguration moduleConfiguration) {
 
         final var dataSourceConfiguration = moduleConfiguration.getDatasource();
@@ -37,7 +37,7 @@ public class ModuleBeans {
     }
 
     @Bean(name = MODULE_JDBC_TEMPLATE_BEAN_NAME)
-    public JdbcTemplate moduleJdbcTemplate(@Qualifier(MODULE_DATASOURCE_BEAN_NAME) DataSource dataSource) {
+    public JdbcTemplate moduleJdbcTemplate(@Qualifier(MODULE_DATA_SOURCE_BEAN_NAME) DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
 }

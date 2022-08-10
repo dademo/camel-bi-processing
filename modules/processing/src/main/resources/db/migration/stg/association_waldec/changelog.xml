@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ This Source Code Form is subject to the terms of the Mozilla Public
+  ~ License, v. 2.0. If a copy of the MPL was not distributed with this
+  ~ file, You can obtain one at https://mozilla.org/MPL/2.0/.
+  -->
+
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="1" author="dademo">
+        <createTable tableName="association_waldec">
+            <column name="id" type="VARCHAR(14)"/>
+            <column name="id_ex" type="VARCHAR(10)"/>
+            <column name="siret" type="VARCHAR(14)"/>
+            <column name="rup_code" type="VARCHAR(11)"/>
+            <column name="gestion" type="VARCHAR(4)"/>
+            <column name="creation_date" type="DATE"/>
+            <column name="declaration_date" type="DATE"/>
+            <column name="publication_date" type="DATE"/>
+            <column name="dissolution_date" type="DATE"/>
+            <column name="nature" type="VARCHAR(1)"/>
+            <column name="groupement" type="VARCHAR(1)"/>
+            <column name="title" type="VARCHAR(250)"/>
+            <column name="title_short" type="VARCHAR(38)"/>
+            <column name="object" type="CLOB"/>
+            <column name="social_object_1" type="VARCHAR(6)"/>
+            <column name="social_object_2" type="VARCHAR(6)"/>
+            <column name="address_complement" type="VARCHAR(76)"/>
+            <column name="address_street_number" type="VARCHAR(5)"/>
+            <column name="address_repetition" type="VARCHAR(1)"/>
+            <column name="address_street_type" type="VARCHAR(5)"/>
+            <column name="address_street_libelle" type="VARCHAR(42)"/>
+            <column name="address_distribution" type="VARCHAR(38)"/>
+            <column name="address_postal_code" type="VARCHAR(5)"/>
+            <column name="address_insee_code" type="VARCHAR(5)"/>
+            <column name="address_city_libelle" type="VARCHAR(45)"/>
+            <column name="gestion_declarant_surname" type="VARCHAR(38)"/>
+            <column name="gestion_address_complement_id" type="VARCHAR(38)"/>
+            <column name="gestion_address_complement_geo" type="VARCHAR(38)"/>
+            <column name="gestion_address_street_libelle" type="VARCHAR(42)"/>
+            <column name="gestion_address_distribution" type="VARCHAR(38)"/>
+            <column name="gestion_address_postal_code" type="VARCHAR(5)"/>
+            <column name="gestion_forward" type="VARCHAR(32)"/>
+            <column name="gestion_country" type="VARCHAR(38)"/>
+            <column name="leader_civility" type="VARCHAR(2)"/>
+            <column name="phone" type="VARCHAR(10)"/>
+            <column name="website" type="VARCHAR(64)"/>
+            <column name="email" type="VARCHAR(64)"/>
+            <column name="public_website" type="VARCHAR(1)"/>
+            <column name="observation" type="VARCHAR(255)"/>
+            <column name="position" type="VARCHAR(1)"/>
+            <column name="last_updated" type="DATE"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

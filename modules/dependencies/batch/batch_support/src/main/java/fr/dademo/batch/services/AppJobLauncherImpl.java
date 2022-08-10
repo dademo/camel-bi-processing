@@ -10,9 +10,7 @@ import fr.dademo.batch.helpers.JobTaskExecutorWrapper;
 import fr.dademo.batch.tools.batch.job.BatchJobProvider;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.*;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static fr.dademo.batch.beans.BeanValues.TASK_EXECUTOR_BEAN_NAME;
 
@@ -42,23 +41,27 @@ public class AppJobLauncherImpl implements AppJobLauncher {
     private List<BatchJobProvider> allBatchs;
 
     @Override
-    public void runAll() {
+    public boolean runAll() {
 
         log.info("Starting all jobs");
-        allBatchs.stream()
+        final var jobExecutions = allBatchs.stream()
             .map(BatchJobProvider::getJob)
             .filter(Objects::nonNull)
-            .forEach(this::run);
+            .map(this::run)
+            .collect(Collectors.toList());
 
         log.info("Waiting for jobs to end");
         taskExecutor.shutdown();
         taskExecutor.waitAll();
         log.info("Jobs finished");
+
+        return jobExecutions.stream()
+            .allMatch(jobExecution -> jobExecution.getExitStatus().compareTo(ExitStatus.COMPLETED) == 0);
     }
 
     @SneakyThrows
-    private void run(@Nonnull Job job) {
-        jobLauncher.run(job, getJobParameters());
+    private JobExecution run(@Nonnull Job job) {
+        return jobLauncher.run(job, getJobParameters());
     }
 
     private JobParameters getJobParameters() {

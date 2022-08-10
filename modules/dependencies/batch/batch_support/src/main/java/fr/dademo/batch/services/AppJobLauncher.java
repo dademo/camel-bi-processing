@@ -11,5 +11,10 @@ package fr.dademo.batch.services;
  */
 public interface AppJobLauncher {
 
-    void runAll();
+    /**
+     * Return <i>true</i> in case all batches completed successfully.
+     *
+     * @return if all batch completed successfully
+     */
+    boolean runAll();
 }

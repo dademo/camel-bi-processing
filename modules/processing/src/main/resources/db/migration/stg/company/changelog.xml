@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ This Source Code Form is subject to the terms of the Mozilla Public
+  ~ License, v. 2.0. If a copy of the MPL was not distributed with this
+  ~ file, You can obtain one at https://mozilla.org/MPL/2.0/.
+  -->
+
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="1" author="dademo">
+        <createTable tableName="company">
+            <column name="siren" type="VARCHAR(9)"/>
+            <column name="nic" type="VARCHAR(5)"/>
+            <column name="siret" type="VARCHAR(14)"/>
+            <column name="company_diffusion_statut" type="VARCHAR(1)"/>
+            <column name="company_creation_date" type="DATE"/>
+            <column name="company_staff_number_range" type="VARCHAR(2)"/>
+            <column name="company_staff_number_year" type="INTEGER"/>
+            <column name="company_principal_registered_activity" type="VARCHAR(6)"/>
+            <column name="company_last_processing_date" type="DATETIME"/>
+            <column name="company_is_headquarters" type="BOOLEAN"/>
+            <column name="company_period_count" type="INTEGER"/>
+            <column name="company_address_complement" type="VARCHAR(38)"/>
+            <column name="company_address_street_number" type="VARCHAR(4)"/>
+            <column name="company_address_street_number_repetition" type="VARCHAR(1)"/>
+            <column name="company_address_street_type" type="VARCHAR(4)"/>
+            <column name="company_address_street_name" type="VARCHAR(100)"/>
+            <column name="company_address_postal_code" type="VARCHAR(5)"/>
+            <column name="company_address_city" type="VARCHAR(100)"/>
+            <column name="company_foreign_address_city" type="VARCHAR(100)"/>
+            <column name="company_address_special_distribution" type="VARCHAR(26)"/>
+            <column name="company_address_city_code" type="VARCHAR(5)"/>
+            <column name="company_address_cedex_code" type="VARCHAR(9)"/>
+            <column name="company_address_cedex_name" type="VARCHAR(100)"/>
+            <column name="company_foreign_address_country_code" type="VARCHAR(5)"/>
+            <column name="company_foreign_address_country_name" type="VARCHAR(100)"/>
+            <column name="company_address_complement_2" type="VARCHAR(38)"/>
+            <column name="company_address_street_number_2" type="VARCHAR(4)"/>
+            <column name="company_address_street_number_repetition_2" type="VARCHAR(1)"/>
+            <column name="company_address_street_type_2" type="VARCHAR(4)"/>
+            <column name="company_address_street_name_2" type="VARCHAR(100)"/>
+            <column name="company_address_postal_code_2" type="VARCHAR(5)"/>
+            <column name="company_address_city_2" type="VARCHAR(100)"/>
+            <column name="company_foreign_address_city_2" type="VARCHAR(100)"/>
+            <column name="company_address_special_distribution_2" type="VARCHAR(26)"/>
+            <column name="company_address_city_code_2" type="VARCHAR(5)"/>
+            <column name="company_address_cedex_code_2" type="VARCHAR(9)"/>
+            <column name="company_address_cedex_name_2" type="VARCHAR(100)"/>
+            <column name="company_foreign_address_country_code_2" type="VARCHAR(5)"/>
+            <column name="company_foreign_address_country_name_2" type="VARCHAR(100)"/>
+            <column name="begin_date" type="DATE"/>
+            <column name="company_administative_state" type="VARCHAR(1)"/>
+            <column name="company_name_1" type="VARCHAR(50)"/>
+            <column name="company_name_2" type="VARCHAR(50)"/>
+            <column name="company_name_3" type="VARCHAR(50)"/>
+            <column name="company_usual_name" type="VARCHAR(100)"/>
+            <column name="company_activity" type="VARCHAR(6)"/>
+            <column name="company_principal_activity_name" type="VARCHAR(8)"/>
+            <column name="company_is_employer" type="VARCHAR(1)"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

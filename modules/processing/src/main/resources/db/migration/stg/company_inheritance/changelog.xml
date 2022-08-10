@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ This Source Code Form is subject to the terms of the Mozilla Public
+  ~ License, v. 2.0. If a copy of the MPL was not distributed with this
+  ~ file, You can obtain one at https://mozilla.org/MPL/2.0/.
+  -->
+
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="1" author="dademo">
+        <createTable tableName="company_inheritance">
+            <column name="company_predecessor_siren" type="VARCHAR(14)"/>
+            <column name="company_successor_siren" type="VARCHAR(14)"/>
+            <column name="company_succession_date" type="DATE"/>
+            <column name="company_headquarter_change" type="BOOLEAN"/>
+            <column name="company_economical_continuity" type="BOOLEAN"/>
+            <column name="company_processing_timestamp" type="DATETIME"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

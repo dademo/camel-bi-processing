@@ -122,8 +122,8 @@ public class Association {
         int associationAddress2Field;
         int associationAddress3Field;
         int associationAddressPostalCodeField;
-        int associationAddressCityLibelleField;
         int associationAddressInseeCodeField;
+        int associationAddressCityLibelleField;
         int associationLeaderCivilityField;
         //int associationTelephoneField;
         int associationWebsiteField;

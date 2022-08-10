@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ This Source Code Form is subject to the terms of the Mozilla Public
+  ~ License, v. 2.0. If a copy of the MPL was not distributed with this
+  ~ file, You can obtain one at https://mozilla.org/MPL/2.0/.
+  -->
+
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="1" author="dademo">
+        <createTable tableName="company_legal_history">
+            <column name="siren" type="VARCHAR(9)"/>
+            <column name="end_date" type="DATE"/>
+            <column name="begin_date" type="DATE"/>
+            <column name="legal_unit_administrative_state" type="VARCHAR(1)"/>
+            <column name="legal_unit_administrative_state_change" type="BOOLEAN"/>
+            <column name="legal_unit_legal_unit_name" type="VARCHAR(100)"/>
+            <column name="legal_unit_legal_unit_name_change" type="BOOLEAN"/>
+            <column name="legal_unit_usual_name" type="VARCHAR(100)"/>
+            <column name="legal_unit_usual_name_change" type="BOOLEAN"/>
+            <column name="legal_unit_denomination" type="VARCHAR(120)"/>
+            <column name="legal_unit_denomination_change" type="BOOLEAN"/>
+            <column name="legal_unit_usual_denomination_1" type="VARCHAR(70)"/>
+            <column name="legal_unit_usual_denomination_2" type="VARCHAR(70)"/>
+            <column name="legal_unit_usual_denomination_3" type="VARCHAR(70)"/>
+            <column name="legal_unit_usual_denomination_change" type="BOOLEAN"/>
+            <column name="legal_unit_legal_category" type="VARCHAR(16)"/>
+            <column name="legal_unit_legal_category_change" type="BOOLEAN"/>
+            <column name="legal_unit_principal_activity" type="VARCHAR(6)"/>
+            <column name="legal_unit_principal_activity_nomenclature" type="VARCHAR(8)"/>
+            <column name="legal_unit_principal_activity_nomenclature_change" type="BOOLEAN"/>
+            <column name="legal_unit_headquarter_nic" type="VARCHAR(5)"/>
+            <column name="legal_unit_headquarter_nic_change" type="BOOLEAN"/>
+            <column name="legal_unit_is_social_and_solidarity_economy" type="VARCHAR(1)"/>
+            <column name="legal_unit_is_social_and_solidarity_economy_change" type="BOOLEAN"/>
+            <column name="legal_unit_is_employer" type="VARCHAR(1)"/>
+            <column name="legal_unit_is_employer_change" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

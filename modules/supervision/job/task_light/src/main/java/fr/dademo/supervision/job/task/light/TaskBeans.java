@@ -25,10 +25,10 @@ import javax.sql.DataSource;
 @Configuration
 public class TaskBeans {
 
-    public static final String TASK_DATASOURCE_BEAN_NAME = "TASK_DATASOURCE_BEAN";
-    public static final String OUTPUT_DATASOURCE_NAME = "output";
+    public static final String TASK_DATA_SOURCE_BEAN_NAME = "TASK_DATA_SOURCE_BEAN";
+    public static final String OUTPUT_DATA_SOURCE_NAME = "output";
 
-    @Bean(name = TASK_DATASOURCE_BEAN_NAME)
+    @Bean(name = TASK_DATA_SOURCE_BEAN_NAME)
     public DataSource dataSource(TaskConfiguration taskConfiguration) {
 
         final var datasourceConfiguration = taskConfiguration.getDatasource();
@@ -40,7 +40,7 @@ public class TaskBeans {
     }
 
     @Bean
-    public TaskConfigurer taskConfigurer(@Qualifier(TASK_DATASOURCE_BEAN_NAME) DataSource taskDataSource) {
+    public TaskConfigurer taskConfigurer(@Qualifier(TASK_DATA_SOURCE_BEAN_NAME) DataSource taskDataSource) {
         return new DefaultTaskConfigurer(taskDataSource);
     }
 

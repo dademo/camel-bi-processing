@@ -50,21 +50,21 @@ import static fr.dademo.batch.beans.BeanValues.*;
 )
 public class BatchRepository {
 
-    @Bean(BATCH_DATASOURCE_BEAN_NAME)
+    @Bean(BATCH_DATA_SOURCE_BEAN_NAME)
     public DataSource jobRepositoryDataSource(DataSourcesFactory dataSourcesFactory) {
-        return dataSourcesFactory.getDataSource(BATCH_DATASOURCE_NAME);
+        return dataSourcesFactory.getDataSource(BATCH_DATA_SOURCE_NAME);
     }
 
-    @Bean(BATCH_DATASOURCE_TRANSACTION_MANAGER_BEAN_NAME)
-    public PlatformTransactionManager transactionManager(@Qualifier(BATCH_DATASOURCE_BEAN_NAME) DataSource jobRepositoryDataSource) {
+    @Bean(BATCH_DATA_SOURCE_TRANSACTION_MANAGER_BEAN_NAME)
+    public PlatformTransactionManager transactionManager(@Qualifier(BATCH_DATA_SOURCE_BEAN_NAME) DataSource jobRepositoryDataSource) {
         return new JdbcTransactionManager(jobRepositoryDataSource);
     }
 
     @Bean
     @ConditionalOnMissingBean(JobRepository.class)
     @SneakyThrows
-    public JobRepository jdbcJobRepository(@Qualifier(BATCH_DATASOURCE_BEAN_NAME) DataSource jobRepositoryDataSource,
-                                           @Qualifier(BATCH_DATASOURCE_TRANSACTION_MANAGER_BEAN_NAME) PlatformTransactionManager transactionManager) {
+    public JobRepository jdbcJobRepository(@Qualifier(BATCH_DATA_SOURCE_BEAN_NAME) DataSource jobRepositoryDataSource,
+                                           @Qualifier(BATCH_DATA_SOURCE_TRANSACTION_MANAGER_BEAN_NAME) PlatformTransactionManager transactionManager) {
 
         JobRepositoryFactoryBean factory = new JobRepositoryFactoryBean();
         factory.setDataSource(jobRepositoryDataSource);
@@ -77,7 +77,7 @@ public class BatchRepository {
     @Bean
     @ConditionalOnMissingBean(JobExplorer.class)
     @SneakyThrows
-    public JobExplorer jobExplorer(@Qualifier(BATCH_DATASOURCE_BEAN_NAME) DataSource jobRepositoryDataSource) {
+    public JobExplorer jobExplorer(@Qualifier(BATCH_DATA_SOURCE_BEAN_NAME) DataSource jobRepositoryDataSource) {
 
         initializeSpringBatchSchema(jobRepositoryDataSource);
 
@@ -144,7 +144,7 @@ public class BatchRepository {
     @Bean
     @ConditionalOnMissingBean(StepBuilderFactory.class)
     public StepBuilderFactory stepBuilderFactory(JobRepository jobRepository,
-                                                 @Qualifier(BATCH_DATASOURCE_TRANSACTION_MANAGER_BEAN_NAME) PlatformTransactionManager transactionManager) {
+                                                 @Qualifier(BATCH_DATA_SOURCE_TRANSACTION_MANAGER_BEAN_NAME) PlatformTransactionManager transactionManager) {
         return new StepBuilderFactory(jobRepository, transactionManager);
     }
 

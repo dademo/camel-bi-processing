@@ -8,11 +8,13 @@ package fr.dademo.bi.companies.jobs.stg.association.writers;
 
 import fr.dademo.bi.companies.jobs.stg.association.AssociationItemWriter;
 import fr.dademo.bi.companies.jobs.stg.association.datamodel.Association;
+import fr.dademo.bi.companies.jobs.stg.association.datamodel.AssociationRecord;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
+import org.jooq.InsertOnDuplicateStep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -38,7 +40,7 @@ import static fr.dademo.bi.companies.jobs.stg.association.datamodel.AssociationT
 public class AssociationJdbcItemWriterImpl implements AssociationItemWriter {
 
     @Autowired
-    @Qualifier(STG_DATASOURCE_DSL_CONTEXT_BEAN_NAME)
+    @Qualifier(STG_DATA_SOURCE_DSL_CONTEXT_BEAN_NAME)
     @Getter
     private DSLContext dslContext;
 
@@ -48,7 +50,28 @@ public class AssociationJdbcItemWriterImpl implements AssociationItemWriter {
 
         log.info("Writing {} association documents", items.size());
 
-        final var batchInsertStatement = dslContext.batch(dslContext.insertInto(ASSOCIATION,
+        try (final var insertStatement = getInsertStatement()) {
+
+            final var batchInsertStatement = dslContext.batch(insertStatement);
+
+            items.stream()
+                .map(this::companyBind)
+                .forEach(consumer -> consumer.accept(batchInsertStatement));
+
+            final var batchResult = batchInsertStatement.execute();
+            if (batchResult.length > 0) {
+                final int totalUpdated = Arrays.stream(batchResult).sum();
+                log.info("{} rows affected", totalUpdated);
+            } else {
+                log.error("An error occurred while running batch");
+            }
+        }
+    }
+
+    @SuppressWarnings("resource")
+    private InsertOnDuplicateStep<AssociationRecord> getInsertStatement() {
+
+        return dslContext.insertInto(ASSOCIATION,
             ASSOCIATION.FIELD_ASSOCIATION_ID,
             ASSOCIATION.FIELD_ASSOCIATION_ID_EX,
             ASSOCIATION.FIELD_ASSOCIATION_SIRET,
@@ -76,19 +99,7 @@ public class AssociationJdbcItemWriterImpl implements AssociationItemWriter {
             ASSOCIATION.FIELD_ASSOCIATION_RUP_CODE,
             ASSOCIATION.FIELD_ASSOCIATION_LAST_UPDATED
         ).values((String) null, null, null, null, null, null, null, null, null, null, null, null,
-            null, null, null, null, null, null, null, null, null, null, null, null, null, null));
-
-        items.stream()
-            .map(this::companyBind)
-            .forEach(consumer -> consumer.accept(batchInsertStatement));
-
-        final var batchResult = batchInsertStatement.execute();
-        if (batchResult.length > 0) {
-            final int totalUpdated = Arrays.stream(batchResult).sum();
-            log.info("{} rows affected", totalUpdated);
-        } else {
-            log.error("An error occurred while running batch");
-        }
+            null, null, null, null, null, null, null, /*null,*/ null, /*null,*/ null, null, null, null);
     }
 
     private Consumer<BatchBindStep> companyBind(Association association) {

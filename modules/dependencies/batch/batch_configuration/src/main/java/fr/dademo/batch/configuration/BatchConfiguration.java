@@ -16,9 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.validation.constraints.Min;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author dademo
@@ -61,6 +59,7 @@ public class BatchConfiguration {
 
         public static final boolean DEFAULT_IS_ENABLED = false;
         public static final int DEFAULT_CHUNK_SIZE = 10_000;
+        public static final String DEFAULT_CHANGELOG_FILE = "changelog.xml";
 
         @Nullable
         private Boolean enabled;
@@ -72,6 +71,15 @@ public class BatchConfiguration {
         @Nullable
         @Min(1)
         private Integer maxThreads;
+
+        @Nullable
+        private String dataSourceName;
+
+        @Nullable
+        private String changeLogFileName;
+
+        @Nonnull
+        private List<String> migrationContexts = Collections.emptyList();
 
         public static boolean getDefaultIsEnabled() {
             return DEFAULT_IS_ENABLED;

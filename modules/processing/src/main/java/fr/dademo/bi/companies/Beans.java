@@ -24,33 +24,34 @@ import static fr.dademo.batch.beans.BeanValues.*;
 @Configuration
 public class Beans {
 
+    // TODO integrate beans into jobs to avoid global declarations and allow the user to select his datasource per job
     @ConditionalOnProperty(
-        name = CONFIG_DATASOURCE_JDBC + "." + STG_DATASOURCE_NAME + CONFIG_ENABLED,
+        name = CONFIG_DATA_SOURCE_JDBC + "." + STG_DATA_SOURCE_NAME + CONFIG_ENABLED,
         havingValue = "true",
         matchIfMissing = true
     )
-    @Bean(STG_DATASOURCE_DSL_CONTEXT_BEAN_NAME)
+    @Bean(STG_DATA_SOURCE_DSL_CONTEXT_BEAN_NAME)
     public DSLContext stgDslContext(DataSourcesFactory dataSourcesFactory) {
-        return dataSourcesFactory.getDslContext(STG_DATASOURCE_NAME);
+        return dataSourcesFactory.getDslContext(STG_DATA_SOURCE_NAME);
     }
 
     @ConditionalOnProperty(
-        name = CONFIG_DATASOURCE_MONGODB + "." + STG_DATASOURCE_NAME + CONFIG_ENABLED,
+        name = CONFIG_DATA_SOURCE_MONGODB + "." + STG_DATA_SOURCE_NAME + CONFIG_ENABLED,
         havingValue = "true",
         matchIfMissing = true
     )
     @Bean(STG_MONGO_TEMPLATE_CONFIG_BEAN_NAME)
     public MongoTemplate stgMongoTemplate(MongoTemplateFactory mongoTemplateFactory) {
-        return mongoTemplateFactory.getTemplateForConnection(STG_DATASOURCE_NAME);
+        return mongoTemplateFactory.getTemplateForConnection(STG_DATA_SOURCE_NAME);
     }
 
     @ConditionalOnProperty(
-        name = CONFIG_DATASOURCE_AMQP_TEMPLATE + "." + STG_DATASOURCE_NAME + CONFIG_ENABLED,
+        name = CONFIG_DATA_SOURCE_AMQP_TEMPLATE + "." + STG_DATA_SOURCE_NAME + CONFIG_ENABLED,
         havingValue = "true",
         matchIfMissing = true
     )
     @Bean(STG_AMQP_TEMPLATE_CONFIG_BEAN_NAME)
     public AmqpTemplate stgAmqpTemplate(RabbitAmqpFactory rabbitAmqpFactory) {
-        return rabbitAmqpFactory.getAmqpTemplateForDataSource(STG_DATASOURCE_NAME);
+        return rabbitAmqpFactory.getAmqpTemplateForDataSource(STG_DATA_SOURCE_NAME);
     }
 }

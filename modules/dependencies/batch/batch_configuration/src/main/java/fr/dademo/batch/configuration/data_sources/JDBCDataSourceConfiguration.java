@@ -33,6 +33,9 @@ public class JDBCDataSourceConfiguration {
     private String password;
 
     @Nullable
+    private String catalog;
+
+    @Nullable
     private String schema;
 
     @Nullable
