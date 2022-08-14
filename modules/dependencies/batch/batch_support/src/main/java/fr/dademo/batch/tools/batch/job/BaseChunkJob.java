@@ -9,11 +9,15 @@ package fr.dademo.batch.tools.batch.job;
 import fr.dademo.batch.beans.jdbc.DataSourcesFactory;
 import fr.dademo.batch.configuration.BatchConfiguration;
 import fr.dademo.batch.configuration.BatchDataSourcesConfiguration;
+import fr.dademo.batch.configuration.exception.MissingJobDataSourceConfigurationException;
 import fr.dademo.batch.tools.batch.job.exceptions.MissingJdbcDataSource;
 import fr.dademo.batch.tools.batch.job.exceptions.MissingMigrationFolder;
 import fr.dademo.batch.tools.batch.job.listeners.DefaultJobExecutionListener;
 import fr.dademo.batch.tools.batch.job.listeners.DefaultStepExecutionListener;
 import fr.dademo.batch.tools.batch.job.listeners.StepThreadPoolListener;
+import lombok.AccessLevel;
+import lombok.Getter;
+import org.jooq.DSLContext;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
@@ -23,7 +27,6 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
@@ -37,39 +40,53 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static fr.dademo.batch.beans.BeanValues.CONFIG_JDBC_TYPE;
+
 /**
  * @author dademo
  */
+@Getter(AccessLevel.PROTECTED)
 public abstract class BaseChunkJob<I, O> implements BatchJobProvider {
 
     public static final int MAX_THREAD_POOL_QUEUE_SIZE_FACTOR = 5;
+    public static final boolean DEFAULT_JOB_IS_JDBC = false;
 
-    @Autowired
-    private JobBuilderFactory jobBuilderFactory;
+    private final JobBuilderFactory jobBuilderFactory;
 
-    @Autowired
-    private StepBuilderFactory stepBuilderFactory;
+    private final StepBuilderFactory stepBuilderFactory;
 
-    @Autowired
-    private BatchDataSourcesConfiguration batchDataSourcesConfiguration;
+    private final BatchConfiguration batchConfiguration;
 
-    @Autowired
-    private DataSourcesFactory dataSourcesFactory;
+    private final BatchDataSourcesConfiguration batchDataSourcesConfiguration;
 
-    @Autowired
-    private ResourceLoader resourceLoader;
+    private final DataSourcesFactory dataSourcesFactory;
 
+    private final ResourceLoader resourceLoader;
 
-    @Nonnull
-    protected abstract BatchConfiguration.JobConfiguration getJobConfiguration();
+    public BaseChunkJob(JobBuilderFactory jobBuilderFactory,
+                        StepBuilderFactory stepBuilderFactory,
+                        BatchConfiguration batchConfiguration,
+                        BatchDataSourcesConfiguration batchDataSourcesConfiguration,
+                        DataSourcesFactory dataSourcesFactory,
+                        ResourceLoader resourceLoader) {
+
+        this.jobBuilderFactory = jobBuilderFactory;
+        this.stepBuilderFactory = stepBuilderFactory;
+        this.batchConfiguration = batchConfiguration;
+        this.batchDataSourcesConfiguration = batchDataSourcesConfiguration;
+        this.dataSourcesFactory = dataSourcesFactory;
+        this.resourceLoader = resourceLoader;
+    }
+
+    // ---
+    // Extended getters
+    // ---
 
     @Nonnull
     protected abstract String getJobName();
 
-    @Nullable
-    protected String getDefaultJdbcDataSourceName() {
-        return null;
-    }
+    @Nonnull
+    protected abstract BatchConfiguration.JobConfiguration getJobConfiguration();
 
     @Nullable
     protected String getMigrationFolder() {
@@ -86,37 +103,69 @@ public abstract class BaseChunkJob<I, O> implements BatchJobProvider {
         return null;
     }
 
+    protected boolean isJobInputJdbcDataSource(BatchConfiguration.JobConfiguration jobConfiguration) {
+
+        return Optional.ofNullable(jobConfiguration.getInputDataSource())
+            .map(this::isJdbcConfiguredJob)
+            .orElse(DEFAULT_JOB_IS_JDBC);
+    }
+
+    protected boolean isJobOutputJdbcDataSource(BatchConfiguration.JobConfiguration jobConfiguration) {
+
+        return Optional.ofNullable(jobConfiguration.getOutputDataSource())
+            .map(this::isJdbcConfiguredJob)
+            .orElse(DEFAULT_JOB_IS_JDBC);
+    }
+
+    private boolean isJdbcConfiguredJob(BatchConfiguration.JobDataSourceConfiguration jobDataSourceConfiguration) {
+        return CONFIG_JDBC_TYPE.equals(jobDataSourceConfiguration.getType());
+    }
+
+    protected String getJobInputDataSourceSchema() {
+        return getDataSourceSchema(getJobInputDataSourceName());
+    }
+
+    protected String getJobOutputDataSourceSchema() {
+        return getDataSourceSchema(getJobOutputDataSourceName());
+    }
+
+    private String getDataSourceSchema(String dataSourceName) {
+
+        return batchDataSourcesConfiguration
+            .getJDBCDataSourceConfigurationByName(dataSourceName)
+            .getSchema();
+    }
+
+    protected DSLContext getJobInputDslContext() {
+        return dataSourcesFactory.getJobOutputDslContextByDataSourceName(getJobInputDataSourceName());
+    }
+
+    protected DSLContext getJobOutputDslContext() {
+        return dataSourcesFactory.getJobOutputDslContextByDataSourceName(getJobOutputDataSourceName());
+    }
+
+    private String getJobInputDataSourceName() {
+        return getDataSourceName(getJobConfiguration().getInputDataSource());
+    }
+
+    private String getJobOutputDataSourceName() {
+        return getDataSourceName(getJobConfiguration().getOutputDataSource());
+    }
+
+    private String getDataSourceName(@Nullable BatchConfiguration.JobDataSourceConfiguration jobDataSourceConfiguration) {
+
+        return Optional.ofNullable(jobDataSourceConfiguration)
+            .map(BatchConfiguration.JobDataSourceConfiguration::getName)
+            .orElseThrow(MissingJobDataSourceConfigurationException.forJob(getJobName()));
+    }
+
+    // ---
+    // Job definition
+    // ---
+
     @Nonnull
     protected List<Tasklet> getInitTasks() {
         return Collections.emptyList();
-    }
-
-    protected Tasklet getLiquibaseMigrationTasklet() {
-
-        final var dataSourceName = Optional.ofNullable(getJobConfiguration().getDataSourceName())
-            .orElseGet(
-                () -> Optional.ofNullable(getDefaultJdbcDataSourceName())
-                    .orElseThrow(() -> new MissingJdbcDataSource(getClass()))
-            );
-        final var dataSourceConfiguration = batchDataSourcesConfiguration.getJDBCDataSourceConfigurationByName(dataSourceName);
-
-        return LiquibaseMigrationTasklet.builder()
-            .migrationFolder(
-                Optional.ofNullable(getMigrationFolder())
-                    .orElseThrow(() -> new MissingMigrationFolder(getClass()))
-            )
-            .jobConfiguration(getJobConfiguration())
-            .databaseCatalog(
-                Optional.ofNullable(dataSourceConfiguration.getCatalog())
-                    .orElseGet(this::getDefaultDatabaseCatalog)
-            )
-            .databaseSchema(
-                Optional.ofNullable(dataSourceConfiguration.getSchema())
-                    .orElseGet(this::getDefaultDatabaseSchema)
-            )
-            .dataSource(dataSourcesFactory.getDataSource(dataSourceName))
-            .resourceLoader(resourceLoader)
-            .build();
     }
 
     @Nonnull
@@ -133,15 +182,16 @@ public abstract class BaseChunkJob<I, O> implements BatchJobProvider {
         return Collections.singletonList(new DefaultJobExecutionListener());
     }
 
+    @Nonnull
     protected List<StepExecutionListener> getStepExecutionListeners() {
         return Collections.singletonList(new DefaultStepExecutionListener());
     }
 
+    @Nonnull
     protected List<ChunkListener> getChunkListeners() {
         return Collections.emptyList();
     }
 
-    @Nonnull
     private List<JobExecutionListener> getAllJobExecutionListener() {
         return getJobExecutionListeners();
     }
@@ -157,7 +207,6 @@ public abstract class BaseChunkJob<I, O> implements BatchJobProvider {
     protected List<ChunkListener> getAllChunkListeners() {
         return getChunkListeners();
     }
-
 
     @Override
     public Job getJob() {
@@ -244,5 +293,50 @@ public abstract class BaseChunkJob<I, O> implements BatchJobProvider {
         getAllChunkListeners().forEach(jobStep::listener);
 
         return jobStep.build();
+    }
+
+    // ---
+    // Job builder helpers
+    // ---
+
+    protected Tasklet getLiquibaseInputMigrationTasklet() {
+
+        return Optional.ofNullable(getJobConfiguration().getInputDataSource())
+            .map(this::getLiquibaseMigrationTasklet)
+            .orElseThrow(() -> MissingJdbcDataSource.missingInputJdbcDataSource(getClass()));
+    }
+
+    @Nonnull
+    protected Tasklet getLiquibaseOutputMigrationTasklet() {
+
+        return Optional.ofNullable(getJobConfiguration().getOutputDataSource())
+            .map(this::getLiquibaseMigrationTasklet)
+            .orElseThrow(() -> MissingJdbcDataSource.missingOutputJdbcDataSource(getClass()));
+    }
+
+    @Nonnull
+    private Tasklet getLiquibaseMigrationTasklet(BatchConfiguration.JobDataSourceConfiguration jobDataSourceConfiguration) {
+
+        final var dataSourceName = jobDataSourceConfiguration.getName();
+        final var dataSourceConfiguration = batchDataSourcesConfiguration
+            .getJDBCDataSourceConfigurationByName(dataSourceName);
+
+        return LiquibaseMigrationTasklet.builder()
+            .migrationFolder(
+                Optional.ofNullable(getMigrationFolder())
+                    .orElseThrow(() -> new MissingMigrationFolder(getClass()))
+            )
+            .jobDataSourceConfiguration(jobDataSourceConfiguration)
+            .databaseCatalog(
+                Optional.ofNullable(dataSourceConfiguration.getCatalog())
+                    .orElseGet(this::getDefaultDatabaseCatalog)
+            )
+            .databaseSchema(
+                Optional.ofNullable(dataSourceConfiguration.getSchema())
+                    .orElseGet(this::getDefaultDatabaseSchema)
+            )
+            .dataSource(dataSourcesFactory.getDataSource(dataSourceName))
+            .resourceLoader(resourceLoader)
+            .build();
     }
 }

@@ -10,6 +10,10 @@ services:
     volumes:
       - './docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:ro'
       - 'postgresql:/var/lib/postgresql/data:rw'
+    command:
+      - postgres
+      - '-c'
+      - log_statement=all
   mongodb:
     image: 'docker.io/library/mongo:5.0.6'
     restart: always

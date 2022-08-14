@@ -36,7 +36,6 @@ import static fr.dademo.bi.companies.jobs.stg.association_waldec.datamodel.Assoc
  */
 @Slf4j
 @Component
-@SuppressWarnings("java:S112")
 public class AssociationWaldecItemReader extends UnidirectionalItemStreamReaderSupport<WrappedRowResource> {
 
     private static final String DATASET_TITLE = "repertoire-national-des-associations";

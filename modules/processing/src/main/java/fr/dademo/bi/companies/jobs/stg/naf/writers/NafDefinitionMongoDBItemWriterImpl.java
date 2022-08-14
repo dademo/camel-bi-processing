@@ -6,24 +6,23 @@
 
 package fr.dademo.bi.companies.jobs.stg.naf.writers;
 
+import fr.dademo.batch.beans.mongodb.MongoTemplateFactory;
+import fr.dademo.batch.configuration.BatchConfiguration;
+import fr.dademo.batch.configuration.exception.MissingJobDataSourceConfigurationException;
 import fr.dademo.bi.companies.jobs.stg.naf.NafDefinitionItemWriter;
 import fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinition;
-import lombok.Getter;
+import fr.dademo.bi.companies.shared.AbstractMongoDBWriter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.item.ExecutionContext;
-import org.springframework.batch.item.ItemStreamException;
-import org.springframework.batch.item.ItemStreamWriter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
 import static fr.dademo.batch.beans.BeanValues.*;
+import static fr.dademo.bi.companies.jobs.stg.company.JobDefinition.COMPANY_CONFIG_JOB_NAME;
+import static fr.dademo.bi.companies.jobs.stg.company.JobDefinition.COMPANY_JOB_NAME;
 import static fr.dademo.bi.companies.jobs.stg.naf.JobDefinition.NAF_CONFIG_JOB_NAME;
 
 /**
@@ -32,17 +31,23 @@ import static fr.dademo.bi.companies.jobs.stg.naf.JobDefinition.NAF_CONFIG_JOB_N
 @Slf4j
 @Component
 @ConditionalOnProperty(
-    value = CONFIG_JOBS_BASE + "." + NAF_CONFIG_JOB_NAME + "." + CONFIG_WRITER_TYPE,
+    value = CONFIG_JOBS_BASE + "." + NAF_CONFIG_JOB_NAME + "." + CONFIG_JOB_OUTPUT_DATA_SOURCE + "." + CONFIG_WRITER_TYPE,
     havingValue = CONFIG_MONGODB_TYPE
 )
-public class NafMongoDBDefinitionItemWriterImpl implements NafDefinitionItemWriter, ItemStreamWriter<NafDefinition> {
+public class NafDefinitionMongoDBItemWriterImpl extends AbstractMongoDBWriter implements NafDefinitionItemWriter {
 
     public static final String COLLECTION_NAME = "naf";
 
-    @Autowired
-    @Qualifier(STG_MONGO_TEMPLATE_CONFIG_BEAN_NAME)
-    @Getter
-    private MongoTemplate mongoTemplate;
+    private final MongoTemplate mongoTemplate;
+
+    public NafDefinitionMongoDBItemWriterImpl(MongoTemplateFactory mongoTemplateFactory,
+                                              BatchConfiguration batchConfiguration) {
+
+        this.mongoTemplate = mongoTemplateFactory.getTemplateForConnection(
+            getJobOutputDataSourceName(COMPANY_CONFIG_JOB_NAME, batchConfiguration)
+                .orElseThrow(MissingJobDataSourceConfigurationException.forJob(COMPANY_JOB_NAME))
+        );
+    }
 
     @SneakyThrows
     @Override
@@ -53,24 +58,5 @@ public class NafMongoDBDefinitionItemWriterImpl implements NafDefinitionItemWrit
             .withDocumentClass(NafDefinition.class)
             .insertMany(items);
         log.info("{} items added", result.getInsertedIds().size());
-    }
-
-    @Override
-    public void open(@Nonnull ExecutionContext executionContext) throws ItemStreamException {
-
-        // We clean the target collection
-        log.info("Cleaning collection `{}`", COLLECTION_NAME);
-        mongoTemplate.dropCollection(COLLECTION_NAME);
-        log.info("Done");
-    }
-
-    @Override
-    public void update(@Nonnull ExecutionContext executionContext) throws ItemStreamException {
-        // Nothing
-    }
-
-    @Override
-    public void close() throws ItemStreamException {
-        // Nothing
     }
 }

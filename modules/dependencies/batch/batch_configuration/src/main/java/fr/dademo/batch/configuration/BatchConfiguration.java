@@ -38,6 +38,7 @@ public class BatchConfiguration {
     private Integer executorThreadPoolSize;
 
 
+    @Nonnull
     public JobConfiguration getJobConfigurationByName(@Nonnull String jobName) {
 
         return Optional.ofNullable(jobs.get(jobName))
@@ -65,21 +66,18 @@ public class BatchConfiguration {
         private Boolean enabled;
 
         @Nullable
+        private JobDataSourceConfiguration inputDataSource;
+
+        @Nullable
+        private JobDataSourceConfiguration outputDataSource;
+
+        @Nullable
         @Min(1)
         private Integer chunkSize;
 
         @Nullable
         @Min(1)
         private Integer maxThreads;
-
-        @Nullable
-        private String dataSourceName;
-
-        @Nullable
-        private String changeLogFileName;
-
-        @Nonnull
-        private List<String> migrationContexts = Collections.emptyList();
 
         public static boolean getDefaultIsEnabled() {
             return DEFAULT_IS_ENABLED;
@@ -92,5 +90,26 @@ public class BatchConfiguration {
         public static int getDefaultMaxThreads() {
             return Runtime.getRuntime().availableProcessors();
         }
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class JobDataSourceConfiguration {
+
+        @Nonnull
+        private String name;
+
+        @Nonnull
+        private String type;
+
+        /*
+         * Only valid in case of a JDBC connection, else ignored
+         */
+        @Nullable
+        private String changeLogFileName;
+
+        @Nonnull
+        private List<String> migrationContexts = Collections.emptyList();
     }
 }

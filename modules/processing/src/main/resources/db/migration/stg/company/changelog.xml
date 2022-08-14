@@ -63,4 +63,9 @@
             <column name="company_is_employer" type="VARCHAR(1)"/>
         </createTable>
     </changeSet>
+    <changeSet id="2" author="dademo">
+        <sql dbms="postgresql">
+            ALTER TABLE "company" SET UNLOGGED
+        </sql>
+    </changeSet>
 </databaseChangeLog>

@@ -106,53 +106,65 @@ batch:
   jobs:
     naf:
       enabled: true
-      data-source-name: stg
+      #inputDataSource: null
+      outputDataSource:
+        name: stg
+        type: jdbc
       chunk-size: 1000
-      writer-type: JDBC
-      #writer-type: MONGODB
       max-threads: null
     company:
-      enabled: true
-      data-source-name: stg
-      chunk-size: 1000000
-      writer-type: JDBC
-      #writer-type: MONGODB
+      enabled: false
+      #inputDataSource: null
+      outputDataSource:
+        name: stg
+        type: jdbc
+      chunk-size: 10000
       max-threads: null
     company-history:
-      enabled: true
-      data-source-name: stg
-      chunk-size: 1000000
-      writer-type: JDBC
+      enabled: false
+      #inputDataSource: null
+      outputDataSource:
+        name: stg
+        type: jdbc
+      chunk-size: 10000
       max-threads: null
     company-inheritance:
-      enabled: true
-      data-source-name: stg
-      chunk-size: 1000000
-      writer-type: JDBC
+      enabled: false
+      #inputDataSource: null
+      outputDataSource:
+        name: stg
+        type: jdbc
+      chunk-size: 10000
       max-threads: null
     company-legal:
-      enabled: true
-      data-source-name: stg
-      chunk-size: 1000000
-      writer-type: JDBC
+      enabled: false
+      #inputDataSource: null
+      outputDataSource:
+        name: stg
+        type: jdbc
+      chunk-size: 10000
       max-threads: null
     company-legal-history:
-      enabled: true
-      data-source-name: stg
-      chunk-size: 1000000
-      writer-type: JDBC
+      enabled: false
+      #inputDataSource: null
+      outputDataSource:
+        name: stg
+        type: jdbc
+      chunk-size: 10000
       max-threads: null
     association:
       enabled: true
-      data-source-name: stg
-      chunk-size: 1000000
-      #writer-type: AMQP
-      #writer-type: NO_ACTION
-      writer-type: JDBC
+      #inputDataSource: null
+      outputDataSource:
+        name: stg
+        type: jdbc
+      chunk-size: 10000
       max-threads: null
     association-waldec:
-      enabled: true
-      data-source-name: stg
-      chunk-size: 1000000
-      writer-type: JDBC
+      enabled: false
+      #inputDataSource: null
+      outputDataSource:
+        name: stg
+        type: jdbc
+      chunk-size: 10000
       max-threads: null

@@ -6,7 +6,7 @@
 
 package fr.dademo.batch.beans.events;
 
-import fr.dademo.batch.beans.rabbitmq.RabbitAmqpFactory;
+import fr.dademo.batch.beans.amqp.AmqpFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -22,14 +22,14 @@ import org.springframework.context.event.EventListener;
 public class ApplicationPrepareMessagingOnEvents {
 
     @Autowired
-    RabbitAmqpFactory rabbitAmqpFactory;
+    AmqpFactory amqpFactory;
 
     @EventListener(ApplicationStartedEvent.class)
     @ConditionalOnProperty(value = "amqp.createQueues", matchIfMissing = true)
     public void doCreateQueues() {
 
         log.info("Creating queues");
-        rabbitAmqpFactory.getAllQueuesBuilder().forEach(RabbitAmqpFactory.QueueBuilder::build);
+        amqpFactory.getAllQueuesBuilder().forEach(AmqpFactory.QueueBuilder::build);
         log.info("All queues created");
     }
 
@@ -38,7 +38,7 @@ public class ApplicationPrepareMessagingOnEvents {
     public void doCreateExchanges() {
 
         log.info("Creating exchanges");
-        rabbitAmqpFactory.getAllExchangesBuilder().forEach(RabbitAmqpFactory.ExchangeBuilder::build);
+        amqpFactory.getAllExchangesBuilder().forEach(AmqpFactory.ExchangeBuilder::build);
         log.info("All exchanges created");
     }
 }

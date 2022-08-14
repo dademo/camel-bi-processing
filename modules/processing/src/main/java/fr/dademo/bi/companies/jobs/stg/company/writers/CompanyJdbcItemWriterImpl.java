@@ -6,27 +6,29 @@
 
 package fr.dademo.bi.companies.jobs.stg.company.writers;
 
+import fr.dademo.batch.beans.jdbc.DataSourcesFactory;
+import fr.dademo.batch.configuration.BatchConfiguration;
+import fr.dademo.batch.configuration.BatchDataSourcesConfiguration;
+import fr.dademo.batch.configuration.exception.MissingJobDataSourceConfigurationException;
 import fr.dademo.bi.companies.jobs.stg.company.CompanyItemWriter;
 import fr.dademo.bi.companies.jobs.stg.company.datamodel.Company;
 import fr.dademo.bi.companies.jobs.stg.company.datamodel.CompanyRecord;
-import lombok.Getter;
+import fr.dademo.bi.companies.jobs.stg.company.datamodel.CompanyTable;
+import fr.dademo.bi.companies.shared.AbstractApplicationJdbcWriter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.BatchBindStep;
-import org.jooq.DSLContext;
-import org.jooq.InsertOnDuplicateStep;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.jooq.Insert;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
 import static fr.dademo.batch.beans.BeanValues.*;
 import static fr.dademo.bi.companies.jobs.stg.company.JobDefinition.COMPANY_CONFIG_JOB_NAME;
-import static fr.dademo.bi.companies.jobs.stg.company.datamodel.CompanyTable.COMPANY;
+import static fr.dademo.bi.companies.jobs.stg.company.JobDefinition.COMPANY_JOB_NAME;
+import static fr.dademo.bi.companies.jobs.stg.company.datamodel.CompanyTable.DEFAULT_COMPANY_TABLE;
 
 /**
  * @author dademo
@@ -34,101 +36,101 @@ import static fr.dademo.bi.companies.jobs.stg.company.datamodel.CompanyTable.COM
 @Slf4j
 @Component
 @ConditionalOnProperty(
-    value = CONFIG_JOBS_BASE + "." + COMPANY_CONFIG_JOB_NAME + "." + CONFIG_WRITER_TYPE,
+    value = CONFIG_JOBS_BASE + "." + COMPANY_CONFIG_JOB_NAME + "." + CONFIG_JOB_OUTPUT_DATA_SOURCE + "." + CONFIG_WRITER_TYPE,
     havingValue = CONFIG_JDBC_TYPE
 )
-public class CompanyJdbcItemWriterImpl implements CompanyItemWriter {
+public class CompanyJdbcItemWriterImpl extends AbstractApplicationJdbcWriter<Company, CompanyRecord> implements CompanyItemWriter {
 
-    @Autowired
-    @Qualifier(STG_DATA_SOURCE_DSL_CONTEXT_BEAN_NAME)
-    @Getter
-    private DSLContext dslContext;
+    private final CompanyTable companyTable;
+
+    public CompanyJdbcItemWriterImpl(
+        DataSourcesFactory dataSourcesFactory,
+        BatchConfiguration batchConfiguration,
+        BatchDataSourcesConfiguration batchDataSourcesConfiguration
+    ) {
+
+        super(
+            dataSourcesFactory.getJobOutputDslContextByDataSourceName(
+                getJobOutputDataSourceName(COMPANY_CONFIG_JOB_NAME, batchConfiguration)
+                    .orElseThrow(MissingJobDataSourceConfigurationException.forJob(COMPANY_JOB_NAME))
+            )
+        );
+        this.companyTable = getTargetSchemaUsingConfiguration(COMPANY_CONFIG_JOB_NAME, batchConfiguration, batchDataSourcesConfiguration)
+            .map(CompanyTable::new)
+            .orElse(DEFAULT_COMPANY_TABLE);
+    }
 
     @SneakyThrows
     @Override
     public void write(List<? extends Company> items) {
 
         log.info("Writing {} company documents", items.size());
-
-        try (final var insertStatement = getInsertStatement()) {
-
-            final var batchInsertStatement = dslContext.batch(insertStatement);
-
-            items.stream()
-                .map(this::companyBind)
-                .forEach(consumer -> consumer.accept(batchInsertStatement));
-
-            final var batchResult = batchInsertStatement.execute();
-            if (batchResult.length > 0) {
-                final int totalUpdated = Arrays.stream(batchResult).sum();
-                log.info("{} rows affected", totalUpdated);
-            } else {
-                log.error("An error occurred while running batch");
-            }
-        }
+        performBulkWrite(items);
     }
 
     @SuppressWarnings("resource")
-    private InsertOnDuplicateStep<CompanyRecord> getInsertStatement() {
+    @Override
+    protected Insert<CompanyRecord> getInsertStatement() {
 
-        return dslContext.insertInto(COMPANY,
-            COMPANY.FIELD_SIREN,
-            COMPANY.FIELD_NIC,
-            COMPANY.FIELD_SIRET,
-            COMPANY.FIELD_COMPANY_DIFFUSION_STATUT,
-            COMPANY.FIELD_COMPANY_CREATION_DATE,
-            COMPANY.FIELD_COMPANY_STAFF_NUMBER_RANGE,
-            COMPANY.FIELD_COMPANY_STAFF_NUMBER_YEAR,
-            COMPANY.FIELD_COMPANY_PRINCIPAL_REGISTERED_ACTIVITY,
-            COMPANY.FIELD_COMPANY_LAST_PROCESSING_DATE,
-            COMPANY.FIELD_COMPANY_IS_HEADQUARTERS,
-            COMPANY.FIELD_COMPANY_PERIOD_COUNT,
-            COMPANY.FIELD_COMPANY_ADDRESS_COMPLEMENT,
-            COMPANY.FIELD_COMPANY_ADDRESS_STREET_NUMBER,
-            COMPANY.FIELD_COMPANY_ADDRESS_STREET_NUMBER_REPETITION,
-            COMPANY.FIELD_COMPANY_ADDRESS_STREET_TYPE,
-            COMPANY.FIELD_COMPANY_ADDRESS_STREET_NAME,
-            COMPANY.FIELD_COMPANY_ADDRESS_POSTAL_CODE,
-            COMPANY.FIELD_COMPANY_ADDRESS_CITY,
-            COMPANY.FIELD_COMPANY_FOREIGN_ADDRESS_CITY,
-            COMPANY.FIELD_COMPANY_ADDRESS_SPECIAL_DISTRIBUTION,
-            COMPANY.FIELD_COMPANY_ADDRESS_CITY_CODE,
-            COMPANY.FIELD_COMPANY_ADDRESS_CEDEX_CODE,
-            COMPANY.FIELD_COMPANY_ADDRESS_CEDEX_NAME,
-            COMPANY.FIELD_COMPANY_FOREIGN_ADDRESS_COUNTRY_CODE,
-            COMPANY.FIELD_COMPANY_FOREIGN_ADDRESS_COUNTRY_NAME,
-            COMPANY.FIELD_COMPANY_ADDRESS_COMPLEMENT_2,
-            COMPANY.FIELD_COMPANY_ADDRESS_STREET_NUMBER_2,
-            COMPANY.FIELD_COMPANY_ADDRESS_STREET_NUMBER_REPETITION_2,
-            COMPANY.FIELD_COMPANY_ADDRESS_STREET_TYPE_2,
-            COMPANY.FIELD_COMPANY_ADDRESS_STREET_NAME_2,
-            COMPANY.FIELD_COMPANY_ADDRESS_POSTAL_CODE_2,
-            COMPANY.FIELD_COMPANY_ADDRESS_CITY_2,
-            COMPANY.FIELD_COMPANY_FOREIGN_ADDRESS_CITY_2,
-            COMPANY.FIELD_COMPANY_ADDRESS_SPECIAL_DISTRIBUTION_2,
-            COMPANY.FIELD_COMPANY_ADDRESS_CITY_CODE_2,
-            COMPANY.FIELD_COMPANY_ADDRESS_CEDEX_CODE_2,
-            COMPANY.FIELD_COMPANY_ADDRESS_CEDEX_NAME_2,
-            COMPANY.FIELD_COMPANY_FOREIGN_ADDRESS_COUNTRY_CODE_2,
-            COMPANY.FIELD_COMPANY_FOREIGN_ADDRESS_COUNTRY_NAME_2,
-            COMPANY.FIELD_BEGIN_DATE,
-            COMPANY.FIELD_COMPANY_ADMINISTATIVE_STATE,
-            COMPANY.FIELD_COMPANY_NAME_1,
-            COMPANY.FIELD_COMPANY_NAME_2,
-            COMPANY.FIELD_COMPANY_NAME_3,
-            COMPANY.FIELD_COMPANY_USUAL_NAME,
-            COMPANY.FIELD_COMPANY_ACTIVITY,
-            COMPANY.FIELD_COMPANY_PRINCIPAL_ACTIVITY_NAME,
-            COMPANY.FIELD_COMPANY_IS_EMPLOYER
+        return getDslContext().insertInto(companyTable,
+            DEFAULT_COMPANY_TABLE.FIELD_SIREN,
+            DEFAULT_COMPANY_TABLE.FIELD_NIC,
+            DEFAULT_COMPANY_TABLE.FIELD_SIRET,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_DIFFUSION_STATUT,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_CREATION_DATE,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_STAFF_NUMBER_RANGE,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_STAFF_NUMBER_YEAR,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_PRINCIPAL_REGISTERED_ACTIVITY,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_LAST_PROCESSING_DATE,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_IS_HEADQUARTERS,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_PERIOD_COUNT,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_COMPLEMENT,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_STREET_NUMBER,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_STREET_NUMBER_REPETITION,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_STREET_TYPE,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_STREET_NAME,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_POSTAL_CODE,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_CITY,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_FOREIGN_ADDRESS_CITY,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_SPECIAL_DISTRIBUTION,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_CITY_CODE,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_CEDEX_CODE,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_CEDEX_NAME,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_FOREIGN_ADDRESS_COUNTRY_CODE,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_FOREIGN_ADDRESS_COUNTRY_NAME,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_COMPLEMENT_2,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_STREET_NUMBER_2,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_STREET_NUMBER_REPETITION_2,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_STREET_TYPE_2,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_STREET_NAME_2,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_POSTAL_CODE_2,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_CITY_2,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_FOREIGN_ADDRESS_CITY_2,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_SPECIAL_DISTRIBUTION_2,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_CITY_CODE_2,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_CEDEX_CODE_2,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_CEDEX_NAME_2,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_FOREIGN_ADDRESS_COUNTRY_CODE_2,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_FOREIGN_ADDRESS_COUNTRY_NAME_2,
+            DEFAULT_COMPANY_TABLE.FIELD_BEGIN_DATE,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADMINISTATIVE_STATE,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_NAME_1,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_NAME_2,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_NAME_3,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_USUAL_NAME,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ACTIVITY,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_PRINCIPAL_ACTIVITY_NAME,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_IS_EMPLOYER
         ).values((String) null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
             null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
             null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null
         );
     }
 
-    private Consumer<BatchBindStep> companyBind(Company company) {
+    @Override
+    protected Consumer<Company> bindToStatement(BatchBindStep statement) {
 
-        return items -> items.bind(
+        return company -> statement.bind(
             company.getSiren(),
             company.getNic(),
             company.getSiret(),

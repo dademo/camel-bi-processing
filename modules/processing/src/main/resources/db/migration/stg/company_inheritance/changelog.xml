@@ -21,4 +21,9 @@
             <column name="company_processing_timestamp" type="DATETIME"/>
         </createTable>
     </changeSet>
+    <changeSet id="2" author="dademo">
+        <sql dbms="postgresql">
+            ALTER TABLE "company_inheritance" SET UNLOGGED
+        </sql>
+    </changeSet>
 </databaseChangeLog>

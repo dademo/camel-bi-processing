@@ -20,7 +20,7 @@ import static fr.dademo.bi.companies.jobs.stg.company_legal.JobDefinition.COMPAN
  */
 @Component
 @ConditionalOnProperty(
-    value = CONFIG_JOBS_BASE + "." + COMPANY_LEGAL_CONFIG_JOB_NAME + "." + CONFIG_WRITER_TYPE,
+    value = CONFIG_JOBS_BASE + "." + COMPANY_LEGAL_CONFIG_JOB_NAME + "." + CONFIG_JOB_OUTPUT_DATA_SOURCE + "." + CONFIG_WRITER_TYPE,
     havingValue = CONFIG_NO_ACTION_TYPE
 )
 public class CompanyLegalNoActionItemWriterImpl extends NoActionItemWriter<CompanyLegal> implements CompanyLegalItemWriter {

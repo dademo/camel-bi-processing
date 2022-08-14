@@ -9,15 +9,16 @@ package fr.dademo.batch.beans.jdbc;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import fr.dademo.batch.beans.jdbc.tools.FlywayMigrationsSupplier;
+import fr.dademo.batch.configuration.BatchConfiguration;
 import fr.dademo.batch.configuration.BatchDataSourcesConfiguration;
 import fr.dademo.batch.configuration.FlywayMigrationsConfiguration;
+import fr.dademo.batch.configuration.exception.MissingJobDataSourceConfigurationException;
 import org.flywaydb.core.Flyway;
 import org.jooq.DSLContext;
 import org.jooq.conf.Settings;
 import org.jooq.conf.StatementType;
 import org.jooq.conf.ThrowExceptions;
 import org.jooq.impl.DSL;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
@@ -38,11 +39,19 @@ public class DataSourcesFactory {
 
     private final Map<String, DatabaseSQLDialectSupplier> cachedDataSourcesDialectProviders = new HashMap<>();
 
-    @Autowired
-    private BatchDataSourcesConfiguration batchDataSourcesConfiguration;
+    private final BatchDataSourcesConfiguration batchDataSourcesConfiguration;
+    private final BatchConfiguration batchConfiguration;
+    private final FlywayMigrationsConfiguration flywayMigrationsConfiguration;
 
-    @Autowired
-    private FlywayMigrationsConfiguration flywayMigrationsConfiguration;
+    public DataSourcesFactory(
+        BatchDataSourcesConfiguration batchDataSourcesConfiguration,
+        BatchConfiguration batchConfiguration,
+        FlywayMigrationsConfiguration flywayMigrationsConfiguration
+    ) {
+        this.batchDataSourcesConfiguration = batchDataSourcesConfiguration;
+        this.batchConfiguration = batchConfiguration;
+        this.flywayMigrationsConfiguration = flywayMigrationsConfiguration;
+    }
 
     @Nonnull
     public DataSource getDataSource(@NotEmpty String dataSourceName) {
@@ -75,8 +84,42 @@ public class DataSourcesFactory {
         return batchDataSourcesConfiguration.getJdbc().keySet().stream().map(this::getMigration);
     }
 
+    public DSLContext getJobInputDslContextByName(@Nonnull String jobName) {
+
+        final var jobInputDataSourceName = Optional.ofNullable(
+            batchConfiguration
+                .getJobConfigurationByName(jobName)
+                .getInputDataSource()
+        );
+
+        return getDslContext(
+            jobInputDataSourceName
+                .map(BatchConfiguration.JobDataSourceConfiguration::getName)
+                .orElseThrow(MissingJobDataSourceConfigurationException.forJob(jobName))
+        );
+    }
+
+    public DSLContext getJobOutputDslContextByJobName(@Nonnull String jobName) {
+
+        final var jobOutputDataSourceName = Optional.ofNullable(
+            batchConfiguration
+                .getJobConfigurationByName(jobName)
+                .getInputDataSource()
+        );
+
+        return getJobOutputDslContextByDataSourceName(
+            jobOutputDataSourceName
+                .map(BatchConfiguration.JobDataSourceConfiguration::getName)
+                .orElseThrow(MissingJobDataSourceConfigurationException.forJob(jobName))
+        );
+    }
+
+    public DSLContext getJobOutputDslContextByDataSourceName(@Nonnull String dataSourceName) {
+        return getDslContext(dataSourceName);
+    }
+
     @Nonnull
-    public DSLContext getDslContext(@Nonnull String dataSourceName) {
+    private DSLContext getDslContext(@Nonnull String dataSourceName) {
 
         return DSL.using(
             getDataSource(dataSourceName),
@@ -97,7 +140,7 @@ public class DataSourcesFactory {
         final var configuration = batchDataSourcesConfiguration.getJDBCDataSourceConfigurationByName(dataSourceName);
         final var hikariConfig = new HikariConfig();
 
-        hikariConfig.setAutoCommit(false);
+        hikariConfig.setAutoCommit(true);
         hikariConfig.setJdbcUrl(configuration.getUrl());
         hikariConfig.setMinimumIdle(configuration.getMinimumIdle());
         hikariConfig.setMaximumPoolSize(configuration.getMaximumPoolSize());

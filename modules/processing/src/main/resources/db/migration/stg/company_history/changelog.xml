@@ -33,4 +33,9 @@
             <column name="institution_employer_nature_change" type="BOOLEAN"/>
         </createTable>
     </changeSet>
+    <changeSet id="2" author="dademo">
+        <sql dbms="postgresql">
+            ALTER TABLE "company_history" SET UNLOGGED
+        </sql>
+    </changeSet>
 </databaseChangeLog>

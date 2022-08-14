@@ -19,7 +19,17 @@ public class MissingJdbcDataSource extends RuntimeException {
     private static final long serialVersionUID = 3943516555210855477L;
 
     @SuppressWarnings("rawtypes")
-    public MissingJdbcDataSource(Class<? extends BaseChunkJob> clazz) {
-        super(String.format("Missing datasource definition in class %s", clazz.getName()));
+    private MissingJdbcDataSource(String refName, Class<? extends BaseChunkJob> clazz) {
+        super(String.format("Missing %s datasource definition in class %s", refName, clazz.getName()));
+    }
+
+    @SuppressWarnings("rawtypes")
+    public static MissingJdbcDataSource missingInputJdbcDataSource(Class<? extends BaseChunkJob> clazz) {
+        return new MissingJdbcDataSource("input", clazz);
+    }
+
+    @SuppressWarnings("rawtypes")
+    public static MissingJdbcDataSource missingOutputJdbcDataSource(Class<? extends BaseChunkJob> clazz) {
+        return new MissingJdbcDataSource("output", clazz);
     }
 }

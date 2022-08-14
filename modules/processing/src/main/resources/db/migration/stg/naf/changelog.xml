@@ -21,4 +21,9 @@
             <column name="title_40" type="VARCHAR(40)"/>
         </createTable>
     </changeSet>
+    <changeSet id="2" author="dademo">
+        <sql dbms="postgresql">
+            ALTER TABLE "naf_codes" SET UNLOGGED
+        </sql>
+    </changeSet>
 </databaseChangeLog>

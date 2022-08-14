@@ -6,7 +6,7 @@
 
 package fr.dademo.batch.configuration.helpers;
 
-import fr.dademo.batch.configuration.data_sources.RabbitMQConfiguration;
+import fr.dademo.batch.configuration.data_sources.AmqpConfiguration;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.amqp.core.Queue;
@@ -15,9 +15,9 @@ import org.springframework.amqp.core.Queue;
  * @author dademo
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class RabbitMQQueueBuilder {
+public final class AmqpQueueBuilder {
 
-    public static Queue getQueueFor(RabbitMQConfiguration.RabbitMQQueueConfiguration queueConfiguration) {
+    public static Queue getQueueFor(AmqpConfiguration.AmqpQueueConfiguration queueConfiguration) {
         return new Queue(
             queueConfiguration.getName(),
             queueConfiguration.isDurable(),

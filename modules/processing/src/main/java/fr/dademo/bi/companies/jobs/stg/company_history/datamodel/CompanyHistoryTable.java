@@ -19,15 +19,12 @@ import static org.jooq.impl.DSL.schema;
 /**
  * @author dademo
  */
-@SuppressWarnings({"java:S110", "java:S116", "java:S2055", "java:S2160"})
 public class CompanyHistoryTable extends CustomTable<CompanyHistoryRecord> {
 
-    public static final CompanyHistoryTable COMPANY_HISTORY = new CompanyHistoryTable();
     public static final String TABLE_NAME = "company_history";
-    public static final String TABLE_NAMESPACE = "stg";
-
+    public static final String DEFAULT_TABLE_SCHEMA = "stg";
+    public static final CompanyHistoryTable DEFAULT_COMPANY_HISTORY_TABLE = new CompanyHistoryTable(DEFAULT_TABLE_SCHEMA);
     private static final long serialVersionUID = -8996406197689042034L;
-
     public final TableField<CompanyHistoryRecord, String> FIELD_SIREN = createField(name("siren"), SQLDataType.VARCHAR(9), this);
     public final TableField<CompanyHistoryRecord, String> FIELD_NIC = createField(name("nic"), SQLDataType.VARCHAR(5), this);
     public final TableField<CompanyHistoryRecord, String> FIELD_SIRET = createField(name("siret"), SQLDataType.VARCHAR(14), this);
@@ -47,8 +44,8 @@ public class CompanyHistoryTable extends CustomTable<CompanyHistoryRecord> {
     public final TableField<CompanyHistoryRecord, String> FIELD_INSTITUTION_EMPLOYER_NATURE = createField(name("institution_employer_nature"), SQLDataType.VARCHAR(1), this);
     public final TableField<CompanyHistoryRecord, Boolean> FIELD_INSTITUTION_EMPLOYER_NATURE_CHANGE = createField(name("institution_employer_nature_change"), SQLDataType.BOOLEAN, this);
 
-    protected CompanyHistoryTable() {
-        super(name(TABLE_NAME), schema(TABLE_NAMESPACE));
+    public CompanyHistoryTable(@Nonnull String schema) {
+        super(name(TABLE_NAME), schema(schema));
     }
 
     @Override

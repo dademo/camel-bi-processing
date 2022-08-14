@@ -36,7 +36,6 @@ import static fr.dademo.bi.companies.jobs.stg.company.datamodel.Company.CSV_HEAD
  */
 @Slf4j
 @Component
-@SuppressWarnings("java:S112")
 public class CompanyItemReader extends UnidirectionalItemStreamReaderSupport<WrappedRowResource> {
 
     private static final String DATASET_TITLE = "base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret";

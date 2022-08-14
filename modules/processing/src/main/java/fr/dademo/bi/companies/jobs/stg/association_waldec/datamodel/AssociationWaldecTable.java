@@ -20,15 +20,12 @@ import static org.jooq.impl.DSL.schema;
 /**
  * @author dademo
  */
-@SuppressWarnings({"java:S110", "java:S116", "java:S2055", "java:S2160"})
 public class AssociationWaldecTable extends CustomTable<AssociationWaldecRecord> {
 
-    public static final AssociationWaldecTable ASSOCIATION_WALDEC = new AssociationWaldecTable();
     public static final String TABLE_NAME = "association_waldec";
-    public static final String TABLE_NAMESPACE = "stg";
-
+    public static final String DEFAULT_TABLE_SCHEMA = "stg";
+    public static final AssociationWaldecTable DEFAULT_ASSOCIATION_WALDEC_TABLE = new AssociationWaldecTable(DEFAULT_TABLE_SCHEMA);
     private static final long serialVersionUID = -3509123209084990428L;
-
     public final TableField<AssociationWaldecRecord, String> FIELD_ASSOCIATION_ID = createField(name("id"), SQLDataType.VARCHAR(14), this);
     public final TableField<AssociationWaldecRecord, String> FIELD_ASSOCIATION_ID_EX = createField(name("id_ex"), SQLDataType.VARCHAR(10), this);
     public final TableField<AssociationWaldecRecord, String> FIELD_ASSOCIATION_SIRET = createField(name("siret"), SQLDataType.VARCHAR(14), this);
@@ -71,8 +68,8 @@ public class AssociationWaldecTable extends CustomTable<AssociationWaldecRecord>
     public final TableField<AssociationWaldecRecord, String> FIELD_ASSOCIATION_POSITION = createField(name("position"), SQLDataType.VARCHAR(1), this);
     public final TableField<AssociationWaldecRecord, LocalDateTime> FIELD_ASSOCIATION_LAST_UPDATED = createField(name("last_updated"), SQLDataType.LOCALDATETIME, this);
 
-    protected AssociationWaldecTable() {
-        super(name(TABLE_NAME), schema(TABLE_NAMESPACE));
+    public AssociationWaldecTable(@Nonnull String schema) {
+        super(name(TABLE_NAME), schema(schema));
     }
 
     @Override

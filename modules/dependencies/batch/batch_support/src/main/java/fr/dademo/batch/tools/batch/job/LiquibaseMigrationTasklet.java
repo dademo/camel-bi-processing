@@ -35,7 +35,7 @@ public class LiquibaseMigrationTasklet implements Tasklet {
 
     @Builder
     public LiquibaseMigrationTasklet(@NotEmpty String migrationFolder,
-                                     @Nonnull BatchConfiguration.JobConfiguration jobConfiguration,
+                                     @Nonnull BatchConfiguration.JobDataSourceConfiguration jobDataSourceConfiguration,
                                      @NotEmpty String databaseCatalog,
                                      @NotEmpty String databaseSchema,
                                      @Nonnull DataSource dataSource,
@@ -44,13 +44,13 @@ public class LiquibaseMigrationTasklet implements Tasklet {
         migrationsSupplier = LiquibaseMigrationsSupplier.builder()
             .migrationFolder(migrationFolder)
             .changeLogFileName(
-                Optional.ofNullable(jobConfiguration.getChangeLogFileName())
+                Optional.ofNullable(jobDataSourceConfiguration.getChangeLogFileName())
                     .filter(v -> !v.isEmpty())
                     .orElse(BatchConfiguration.JobConfiguration.DEFAULT_CHANGELOG_FILE)
             )
             .databaseCatalog(databaseCatalog)
             .databaseSchema(databaseSchema)
-            .contexts(Optional.ofNullable(jobConfiguration.getMigrationContexts()).orElse(Collections.emptyList()))
+            .contexts(Optional.ofNullable(jobDataSourceConfiguration.getMigrationContexts()).orElse(Collections.emptyList()))
             .dataSource(dataSource)
             .resourceLoader(resourceLoader)
             .build();

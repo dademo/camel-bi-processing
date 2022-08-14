@@ -20,15 +20,12 @@ import static org.jooq.impl.DSL.schema;
 /**
  * @author dademo
  */
-@SuppressWarnings({"java:S110", "java:S116", "java:S2055", "java:S2160"})
 public class CompanyLegalTable extends CustomTable<CompanyLegalRecord> {
 
-    public static final CompanyLegalTable COMPANY_LEGAL = new CompanyLegalTable();
     public static final String TABLE_NAME = "company_legal_unit";
-    public static final String TABLE_NAMESPACE = "stg";
-
+    public static final String DEFAULT_TABLE_SCHEMA = "stg";
+    public static final CompanyLegalTable DEFAULT_COMPANY_LEGAL_TABLE = new CompanyLegalTable(DEFAULT_TABLE_SCHEMA);
     private static final long serialVersionUID = -6021744332544359613L;
-
     public final TableField<CompanyLegalRecord, String> FIELD_COMPANY_LEGAL_UNIT_SIREN = createField(name("siren"), SQLDataType.VARCHAR(9), this);
     public final TableField<CompanyLegalRecord, String> FIELD_COMPANY_LEGAL_UNIT_DIFFUSION_STATUS = createField(name("diffusion_status"), SQLDataType.VARCHAR(1), this);
     public final TableField<CompanyLegalRecord, Boolean> FIELD_COMPANY_LEGAL_UNIT_IS_PURGED = createField(name("is_purged"), SQLDataType.BOOLEAN, this);
@@ -63,8 +60,8 @@ public class CompanyLegalTable extends CustomTable<CompanyLegalRecord> {
     public final TableField<CompanyLegalRecord, String> FIELD_COMPANY_LEGAL_UNIT_IS_SOCIAL_AND_SOLIDARITY_ECONOMY = createField(name("is_social_and_solidarity_economy"), SQLDataType.VARCHAR(1), this);
     public final TableField<CompanyLegalRecord, String> FIELD_COMPANY_LEGAL_UNIT_IS_EMPLOYER = createField(name("is_employer"), SQLDataType.VARCHAR(1), this);
 
-    protected CompanyLegalTable() {
-        super(name(TABLE_NAME), schema(TABLE_NAMESPACE));
+    public CompanyLegalTable(@Nonnull String schema) {
+        super(name(TABLE_NAME), schema(schema));
     }
 
     @Override

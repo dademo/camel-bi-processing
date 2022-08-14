@@ -6,7 +6,7 @@
 
 package fr.dademo.batch.configuration.helpers;
 
-import fr.dademo.batch.configuration.data_sources.RabbitMQConfiguration;
+import fr.dademo.batch.configuration.data_sources.AmqpConfiguration;
 import fr.dademo.batch.configuration.helpers.exception.UnsupportedExchangeTypeException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -16,9 +16,9 @@ import org.springframework.amqp.core.*;
  * @author dademo
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class RabbitMQExchangeBuilder {
+public final class AmqpExchangeBuilder {
 
-    public static Exchange getExchangeFor(RabbitMQConfiguration.RabbitMQExchangeConfiguration exchangeConfiguration) {
+    public static Exchange getExchangeFor(AmqpConfiguration.AmqpExchangeConfiguration exchangeConfiguration) {
 
         AbstractExchange exchange;
         switch (exchangeConfiguration.getType().toLowerCase()) {

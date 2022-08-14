@@ -155,6 +155,7 @@ public class BatchRepository {
 
         // Trying to figure if the schema have already been initialized
         try (final var jdbcConnection = jobRepositoryDataSource.getConnection()) {
+            jdbcConnection.setAutoCommit(false);
             try (final var statement = jdbcConnection.createStatement()) {
                 statement.execute("SELECT * FROM public.BATCH_JOB_INSTANCE");
                 isInitialized = true;

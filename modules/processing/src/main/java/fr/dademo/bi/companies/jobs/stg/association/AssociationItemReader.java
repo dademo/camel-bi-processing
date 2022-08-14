@@ -37,7 +37,6 @@ import static fr.dademo.bi.companies.jobs.stg.association.datamodel.Association.
  */
 @Slf4j
 @Component
-@SuppressWarnings("java:S112")
 public class AssociationItemReader extends UnidirectionalItemStreamReaderSupport<WrappedRowResource> {
 
     private static final String DATASET_TITLE = "repertoire-national-des-associations";

@@ -8,18 +8,17 @@ package fr.dademo.bi.companies.jobs.stg.association.datamodel;
 
 import org.jooq.impl.CustomRecord;
 
-import static fr.dademo.bi.companies.jobs.stg.association.datamodel.AssociationTable.ASSOCIATION;
+import javax.annotation.Nonnull;
 
 /**
  * @author dademo
  */
-@SuppressWarnings("java:S110")
 public class AssociationRecord extends CustomRecord<AssociationRecord> {
 
     private static final long serialVersionUID = 3007869680725243588L;
 
-    public AssociationRecord() {
-        super(ASSOCIATION);
+    public AssociationRecord(@Nonnull AssociationTable table) {
+        super(table);
     }
 }
 

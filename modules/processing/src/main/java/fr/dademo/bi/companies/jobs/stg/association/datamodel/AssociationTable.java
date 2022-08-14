@@ -19,16 +19,12 @@ import static org.jooq.impl.DSL.schema;
 /**
  * @author dademo
  */
-@SuppressWarnings({"java:S110", "java:S116", "java:S2055", "java:S2160"})
 public class AssociationTable extends CustomTable<AssociationRecord> {
 
-    // TODO handle schemas declaration
-    public static final AssociationTable ASSOCIATION = new AssociationTable();
     public static final String TABLE_NAME = "association";
-    public static final String TABLE_NAMESPACE = "stg";
-
+    public static final String DEFAULT_TABLE_SCHEMA = "stg";
+    public static final AssociationTable DEFAULT_ASSOCIATION_TABLE = new AssociationTable(DEFAULT_TABLE_SCHEMA);
     private static final long serialVersionUID = 2388048002240918898L;
-
     public final TableField<AssociationRecord, String> FIELD_ASSOCIATION_ID = createField(name("id"), SQLDataType.VARCHAR(14), this);
     public final TableField<AssociationRecord, String> FIELD_ASSOCIATION_ID_EX = createField(name("id_ex"), SQLDataType.VARCHAR(10), this);
     public final TableField<AssociationRecord, String> FIELD_ASSOCIATION_SIRET = createField(name("siret"), SQLDataType.VARCHAR(14), this);
@@ -54,8 +50,8 @@ public class AssociationTable extends CustomTable<AssociationRecord> {
     public final TableField<AssociationRecord, String> FIELD_ASSOCIATION_RUP_CODE = createField(name("rup_code"), SQLDataType.VARCHAR(11), this);
     public final TableField<AssociationRecord, LocalDate> FIELD_ASSOCIATION_LAST_UPDATED = createField(name("last_updated"), SQLDataType.LOCALDATE, this);
 
-    protected AssociationTable() {
-        super(name(TABLE_NAME), schema(TABLE_NAMESPACE));
+    public AssociationTable(String schema) {
+        super(name(TABLE_NAME), schema(schema));
     }
 
     @Override

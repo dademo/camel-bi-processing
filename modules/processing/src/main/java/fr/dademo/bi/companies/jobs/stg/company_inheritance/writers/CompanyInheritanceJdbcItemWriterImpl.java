@@ -6,26 +6,28 @@
 
 package fr.dademo.bi.companies.jobs.stg.company_inheritance.writers;
 
+import fr.dademo.batch.beans.jdbc.DataSourcesFactory;
+import fr.dademo.batch.configuration.BatchConfiguration;
+import fr.dademo.batch.configuration.BatchDataSourcesConfiguration;
+import fr.dademo.batch.configuration.exception.MissingJobDataSourceConfigurationException;
 import fr.dademo.bi.companies.jobs.stg.company_inheritance.CompanyInheritanceItemWriter;
 import fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel.CompanyInheritance;
 import fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel.CompanyInheritanceRecord;
-import lombok.Getter;
+import fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel.CompanyInheritanceTable;
+import fr.dademo.bi.companies.shared.AbstractApplicationJdbcWriter;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.BatchBindStep;
-import org.jooq.DSLContext;
-import org.jooq.InsertOnDuplicateStep;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.jooq.Insert;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
 import static fr.dademo.batch.beans.BeanValues.*;
 import static fr.dademo.bi.companies.jobs.stg.company_inheritance.JobDefinition.COMPANY_INHERITANCE_CONFIG_JOB_NAME;
-import static fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel.CompanyInheritanceTable.COMPANY_INHERITANCE;
+import static fr.dademo.bi.companies.jobs.stg.company_inheritance.JobDefinition.COMPANY_INHERITANCE_JOB_NAME;
+import static fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel.CompanyInheritanceTable.DEFAULT_COMPANY_INHERITANCE_TABLE;
 
 /**
  * @author dademo
@@ -33,55 +35,55 @@ import static fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel.Comp
 @Slf4j
 @Component
 @ConditionalOnProperty(
-    value = CONFIG_JOBS_BASE + "." + COMPANY_INHERITANCE_CONFIG_JOB_NAME + "." + CONFIG_WRITER_TYPE,
+    value = CONFIG_JOBS_BASE + "." + COMPANY_INHERITANCE_CONFIG_JOB_NAME + "." + CONFIG_JOB_OUTPUT_DATA_SOURCE + "." + CONFIG_WRITER_TYPE,
     havingValue = CONFIG_JDBC_TYPE
 )
-public class CompanyInheritanceJdbcItemWriterImpl implements CompanyInheritanceItemWriter {
+public class CompanyInheritanceJdbcItemWriterImpl extends AbstractApplicationJdbcWriter<CompanyInheritance, CompanyInheritanceRecord> implements CompanyInheritanceItemWriter {
 
-    @Autowired
-    @Qualifier(STG_DATA_SOURCE_DSL_CONTEXT_BEAN_NAME)
-    @Getter
-    private DSLContext dslContext;
+    private final CompanyInheritanceTable companyInheritanceTable;
+
+    public CompanyInheritanceJdbcItemWriterImpl(
+        DataSourcesFactory dataSourcesFactory,
+        BatchConfiguration batchConfiguration,
+        BatchDataSourcesConfiguration batchDataSourcesConfiguration
+    ) {
+
+        super(
+            dataSourcesFactory.getJobOutputDslContextByDataSourceName(
+                getJobOutputDataSourceName(COMPANY_INHERITANCE_CONFIG_JOB_NAME, batchConfiguration)
+                    .orElseThrow(MissingJobDataSourceConfigurationException.forJob(COMPANY_INHERITANCE_JOB_NAME))
+            )
+        );
+        this.companyInheritanceTable = getTargetSchemaUsingConfiguration(COMPANY_INHERITANCE_CONFIG_JOB_NAME, batchConfiguration, batchDataSourcesConfiguration)
+            .map(CompanyInheritanceTable::new)
+            .orElse(DEFAULT_COMPANY_INHERITANCE_TABLE);
+    }
 
     @Override
     public void write(List<? extends CompanyInheritance> items) {
 
         log.info("Writing {} company inheritance documents", items.size());
-
-        try (final var insertStatement = getInsertStatement()) {
-
-            final var batchInsertStatement = dslContext.batch(insertStatement);
-
-            items.stream()
-                .map(this::companyInheritanceBind)
-                .forEach(consumer -> consumer.accept(batchInsertStatement));
-
-            final var batchResult = batchInsertStatement.execute();
-            if (batchResult.length > 0) {
-                final int totalUpdated = Arrays.stream(batchResult).sum();
-                log.info("{} rows affected", totalUpdated);
-            } else {
-                log.error("An error occurred while running batch");
-            }
-        }
+        performBulkWrite(items);
     }
 
     @SuppressWarnings("resource")
-    private InsertOnDuplicateStep<CompanyInheritanceRecord> getInsertStatement() {
+    @Override
+    protected Insert<CompanyInheritanceRecord> getInsertStatement() {
 
-        return dslContext.insertInto(COMPANY_INHERITANCE,
-            COMPANY_INHERITANCE.FIELD_COMPANY_PREDECESSOR_SIREN,
-            COMPANY_INHERITANCE.FIELD_COMPANY_SUCCESSOR_SIREN,
-            COMPANY_INHERITANCE.FIELD_COMPANY_SUCCESSION_DATE,
-            COMPANY_INHERITANCE.FIELD_COMPANY_HEADQUARTER_CHANGE,
-            COMPANY_INHERITANCE.FIELD_COMPANY_ECONOMICAL_CONTINUITY,
-            COMPANY_INHERITANCE.FIELD_COMPANY_PROCESSING_DATE
+        return getDslContext().insertInto(companyInheritanceTable,
+            DEFAULT_COMPANY_INHERITANCE_TABLE.FIELD_COMPANY_PREDECESSOR_SIREN,
+            DEFAULT_COMPANY_INHERITANCE_TABLE.FIELD_COMPANY_SUCCESSOR_SIREN,
+            DEFAULT_COMPANY_INHERITANCE_TABLE.FIELD_COMPANY_SUCCESSION_DATE,
+            DEFAULT_COMPANY_INHERITANCE_TABLE.FIELD_COMPANY_HEADQUARTER_CHANGE,
+            DEFAULT_COMPANY_INHERITANCE_TABLE.FIELD_COMPANY_ECONOMICAL_CONTINUITY,
+            DEFAULT_COMPANY_INHERITANCE_TABLE.FIELD_COMPANY_PROCESSING_DATE
         ).values((String) null, null, null, null, null, null);
     }
 
-    private Consumer<BatchBindStep> companyInheritanceBind(CompanyInheritance companyInheritance) {
+    @Override
+    protected Consumer<CompanyInheritance> bindToStatement(BatchBindStep statement) {
 
-        return items -> items.bind(
+        return companyInheritance -> statement.bind(
             companyInheritance.getCompanyPredecessorSiren(),
             companyInheritance.getCompanySuccessorSiren(),
             companyInheritance.getCompanySuccessionDate(),

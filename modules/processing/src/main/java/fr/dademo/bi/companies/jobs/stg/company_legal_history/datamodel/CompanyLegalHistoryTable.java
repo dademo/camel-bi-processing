@@ -19,15 +19,12 @@ import static org.jooq.impl.DSL.schema;
 /**
  * @author dademo
  */
-@SuppressWarnings({"java:S110", "java:S116", "java:S2055", "java:S2160"})
 public class CompanyLegalHistoryTable extends CustomTable<CompanyLegalHistoryRecord> {
 
-    public static final CompanyLegalHistoryTable COMPANY_LEGAL_HISTORY = new CompanyLegalHistoryTable();
     public static final String TABLE_NAME = "company_legal_unit_history";
-    public static final String TABLE_NAMESPACE = "stg";
-
+    public static final String DEFAULT_TABLE_SCHEMA = "stg";
+    public static final CompanyLegalHistoryTable DEFAULT_COMPANY_LEGAL_HISTORY_TABLE = new CompanyLegalHistoryTable(DEFAULT_TABLE_SCHEMA);
     private static final long serialVersionUID = 4298493080112132399L;
-
     public final TableField<CompanyLegalHistoryRecord, String> FIELD_COMPANY_LEGAL_HISTORY_SIREN = createField(name("siren"), SQLDataType.VARCHAR(9), this);
     public final TableField<CompanyLegalHistoryRecord, LocalDate> FIELD_COMPANY_LEGAL_HISTORY_END_DATE = createField(name("end_date"), SQLDataType.LOCALDATE, this);
     public final TableField<CompanyLegalHistoryRecord, LocalDate> FIELD_COMPANY_LEGAL_HISTORY_BEGIN_DATE = createField(name("begin_date"), SQLDataType.LOCALDATE, this);
@@ -55,8 +52,8 @@ public class CompanyLegalHistoryTable extends CustomTable<CompanyLegalHistoryRec
     public final TableField<CompanyLegalHistoryRecord, String> FIELD_COMPANY_LEGAL_HISTORY_LEGAL_UNIT_IS_EMPLOYER = createField(name("legal_unit_is_employer"), SQLDataType.VARCHAR(1), this);
     public final TableField<CompanyLegalHistoryRecord, Boolean> FIELD_COMPANY_LEGAL_HISTORY_LEGAL_UNIT_IS_EMPLOYER_CHANGE = createField(name("legal_unit_is_employer_change"), SQLDataType.BOOLEAN, this);
 
-    protected CompanyLegalHistoryTable() {
-        super(name(TABLE_NAME), schema(TABLE_NAMESPACE));
+    public CompanyLegalHistoryTable(@Nonnull String schema) {
+        super(name(TABLE_NAME), schema(schema));
     }
 
     @Override

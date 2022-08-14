@@ -8,18 +8,17 @@ package fr.dademo.bi.companies.jobs.stg.company.datamodel;
 
 import org.jooq.impl.CustomRecord;
 
-import static fr.dademo.bi.companies.jobs.stg.company.datamodel.CompanyTable.COMPANY;
+import javax.annotation.Nonnull;
 
 /**
  * @author dademo
  */
-@SuppressWarnings("java:S110")
 public class CompanyRecord extends CustomRecord<CompanyRecord> {
 
     private static final long serialVersionUID = -1286983357693463916L;
 
-    public CompanyRecord() {
-        super(COMPANY);
+    public CompanyRecord(@Nonnull CompanyTable table) {
+        super(table);
     }
 }
 

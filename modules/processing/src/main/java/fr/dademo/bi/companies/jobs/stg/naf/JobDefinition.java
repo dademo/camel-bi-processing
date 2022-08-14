@@ -6,20 +6,22 @@
 
 package fr.dademo.bi.companies.jobs.stg.naf;
 
+import fr.dademo.batch.beans.jdbc.DataSourcesFactory;
 import fr.dademo.batch.configuration.BatchConfiguration;
+import fr.dademo.batch.configuration.BatchDataSourcesConfiguration;
 import fr.dademo.batch.tools.batch.job.BaseChunkJob;
 import fr.dademo.batch.tools.batch.job.JooqTruncateTasklet;
-import fr.dademo.bi.companies.jobs.exceptions.MissingBeanException;
 import fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinition;
 import fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinitionContainer;
-import fr.dademo.bi.companies.jobs.stg.naf.writers.NafJdbcDefinitionItemWriterImpl;
-import org.jooq.DSLContext;
+import fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinitionTable;
+import fr.dademo.bi.companies.jobs.stg.naf.writers.NafDefinitionJdbcItemWriterImpl;
+import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
@@ -27,10 +29,6 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-
-import static fr.dademo.batch.beans.BeanValues.STG_DATA_SOURCE_DSL_CONTEXT_BEAN_NAME;
-import static fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinitionTable.NAF_DEFINITION;
 
 /**
  * @author dademo
@@ -43,25 +41,38 @@ public class JobDefinition extends BaseChunkJob<NafDefinitionContainer, NafDefin
     public static final String NAF_JOB_NAME = "stg_" + NAF_NORMALIZED_CONFIG_JOB_NAME;
     public static final String NAF_MIGRATION_FOLDER = "stg/naf";
     public static final String NAF_DEFAULT_JDBC_DATA_SOURCE_NAME = "stg";
+    private final NafDefinitionItemReader nafDefinitionItemReader;
+    private final NafDefinitionItemProcessor nafDefinitionItemProcessor;
+    private final NafDefinitionItemWriter nafDefinitionItemWriter;
 
-    @Autowired
-    private BatchConfiguration batchConfiguration;
+    public JobDefinition(
+        // Common job resources
+        JobBuilderFactory jobBuilderFactory,
+        StepBuilderFactory stepBuilderFactory,
+        BatchConfiguration batchConfiguration,
+        BatchDataSourcesConfiguration batchDataSourcesConfiguration,
+        DataSourcesFactory dataSourcesFactory,
+        ResourceLoader resourceLoader,
+        // Job-specific
+        NafDefinitionItemReader nafDefinitionItemReader,
+        NafDefinitionItemProcessor nafDefinitionItemProcessor,
+        NafDefinitionItemWriter nafDefinitionItemWriter) {
 
-    @Nullable
-    @Autowired(required = false)
-    @Qualifier(STG_DATA_SOURCE_DSL_CONTEXT_BEAN_NAME)
-    private DSLContext dslContext;
+        super(jobBuilderFactory,
+            stepBuilderFactory,
+            batchConfiguration,
+            batchDataSourcesConfiguration,
+            dataSourcesFactory,
+            resourceLoader);
 
-    @Autowired
-    private NafDefinitionItemReader nafDefinitionItemReader;
-    @Autowired
-    private NafDefinitionItemProcessor nafDefinitionItemProcessor;
-    @Autowired
-    private NafDefinitionItemWriter nafDefinitionItemWriter;
+        this.nafDefinitionItemReader = nafDefinitionItemReader;
+        this.nafDefinitionItemProcessor = nafDefinitionItemProcessor;
+        this.nafDefinitionItemWriter = nafDefinitionItemWriter;
+    }
 
     @Nonnull
     protected BatchConfiguration.JobConfiguration getJobConfiguration() {
-        return batchConfiguration.getJobConfigurationByName(NAF_CONFIG_JOB_NAME);
+        return getBatchConfiguration().getJobConfigurationByName(NAF_CONFIG_JOB_NAME);
     }
 
     @Nonnull
@@ -74,10 +85,10 @@ public class JobDefinition extends BaseChunkJob<NafDefinitionContainer, NafDefin
     @Override
     protected List<Tasklet> getInitTasks() {
 
-        if (nafDefinitionItemWriter instanceof NafJdbcDefinitionItemWriterImpl) {
+        if (nafDefinitionItemWriter instanceof NafDefinitionJdbcItemWriterImpl) {
 
             return Arrays.asList(
-                getLiquibaseMigrationTasklet(),
+                getLiquibaseOutputMigrationTasklet(),
                 getJooqTruncateTasklet()
             );
         } else {
@@ -88,16 +99,9 @@ public class JobDefinition extends BaseChunkJob<NafDefinitionContainer, NafDefin
     private Tasklet getJooqTruncateTasklet() {
 
         return new JooqTruncateTasklet<>(
-            Optional.ofNullable(dslContext)
-                .orElseThrow(() -> new MissingBeanException(DSLContext.class, STG_DATA_SOURCE_DSL_CONTEXT_BEAN_NAME)),
-            NAF_DEFINITION
+            getJobOutputDslContext(),
+            new NafDefinitionTable(getJobOutputDataSourceSchema())
         );
-    }
-
-    @Nullable
-    @Override
-    protected String getDefaultJdbcDataSourceName() {
-        return NAF_DEFAULT_JDBC_DATA_SOURCE_NAME;
     }
 
     @Nullable

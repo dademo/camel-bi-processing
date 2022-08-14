@@ -39,4 +39,9 @@
             <column name="last_updated" type="DATE"/>
         </createTable>
     </changeSet>
+    <changeSet id="2" author="dademo">
+        <sql dbms="postgresql">
+            ALTER TABLE "association" SET UNLOGGED
+        </sql>
+    </changeSet>
 </databaseChangeLog>

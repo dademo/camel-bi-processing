@@ -8,18 +8,17 @@ package fr.dademo.bi.companies.jobs.stg.association_waldec.datamodel;
 
 import org.jooq.impl.CustomRecord;
 
-import static fr.dademo.bi.companies.jobs.stg.association_waldec.datamodel.AssociationWaldecTable.ASSOCIATION_WALDEC;
+import javax.annotation.Nonnull;
 
 /**
  * @author dademo
  */
-@SuppressWarnings("java:S110")
 public class AssociationWaldecRecord extends CustomRecord<AssociationWaldecRecord> {
 
     private static final long serialVersionUID = -5979839326641508119L;
 
-    public AssociationWaldecRecord() {
-        super(ASSOCIATION_WALDEC);
+    public AssociationWaldecRecord(@Nonnull AssociationWaldecTable table) {
+        super(table);
     }
 }
 

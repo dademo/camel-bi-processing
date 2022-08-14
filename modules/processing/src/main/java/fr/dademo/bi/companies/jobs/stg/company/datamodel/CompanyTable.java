@@ -20,15 +20,12 @@ import static org.jooq.impl.DSL.schema;
 /**
  * @author dademo
  */
-@SuppressWarnings({"java:S110", "java:S116", "java:S2055", "java:S2160"})
 public class CompanyTable extends CustomTable<CompanyRecord> {
 
-    public static final CompanyTable COMPANY = new CompanyTable();
     public static final String TABLE_NAME = "company";
-    public static final String TABLE_NAMESPACE = "stg";
-
+    public static final String DEFAULT_TABLE_SCHEMA = "stg";
+    public static final CompanyTable DEFAULT_COMPANY_TABLE = new CompanyTable(DEFAULT_TABLE_SCHEMA);
     private static final long serialVersionUID = -7046999060163075757L;
-
     public final TableField<CompanyRecord, String> FIELD_SIREN = createField(name("siren"), SQLDataType.VARCHAR(9), this);
     public final TableField<CompanyRecord, String> FIELD_NIC = createField(name("nic"), SQLDataType.VARCHAR(5), this);
     public final TableField<CompanyRecord, String> FIELD_SIRET = createField(name("siret"), SQLDataType.VARCHAR(14), this);
@@ -78,8 +75,8 @@ public class CompanyTable extends CustomTable<CompanyRecord> {
     public final TableField<CompanyRecord, String> FIELD_COMPANY_PRINCIPAL_ACTIVITY_NAME = createField(name("company_principal_activity_name"), SQLDataType.VARCHAR(8), this);
     public final TableField<CompanyRecord, String> FIELD_COMPANY_IS_EMPLOYER = createField(name("company_is_employer"), SQLDataType.VARCHAR(1), this);
 
-    protected CompanyTable() {
-        super(name(TABLE_NAME), schema(TABLE_NAMESPACE));
+    public CompanyTable(@Nonnull String schema) {
+        super(name(TABLE_NAME), schema(schema));
     }
 
     @Override

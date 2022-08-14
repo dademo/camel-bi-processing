@@ -6,27 +6,28 @@
 
 package fr.dademo.bi.companies.jobs.stg.association.writers;
 
+import fr.dademo.batch.beans.jdbc.DataSourcesFactory;
+import fr.dademo.batch.configuration.BatchConfiguration;
+import fr.dademo.batch.configuration.BatchDataSourcesConfiguration;
+import fr.dademo.batch.configuration.exception.MissingJobDataSourceConfigurationException;
 import fr.dademo.bi.companies.jobs.stg.association.AssociationItemWriter;
 import fr.dademo.bi.companies.jobs.stg.association.datamodel.Association;
 import fr.dademo.bi.companies.jobs.stg.association.datamodel.AssociationRecord;
-import lombok.Getter;
-import lombok.SneakyThrows;
+import fr.dademo.bi.companies.jobs.stg.association.datamodel.AssociationTable;
+import fr.dademo.bi.companies.shared.AbstractApplicationJdbcWriter;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.BatchBindStep;
-import org.jooq.DSLContext;
-import org.jooq.InsertOnDuplicateStep;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.jooq.Insert;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
 import static fr.dademo.batch.beans.BeanValues.*;
 import static fr.dademo.bi.companies.jobs.stg.association.JobDefinition.ASSOCIATION_CONFIG_JOB_NAME;
-import static fr.dademo.bi.companies.jobs.stg.association.datamodel.AssociationTable.ASSOCIATION;
+import static fr.dademo.bi.companies.jobs.stg.association.JobDefinition.ASSOCIATION_JOB_NAME;
+import static fr.dademo.bi.companies.jobs.stg.association.datamodel.AssociationTable.DEFAULT_ASSOCIATION_TABLE;
 
 /**
  * @author dademo
@@ -34,77 +35,75 @@ import static fr.dademo.bi.companies.jobs.stg.association.datamodel.AssociationT
 @Slf4j
 @Component
 @ConditionalOnProperty(
-    value = CONFIG_JOBS_BASE + "." + ASSOCIATION_CONFIG_JOB_NAME + "." + CONFIG_WRITER_TYPE,
+    value = CONFIG_JOBS_BASE + "." + ASSOCIATION_CONFIG_JOB_NAME + "." + CONFIG_JOB_OUTPUT_DATA_SOURCE + "." + CONFIG_WRITER_TYPE,
     havingValue = CONFIG_JDBC_TYPE
 )
-public class AssociationJdbcItemWriterImpl implements AssociationItemWriter {
+public class AssociationJdbcItemWriterImpl extends AbstractApplicationJdbcWriter<Association, AssociationRecord> implements AssociationItemWriter {
 
-    @Autowired
-    @Qualifier(STG_DATA_SOURCE_DSL_CONTEXT_BEAN_NAME)
-    @Getter
-    private DSLContext dslContext;
+    private final AssociationTable associationTable;
 
-    @SneakyThrows
+    public AssociationJdbcItemWriterImpl(
+        DataSourcesFactory dataSourcesFactory,
+        BatchConfiguration batchConfiguration,
+        BatchDataSourcesConfiguration batchDataSourcesConfiguration
+    ) {
+
+        super(
+            dataSourcesFactory.getJobOutputDslContextByDataSourceName(
+                getJobOutputDataSourceName(ASSOCIATION_CONFIG_JOB_NAME, batchConfiguration)
+                    .orElseThrow(MissingJobDataSourceConfigurationException.forJob(ASSOCIATION_JOB_NAME))
+            )
+        );
+        this.associationTable = getTargetSchemaUsingConfiguration(ASSOCIATION_CONFIG_JOB_NAME, batchConfiguration, batchDataSourcesConfiguration)
+            .map(AssociationTable::new)
+            .orElse(DEFAULT_ASSOCIATION_TABLE);
+    }
+
     @Override
     public void write(List<? extends Association> items) {
 
         log.info("Writing {} association documents", items.size());
-
-        try (final var insertStatement = getInsertStatement()) {
-
-            final var batchInsertStatement = dslContext.batch(insertStatement);
-
-            items.stream()
-                .map(this::companyBind)
-                .forEach(consumer -> consumer.accept(batchInsertStatement));
-
-            final var batchResult = batchInsertStatement.execute();
-            if (batchResult.length > 0) {
-                final int totalUpdated = Arrays.stream(batchResult).sum();
-                log.info("{} rows affected", totalUpdated);
-            } else {
-                log.error("An error occurred while running batch");
-            }
-        }
+        performBulkWrite(items);
     }
 
     @SuppressWarnings("resource")
-    private InsertOnDuplicateStep<AssociationRecord> getInsertStatement() {
+    @Override
+    protected Insert<AssociationRecord> getInsertStatement() {
 
-        return dslContext.insertInto(ASSOCIATION,
-            ASSOCIATION.FIELD_ASSOCIATION_ID,
-            ASSOCIATION.FIELD_ASSOCIATION_ID_EX,
-            ASSOCIATION.FIELD_ASSOCIATION_SIRET,
-            ASSOCIATION.FIELD_ASSOCIATION_GESTION,
-            ASSOCIATION.FIELD_ASSOCIATION_CREATION_DATE,
-            ASSOCIATION.FIELD_ASSOCIATION_PUBLICATION_DATE,
-            ASSOCIATION.FIELD_ASSOCIATION_NATURE,
-            ASSOCIATION.FIELD_ASSOCIATION_GROUPEMENT,
-            ASSOCIATION.FIELD_ASSOCIATION_TITLE,
-            ASSOCIATION.FIELD_ASSOCIATION_OBJECT,
-            ASSOCIATION.FIELD_ASSOCIATION_SOCIAL_OBJECT_1,
-            ASSOCIATION.FIELD_ASSOCIATION_SOCIAL_OBJECT_2,
-            ASSOCIATION.FIELD_ASSOCIATION_ADDRESS_1,
-            ASSOCIATION.FIELD_ASSOCIATION_ADDRESS_2,
-            ASSOCIATION.FIELD_ASSOCIATION_ADDRESS_3,
-            ASSOCIATION.FIELD_ASSOCIATION_ADDRESS_POSTAL_CODE,
-            ASSOCIATION.FIELD_ASSOCIATION_ADDRESS_INSEE_CODE,
-            ASSOCIATION.FIELD_ASSOCIATION_ADDRESS_CITY_LIBELLE,
-            ASSOCIATION.FIELD_ASSOCIATION_LEADER_CIVILITY,
+        return getDslContext().insertInto(associationTable,
+            DEFAULT_ASSOCIATION_TABLE.FIELD_ASSOCIATION_ID,
+            DEFAULT_ASSOCIATION_TABLE.FIELD_ASSOCIATION_ID_EX,
+            DEFAULT_ASSOCIATION_TABLE.FIELD_ASSOCIATION_SIRET,
+            DEFAULT_ASSOCIATION_TABLE.FIELD_ASSOCIATION_GESTION,
+            DEFAULT_ASSOCIATION_TABLE.FIELD_ASSOCIATION_CREATION_DATE,
+            DEFAULT_ASSOCIATION_TABLE.FIELD_ASSOCIATION_PUBLICATION_DATE,
+            DEFAULT_ASSOCIATION_TABLE.FIELD_ASSOCIATION_NATURE,
+            DEFAULT_ASSOCIATION_TABLE.FIELD_ASSOCIATION_GROUPEMENT,
+            DEFAULT_ASSOCIATION_TABLE.FIELD_ASSOCIATION_TITLE,
+            DEFAULT_ASSOCIATION_TABLE.FIELD_ASSOCIATION_OBJECT,
+            DEFAULT_ASSOCIATION_TABLE.FIELD_ASSOCIATION_SOCIAL_OBJECT_1,
+            DEFAULT_ASSOCIATION_TABLE.FIELD_ASSOCIATION_SOCIAL_OBJECT_2,
+            DEFAULT_ASSOCIATION_TABLE.FIELD_ASSOCIATION_ADDRESS_1,
+            DEFAULT_ASSOCIATION_TABLE.FIELD_ASSOCIATION_ADDRESS_2,
+            DEFAULT_ASSOCIATION_TABLE.FIELD_ASSOCIATION_ADDRESS_3,
+            DEFAULT_ASSOCIATION_TABLE.FIELD_ASSOCIATION_ADDRESS_POSTAL_CODE,
+            DEFAULT_ASSOCIATION_TABLE.FIELD_ASSOCIATION_ADDRESS_INSEE_CODE,
+            DEFAULT_ASSOCIATION_TABLE.FIELD_ASSOCIATION_ADDRESS_CITY_LIBELLE,
+            DEFAULT_ASSOCIATION_TABLE.FIELD_ASSOCIATION_LEADER_CIVILITY,
             //ASSOCIATION.FIELD_ASSOCIATION_PHONE,
-            ASSOCIATION.FIELD_ASSOCIATION_WEBSITE,
+            DEFAULT_ASSOCIATION_TABLE.FIELD_ASSOCIATION_WEBSITE,
             //ASSOCIATION.FIELD_ASSOCIATION_EMAIL,
-            ASSOCIATION.FIELD_ASSOCIATION_OBSERVATION,
-            ASSOCIATION.FIELD_ASSOCIATION_POSITION,
-            ASSOCIATION.FIELD_ASSOCIATION_RUP_CODE,
-            ASSOCIATION.FIELD_ASSOCIATION_LAST_UPDATED
+            DEFAULT_ASSOCIATION_TABLE.FIELD_ASSOCIATION_OBSERVATION,
+            DEFAULT_ASSOCIATION_TABLE.FIELD_ASSOCIATION_POSITION,
+            DEFAULT_ASSOCIATION_TABLE.FIELD_ASSOCIATION_RUP_CODE,
+            DEFAULT_ASSOCIATION_TABLE.FIELD_ASSOCIATION_LAST_UPDATED
         ).values((String) null, null, null, null, null, null, null, null, null, null, null, null,
             null, null, null, null, null, null, null, /*null,*/ null, /*null,*/ null, null, null, null);
     }
 
-    private Consumer<BatchBindStep> companyBind(Association association) {
+    protected Consumer<Association> bindToStatement(BatchBindStep statement) {
 
-        return items -> items.bind(
+        return association -> statement.bind(
             association.getId(),
             association.getIdEx(),
             association.getSiret(),

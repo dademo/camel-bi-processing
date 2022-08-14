@@ -20,7 +20,7 @@ import static fr.dademo.bi.companies.jobs.stg.naf.JobDefinition.NAF_CONFIG_JOB_N
  */
 @Component
 @ConditionalOnProperty(
-    value = CONFIG_JOBS_BASE + "." + NAF_CONFIG_JOB_NAME + "." + CONFIG_WRITER_TYPE,
+    value = CONFIG_JOBS_BASE + "." + NAF_CONFIG_JOB_NAME + "." + CONFIG_JOB_OUTPUT_DATA_SOURCE + "." + CONFIG_WRITER_TYPE,
     havingValue = CONFIG_NO_ACTION_TYPE
 )
 public class NafDefinitionNoActionItemWriterImpl extends NoActionItemWriter<NafDefinition> implements NafDefinitionItemWriter {

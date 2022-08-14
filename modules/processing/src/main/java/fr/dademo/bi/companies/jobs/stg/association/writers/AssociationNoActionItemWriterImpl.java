@@ -20,7 +20,7 @@ import static fr.dademo.bi.companies.jobs.stg.association.JobDefinition.ASSOCIAT
  */
 @Component
 @ConditionalOnProperty(
-    value = CONFIG_JOBS_BASE + "." + ASSOCIATION_CONFIG_JOB_NAME + "." + CONFIG_WRITER_TYPE,
+    value = CONFIG_JOBS_BASE + "." + ASSOCIATION_CONFIG_JOB_NAME + "." + CONFIG_JOB_OUTPUT_DATA_SOURCE + "." + CONFIG_WRITER_TYPE,
     havingValue = CONFIG_NO_ACTION_TYPE
 )
 public class AssociationNoActionItemWriterImpl extends NoActionItemWriter<Association> implements AssociationItemWriter {

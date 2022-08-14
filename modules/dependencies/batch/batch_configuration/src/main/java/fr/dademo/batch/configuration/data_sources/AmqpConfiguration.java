@@ -25,11 +25,15 @@ import java.util.Optional;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RabbitMQConfiguration {
+public class AmqpConfiguration {
 
     public static final String DEFAULT_SPRING_APPLICATION_NAME = "JAVA_SPRING";
 
     private boolean enabled = true;
+
+    @Nonnull
+    @NotEmpty
+    private String backend;
 
     @Nonnull
     @NotEmpty
@@ -39,22 +43,22 @@ public class RabbitMQConfiguration {
 
     @Nonnull
     @NotEmpty
-    private Map<String, RabbitMQQueueConfiguration> queues;
+    private Map<String, AmqpQueueConfiguration> queues;
 
     @Nonnull
     @NotEmpty
-    private Map<String, RabbitMQExchangeConfiguration> exchanges;
+    private Map<String, AmqpExchangeConfiguration> exchanges;
 
-    public RabbitMQQueueConfiguration getQueueConfigurationByName(@Nonnull String queueName) {
+    public AmqpQueueConfiguration getQueueConfigurationByName(@Nonnull String queueName) {
         return Optional.ofNullable(queues.get(queueName)).orElseThrow(MissingQueueConfigurationException.of(queueName));
     }
 
-    public RabbitMQExchangeConfiguration getExchangeConfigurationByName(@Nonnull String queueName) {
+    public AmqpExchangeConfiguration getExchangeConfigurationByName(@Nonnull String queueName) {
         return Optional.ofNullable(exchanges.get(queueName)).orElseThrow(MissingExchangeConfigurationException.of(queueName));
     }
 
     @Data
-    public static class RabbitMQQueueConfiguration {
+    public static class AmqpQueueConfiguration {
 
         @NotBlank
         private String name;
@@ -69,7 +73,7 @@ public class RabbitMQConfiguration {
     }
 
     @Data
-    public static class RabbitMQExchangeConfiguration {
+    public static class AmqpExchangeConfiguration {
 
         @NotBlank
         private String name;

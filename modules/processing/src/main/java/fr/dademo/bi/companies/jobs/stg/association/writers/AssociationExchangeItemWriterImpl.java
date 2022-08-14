@@ -7,19 +7,21 @@
 package fr.dademo.bi.companies.jobs.stg.association.writers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.dademo.batch.beans.amqp.AmqpFactory;
+import fr.dademo.batch.configuration.BatchConfiguration;
+import fr.dademo.batch.configuration.BatchDataSourcesConfiguration;
+import fr.dademo.batch.configuration.exception.MissingJobDataSourceConfigurationException;
 import fr.dademo.bi.companies.jobs.stg.association.AssociationItemWriter;
 import fr.dademo.bi.companies.jobs.stg.association.datamodel.Association;
-import lombok.Getter;
+import fr.dademo.bi.companies.shared.AbstractApplicationAmqpWriter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 import static fr.dademo.batch.beans.BeanValues.*;
@@ -31,20 +33,26 @@ import static fr.dademo.bi.companies.jobs.stg.association.JobDefinition.ASSOCIAT
 @Slf4j
 @Component
 @ConditionalOnProperty(
-    value = CONFIG_JOBS_BASE + "." + ASSOCIATION_CONFIG_JOB_NAME + "." + CONFIG_WRITER_TYPE,
+    value = CONFIG_JOBS_BASE + "." + ASSOCIATION_CONFIG_JOB_NAME + "." + CONFIG_JOB_OUTPUT_DATA_SOURCE + "." + CONFIG_WRITER_TYPE,
     havingValue = CONFIG_AMQP_TYPE
 )
-public class AssociationExchangeItemWriterImpl implements AssociationItemWriter {
+public class AssociationExchangeItemWriterImpl extends AbstractApplicationAmqpWriter implements AssociationItemWriter {
 
     public static final String EXCHANGE_CONFIG_NAME = "association";
 
-    @Autowired
-    @Qualifier(STG_AMQP_TEMPLATE_CONFIG_BEAN_NAME)
-    @Getter
-    private AmqpTemplate amqpTemplate;
+    private final ObjectMapper objectMapper;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    public AssociationExchangeItemWriterImpl(AmqpFactory amqpFactory,
+                                             ObjectMapper objectMapper,
+                                             BatchConfiguration batchConfiguration,
+                                             BatchDataSourcesConfiguration batchDataSourcesConfiguration) {
+
+        super(amqpFactory.getAmqpTemplateForDataSource(
+            getJobOutputDataSourceName(ASSOCIATION_CONFIG_JOB_NAME, batchConfiguration)
+                .orElseThrow(MissingJobDataSourceConfigurationException.forJob(ASSOCIATION_CONFIG_JOB_NAME))
+        ));
+        this.objectMapper = objectMapper;
+    }
 
     @SneakyThrows
     @Override
@@ -73,7 +81,9 @@ public class AssociationExchangeItemWriterImpl implements AssociationItemWriter 
         return messageProperties;
     }
 
-    private void sendMessage(Message associationMessage) {
-        amqpTemplate.send(EXCHANGE_CONFIG_NAME, "*", associationMessage);
+    @Nonnull
+    @Override
+    protected String getExchangeName() {
+        return EXCHANGE_CONFIG_NAME;
     }
 }

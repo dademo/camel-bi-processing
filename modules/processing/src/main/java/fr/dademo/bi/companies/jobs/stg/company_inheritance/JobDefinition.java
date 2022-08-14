@@ -6,20 +6,22 @@
 
 package fr.dademo.bi.companies.jobs.stg.company_inheritance;
 
+import fr.dademo.batch.beans.jdbc.DataSourcesFactory;
 import fr.dademo.batch.configuration.BatchConfiguration;
+import fr.dademo.batch.configuration.BatchDataSourcesConfiguration;
 import fr.dademo.batch.resources.WrappedRowResource;
 import fr.dademo.batch.tools.batch.job.BaseChunkJob;
 import fr.dademo.batch.tools.batch.job.JooqTruncateTasklet;
-import fr.dademo.bi.companies.jobs.exceptions.MissingBeanException;
 import fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel.CompanyInheritance;
+import fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel.CompanyInheritanceTable;
 import fr.dademo.bi.companies.jobs.stg.company_inheritance.writers.CompanyInheritanceJdbcItemWriterImpl;
-import org.jooq.DSLContext;
+import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
@@ -27,10 +29,6 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-
-import static fr.dademo.batch.beans.BeanValues.STG_DATA_SOURCE_DSL_CONTEXT_BEAN_NAME;
-import static fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel.CompanyInheritanceTable.COMPANY_INHERITANCE;
 
 /**
  * @author dademo
@@ -43,25 +41,38 @@ public class JobDefinition extends BaseChunkJob<WrappedRowResource, CompanyInher
     public static final String COMPANY_INHERITANCE_JOB_NAME = "stg_" + COMPANY_INHERITANCE_NORMALIZED_CONFIG_JOB_NAME;
     public static final String COMPANY_INHERITANCE_MIGRATION_FOLDER = "stg/company_inheritance";
     public static final String COMPANY_INHERITANCE_DEFAULT_JDBC_DATA_SOURCE_NAME = "stg";
+    private final CompanyInheritanceItemReader companyInheritanceItemReader;
+    private final CompanyInheritanceItemMapper companyInheritanceItemMapper;
+    private final CompanyInheritanceItemWriter companyInheritanceItemWriter;
 
-    @Autowired
-    private BatchConfiguration batchConfiguration;
+    public JobDefinition(
+        // Common job resources
+        JobBuilderFactory jobBuilderFactory,
+        StepBuilderFactory stepBuilderFactory,
+        BatchConfiguration batchConfiguration,
+        BatchDataSourcesConfiguration batchDataSourcesConfiguration,
+        DataSourcesFactory dataSourcesFactory,
+        ResourceLoader resourceLoader,
+        // Job-specific
+        CompanyInheritanceItemReader companyInheritanceItemReader,
+        CompanyInheritanceItemMapper companyInheritanceItemMapper,
+        CompanyInheritanceItemWriter companyInheritanceItemWriter) {
 
-    @Nullable
-    @Autowired(required = false)
-    @Qualifier(STG_DATA_SOURCE_DSL_CONTEXT_BEAN_NAME)
-    private DSLContext dslContext;
+        super(jobBuilderFactory,
+            stepBuilderFactory,
+            batchConfiguration,
+            batchDataSourcesConfiguration,
+            dataSourcesFactory,
+            resourceLoader);
 
-    @Autowired
-    private CompanyInheritanceItemReader companyInheritanceItemReader;
-    @Autowired
-    private CompanyInheritanceItemMapper companyInheritanceItemMapper;
-    @Autowired
-    private CompanyInheritanceItemWriter companyInheritanceItemWriter;
+        this.companyInheritanceItemReader = companyInheritanceItemReader;
+        this.companyInheritanceItemMapper = companyInheritanceItemMapper;
+        this.companyInheritanceItemWriter = companyInheritanceItemWriter;
+    }
 
     @Nonnull
     protected BatchConfiguration.JobConfiguration getJobConfiguration() {
-        return batchConfiguration.getJobConfigurationByName(COMPANY_INHERITANCE_CONFIG_JOB_NAME);
+        return getBatchConfiguration().getJobConfigurationByName(COMPANY_INHERITANCE_CONFIG_JOB_NAME);
     }
 
     @Nonnull
@@ -77,7 +88,7 @@ public class JobDefinition extends BaseChunkJob<WrappedRowResource, CompanyInher
         if (companyInheritanceItemWriter instanceof CompanyInheritanceJdbcItemWriterImpl) {
 
             return Arrays.asList(
-                getLiquibaseMigrationTasklet(),
+                getLiquibaseOutputMigrationTasklet(),
                 getJooqTruncateTasklet()
             );
         } else {
@@ -88,16 +99,9 @@ public class JobDefinition extends BaseChunkJob<WrappedRowResource, CompanyInher
     private Tasklet getJooqTruncateTasklet() {
 
         return new JooqTruncateTasklet<>(
-            Optional.ofNullable(dslContext)
-                .orElseThrow(() -> new MissingBeanException(DSLContext.class, STG_DATA_SOURCE_DSL_CONTEXT_BEAN_NAME)),
-            COMPANY_INHERITANCE
+            getJobOutputDslContext(),
+            new CompanyInheritanceTable(getJobOutputDataSourceSchema())
         );
-    }
-
-    @Nullable
-    @Override
-    protected String getDefaultJdbcDataSourceName() {
-        return COMPANY_INHERITANCE_DEFAULT_JDBC_DATA_SOURCE_NAME;
     }
 
     @Nullable

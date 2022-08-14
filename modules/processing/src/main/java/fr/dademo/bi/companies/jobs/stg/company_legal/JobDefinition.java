@@ -6,20 +6,22 @@
 
 package fr.dademo.bi.companies.jobs.stg.company_legal;
 
+import fr.dademo.batch.beans.jdbc.DataSourcesFactory;
 import fr.dademo.batch.configuration.BatchConfiguration;
+import fr.dademo.batch.configuration.BatchDataSourcesConfiguration;
 import fr.dademo.batch.resources.WrappedRowResource;
 import fr.dademo.batch.tools.batch.job.BaseChunkJob;
 import fr.dademo.batch.tools.batch.job.JooqTruncateTasklet;
-import fr.dademo.bi.companies.jobs.exceptions.MissingBeanException;
 import fr.dademo.bi.companies.jobs.stg.company_legal.datamodel.CompanyLegal;
+import fr.dademo.bi.companies.jobs.stg.company_legal.datamodel.CompanyLegalTable;
 import fr.dademo.bi.companies.jobs.stg.company_legal.writers.CompanyLegalJdbcItemWriterImpl;
-import org.jooq.DSLContext;
+import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
@@ -27,10 +29,6 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-
-import static fr.dademo.batch.beans.BeanValues.STG_DATA_SOURCE_DSL_CONTEXT_BEAN_NAME;
-import static fr.dademo.bi.companies.jobs.stg.company_legal.datamodel.CompanyLegalTable.COMPANY_LEGAL;
 
 /**
  * @author dademo
@@ -43,25 +41,38 @@ public class JobDefinition extends BaseChunkJob<WrappedRowResource, CompanyLegal
     public static final String COMPANY_LEGAL_JOB_NAME = "stg_" + COMPANY_LEGAL_NORMALIZED_CONFIG_JOB_NAME;
     public static final String COMPANY_LEGAL_MIGRATION_FOLDER = "stg/company_legal";
     public static final String COMPANY_LEGAL_DEFAULT_JDBC_DATA_SOURCE_NAME = "stg";
+    private final CompanyLegalItemReader companyLegalItemReader;
+    private final CompanyLegalItemMapper companyLegalItemMapper;
+    private final CompanyLegalItemWriter companyLegalItemWriter;
 
-    @Autowired
-    private BatchConfiguration batchConfiguration;
+    public JobDefinition(
+        // Common job resources
+        JobBuilderFactory jobBuilderFactory,
+        StepBuilderFactory stepBuilderFactory,
+        BatchConfiguration batchConfiguration,
+        BatchDataSourcesConfiguration batchDataSourcesConfiguration,
+        DataSourcesFactory dataSourcesFactory,
+        ResourceLoader resourceLoader,
+        // Job-specific
+        CompanyLegalItemReader companyLegalItemReader,
+        CompanyLegalItemMapper companyLegalItemMapper,
+        CompanyLegalItemWriter companyLegalItemWriter) {
 
-    @Nullable
-    @Autowired(required = false)
-    @Qualifier(STG_DATA_SOURCE_DSL_CONTEXT_BEAN_NAME)
-    private DSLContext dslContext;
+        super(jobBuilderFactory,
+            stepBuilderFactory,
+            batchConfiguration,
+            batchDataSourcesConfiguration,
+            dataSourcesFactory,
+            resourceLoader);
 
-    @Autowired
-    private CompanyLegalItemReader companyLegalItemReader;
-    @Autowired
-    private CompanyLegalItemMapper companyLegalItemMapper;
-    @Autowired
-    private CompanyLegalItemWriter companyLegalItemWriter;
+        this.companyLegalItemReader = companyLegalItemReader;
+        this.companyLegalItemMapper = companyLegalItemMapper;
+        this.companyLegalItemWriter = companyLegalItemWriter;
+    }
 
     @Nonnull
     protected BatchConfiguration.JobConfiguration getJobConfiguration() {
-        return batchConfiguration.getJobConfigurationByName(COMPANY_LEGAL_CONFIG_JOB_NAME);
+        return getBatchConfiguration().getJobConfigurationByName(COMPANY_LEGAL_CONFIG_JOB_NAME);
     }
 
     @Nonnull
@@ -77,7 +88,7 @@ public class JobDefinition extends BaseChunkJob<WrappedRowResource, CompanyLegal
         if (companyLegalItemWriter instanceof CompanyLegalJdbcItemWriterImpl) {
 
             return Arrays.asList(
-                getLiquibaseMigrationTasklet(),
+                getLiquibaseOutputMigrationTasklet(),
                 getJooqTruncateTasklet()
             );
         } else {
@@ -88,16 +99,9 @@ public class JobDefinition extends BaseChunkJob<WrappedRowResource, CompanyLegal
     private Tasklet getJooqTruncateTasklet() {
 
         return new JooqTruncateTasklet<>(
-            Optional.ofNullable(dslContext)
-                .orElseThrow(() -> new MissingBeanException(DSLContext.class, STG_DATA_SOURCE_DSL_CONTEXT_BEAN_NAME)),
-            COMPANY_LEGAL
+            getJobOutputDslContext(),
+            new CompanyLegalTable(getJobOutputDataSourceSchema())
         );
-    }
-
-    @Nullable
-    @Override
-    protected String getDefaultJdbcDataSourceName() {
-        return COMPANY_LEGAL_DEFAULT_JDBC_DATA_SOURCE_NAME;
     }
 
     @Nullable
