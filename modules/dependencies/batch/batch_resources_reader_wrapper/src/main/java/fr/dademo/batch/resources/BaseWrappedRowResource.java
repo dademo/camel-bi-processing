@@ -29,7 +29,7 @@ public abstract class BaseWrappedRowResource implements WrappedRowResource {
 
         return Optional.ofNullable(columnsIndexMapping)
             .map(
-                _columnsIndexMapping -> Optional.ofNullable(_columnsIndexMapping.get(columnName))
+                streamColumnsIndexMapping -> Optional.ofNullable(streamColumnsIndexMapping.get(columnName))
                     .orElseThrow(() -> new MissingColumnException(columnName))
             )
             .orElseThrow(() -> new UnsupportedOperationException(

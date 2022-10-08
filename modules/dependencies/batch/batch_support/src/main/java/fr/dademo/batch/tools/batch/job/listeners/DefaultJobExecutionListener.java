@@ -73,7 +73,7 @@ public class DefaultJobExecutionListener implements JobExecutionListener {
         }
 
         log.info(formatBatchInfo(String.format(
-            "Java batch [%s] no [%d]%n" +
+            "Batch [%s] no [%d]%n" +
                 "Started on [%s]%n" +
                 "%s",
             jobExecution.getJobInstance().getJobName(),
@@ -91,7 +91,7 @@ public class DefaultJobExecutionListener implements JobExecutionListener {
             .collect(Collectors.joining("\n"));
 
         log.info(formatBatchInfo(String.format(
-            "Java batch [%s] no [%d]%n" +
+            "Batch [%s] no [%d]%n" +
                 "Started on [%s]%n" +
                 "Ended on [%s] (%s)%n" +
                 "with status [%s, %s]" +
@@ -101,8 +101,8 @@ public class DefaultJobExecutionListener implements JobExecutionListener {
             Optional.ofNullable(jobExecution.getStartTime()).map(this::formatDate).orElse("-"),
             Optional.ofNullable(jobExecution.getEndTime()).map(this::formatDate).orElse("-"),
             Duration.between(
-                jobExecution.getStartTime().toInstant(),
-                jobExecution.getEndTime().toInstant()
+                Optional.ofNullable(jobExecution.getStartTime()).orElseGet(Date::new).toInstant(),
+                Optional.ofNullable(jobExecution.getEndTime()).orElseGet(Date::new).toInstant()
             ).toString(),
             jobExecution.getExitStatus().getExitCode(),
             Optional.of(jobExecution.getExitStatus().getExitDescription()).filter(s -> !s.isBlank()).orElse("[-]"),

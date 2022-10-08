@@ -12,24 +12,21 @@
 
 package fr.dademo.batch.tools.batch.job.exceptions;
 
-import fr.dademo.batch.tools.batch.job.BaseChunkJob;
+import fr.dademo.batch.tools.batch.job.BaseChunkedJob;
 
 public class MissingJdbcDataSource extends RuntimeException {
 
     private static final long serialVersionUID = 3943516555210855477L;
 
-    @SuppressWarnings("rawtypes")
-    private MissingJdbcDataSource(String refName, Class<? extends BaseChunkJob> clazz) {
+    private MissingJdbcDataSource(String refName, Class<? extends BaseChunkedJob> clazz) {
         super(String.format("Missing %s datasource definition in class %s", refName, clazz.getName()));
     }
 
-    @SuppressWarnings("rawtypes")
-    public static MissingJdbcDataSource missingInputJdbcDataSource(Class<? extends BaseChunkJob> clazz) {
+    public static MissingJdbcDataSource missingInputJdbcDataSource(Class<? extends BaseChunkedJob> clazz) {
         return new MissingJdbcDataSource("input", clazz);
     }
 
-    @SuppressWarnings("rawtypes")
-    public static MissingJdbcDataSource missingOutputJdbcDataSource(Class<? extends BaseChunkJob> clazz) {
+    public static MissingJdbcDataSource missingOutputJdbcDataSource(Class<? extends BaseChunkedJob> clazz) {
         return new MissingJdbcDataSource("output", clazz);
     }
 }

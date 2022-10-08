@@ -54,10 +54,12 @@ public final class BeanValues {
     //// Beans ////
     // Database connectors
     public static final String BATCH_DATA_SOURCE_BEAN_NAME = DATA_SOURCE_CONFIG + "_" + BATCH_DATA_SOURCE_NAME;
-    // Config constants
-    public static final String CONFIG_ENABLED = ".enabled";
+    public static final String BATCH_DSL_CONTEXT_BEAN_NAME = DATA_SOURCE_CONFIG + "_" + BATCH_DATA_SOURCE_NAME + DSL_CONTEXT_EXTENSION;
 
     //// Values ////
     public static final int DEFAULT_THREAD_POOL_SIZE = 2;
     public static final String TASK_EXECUTOR_BEAN_NAME = "batch_task_executor";
+    public static final String DATA_SET_MIGRATIONS_FOLDER_NAME = "batch_core";
+    public static final String JOB_PARAMETER_STARTED_AT = "startedAt";
+    public static final String JOB_PARAMETER_FORCE = "force";
 }

@@ -32,6 +32,7 @@ import java.util.stream.Stream;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Component
 public class DataSourcesFactory {
 
@@ -107,14 +108,14 @@ public class DataSourcesFactory {
                 .getInputDataSource()
         );
 
-        return getJobOutputDslContextByDataSourceName(
+        return getDslContext(
             jobOutputDataSourceName
                 .map(BatchConfiguration.JobDataSourceConfiguration::getName)
                 .orElseThrow(MissingJobDataSourceConfigurationException.forJob(jobName))
         );
     }
 
-    public DSLContext getJobOutputDslContextByDataSourceName(@Nonnull String dataSourceName) {
+    public DSLContext getDslContextByDataSourceName(@Nonnull String dataSourceName) {
         return getDslContext(dataSourceName);
     }
 

@@ -10,12 +10,11 @@ public abstract class ResourceWrapperException extends RuntimeException {
 
     private static final long serialVersionUID = -7218270755909144932L;
 
-
-    public ResourceWrapperException(String message) {
+    protected ResourceWrapperException(String message) {
         super(message);
     }
 
-    public ResourceWrapperException(String message, Throwable cause) {
+    protected ResourceWrapperException(String message, Throwable cause) {
         super(message, cause);
     }
 }

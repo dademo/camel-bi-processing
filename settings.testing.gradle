@@ -7,4 +7,4 @@
 /*
  * Will include all testing related sub-modules
  */
-include 'modules:dependencies:testing:batch:batch_testing_support'
+include 'modules:dependencies:testing:batch_testing_support'

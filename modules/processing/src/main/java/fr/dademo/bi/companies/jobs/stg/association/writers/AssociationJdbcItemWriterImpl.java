@@ -49,7 +49,7 @@ public class AssociationJdbcItemWriterImpl extends AbstractApplicationJdbcWriter
     ) {
 
         super(
-            dataSourcesFactory.getJobOutputDslContextByDataSourceName(
+            dataSourcesFactory.getDslContextByDataSourceName(
                 getJobOutputDataSourceName(ASSOCIATION_CONFIG_JOB_NAME, batchConfiguration)
                     .orElseThrow(MissingJobDataSourceConfigurationException.forJob(ASSOCIATION_JOB_NAME))
             )

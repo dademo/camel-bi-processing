@@ -32,6 +32,7 @@ import static fr.dademo.bi.companies.jobs.stg.company_legal.datamodel.CompanyLeg
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Slf4j
 @Component
 @ConditionalOnProperty(
@@ -49,7 +50,7 @@ public class CompanyLegalJdbcItemWriterImpl extends AbstractApplicationJdbcWrite
     ) {
 
         super(
-            dataSourcesFactory.getJobOutputDslContextByDataSourceName(
+            dataSourcesFactory.getDslContextByDataSourceName(
                 getJobOutputDataSourceName(COMPANY_LEGAL_CONFIG_JOB_NAME, batchConfiguration)
                     .orElseThrow(MissingJobDataSourceConfigurationException.forJob(COMPANY_LEGAL_JOB_NAME)))
         );
@@ -68,7 +69,7 @@ public class CompanyLegalJdbcItemWriterImpl extends AbstractApplicationJdbcWrite
     @SuppressWarnings("resource")
     protected Insert<CompanyLegalRecord> getInsertStatement() {
 
-        return getDslContext().insertInto(DEFAULT_COMPANY_LEGAL_TABLE,
+        return getDslContext().insertInto(companyLegalTable,
             DEFAULT_COMPANY_LEGAL_TABLE.FIELD_COMPANY_LEGAL_UNIT_SIREN,
             DEFAULT_COMPANY_LEGAL_TABLE.FIELD_COMPANY_LEGAL_UNIT_DIFFUSION_STATUS,
             DEFAULT_COMPANY_LEGAL_TABLE.FIELD_COMPANY_LEGAL_UNIT_IS_PURGED,

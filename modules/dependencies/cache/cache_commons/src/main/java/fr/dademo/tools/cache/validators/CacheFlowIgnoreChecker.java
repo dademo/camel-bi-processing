@@ -11,7 +11,7 @@ import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 /**
  * @author dademo
  */
-public interface CacheFlowIgnoreChecker<T extends InputStreamIdentifier<?>> {
+public interface CacheFlowIgnoreChecker {
 
     /**
      * Checks if a flow is allowed to be cached for the given {@link InputStreamIdentifier}.

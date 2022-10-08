@@ -8,24 +8,20 @@ package fr.dademo.bi.companies.jobs.stg.association_waldec;
 
 import fr.dademo.batch.resources.ResourcesReaderWrapperProvider;
 import fr.dademo.batch.resources.WrappedRowResource;
-import fr.dademo.batch.tools.batch.reader.UnidirectionalItemStreamReaderSupport;
+import fr.dademo.batch.tools.batch.reader.StgJobItemReader;
 import fr.dademo.data.definitions.data_gouv_fr.dimensions.DataGouvFrDataSetResource;
-import fr.dademo.data.helpers.data_gouv_fr.helpers.DataGouvFrFilterHelpers;
 import fr.dademo.data.helpers.data_gouv_fr.repository.DataGouvFrDataQuerierService;
-import fr.dademo.data.helpers.data_gouv_fr.repository.exception.ResourceNotFoundException;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.csv.CSVFormat;
 import org.springframework.batch.item.ExecutionContext;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
 import java.io.InputStreamReader;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Optional;
 
@@ -36,30 +32,24 @@ import static fr.dademo.bi.companies.jobs.stg.association_waldec.datamodel.Assoc
  */
 @Slf4j
 @Component
-public class AssociationWaldecItemReader extends UnidirectionalItemStreamReaderSupport<WrappedRowResource> {
+public class AssociationWaldecItemReader extends StgJobItemReader<WrappedRowResource> {
 
-    private static final String DATASET_TITLE = "repertoire-national-des-associations";
-    private static final String DATA_TITLE_WALDEC = " Waldec ";
+    private final DataGouvFrDataQuerierService dataGouvFrDataQuerierService;
 
-    @Autowired
-    private DataGouvFrDataQuerierService dataGouvFrDataQuerierService;
-
-    private ZipArchiveInputStream archiveInputStream;
+    private ZipArchiveInputStream archiveInputStream = null;
     private Iterator<WrappedRowResource> iterator = Collections.emptyIterator();
+
+    public AssociationWaldecItemReader(DataGouvFrDataQuerierService dataGouvFrDataQuerierService) {
+        this.dataGouvFrDataQuerierService = dataGouvFrDataQuerierService;
+    }
 
     @SneakyThrows
     public void open(@Nonnull ExecutionContext executionContext) {
 
-        log.info("Getting dataset definition");
-        final var dataGouvFrDataSet = dataGouvFrDataQuerierService.getDataSet(DATASET_TITLE);
-        final var dataGouvFrDataSetResource = dataGouvFrDataSet
-            .getResources().stream()
-            .filter(DataGouvFrFilterHelpers.fieldContaining(DataGouvFrDataSetResource::getTitle, DATA_TITLE_WALDEC))
-            .max(Comparator.comparing(DataGouvFrDataSetResource::dateTimeKeyExtractor))
-            .orElseThrow(() -> new ResourceNotFoundException("*" + DATA_TITLE_WALDEC + "*", dataGouvFrDataSet));
-
         log.info("Reading values");
-        archiveInputStream = new ZipArchiveInputStream(dataGouvFrDataQuerierService.queryForStream(dataGouvFrDataSetResource));
+        archiveInputStream = new ZipArchiveInputStream(dataGouvFrDataQuerierService.queryForStream(
+            (DataGouvFrDataSetResource) getDataSetResource()
+        ));
     }
 
     @Override

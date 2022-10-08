@@ -6,11 +6,14 @@
 
 package fr.dademo.data.definitions.data_gouv_fr.dimensions;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import fr.dademo.data.definitions.DataSetResource;
+import fr.dademo.data.definitions.data_gouv_fr.DataGouvFrDataSet;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +21,7 @@ import lombok.NoArgsConstructor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -30,57 +34,44 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonIgnoreProperties({"extras", "schema"})
-public class DataGouvFrDataSetResource {
+public class DataGouvFrDataSetResource implements DataSetResource {
 
     @Nullable
     private String id;
-
     @Nullable
     private String description;
-
     @Nonnull
     private String title;
-
     @Nonnull
     private String url;
-
     @Nonnull
     private ResourceType type;
-
     @Nullable
     private DataGouvFrDataSetResourceChecksum checksum;
-
     @Nonnull
     private LocalDateTime createdAt;
-
     @Nullable
     private LocalDateTime published;
-
     @Nullable
     private LocalDateTime lastModified;
-
     @Nullable
     @JsonProperty("filesize")
     private Integer fileSize;
-
     @Nonnull
     @JsonProperty("filetype")
     private String fileType;
-
     @Nonnull
     private String format;
-
     @Nullable
     private String latest;
-
     @Nullable
     private Map<String, Integer> metrics;
-
     @Nullable
     private String mime;
-
     @Nullable
     private String previewUrl;
+    @JsonBackReference
+    private DataGouvFrDataSet dataSet;
 
     public static LocalDateTime dateTimeKeyExtractor(DataGouvFrDataSetResource v) {
         return Stream.of(
@@ -92,6 +83,53 @@ public class DataGouvFrDataSetResource {
             .orElse(null);
     }
 
+    // Internal values and functions required for data set compatibility
+
+    @Nullable
+    public String getId() {
+        // Internal technical ID doesn't exist as it always comes from an external provider
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public String getExternalId() {
+        return id;
+    }
+
+    @Nonnull
+    public String getName() {
+
+        final var nameDate = Stream.of(
+                lastModified,
+                published,
+                createdAt
+            ).filter(Objects::nonNull)
+            .findFirst()
+            .map(date -> date.format(DateTimeFormatter.ISO_LOCAL_DATE))
+            .orElse("-");
+        return String.format("%s - %s - %s", dataSet.getTitle(), title, nameDate);
+    }
+
+    @Nullable
+    @Override
+    public String getParentId() {
+        // Does not exist
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public String getSource() {
+        return dataSet.getTitle();
+    }
+
+    @Nullable
+    @Override
+    public String getSourceSub() {
+        return title;
+    }
+
     @AllArgsConstructor
     public enum ResourceType {
         MAIN("main"),
@@ -101,12 +139,11 @@ public class DataGouvFrDataSetResource {
         CODE("code"),
         OTHER("other");
 
-        private String value;
+        private final String value;
 
         @JsonValue
         public String getValue() {
             return value;
         }
     }
-
 }

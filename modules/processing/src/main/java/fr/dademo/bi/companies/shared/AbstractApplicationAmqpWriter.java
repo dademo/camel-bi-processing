@@ -20,7 +20,7 @@ public abstract class AbstractApplicationAmqpWriter extends BaseJobWriter {
 
     private String cachedExchangeName;
 
-    public AbstractApplicationAmqpWriter(@Nonnull AmqpTemplate amqpTemplate) {
+    protected AbstractApplicationAmqpWriter(@Nonnull AmqpTemplate amqpTemplate) {
 
         this.amqpTemplate = amqpTemplate;
         cachedExchangeName = null;

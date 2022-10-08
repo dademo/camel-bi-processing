@@ -61,7 +61,7 @@ public class MinioBeans {
             .build();
 
         if (!minioClient.bucketExists(bucketExists) &&
-            cacheMinioConfiguration.getCreateBucket()) {
+            Boolean.TRUE.equals(cacheMinioConfiguration.getCreateBucket())) {
             log.info("Will crate MinIO bucket {}", cacheMinioConfiguration.getBucketName());
             minioClient.makeBucket(MakeBucketArgs.builder()
                 .bucket(cacheMinioConfiguration.getBucketName())
@@ -70,7 +70,7 @@ public class MinioBeans {
         }
 
         if (!minioClient.bucketExists(tempBucketExists) &&
-            cacheMinioConfiguration.getCreateBucket()) {
+            Boolean.TRUE.equals(cacheMinioConfiguration.getCreateBucket())) {
             log.info("Will crate MinIO temp bucket {}", tempBucketName);
             minioClient.makeBucket(MakeBucketArgs.builder()
                 .bucket(tempBucketName)

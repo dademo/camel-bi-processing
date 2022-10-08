@@ -154,6 +154,7 @@ batch:
       max-threads: null
     association:
       enabled: true
+      #enabled: false
       #inputDataSource: null
       outputDataSource:
         name: stg

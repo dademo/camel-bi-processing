@@ -104,6 +104,7 @@ public class Association {
     @Getter
     @Builder
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @SuppressWarnings("java:S125")
     public static class AssociationCsvColumnsMapping {
 
         int associationIdField;

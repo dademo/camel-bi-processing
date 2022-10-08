@@ -6,11 +6,13 @@
 
 package fr.dademo.batch.beans;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.dademo.batch.beans.jdbc.DataSourcesFactory;
 import fr.dademo.batch.configuration.BatchConfiguration;
 import fr.dademo.batch.helpers.JobTaskExecutorWrapper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.jooq.DSLContext;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
@@ -19,7 +21,9 @@ import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.explore.support.JobExplorerFactoryBean;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;
+import org.springframework.batch.core.repository.ExecutionContextSerializer;
 import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.repository.dao.Jackson2ExecutionContextStringSerializer;
 import org.springframework.batch.core.repository.support.JobRepositoryFactoryBean;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.batch.BatchDataSourceScriptDatabaseInitializer;
@@ -50,44 +54,69 @@ import static fr.dademo.batch.beans.BeanValues.*;
 )
 public class BatchRepository {
 
+    @SuppressWarnings("unused")
     @Bean(BATCH_DATA_SOURCE_BEAN_NAME)
     public DataSource jobRepositoryDataSource(DataSourcesFactory dataSourcesFactory) {
         return dataSourcesFactory.getDataSource(BATCH_DATA_SOURCE_NAME);
     }
 
+    @SuppressWarnings("unused")
+    @Bean(BATCH_DSL_CONTEXT_BEAN_NAME)
+    public DSLContext jobRepositoryDslContext(DataSourcesFactory dataSourcesFactory) {
+        return dataSourcesFactory.getDslContextByDataSourceName(BATCH_DATA_SOURCE_NAME);
+    }
+
+    @SuppressWarnings("unused")
     @Bean(BATCH_DATA_SOURCE_TRANSACTION_MANAGER_BEAN_NAME)
     public PlatformTransactionManager transactionManager(@Qualifier(BATCH_DATA_SOURCE_BEAN_NAME) DataSource jobRepositoryDataSource) {
         return new JdbcTransactionManager(jobRepositoryDataSource);
     }
 
+    @SuppressWarnings("unused")
+    @Bean
+    public ExecutionContextSerializer executionContextStringSerializer(ObjectMapper objectMapper) {
+
+        final var serializer = new Jackson2ExecutionContextStringSerializer();
+        serializer.setObjectMapper(objectMapper);
+        return serializer;
+    }
+
+    @SuppressWarnings("unused")
     @Bean
     @ConditionalOnMissingBean(JobRepository.class)
     @SneakyThrows
     public JobRepository jdbcJobRepository(@Qualifier(BATCH_DATA_SOURCE_BEAN_NAME) DataSource jobRepositoryDataSource,
-                                           @Qualifier(BATCH_DATA_SOURCE_TRANSACTION_MANAGER_BEAN_NAME) PlatformTransactionManager transactionManager) {
+                                           @Qualifier(BATCH_DATA_SOURCE_TRANSACTION_MANAGER_BEAN_NAME) PlatformTransactionManager transactionManager,
+                                           ExecutionContextSerializer executionContextSerializer) {
 
         JobRepositoryFactoryBean factory = new JobRepositoryFactoryBean();
         factory.setDataSource(jobRepositoryDataSource);
         factory.setTransactionManager(transactionManager);
         factory.setMaxVarCharLength(1000);
 
+        factory.setSerializer(executionContextSerializer);
+
         return factory.getObject();
     }
 
+    @SuppressWarnings("unused")
     @Bean
     @ConditionalOnMissingBean(JobExplorer.class)
     @SneakyThrows
-    public JobExplorer jobExplorer(@Qualifier(BATCH_DATA_SOURCE_BEAN_NAME) DataSource jobRepositoryDataSource) {
+    public JobExplorer jobExplorer(@Qualifier(BATCH_DATA_SOURCE_BEAN_NAME) DataSource jobRepositoryDataSource,
+                                   ExecutionContextSerializer executionContextSerializer) {
 
         initializeSpringBatchSchema(jobRepositoryDataSource);
 
         JobExplorerFactoryBean factoryBean = new JobExplorerFactoryBean();
         factoryBean.setDataSource(jobRepositoryDataSource);
+        factoryBean.setSerializer(executionContextSerializer);
         factoryBean.afterPropertiesSet();
 
         return factoryBean.getObject();
     }
 
+    @SuppressWarnings("unused")
     @Bean
     @ConditionalOnMissingBean(JobLauncher.class)
     @SneakyThrows
@@ -101,6 +130,7 @@ public class BatchRepository {
         return jobLauncher;
     }
 
+    @SuppressWarnings("unused")
     @Bean
     @ConditionalOnMissingBean(JobRegistry.class)
     @SneakyThrows
@@ -108,6 +138,7 @@ public class BatchRepository {
         return new MapJobRegistry();
     }
 
+    @SuppressWarnings("unused")
     @Bean(TASK_EXECUTOR_BEAN_NAME)
     @ConditionalOnMissingBean(name = TASK_EXECUTOR_BEAN_NAME)
     @SneakyThrows
@@ -135,12 +166,14 @@ public class BatchRepository {
         return new JobTaskExecutorWrapper(threadPoolTaskExecutor);
     }
 
+    @SuppressWarnings("unused")
     @Bean
     @ConditionalOnMissingBean(JobBuilderFactory.class)
     public JobBuilderFactory jobBuilderFactory(JobRepository jobRepository) {
         return new JobBuilderFactory(jobRepository);
     }
 
+    @SuppressWarnings("unused")
     @Bean
     @ConditionalOnMissingBean(StepBuilderFactory.class)
     public StepBuilderFactory stepBuilderFactory(JobRepository jobRepository,
@@ -148,6 +181,7 @@ public class BatchRepository {
         return new StepBuilderFactory(jobRepository, transactionManager);
     }
 
+    @SuppressWarnings("unused")
     @SneakyThrows
     private void initializeSpringBatchSchema(DataSource jobRepositoryDataSource) {
 

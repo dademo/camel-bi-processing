@@ -6,7 +6,6 @@
 
 package fr.dademo.data.helpers.data_gouv_fr;
 
-import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 import fr.dademo.data.helpers.data_gouv_fr.cache.flow_ignore_checkers.DataGouvFrCacheFlowIgnoreChecker;
 import fr.dademo.tools.cache.validators.CacheFlowIgnoreChecker;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +19,7 @@ public class DefaultDataGouvFrBeans {
 
     @SuppressWarnings("java:S1452")
     @Bean
-    public CacheFlowIgnoreChecker<? extends InputStreamIdentifier<?>> dataGouvFrCacheFlowIgnoreChecker() {
+    public CacheFlowIgnoreChecker dataGouvFrCacheFlowIgnoreChecker() {
         return new DataGouvFrCacheFlowIgnoreChecker();
     }
 }

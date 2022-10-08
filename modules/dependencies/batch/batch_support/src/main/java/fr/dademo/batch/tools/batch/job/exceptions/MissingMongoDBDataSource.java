@@ -12,24 +12,21 @@
 
 package fr.dademo.batch.tools.batch.job.exceptions;
 
-import fr.dademo.batch.tools.batch.job.BaseChunkJob;
+import fr.dademo.batch.tools.batch.job.BaseChunkedJob;
 
 public class MissingMongoDBDataSource extends RuntimeException {
 
     private static final long serialVersionUID = 877723797788251132L;
 
-    @SuppressWarnings("rawtypes")
-    private MissingMongoDBDataSource(String refName, Class<? extends BaseChunkJob> clazz) {
+    private MissingMongoDBDataSource(String refName, Class<? extends BaseChunkedJob> clazz) {
         super(String.format("Missing %s Mongodb definition in class %s", refName, clazz.getName()));
     }
 
-    @SuppressWarnings("rawtypes")
-    public static MissingMongoDBDataSource missingInputJdbcDataSource(Class<? extends BaseChunkJob> clazz) {
+    public static MissingMongoDBDataSource missingInputJdbcDataSource(Class<? extends BaseChunkedJob> clazz) {
         return new MissingMongoDBDataSource("input", clazz);
     }
 
-    @SuppressWarnings("rawtypes")
-    public static MissingMongoDBDataSource missingOutputJdbcDataSource(Class<? extends BaseChunkJob> clazz) {
+    public static MissingMongoDBDataSource missingOutputJdbcDataSource(Class<? extends BaseChunkedJob> clazz) {
         return new MissingMongoDBDataSource("output", clazz);
     }
 }

@@ -6,14 +6,20 @@
 
 package fr.dademo.testing.batch;
 
+import fr.dademo.batch.beans.jdbc.DataSourcesFactory;
 import fr.dademo.batch.configuration.BatchConfiguration;
-import fr.dademo.batch.tools.batch.job.BaseChunkJob;
+import fr.dademo.batch.configuration.BatchDataSourcesConfiguration;
+import fr.dademo.batch.tools.batch.job.BaseChunkedJob;
+import fr.dademo.batch.tools.batch.job.ChunkedStepProvider;
 import lombok.Builder;
 import lombok.Getter;
 import org.mockito.Mockito;
+import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.core.io.ResourceLoader;
 
 import javax.annotation.Nonnull;
 
@@ -21,29 +27,41 @@ import javax.annotation.Nonnull;
  * @author dademo
  */
 @SuppressWarnings("unchecked")
-@Builder
 @Getter
-public class MockedChunkJob<I, O> extends BaseChunkJob<I, O> {
+public class MockedChunkJob<I, O> extends BaseChunkedJob {
 
     public static final String TEST_JOB_NAME = "__TEST_JOB__";
-
-    @Builder.Default
     @Nonnull
     protected BatchConfiguration.JobConfiguration jobConfiguration = new BatchConfiguration.JobConfiguration();
-
-    @Builder.Default
     @Nonnull
     protected String jobName = TEST_JOB_NAME;
-
-    @Builder.Default
     @Nonnull
     protected ItemReader<I> itemReader = Mockito.mock(ItemReader.class);
-
-    @Builder.Default
     @Nonnull
     protected ItemProcessor<I, O> itemProcessor = Mockito.mock(ItemProcessor.class);
-
-    @Builder.Default
     @Nonnull
     protected ItemWriter<O> itemWriter = Mockito.mock(ItemWriter.class);
+
+    @Builder
+    public MockedChunkJob(
+        JobBuilderFactory jobBuilderFactory,
+        StepBuilderFactory stepBuilderFactory,
+        BatchConfiguration batchConfiguration,
+        BatchDataSourcesConfiguration batchDataSourcesConfiguration,
+        DataSourcesFactory dataSourcesFactory,
+        ResourceLoader resourceLoader) {
+        super(
+            jobBuilderFactory,
+            stepBuilderFactory,
+            batchConfiguration,
+            batchDataSourcesConfiguration,
+            dataSourcesFactory,
+            resourceLoader
+        );
+    }
+
+    @Override
+    protected ChunkedStepProvider getChunkedStepProvider() {
+        throw new UnsupportedOperationException("Not implemented");
+    }
 }

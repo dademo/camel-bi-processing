@@ -40,6 +40,7 @@ public abstract class MinioCacheIndexRepositoryBeanLifecycle<T extends InputStre
     @Autowired
     private MinioClient minioClient;
 
+    @SuppressWarnings("java:S3864")
     @SneakyThrows
     protected void cleanCacheResourceDirectory() {
 

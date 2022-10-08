@@ -13,6 +13,7 @@ import javax.annotation.Nonnull;
 /**
  * @author dademo
  */
+@SuppressWarnings("java:S110")
 public class NafDefinitionRecord extends CustomRecord<NafDefinitionRecord> {
 
     private static final long serialVersionUID = -3661300836662672014L;

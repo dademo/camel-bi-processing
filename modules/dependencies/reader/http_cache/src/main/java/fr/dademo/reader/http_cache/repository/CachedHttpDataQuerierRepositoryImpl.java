@@ -14,7 +14,6 @@ import fr.dademo.tools.cache.repository.cache_index.CacheIndexRepository;
 import fr.dademo.tools.cache.repository.cache_repository.CacheRepository;
 import fr.dademo.tools.cache.validators.CacheFlowIgnoreChecker;
 import fr.dademo.tools.cache.validators.CacheValidator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Repository;
 
@@ -28,18 +27,22 @@ import java.util.List;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @ConditionalOnBean({CacheRepository.class, CacheIndexRepository.class})
 @Repository
 public class CachedHttpDataQuerierRepositoryImpl extends BaseCachedHttpDataQuerierRepository implements CachedHttpDataQuerierRepository {
 
-    @Autowired
-    private CacheRepository<HttpInputStreamIdentifier> cacheRepository;
+    private final CacheRepository<HttpInputStreamIdentifier> cacheRepository;
 
-    @Autowired
-    private CacheIndexRepository<HttpInputStreamIdentifier> cacheIndexRepository;
+    private final List<? extends CacheFlowIgnoreChecker> cacheFlowIgnoreCheckerList;
 
-    @Autowired
-    private List<CacheFlowIgnoreChecker<?>> cacheFlowIgnoreCheckerList;
+    public CachedHttpDataQuerierRepositoryImpl(
+        CacheRepository<HttpInputStreamIdentifier> cacheRepository,
+        List<? extends CacheFlowIgnoreChecker> cacheFlowIgnoreCheckerList) {
+        this.cacheRepository = cacheRepository;
+        this.cacheFlowIgnoreCheckerList = cacheFlowIgnoreCheckerList;
+    }
+
 
     @SuppressWarnings("unchecked")
     @Override

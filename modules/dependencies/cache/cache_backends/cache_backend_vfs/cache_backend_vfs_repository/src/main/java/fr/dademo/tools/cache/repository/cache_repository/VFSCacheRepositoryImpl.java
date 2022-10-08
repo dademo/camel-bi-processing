@@ -167,13 +167,11 @@ public class VFSCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extends 
 
         try {
             return file.getContent().getInputStream();
+        } catch (FileNotFoundException ex) {
+            log.error("Cached file {} not found", file.getURI());
+            return null;
         } catch (FileSystemException ex) {
-
-            if (ex instanceof FileNotFoundException) {
-                log.error("Cached file {} not found", file.getURI());
-            } else {
-                log.error("Unexpected error occurred", ex);
-            }
+            log.error("Unexpected error occurred", ex);
             return null;
         }
     }

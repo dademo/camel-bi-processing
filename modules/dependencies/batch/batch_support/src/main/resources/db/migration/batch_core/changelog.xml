@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ This Source Code Form is subject to the terms of the Mozilla Public
+  ~ License, v. 2.0. If a copy of the MPL was not distributed with this
+  ~ file, You can obtain one at https://mozilla.org/MPL/2.0/.
+  -->
+
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="1" author="dademo">
+        <createTable tableName="dataset">
+            <column name="id" type="INTEGER" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="parent" type="INTEGER">
+                <constraints nullable="true"/>
+            </column>
+            <column name="source" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="source_sub" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="state" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <!--
+            The parent should exist in the same table or references should be deleted to keep a consistent table.
+        -->
+        <addForeignKeyConstraint baseTableName="dataset" baseColumnNames="parent"
+                                 constraintName="dataset_parent_fk"
+                                 referencedTableName="dataset"
+                                 referencedColumnNames="id"/>
+        <!--
+            A dataset should only be used once by a batch, or a force will be required.
+            Concerns both next constraints.
+        -->
+        <addUniqueConstraint
+            constraintName="dataset_source_uniq"
+            tableName="dataset"
+            columnNames="name, source, source_sub"
+        />
+        <addUniqueConstraint
+            constraintName="dataset_parent_uniq"
+            tableName="dataset"
+            columnNames="name, parent"
+        />
+        <!--
+            A DataSet should only be present once.
+        -->
+        <addUniqueConstraint
+            constraintName="dataset_uniq_parent"
+            tableName="dataset"
+            columnNames="name, parent, state"
+        />
+        <addUniqueConstraint
+            constraintName="dataset_uniq_source"
+            tableName="dataset"
+            columnNames="name, source, source_sub, state"
+        />
+        <!--
+            Some indexes to speed up reading database
+        -->
+        <createIndex tableName="dataset" indexName="dataset_name">
+            <column name="name" descending="false"/>
+        </createIndex>
+        <createIndex tableName="dataset" indexName="dataset_timestamp">
+            <column name="timestamp" descending="true"/>
+        </createIndex>
+        <createIndex tableName="dataset" indexName="dataset_source">
+            <column name="source" descending="false"/>
+            <column name="source_sub" descending="false"/>
+        </createIndex>
+        <createIndex tableName="dataset" indexName="dataset_parent">
+            <column name="parent" descending="false"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

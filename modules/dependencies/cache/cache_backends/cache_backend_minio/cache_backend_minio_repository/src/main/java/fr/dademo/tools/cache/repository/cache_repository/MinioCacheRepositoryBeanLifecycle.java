@@ -37,7 +37,10 @@ public abstract class MinioCacheRepositoryBeanLifecycle<T extends InputStreamIde
     public static final int TEMP_DIRECTORY_RANDOM_LENGTH = 16;
     public static final int TEMP_FILE_RANDOM_LENGTH = 32;
     protected static final String RESOURCES_DIRECTORY_NAME = "resources";
+
     private static final String TEMP_PREFIX = normalizedName(MinioCacheRepositoryImpl.class.getName());
+    private static final Random random = new Random();
+
     private String tempDirectoryName = null;
 
     @Autowired
@@ -84,6 +87,7 @@ public abstract class MinioCacheRepositoryBeanLifecycle<T extends InputStreamIde
         );
     }
 
+    @SuppressWarnings("java:S3864")
     @SneakyThrows
     protected int deleteTempDirectory(String tempDirectoryName) {
 
@@ -148,7 +152,7 @@ public abstract class MinioCacheRepositoryBeanLifecycle<T extends InputStreamIde
     private String getBase64Random(int length) {
 
         final var bytes = new byte[length];
-        new Random().nextBytes(bytes);
+        random.nextBytes(bytes);
         return Base64.getUrlEncoder().encodeToString(bytes);
     }
 }

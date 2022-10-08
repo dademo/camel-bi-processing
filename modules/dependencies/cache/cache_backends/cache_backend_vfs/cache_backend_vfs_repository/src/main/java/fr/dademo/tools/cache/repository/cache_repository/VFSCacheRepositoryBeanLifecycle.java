@@ -35,6 +35,8 @@ public abstract class VFSCacheRepositoryBeanLifecycle<T extends InputStreamIdent
     public static final int TEMP_FILE_RANDOM_LENGTH = 32;
     protected static final String RESOURCES_DIRECTORY_NAME = "resources";
     private static final String TEMP_PREFIX = normalizedName(VFSCacheRepositoryImpl.class.getName());
+    private static final Random random = new Random();
+
     private URI tempDirectoryURI = null;
 
     @Autowired
@@ -131,7 +133,7 @@ public abstract class VFSCacheRepositoryBeanLifecycle<T extends InputStreamIdent
     private String getBase64Random(int length) {
 
         final var bytes = new byte[length];
-        new Random().nextBytes(bytes);
+        random.nextBytes(bytes);
         return Base64.getUrlEncoder().encodeToString(bytes);
     }
 }

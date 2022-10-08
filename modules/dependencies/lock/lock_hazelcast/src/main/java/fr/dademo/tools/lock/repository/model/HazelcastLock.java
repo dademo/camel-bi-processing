@@ -16,7 +16,7 @@ import javax.annotation.Nonnull;
 @Slf4j
 public class HazelcastLock implements Lock {
 
-    public final String MAP_NAME = "dev_cache";
+    public static final String MAP_NAME = "dev_cache";
 
     @Nonnull
     private final HazelcastInstance hazelcastInstance;
@@ -40,6 +40,7 @@ public class HazelcastLock implements Lock {
         return new HazelcastLock(hazelcastInstance, lockedResource);
     }
 
+    @SuppressWarnings("java:S2235")
     @Override
     public void close() {
 

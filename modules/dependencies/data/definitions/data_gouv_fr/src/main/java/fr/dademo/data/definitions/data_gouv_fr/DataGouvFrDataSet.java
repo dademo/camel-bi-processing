@@ -7,9 +7,11 @@
 package fr.dademo.data.definitions.data_gouv_fr;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import fr.dademo.data.definitions.DataSet;
 import fr.dademo.data.definitions.data_gouv_fr.dimensions.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,7 +31,7 @@ import java.util.Map;
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonIgnoreProperties({"owner", "quality", "extras"})
-public class DataGouvFrDataSet {
+public class DataGouvFrDataSet implements DataSet {
 
     @Nullable
     private String id;
@@ -62,6 +64,7 @@ public class DataGouvFrDataSet {
     private LocalDateTime lastUpdate;
 
     @Nonnull
+    @JsonManagedReference
     private List<DataGouvFrDataSetResource> resources;
 
     @Nonnull

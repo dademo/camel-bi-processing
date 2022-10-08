@@ -10,7 +10,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package fr.dademo.batch.tools.batch.job;
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package fr.dademo.batch.tools.batch.job.tasklets;
 
 import fr.dademo.batch.beans.jdbc.tools.LiquibaseMigrationsSupplier;
 import fr.dademo.batch.configuration.BatchConfiguration;
@@ -25,7 +31,6 @@ import org.springframework.core.io.ResourceLoader;
 import javax.annotation.Nonnull;
 import javax.sql.DataSource;
 import javax.validation.constraints.NotEmpty;
-import java.util.Collections;
 import java.util.Optional;
 
 @Slf4j
@@ -50,7 +55,7 @@ public class LiquibaseMigrationTasklet implements Tasklet {
             )
             .databaseCatalog(databaseCatalog)
             .databaseSchema(databaseSchema)
-            .contexts(Optional.ofNullable(jobDataSourceConfiguration.getMigrationContexts()).orElse(Collections.emptyList()))
+            .contexts(jobDataSourceConfiguration.getMigrationContexts())
             .dataSource(dataSource)
             .resourceLoader(resourceLoader)
             .build();

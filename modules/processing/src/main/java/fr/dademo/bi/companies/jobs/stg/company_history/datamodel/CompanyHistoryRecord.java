@@ -13,6 +13,7 @@ import javax.annotation.Nonnull;
 /**
  * @author dademo
  */
+@SuppressWarnings("java:S110")
 public class CompanyHistoryRecord extends CustomRecord<CompanyHistoryRecord> {
 
     private static final long serialVersionUID = 5054020186151448725L;

@@ -9,41 +9,50 @@ package fr.dademo.bi.companies.jobs.stg.company_legal;
 import fr.dademo.batch.beans.jdbc.DataSourcesFactory;
 import fr.dademo.batch.configuration.BatchConfiguration;
 import fr.dademo.batch.configuration.BatchDataSourcesConfiguration;
-import fr.dademo.batch.resources.WrappedRowResource;
-import fr.dademo.batch.tools.batch.job.BaseChunkJob;
-import fr.dademo.batch.tools.batch.job.JooqTruncateTasklet;
-import fr.dademo.bi.companies.jobs.stg.company_legal.datamodel.CompanyLegal;
+import fr.dademo.batch.services.DataSetService;
+import fr.dademo.batch.tools.batch.job.ChunkedStepProvider;
+import fr.dademo.batch.tools.batch.job.SimpleChunkedStepProvider;
+import fr.dademo.batch.tools.batch.job.tasklets.DataSetResourceQueryTasklet;
+import fr.dademo.batch.tools.batch.job.tasklets.JooqTruncateTasklet;
 import fr.dademo.bi.companies.jobs.stg.company_legal.datamodel.CompanyLegalTable;
-import fr.dademo.bi.companies.jobs.stg.company_legal.writers.CompanyLegalJdbcItemWriterImpl;
+import fr.dademo.bi.companies.shared.AbstractApplicationStgJob;
+import fr.dademo.data.definitions.data_gouv_fr.dimensions.DataGouvFrDataSetResource;
+import fr.dademo.data.helpers.data_gouv_fr.helpers.DataGouvFrFilterHelpers;
+import fr.dademo.data.helpers.data_gouv_fr.repository.DataGouvFrDataQuerierService;
+import fr.dademo.data.helpers.data_gouv_fr.repository.exception.ResourceNotFoundException;
+import lombok.SneakyThrows;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.step.tasklet.Tasklet;
-import org.springframework.batch.item.ItemProcessor;
-import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.Comparator;
 
 /**
  * @author dademo
  */
+@SuppressWarnings({"java:S107", "java:S110"})
 @Component(JobDefinition.COMPANY_LEGAL_JOB_NAME)
-public class JobDefinition extends BaseChunkJob<WrappedRowResource, CompanyLegal> {
+public class JobDefinition extends AbstractApplicationStgJob {
 
     public static final String COMPANY_LEGAL_CONFIG_JOB_NAME = "company-legal";
     public static final String COMPANY_LEGAL_NORMALIZED_CONFIG_JOB_NAME = "company_legal";
     public static final String COMPANY_LEGAL_JOB_NAME = "stg_" + COMPANY_LEGAL_NORMALIZED_CONFIG_JOB_NAME;
     public static final String COMPANY_LEGAL_MIGRATION_FOLDER = "stg/company_legal";
-    public static final String COMPANY_LEGAL_DEFAULT_JDBC_DATA_SOURCE_NAME = "stg";
+
+    private static final String DATASET_TITLE = "base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret";
+    private static final String DATA_TITLE_PREFIX = "Sirene : Fichier StockUniteLegale ";
+
+
+    private final StepBuilderFactory stepBuilderFactory;
     private final CompanyLegalItemReader companyLegalItemReader;
     private final CompanyLegalItemMapper companyLegalItemMapper;
     private final CompanyLegalItemWriter companyLegalItemWriter;
+    private final DataGouvFrDataQuerierService dataGouvFrDataQuerierService;
 
     public JobDefinition(
         // Common job resources
@@ -53,21 +62,46 @@ public class JobDefinition extends BaseChunkJob<WrappedRowResource, CompanyLegal
         BatchDataSourcesConfiguration batchDataSourcesConfiguration,
         DataSourcesFactory dataSourcesFactory,
         ResourceLoader resourceLoader,
+        DataSetService dataSetService,
+        DataGouvFrDataQuerierService dataGouvFrDataQuerierService,
         // Job-specific
         CompanyLegalItemReader companyLegalItemReader,
         CompanyLegalItemMapper companyLegalItemMapper,
         CompanyLegalItemWriter companyLegalItemWriter) {
 
-        super(jobBuilderFactory,
+        super(
+            jobBuilderFactory,
             stepBuilderFactory,
             batchConfiguration,
             batchDataSourcesConfiguration,
             dataSourcesFactory,
-            resourceLoader);
+            resourceLoader,
+            dataSetService
+        );
 
+        this.stepBuilderFactory = stepBuilderFactory;
         this.companyLegalItemReader = companyLegalItemReader;
         this.companyLegalItemMapper = companyLegalItemMapper;
         this.companyLegalItemWriter = companyLegalItemWriter;
+        this.dataGouvFrDataQuerierService = dataGouvFrDataQuerierService;
+    }
+
+    @Nonnull
+    @Override
+    public String getJobName() {
+        return COMPANY_LEGAL_JOB_NAME;
+    }
+
+    @Override
+    protected ChunkedStepProvider getChunkedStepProvider() {
+
+        return new SimpleChunkedStepProvider<>(
+            stepBuilderFactory,
+            companyLegalItemReader,
+            companyLegalItemMapper,
+            companyLegalItemWriter,
+            getStepExecutionListeners()
+        );
     }
 
     @Nonnull
@@ -77,26 +111,28 @@ public class JobDefinition extends BaseChunkJob<WrappedRowResource, CompanyLegal
 
     @Nonnull
     @Override
-    public String getJobName() {
-        return COMPANY_LEGAL_JOB_NAME;
+    protected ItemWriter<?> getItemWriter() {
+        return companyLegalItemWriter;
     }
 
-    @Nonnull
     @Override
-    protected List<Tasklet> getInitTasks() {
-
-        if (companyLegalItemWriter instanceof CompanyLegalJdbcItemWriterImpl) {
-
-            return Arrays.asList(
-                getLiquibaseOutputMigrationTasklet(),
-                getJooqTruncateTasklet()
-            );
-        } else {
-            return Collections.emptyList();
-        }
+    protected DataSetResourceQueryTasklet.DataSetResourceProvider getDataSetResourceProvider() {
+        return this::getDataSetResource;
     }
 
-    private Tasklet getJooqTruncateTasklet() {
+    @SneakyThrows
+    private DataGouvFrDataSetResource getDataSetResource() {
+
+        final var dataGouvFrDataSet = dataGouvFrDataQuerierService.getDataSet(DATASET_TITLE);
+        return dataGouvFrDataSet
+            .getResources().stream()
+            .filter(DataGouvFrFilterHelpers.fieldStartingWith(DataGouvFrDataSetResource::getTitle, DATA_TITLE_PREFIX))
+            .max(Comparator.comparing(DataGouvFrDataSetResource::dateTimeKeyExtractor))
+            .orElseThrow(() -> new ResourceNotFoundException(DATA_TITLE_PREFIX + "*", dataGouvFrDataSet));
+    }
+
+    @Override
+    protected Tasklet getJooqTruncateTasklet() {
 
         return new JooqTruncateTasklet<>(
             getJobOutputDslContext(),
@@ -106,26 +142,7 @@ public class JobDefinition extends BaseChunkJob<WrappedRowResource, CompanyLegal
 
     @Nullable
     @Override
-    protected String getMigrationFolder() {
+    protected String getLiquibaseMigrationFolder() {
         return COMPANY_LEGAL_MIGRATION_FOLDER;
-    }
-
-    @Nonnull
-    @Override
-    public ItemReader<WrappedRowResource> getItemReader() {
-        return companyLegalItemReader;
-    }
-
-    @Nonnull
-    @Override
-    public ItemProcessor<WrappedRowResource, CompanyLegal> getItemProcessor() {
-        return companyLegalItemMapper;
-    }
-
-    @Nonnull
-    @Override
-    protected ItemWriter<CompanyLegal> getItemWriter() {
-
-        return companyLegalItemWriter;
     }
 }

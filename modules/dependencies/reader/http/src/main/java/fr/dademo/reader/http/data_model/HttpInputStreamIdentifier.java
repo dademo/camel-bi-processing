@@ -38,7 +38,7 @@ public class HttpInputStreamIdentifier implements InputStreamIdentifier<URL> {
     private String method = "GET";
 
     @Nullable
-    private RequestBody requestBody;
+    private transient RequestBody requestBody;
 
     @Nullable
     private String contentType;

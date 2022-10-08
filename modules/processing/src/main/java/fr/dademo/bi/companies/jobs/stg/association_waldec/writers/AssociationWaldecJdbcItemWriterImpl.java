@@ -33,6 +33,7 @@ import static fr.dademo.bi.companies.jobs.stg.association_waldec.datamodel.Assoc
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Slf4j
 @Component
 @ConditionalOnProperty(
@@ -50,7 +51,7 @@ public class AssociationWaldecJdbcItemWriterImpl extends AbstractApplicationJdbc
     ) {
 
         super(
-            dataSourcesFactory.getJobOutputDslContextByDataSourceName(
+            dataSourcesFactory.getDslContextByDataSourceName(
                 getJobOutputDataSourceName(ASSOCIATION_WALDEC_CONFIG_JOB_NAME, batchConfiguration)
                     .orElseThrow(MissingJobDataSourceConfigurationException.forJob(ASSOCIATION_WALDEC_JOB_NAME))
             )

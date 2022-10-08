@@ -8,10 +8,18 @@ package fr.dademo.batch.tools.batch.job;
 
 import org.springframework.batch.core.Job;
 
+import javax.annotation.Nonnull;
+
 /**
  * @author dademo
  */
-public interface BatchJobProvider {
+public interface JobProvider {
 
+    boolean isJobAvailable();
+
+    @Nonnull
+    String getJobName();
+
+    @Nonnull
     Job getJob();
 }

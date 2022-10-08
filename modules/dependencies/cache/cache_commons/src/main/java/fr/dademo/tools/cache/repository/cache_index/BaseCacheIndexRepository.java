@@ -31,7 +31,7 @@ public abstract class BaseCacheIndexRepository<T extends InputStreamIdentifier<?
 
         private static final long serialVersionUID = -6523259374758503225L;
 
-        private final BaseCacheIndexRepository<?> parentRef;
+        private final transient BaseCacheIndexRepository<?> parentRef;
 
         @Nonnull
         @Override

@@ -13,6 +13,7 @@ import javax.annotation.Nonnull;
 /**
  * @author dademo
  */
+@SuppressWarnings("java:S110")
 public class AssociationRecord extends CustomRecord<AssociationRecord> {
 
     private static final long serialVersionUID = 3007869680725243588L;

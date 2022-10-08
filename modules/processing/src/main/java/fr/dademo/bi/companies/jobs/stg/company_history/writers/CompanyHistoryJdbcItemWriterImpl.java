@@ -32,6 +32,7 @@ import static fr.dademo.bi.companies.jobs.stg.company_history.datamodel.CompanyH
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Slf4j
 @Component
 @ConditionalOnProperty(
@@ -49,7 +50,7 @@ public class CompanyHistoryJdbcItemWriterImpl extends AbstractApplicationJdbcWri
     ) {
 
         super(
-            dataSourcesFactory.getJobOutputDslContextByDataSourceName(
+            dataSourcesFactory.getDslContextByDataSourceName(
                 getJobOutputDataSourceName(COMPANY_HISTORY_CONFIG_JOB_NAME, batchConfiguration)
                     .orElseThrow(MissingJobDataSourceConfigurationException.forJob(COMPANY_HISTORY_JOB_NAME))
             )

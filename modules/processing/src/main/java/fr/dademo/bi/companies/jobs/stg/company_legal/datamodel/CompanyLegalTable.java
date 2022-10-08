@@ -20,6 +20,7 @@ import static org.jooq.impl.DSL.schema;
 /**
  * @author dademo
  */
+@SuppressWarnings({"java:S110", "java:S2160", "java:S116"})
 public class CompanyLegalTable extends CustomTable<CompanyLegalRecord> {
 
     public static final String TABLE_NAME = "company_legal_unit";

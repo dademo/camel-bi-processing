@@ -11,7 +11,7 @@ import fr.dademo.batch.configuration.BatchConfiguration;
 import fr.dademo.batch.configuration.exception.MissingJobDataSourceConfigurationException;
 import fr.dademo.bi.companies.jobs.stg.naf.NafDefinitionItemWriter;
 import fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinition;
-import fr.dademo.bi.companies.shared.AbstractMongoDBWriter;
+import fr.dademo.bi.companies.shared.AbstractApplicationMongoDBWriter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -28,13 +28,14 @@ import static fr.dademo.bi.companies.jobs.stg.naf.JobDefinition.NAF_CONFIG_JOB_N
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Slf4j
 @Component
 @ConditionalOnProperty(
     value = CONFIG_JOBS_BASE + "." + NAF_CONFIG_JOB_NAME + "." + CONFIG_JOB_OUTPUT_DATA_SOURCE + "." + CONFIG_WRITER_TYPE,
     havingValue = CONFIG_MONGODB_TYPE
 )
-public class NafDefinitionMongoDBItemWriterImpl extends AbstractMongoDBWriter implements NafDefinitionItemWriter {
+public class NafDefinitionMongoDBItemWriterImpl extends AbstractApplicationMongoDBWriter implements NafDefinitionItemWriter {
 
     public static final String COLLECTION_NAME = "naf";
 

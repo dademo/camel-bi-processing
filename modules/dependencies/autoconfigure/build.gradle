@@ -57,7 +57,6 @@ dependencies {
     dataGouvFrSupportApi project(':modules:dependencies:data:helpers:data_gouv_fr')
     batchSupportApi project(':modules:dependencies:batch:batch_support')
 
-
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 

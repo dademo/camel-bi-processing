@@ -57,12 +57,10 @@ public class AmqpFactory {
     @Nonnull
     public AmqpTemplate getAmqpTemplateForDataSource(@NotEmpty String dataSourceName) {
 
-        final var amqpConfiguration = batchDataSourcesConfiguration.getAmqpConfigurationByName(dataSourceName);
-
-        if (CONFIG_AMQP_BACKEND_RABBITMQ.equals(amqpConfiguration.getBackend())) {
-            return new RabbitTemplate(rabbitMQConnectionFactoryForDataSource(dataSourceName));
-        }
-        throw new AmqpUnknownBackendException(amqpConfiguration.getBackend());
+        return cachedAmqpTemplate.computeIfAbsent(
+            dataSourceName,
+            this::createAmqpTemplateForDataSource
+        );
     }
 
     private AmqpAdmin createAmqpAdminForDataSource(String dataSourceName) {
@@ -72,6 +70,17 @@ public class AmqpFactory {
         if (CONFIG_AMQP_BACKEND_RABBITMQ.equals(amqpConfiguration.getBackend())) {
             return new RabbitAdmin(rabbitMQConnectionFactoryForDataSource(dataSourceName));
         }
+        throw new AmqpUnknownBackendException(amqpConfiguration.getBackend());
+    }
+
+    private RabbitTemplate createAmqpTemplateForDataSource(String dataSourceName) {
+
+        final var amqpConfiguration = batchDataSourcesConfiguration.getAmqpConfigurationByName(dataSourceName);
+
+        if (CONFIG_AMQP_BACKEND_RABBITMQ.equals(amqpConfiguration.getBackend())) {
+            return new RabbitTemplate(rabbitMQConnectionFactoryForDataSource(dataSourceName));
+        }
+
         throw new AmqpUnknownBackendException(amqpConfiguration.getBackend());
     }
 

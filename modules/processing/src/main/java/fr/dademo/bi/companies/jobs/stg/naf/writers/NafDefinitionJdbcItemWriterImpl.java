@@ -37,6 +37,7 @@ import static org.jooq.impl.DSL.name;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Slf4j
 @Component
 @ConditionalOnProperty(
@@ -53,7 +54,7 @@ public class NafDefinitionJdbcItemWriterImpl extends AbstractApplicationJdbcWrit
         BatchDataSourcesConfiguration batchDataSourcesConfiguration
     ) {
         super(
-            dataSourcesFactory.getJobOutputDslContextByDataSourceName(
+            dataSourcesFactory.getDslContextByDataSourceName(
                 getJobOutputDataSourceName(NAF_CONFIG_JOB_NAME, batchConfiguration)
                     .orElseThrow(MissingJobDataSourceConfigurationException.forJob(NAF_JOB_NAME))
             )

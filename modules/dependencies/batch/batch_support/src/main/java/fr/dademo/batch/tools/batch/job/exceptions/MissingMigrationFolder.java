@@ -12,14 +12,13 @@
 
 package fr.dademo.batch.tools.batch.job.exceptions;
 
-import fr.dademo.batch.tools.batch.job.BaseChunkJob;
+import fr.dademo.batch.tools.batch.job.BaseChunkedJob;
 
 public class MissingMigrationFolder extends RuntimeException {
 
     private static final long serialVersionUID = -6694725778419195945L;
 
-    @SuppressWarnings("rawtypes")
-    public MissingMigrationFolder(Class<? extends BaseChunkJob> clazz) {
+    public MissingMigrationFolder(Class<? extends BaseChunkedJob> clazz) {
         super(String.format("Missing migration folder definition in class %s", clazz.getName()));
     }
 }

@@ -9,7 +9,6 @@ package fr.dademo.bi.companies.jobs.stg.association.writers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.dademo.batch.beans.amqp.AmqpFactory;
 import fr.dademo.batch.configuration.BatchConfiguration;
-import fr.dademo.batch.configuration.BatchDataSourcesConfiguration;
 import fr.dademo.batch.configuration.exception.MissingJobDataSourceConfigurationException;
 import fr.dademo.bi.companies.jobs.stg.association.AssociationItemWriter;
 import fr.dademo.bi.companies.jobs.stg.association.datamodel.Association;
@@ -30,6 +29,7 @@ import static fr.dademo.bi.companies.jobs.stg.association.JobDefinition.ASSOCIAT
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Slf4j
 @Component
 @ConditionalOnProperty(
@@ -44,8 +44,7 @@ public class AssociationExchangeItemWriterImpl extends AbstractApplicationAmqpWr
 
     public AssociationExchangeItemWriterImpl(AmqpFactory amqpFactory,
                                              ObjectMapper objectMapper,
-                                             BatchConfiguration batchConfiguration,
-                                             BatchDataSourcesConfiguration batchDataSourcesConfiguration) {
+                                             BatchConfiguration batchConfiguration) {
 
         super(amqpFactory.getAmqpTemplateForDataSource(
             getJobOutputDataSourceName(ASSOCIATION_CONFIG_JOB_NAME, batchConfiguration)

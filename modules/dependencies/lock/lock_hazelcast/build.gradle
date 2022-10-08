@@ -31,7 +31,7 @@ dependencies {
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
     implementation 'org.springframework.boot:spring-boot-starter'
-    implementation "com.hazelcast:hazelcast-spring:${azelcastVersion}"
+    implementation "com.hazelcast:hazelcast-spring:${hazelcastVersion}"
 
     // Other libraries
     implementation "com.google.code.findbugs:jsr305:${findBugsJsr305Version}"

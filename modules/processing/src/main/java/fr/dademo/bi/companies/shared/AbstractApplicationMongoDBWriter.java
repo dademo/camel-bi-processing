@@ -6,5 +6,5 @@
 
 package fr.dademo.bi.companies.shared;
 
-public abstract class AbstractMongoDBWriter extends BaseJobWriter {
+public abstract class AbstractApplicationMongoDBWriter extends BaseJobWriter {
 }

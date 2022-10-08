@@ -72,7 +72,7 @@ public class MinioCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extend
 
     @Nonnull
     @Override
-    @SuppressWarnings("java:S2095")
+    @SuppressWarnings({"java:S2095", "java:S112"})
     public InputStream cacheInputStream(@Nonnull InputStream inputStream, @Nonnull T inputStreamIdentifier) throws IOException {
 
         log.debug("Storing input stream in cache for identifier `{}`", inputStreamIdentifier.getDescription());
@@ -101,6 +101,10 @@ public class MinioCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extend
                     } else {
                         log.warn("Input stream is not valid and will not be persisted");
                     }
+                } catch (InterruptedException ex) {
+                    // java:S2142
+                    // Restore interrupted state...
+                    Thread.currentThread().interrupt();
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }

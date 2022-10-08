@@ -9,6 +9,7 @@ package fr.dademo.data.definitions.data_gouv_fr.dimensions;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import fr.dademo.data.definitions.DataSetResourceChecksum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +23,7 @@ import javax.annotation.Nonnull;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class DataGouvFrDataSetResourceChecksum {
+public class DataGouvFrDataSetResourceChecksum implements DataSetResourceChecksum {
 
     @Nonnull
     private String type;

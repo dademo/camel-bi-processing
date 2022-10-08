@@ -6,7 +6,7 @@
 
 package fr.dademo.testing.batch;
 
-import fr.dademo.batch.tools.batch.job.BatchJobProvider;
+import fr.dademo.batch.tools.batch.job.JobProvider;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.mockito.Mockito;
@@ -20,9 +20,9 @@ import static org.mockito.BDDMockito.given;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class MockedBatchJobProviderHelper {
 
-    public static BatchJobProvider mockedBatchJobProviderFor(Job job) {
+    public static JobProvider mockedBatchJobProviderFor(Job job) {
 
-        final var mockedJobProvider = Mockito.mock(BatchJobProvider.class);
+        final var mockedJobProvider = Mockito.mock(JobProvider.class);
         given(mockedJobProvider.getJob()).willReturn(job);
         return mockedJobProvider;
     }

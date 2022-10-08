@@ -7,12 +7,9 @@
 package fr.dademo.bi.companies;
 
 import fr.dademo.batch.services.AppJobLauncher;
+import fr.dademo.bi.companies.exceptions.ApplicationInitializationError;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.ExitCodeGenerator;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.WebApplicationType;
+import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration;
@@ -26,6 +23,7 @@ import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.autoconfigure.r2dbc.R2dbcAutoConfiguration;
 import org.springframework.boot.autoconfigure.sql.init.SqlInitializationAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories;
 
 /**
  * @author dademo
@@ -44,15 +42,20 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
     LiquibaseAutoConfiguration.class,
 })
 @ImportAutoConfiguration
+@EnableJdbcRepositories
 //@EnableBatchProcessing
-public class Application implements CommandLineRunner, ExitCodeGenerator {
+public class Application implements ApplicationRunner, ExitCodeGenerator {
 
-    @Autowired
-    private AppJobLauncher appJobLauncher;
+    private final AppJobLauncher appJobLauncher;
 
-    private boolean successfull = false;
+    private boolean successful;
 
-    public static void main(String[] args) {
+    public Application(AppJobLauncher appJobLauncher) {
+        this.appJobLauncher = appJobLauncher;
+        this.successful = false;
+    }
+
+    public static void main(String... args) {
 
         System.exit(SpringApplication.exit(
             new SpringApplicationBuilder(Application.class)
@@ -62,14 +65,41 @@ public class Application implements CommandLineRunner, ExitCodeGenerator {
     }
 
     @Override
-    public void run(String... args) {
-        log.info("Running all jobs");
-        successfull = appJobLauncher.runAll();
-        log.info("Job finished");
+    public void run(ApplicationArguments args) {
+
+        try {
+            final var applicationParsedArguments = ApplicationParsedArguments.usingApplicationArguments(args);
+
+            if (applicationParsedArguments.isHelp()) {
+
+                ApplicationParsedArguments.help();
+                successful = true;
+                return;
+            }
+
+            if (applicationParsedArguments.isListJobs()) {
+                listJobs();
+                successful = true;
+                return;
+            }
+
+            log.info("Running all jobs");
+            successful = appJobLauncher.run(
+                applicationParsedArguments.getOnly(),
+                applicationParsedArguments.isForce()
+            );
+            log.info("Job finished");
+        } catch (ApplicationInitializationError ex) {
+            ApplicationParsedArguments.help(ex.getMessage());
+        }
+    }
+
+    private void listJobs() {
+        log.info(String.join("\n", appJobLauncher.getAllAvailableJobs()));
     }
 
     @Override
     public int getExitCode() {
-        return successfull ? 0 : 1;
+        return successful ? 0 : 1;
     }
 }

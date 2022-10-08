@@ -23,6 +23,8 @@ java {
 
 dependencies {
 
+    api project(':modules:dependencies:data:definitions:shared')
+
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 

@@ -6,20 +6,22 @@
 
 package fr.dademo.batch.services;
 
+import fr.dademo.batch.beans.BeanValues;
 import fr.dademo.batch.helpers.JobTaskExecutorWrapper;
-import fr.dademo.batch.tools.batch.job.BatchJobProvider;
+import fr.dademo.batch.tools.batch.job.JobProvider;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static fr.dademo.batch.beans.BeanValues.TASK_EXECUTOR_BEAN_NAME;
 
@@ -30,24 +32,32 @@ import static fr.dademo.batch.beans.BeanValues.TASK_EXECUTOR_BEAN_NAME;
 @Service
 public class AppJobLauncherImpl implements AppJobLauncher {
 
-    @Autowired
-    private JobLauncher jobLauncher;
+    private final JobLauncher jobLauncher;
+    private final JobTaskExecutorWrapper taskExecutor;
+    private final List<JobProvider> allBatches;
 
-    @Autowired
-    @Qualifier(TASK_EXECUTOR_BEAN_NAME)
-    private JobTaskExecutorWrapper taskExecutor;
-
-    @Autowired
-    private List<BatchJobProvider> allBatchs;
+    public AppJobLauncherImpl(JobLauncher jobLauncher,
+                              @Qualifier(TASK_EXECUTOR_BEAN_NAME) JobTaskExecutorWrapper taskExecutor,
+                              List<JobProvider> allBatches) {
+        this.jobLauncher = jobLauncher;
+        this.taskExecutor = taskExecutor;
+        this.allBatches = allBatches;
+    }
 
     @Override
-    public boolean runAll() {
+    public boolean run(@Nonnull List<String> onlyJobs, boolean force) {
+
+        final var applicationJobLauncher = ApplicationJobLauncher.builder()
+            .jobLauncher(jobLauncher)
+            .force(force)
+            .build();
 
         log.info("Starting all jobs");
-        final var jobExecutions = allBatchs.stream()
-            .map(BatchJobProvider::getJob)
-            .filter(Objects::nonNull)
-            .map(this::run)
+        final var jobExecutions = allBatches.stream()
+            .filter(JobProvider::isJobAvailable)
+            .filter(jobProvider -> onlyJobs.isEmpty() || onlyJobs.contains(jobProvider.getJobName()))
+            .map(JobProvider::getJob)
+            .map(applicationJobLauncher::runJob)
             .collect(Collectors.toList());
 
         log.info("Waiting for jobs to end");
@@ -55,18 +65,48 @@ public class AppJobLauncherImpl implements AppJobLauncher {
         taskExecutor.waitAll();
         log.info("Jobs finished");
 
-        return jobExecutions.stream()
-            .allMatch(jobExecution -> jobExecution.getExitStatus().compareTo(ExitStatus.COMPLETED) == 0);
+        return jobExecutions.stream().allMatch(this::isExitStatusConsideredValid);
     }
 
-    @SneakyThrows
-    private JobExecution run(@Nonnull Job job) {
-        return jobLauncher.run(job, getJobParameters());
+    private boolean isExitStatusConsideredValid(JobExecution jobExecution) {
+
+        return Stream.of(
+                ExitStatus.COMPLETED,
+                ExitStatus.STOPPED,
+                ExitStatus.STOPPED
+            )
+            .map(jobExecution.getExitStatus()::compareTo)
+            .anyMatch(Integer.valueOf(0)::equals);
     }
 
-    private JobParameters getJobParameters() {
-        return new JobParametersBuilder()
-            .addLong("startedAt", System.currentTimeMillis())
-            .toJobParameters();
+    @Override
+    public List<String> getAllAvailableJobs() {
+
+        return allBatches.stream()
+            .filter(JobProvider::isJobAvailable)
+            .map(JobProvider::getJobName)
+            .collect(Collectors.toList());
+    }
+
+    @Builder
+    @AllArgsConstructor
+    private static class ApplicationJobLauncher {
+
+        private final JobLauncher jobLauncher;
+
+        private final boolean force;
+
+        @SneakyThrows
+        public JobExecution runJob(@Nonnull Job job) {
+            return jobLauncher.run(job, getJobParameters());
+        }
+
+        private JobParameters getJobParameters() {
+
+            return new JobParametersBuilder()
+                .addLong(BeanValues.JOB_PARAMETER_STARTED_AT, System.currentTimeMillis())
+                .addString(BeanValues.JOB_PARAMETER_FORCE, Boolean.toString(force))
+                .toJobParameters();
+        }
     }
 }

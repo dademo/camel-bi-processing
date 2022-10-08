@@ -7,10 +7,13 @@
 package fr.dademo.bi.companies.shared;
 
 import fr.dademo.batch.configuration.BatchConfiguration;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class BaseJobWriter {
 
     protected static Optional<String> getJobInputDataSourceName(@Nonnull String configJobName,

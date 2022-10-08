@@ -19,23 +19,23 @@ import java.util.function.Predicate;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DataGouvFrFilterHelpers {
 
-    public static <R extends String> Predicate<DataGouvFrDataSetResource> fieldStartingWith(Function<? super DataGouvFrDataSetResource, ? extends R> getter, R prefix) {
+    public static Predicate<DataGouvFrDataSetResource> fieldStartingWith(Function<? super DataGouvFrDataSetResource, String> getter, String prefix) {
         return dataGouvFrDataSetResource -> getter.apply(dataGouvFrDataSetResource).startsWith(prefix);
     }
 
-    public static <R extends String> Predicate<DataGouvFrDataSetResource> fieldEndingWith(Function<? super DataGouvFrDataSetResource, ? extends R> getter, R suffix) {
+    public static Predicate<DataGouvFrDataSetResource> fieldEndingWith(Function<? super DataGouvFrDataSetResource, String> getter, String suffix) {
         return dataGouvFrDataSetResource -> getter.apply(dataGouvFrDataSetResource).endsWith(suffix);
     }
 
-    public static <R extends String> Predicate<DataGouvFrDataSetResource> fieldContaining(Function<? super DataGouvFrDataSetResource, ? extends R> getter, R s) {
+    public static Predicate<DataGouvFrDataSetResource> fieldContaining(Function<? super DataGouvFrDataSetResource, String> getter, String s) {
         return dataGouvFrDataSetResource -> getter.apply(dataGouvFrDataSetResource).contains(s);
     }
 
-    public static <R extends String> Predicate<DataGouvFrDataSetResource> fieldMatching(Function<? super DataGouvFrDataSetResource, ? extends R> getter, R regex) {
+    public static Predicate<DataGouvFrDataSetResource> fieldMatching(Function<? super DataGouvFrDataSetResource, String> getter, String regex) {
         return dataGouvFrDataSetResource -> getter.apply(dataGouvFrDataSetResource).matches(regex);
     }
 
-    public static <R extends String> Predicate<DataGouvFrDataSetResource> fieldEquals(Function<? super DataGouvFrDataSetResource, ? extends R> getter, R value) {
+    public static Predicate<DataGouvFrDataSetResource> fieldEquals(Function<? super DataGouvFrDataSetResource, String> getter, String value) {
         return dataGouvFrDataSetResource -> getter.apply(dataGouvFrDataSetResource).equals(value);
     }
 }

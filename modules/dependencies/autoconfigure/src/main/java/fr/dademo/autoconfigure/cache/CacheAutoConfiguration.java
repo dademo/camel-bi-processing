@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * @author dademo
  */
+@SuppressWarnings("java:S1118")
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(CachedInputStreamIdentifier.class)
 @ConditionalOnProperty(
@@ -33,4 +34,8 @@ public class CacheAutoConfiguration {
     public static final String CONFIGURATION_PREFIX = "cache";
     public static final String CONFIGURATION_ENABLED = "enabled";
     public static final String CONFIGURATION_ENABLED_VALUE_TRUE = "true";
+
+    public CacheAutoConfiguration() {
+        // Nothing
+    }
 }

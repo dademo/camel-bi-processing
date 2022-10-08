@@ -7,5 +7,6 @@
 /*
  * Will include all data related sub-modules
  */
+include 'modules:dependencies:data:definitions:shared'
 include 'modules:dependencies:data:definitions:data_gouv_fr'
 include 'modules:dependencies:data:helpers:data_gouv_fr'

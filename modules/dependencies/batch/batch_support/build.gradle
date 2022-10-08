@@ -23,6 +23,7 @@ java {
 
 dependencies {
 
+    api project(':modules:dependencies:data:definitions:shared')
     api project(':modules:dependencies:batch:batch_configuration')
     api project(':modules:dependencies:batch:batch_datasources:batch_jdbc')
     api project(':modules:dependencies:batch:batch_datasources:batch_mongodb')
@@ -31,6 +32,7 @@ dependencies {
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapStructVersion}"
 
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
@@ -44,6 +46,7 @@ dependencies {
     implementation "org.jline:jline:${jlineVersion}"
     implementation "javax.validation:validation-api:${javaxValidationApiVersion}"
     implementation "com.google.code.findbugs:jsr305:${findBugsJsr305Version}"
+    implementation "org.mapstruct:mapstruct:${mapStructVersion}"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

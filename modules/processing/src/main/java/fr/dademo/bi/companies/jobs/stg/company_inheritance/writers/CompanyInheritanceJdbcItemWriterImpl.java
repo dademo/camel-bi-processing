@@ -32,6 +32,7 @@ import static fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel.Comp
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Slf4j
 @Component
 @ConditionalOnProperty(
@@ -49,7 +50,7 @@ public class CompanyInheritanceJdbcItemWriterImpl extends AbstractApplicationJdb
     ) {
 
         super(
-            dataSourcesFactory.getJobOutputDslContextByDataSourceName(
+            dataSourcesFactory.getDslContextByDataSourceName(
                 getJobOutputDataSourceName(COMPANY_INHERITANCE_CONFIG_JOB_NAME, batchConfiguration)
                     .orElseThrow(MissingJobDataSourceConfigurationException.forJob(COMPANY_INHERITANCE_JOB_NAME))
             )
