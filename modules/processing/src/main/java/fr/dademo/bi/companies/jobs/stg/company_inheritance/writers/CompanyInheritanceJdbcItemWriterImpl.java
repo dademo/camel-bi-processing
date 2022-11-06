@@ -72,8 +72,8 @@ public class CompanyInheritanceJdbcItemWriterImpl extends AbstractApplicationJdb
     protected Insert<CompanyInheritanceRecord> getInsertStatement() {
 
         return getDslContext().insertInto(companyInheritanceTable,
-            DEFAULT_COMPANY_INHERITANCE_TABLE.FIELD_COMPANY_PREDECESSOR_SIREN,
-            DEFAULT_COMPANY_INHERITANCE_TABLE.FIELD_COMPANY_SUCCESSOR_SIREN,
+            DEFAULT_COMPANY_INHERITANCE_TABLE.FIELD_COMPANY_BUILDING_PREDECESSOR_SIRET,
+            DEFAULT_COMPANY_INHERITANCE_TABLE.FIELD_COMPANY_BUILDING_SUCCESSOR_SIRET,
             DEFAULT_COMPANY_INHERITANCE_TABLE.FIELD_COMPANY_SUCCESSION_DATE,
             DEFAULT_COMPANY_INHERITANCE_TABLE.FIELD_COMPANY_HEADQUARTER_CHANGE,
             DEFAULT_COMPANY_INHERITANCE_TABLE.FIELD_COMPANY_ECONOMICAL_CONTINUITY,
@@ -85,8 +85,8 @@ public class CompanyInheritanceJdbcItemWriterImpl extends AbstractApplicationJdb
     protected Consumer<CompanyInheritance> bindToStatement(BatchBindStep statement) {
 
         return companyInheritance -> statement.bind(
-            companyInheritance.getCompanyPredecessorSiren(),
-            companyInheritance.getCompanySuccessorSiren(),
+            companyInheritance.getCompanyPredecessorSiret(),
+            companyInheritance.getCompanySuccessorSiret(),
             companyInheritance.getCompanySuccessionDate(),
             companyInheritance.getCompanyHeaderChanged(),
             companyInheritance.getCompanyEconomicalContinuity(),

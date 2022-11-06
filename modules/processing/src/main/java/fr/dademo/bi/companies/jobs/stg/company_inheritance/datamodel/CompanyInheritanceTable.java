@@ -27,8 +27,8 @@ public class CompanyInheritanceTable extends CustomTable<CompanyInheritanceRecor
     public static final String DEFAULT_TABLE_SCHEMA = "stg";
     public static final CompanyInheritanceTable DEFAULT_COMPANY_INHERITANCE_TABLE = new CompanyInheritanceTable(DEFAULT_TABLE_SCHEMA);
     private static final long serialVersionUID = -6949326022038402452L;
-    public final TableField<CompanyInheritanceRecord, String> FIELD_COMPANY_PREDECESSOR_SIREN = createField(name("company_predecessor_siren"), SQLDataType.VARCHAR(9), this);
-    public final TableField<CompanyInheritanceRecord, String> FIELD_COMPANY_SUCCESSOR_SIREN = createField(name("company_successor_siren"), SQLDataType.VARCHAR(9), this);
+    public final TableField<CompanyInheritanceRecord, String> FIELD_COMPANY_BUILDING_PREDECESSOR_SIRET = createField(name("company_predecessor_siret"), SQLDataType.VARCHAR(14), this);
+    public final TableField<CompanyInheritanceRecord, String> FIELD_COMPANY_BUILDING_SUCCESSOR_SIRET = createField(name("company_successor_siret"), SQLDataType.VARCHAR(14), this);
     public final TableField<CompanyInheritanceRecord, LocalDate> FIELD_COMPANY_SUCCESSION_DATE = createField(name("company_succession_date"), SQLDataType.LOCALDATE, this);
     public final TableField<CompanyInheritanceRecord, Boolean> FIELD_COMPANY_HEADQUARTER_CHANGE = createField(name("company_headquarter_change"), SQLDataType.BOOLEAN, this);
     public final TableField<CompanyInheritanceRecord, Boolean> FIELD_COMPANY_ECONOMICAL_CONTINUITY = createField(name("company_economical_continuity"), SQLDataType.BOOLEAN, this);

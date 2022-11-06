@@ -19,6 +19,12 @@ java {
     targetCompatibility = JavaVersion.VERSION_11
 }
 
+bootRun {
+    jvmArgs = [
+        '-XX:+UseG1GC',
+    ]
+}
+
 dependencies {
 
     implementation project(':modules:dependencies:autoconfigure') {
@@ -49,7 +55,6 @@ dependencies {
     implementation 'org.springframework.amqp:spring-amqp'
     implementation 'org.springframework.kafka:spring-kafka'
 
-    compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'io.micrometer:micrometer-registry-influx'
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
     runtimeOnly "org.xerial:sqlite-jdbc:${sqlite_jdbc_version}"

@@ -39,8 +39,8 @@ public class CompanyInheritanceItemMapper implements ItemProcessor<WrappedRowRes
         }
 
         return CompanyInheritance.builder()
-            .companyPredecessorSiren(item.getString(columnsIndexMapping.getCompanyPredecessorSirenField()))
-            .companySuccessorSiren(item.getString(columnsIndexMapping.getCompanySuccessorSirenField()))
+            .companyPredecessorSiret(item.getString(columnsIndexMapping.getCompanyPredecessorSiretField()))
+            .companySuccessorSiret(item.getString(columnsIndexMapping.getCompanySuccessorSiretField()))
             .companySuccessionDate(toLocalDate(item.getString(columnsIndexMapping.getCompanySuccessionDateField())))
             .companyHeaderChanged(toBoolean(item.getString(columnsIndexMapping.getCompanyHeaderChangedField())))
             .companyEconomicalContinuity(toBoolean(item.getString(columnsIndexMapping.getCompanyEconomicalContinuityField())))
@@ -51,8 +51,8 @@ public class CompanyInheritanceItemMapper implements ItemProcessor<WrappedRowRes
     private CompanyInheritanceCsvColumnsMapping getHeaderMapping(WrappedRowResource item) {
 
         return CompanyInheritanceCsvColumnsMapping.builder()
-            .companyPredecessorSirenField(item.getColumnIndexByName(CSV_FIELD_COMPANY_INHERITANCE_PREDECESSOR_SIREN))
-            .companySuccessorSirenField(item.getColumnIndexByName(CSV_FIELD_COMPANY_INHERITANCE_SUCCESSOR_SIREN))
+            .companyPredecessorSiretField(item.getColumnIndexByName(CSV_FIELD_COMPANY_INHERITANCE_PREDECESSOR_SIRET))
+            .companySuccessorSiretField(item.getColumnIndexByName(CSV_FIELD_COMPANY_INHERITANCE_SUCCESSOR_SIRET))
             .companySuccessionDateField(item.getColumnIndexByName(CSV_FIELD_COMPANY_INHERITANCE_SUCCESSION_DATE))
             .companyHeaderChangedField(item.getColumnIndexByName(CSV_FIELD_COMPANY_INHERITANCE_HEADQUARTER_CHANGE))
             .companyEconomicalContinuityField(item.getColumnIndexByName(CSV_FIELD_COMPANY_INHERITANCE_ECONOMICAL_CONTINUITY))

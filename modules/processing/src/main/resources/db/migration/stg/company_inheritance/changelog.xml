@@ -13,8 +13,8 @@
 
     <changeSet id="1" author="dademo">
         <createTable tableName="company_inheritance">
-            <column name="company_predecessor_siren" type="VARCHAR(9)"/>
-            <column name="company_successor_siren" type="VARCHAR(9)"/>
+            <column name="company_predecessor_siret" type="VARCHAR(14)"/>
+            <column name="company_successor_siret" type="VARCHAR(14)"/>
             <column name="company_succession_date" type="DATE"/>
             <column name="company_headquarter_change" type="BOOLEAN"/>
             <column name="company_economical_continuity" type="BOOLEAN"/>

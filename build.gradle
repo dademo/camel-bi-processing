@@ -61,6 +61,30 @@ allprojects {
             }
         }
 
+        // Add JVM options to enable debugging
+        // https://access.redhat.com/documentation/en-us/openjdk/17/html-single/using_jdk_flight_recorder_with_openjdk/index#configure-jfr-using-commandline
+        final var timestamp = new Date().format('yyyyMMdd-HHmmss')
+        final var dumpBaseName = "${rootProject.name}-${project.name}-${timestamp}"
+        var dumpJfrMaxAge = jfrMaxAge
+        if (dumpJfrMaxAge == null || dumpJfrMaxAge.isEmpty()) {
+            dumpJfrMaxAge = 'Os'
+        }
+        project.tasks.withType(JavaExec) { javaExec ->
+            javaExec.jvmArgs += [
+                '-XX:+FlightRecorder',
+                '-XX:StartFlightRecording=' + [
+                    "filename=${jfrRepositoryPath}/${dumpBaseName}.jfr",
+                    "name=${dumpBaseName}",
+                    'disk=true',
+                    "maxage=${dumpJfrMaxAge}",
+                    'dumponexit=true',
+                ].join(','),
+                '-XX:FlightRecorderOptions=' + [
+                    "repository=${jfrRepositoryPath}"
+                ].join(',')
+            ]
+        }
+
         project.tasks.withType(Jar) {
             // We enable jar creation
             it.enabled = true
