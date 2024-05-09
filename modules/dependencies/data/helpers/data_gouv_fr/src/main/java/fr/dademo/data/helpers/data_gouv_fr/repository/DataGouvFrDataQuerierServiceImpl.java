@@ -25,11 +25,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
@@ -91,7 +91,7 @@ public class DataGouvFrDataQuerierServiceImpl extends BaseDataGouvFrDataQuerierS
             Stream.concat(
                 DataGouvFrInputStreamValidator.of(dataGouvFrDataSetResource).stream(),
                 inputStreamIdentifierValidators.stream()
-            ).collect(Collectors.toList())
+            ).toList()
         );
     }
 
@@ -145,7 +145,7 @@ public class DataGouvFrDataQuerierServiceImpl extends BaseDataGouvFrDataQuerierS
     private HttpInputStreamIdentifier getInputStreamIdentifierForDataSetResource(DataGouvFrDataSetResource dataGouvFrDataSetResource) {
 
         return HttpInputStreamIdentifier.builder()
-            .url(new URL(dataGouvFrDataSetResource.getUrl()))
+            .url(new URI(dataGouvFrDataSetResource.getUrl()).toURL())
             .contentType(dataGouvFrDataSetResource.getMime())
             .method("GET")
             .build();

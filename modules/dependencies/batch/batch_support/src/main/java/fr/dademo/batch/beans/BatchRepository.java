@@ -14,13 +14,11 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
 import org.springframework.batch.core.configuration.JobRegistry;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.support.MapJobRegistry;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.explore.support.JobExplorerFactoryBean;
 import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.launch.support.SimpleJobLauncher;
+import org.springframework.batch.core.launch.support.TaskExecutorJobLauncher;
 import org.springframework.batch.core.repository.ExecutionContextSerializer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.repository.dao.Jackson2ExecutionContextStringSerializer;
@@ -120,9 +118,9 @@ public class BatchRepository {
     @Bean
     @ConditionalOnMissingBean(JobLauncher.class)
     @SneakyThrows
-    public JobLauncher jobLauncher(JobRepository jobRepository, @Qualifier(TASK_EXECUTOR_BEAN_NAME) JobTaskExecutorWrapper taskExecutor) {
+    public TaskExecutorJobLauncher jobLauncher(JobRepository jobRepository, @Qualifier(TASK_EXECUTOR_BEAN_NAME) JobTaskExecutorWrapper taskExecutor) {
 
-        final var jobLauncher = new SimpleJobLauncher();
+        final var jobLauncher = new TaskExecutorJobLauncher();
 
         jobLauncher.setJobRepository(jobRepository);
         jobLauncher.setTaskExecutor(taskExecutor);
@@ -164,21 +162,6 @@ public class BatchRepository {
         threadPoolTaskExecutor.initialize();
 
         return new JobTaskExecutorWrapper(threadPoolTaskExecutor);
-    }
-
-    @SuppressWarnings("unused")
-    @Bean
-    @ConditionalOnMissingBean(JobBuilderFactory.class)
-    public JobBuilderFactory jobBuilderFactory(JobRepository jobRepository) {
-        return new JobBuilderFactory(jobRepository);
-    }
-
-    @SuppressWarnings("unused")
-    @Bean
-    @ConditionalOnMissingBean(StepBuilderFactory.class)
-    public StepBuilderFactory stepBuilderFactory(JobRepository jobRepository,
-                                                 @Qualifier(BATCH_DATA_SOURCE_TRANSACTION_MANAGER_BEAN_NAME) PlatformTransactionManager transactionManager) {
-        return new StepBuilderFactory(jobRepository);
     }
 
     @SuppressWarnings("unused")

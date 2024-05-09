@@ -8,13 +8,12 @@ package fr.dademo.supervision.dependencies.entities.database.databaseindex;
 
 import fr.dademo.supervision.dependencies.entities.BaseEntity;
 import fr.dademo.supervision.dependencies.entities.DataBackendStateExecutionEntity;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.annotation.Nullable;
-import javax.persistence.*;
-
-import jakarta.validation.constraints.Min;
 
 /**
  * @author dademo

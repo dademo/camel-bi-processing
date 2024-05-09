@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static fr.dademo.batch.beans.BeanValues.TASK_EXECUTOR_BEAN_NAME;
@@ -58,7 +57,7 @@ public class AppJobLauncherImpl implements AppJobLauncher {
             .filter(jobProvider -> onlyJobs.isEmpty() || onlyJobs.contains(jobProvider.getJobName()))
             .map(JobProvider::getJob)
             .map(applicationJobLauncher::runJob)
-            .collect(Collectors.toList());
+            .toList();
 
         log.info("Waiting for jobs to end");
         taskExecutor.shutdown();
@@ -85,7 +84,7 @@ public class AppJobLauncherImpl implements AppJobLauncher {
         return allBatches.stream()
             .filter(JobProvider::isJobAvailable)
             .map(JobProvider::getJobName)
-            .collect(Collectors.toList());
+            .toList();
     }
 
     @Builder

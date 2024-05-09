@@ -17,10 +17,10 @@ import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.jooq.Insert;
 import org.jooq.impl.CustomRecord;
+import org.springframework.batch.item.Chunk;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -44,21 +44,18 @@ public abstract class AbstractApplicationJdbcWriter<T, R extends CustomRecord<R>
     }
 
     @SneakyThrows
-    protected void performBulkWrite(List<? extends T> items) {
+    protected void performBulkWrite(Chunk<? extends T> items) {
 
         getDslContext().transaction(configuration -> {
-            try (final var insertStatement = getInsertStatement()) {
+            final var batchInsertStatement = configuration.dsl().batch(getInsertStatement());
+            items.forEach(bindToStatement(batchInsertStatement));
 
-                final var batchInsertStatement = configuration.dsl().batch(insertStatement);
-                items.forEach(bindToStatement(batchInsertStatement));
-
-                final var batchResult = batchInsertStatement.execute();
-                if (batchResult.length > 0) {
-                    final int totalUpdated = Arrays.stream(batchResult).sum();
-                    log.info("{} rows affected", totalUpdated);
-                } else {
-                    log.error("An error occurred while running batch");
-                }
+            final var batchResult = batchInsertStatement.execute();
+            if (batchResult.length > 0) {
+                final int totalUpdated = Arrays.stream(batchResult).sum();
+                log.info("{} rows affected", totalUpdated);
+            } else {
+                log.error("An error occurred while running batch");
             }
         });
     }

@@ -14,8 +14,9 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.StepExecutionListener;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
+import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.core.repository.JobRepository;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
@@ -29,10 +30,11 @@ import java.util.stream.Stream;
 @Getter(AccessLevel.PROTECTED)
 public abstract class BaseSteppedJob implements JobProvider {
 
-    private final JobBuilderFactory jobBuilderFactory;
+    @Nonnull
+    private final JobRepository jobRepository;
 
-    protected BaseSteppedJob(JobBuilderFactory jobBuilderFactory) {
-        this.jobBuilderFactory = jobBuilderFactory;
+    protected BaseSteppedJob(@Nonnull JobRepository jobRepository) {
+        this.jobRepository = jobRepository;
     }
 
     protected abstract List<Step> getJobSteps();
@@ -58,17 +60,17 @@ public abstract class BaseSteppedJob implements JobProvider {
     @Override
     public Job getJob() {
 
-        final var jobName = getJobName();
-
-        final var jobBuilder = jobBuilderFactory
-            .get(jobName)
+        final var jobBuilder = new JobBuilder(
+            getJobName(),
+            jobRepository
+        )
             .incrementer(new RunIdIncrementer())
             .preventRestart();
 
         final var jobSteps = getJobSteps();
 
         final var stepJobBuilder = jobBuilder
-            .start(jobSteps.get(0));
+            .start(jobSteps.getFirst());
 
         IntStream.range(1, jobSteps.size())
             .mapToObj(jobSteps::get)

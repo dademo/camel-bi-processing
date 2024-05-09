@@ -20,11 +20,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.jooq.BatchBindStep;
 import org.jooq.Field;
 import org.jooq.Insert;
+import org.springframework.batch.item.Chunk;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 import java.util.function.Consumer;
 
 import static fr.dademo.batch.beans.BeanValues.*;
@@ -66,7 +66,7 @@ public class NafDefinitionJdbcItemWriterImpl extends AbstractApplicationJdbcWrit
 
     @SneakyThrows
     @Override
-    public void write(List<? extends NafDefinition> items) {
+    public void write(Chunk<? extends NafDefinition> items) {
 
         log.info("Writing {} naf definition documents", items.size());
         synchronized (getDslContext()) {
@@ -75,7 +75,6 @@ public class NafDefinitionJdbcItemWriterImpl extends AbstractApplicationJdbcWrit
     }
 
     @Override
-    @SuppressWarnings("resource")
     protected Insert<NafDefinitionRecord> getInsertStatement() {
 
         return getDslContext().insertInto(nafDefinitionTable,

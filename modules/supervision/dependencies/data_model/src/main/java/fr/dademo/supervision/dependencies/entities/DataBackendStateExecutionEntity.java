@@ -6,10 +6,10 @@
 
 package fr.dademo.supervision.dependencies.entities;
 
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**

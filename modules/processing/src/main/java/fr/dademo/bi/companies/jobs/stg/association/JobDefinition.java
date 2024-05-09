@@ -21,17 +21,20 @@ import fr.dademo.data.helpers.data_gouv_fr.helpers.DataGouvFrFilterHelpers;
 import fr.dademo.data.helpers.data_gouv_fr.repository.DataGouvFrDataQuerierService;
 import fr.dademo.data.helpers.data_gouv_fr.repository.exception.ResourceNotFoundException;
 import lombok.SneakyThrows;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Comparator;
+
+import static fr.dademo.batch.beans.BeanValues.BATCH_DATA_SOURCE_TRANSACTION_MANAGER_BEAN_NAME;
 
 /**
  * @author dademo
@@ -48,30 +51,29 @@ public class JobDefinition extends AbstractApplicationStgJob {
     private static final String DATASET_TITLE = "repertoire-national-des-associations";
     private static final String DATA_TITLE_PREFIX = " Import ";
 
-    private final StepBuilderFactory stepBuilderFactory;
     private final AssociationItemReader associationItemReader;
     private final AssociationItemMapper associationItemMapper;
     private final AssociationItemWriter associationItemWriter;
     private final DataGouvFrDataQuerierService dataGouvFrDataQuerierService;
 
     public JobDefinition(
+        @Nonnull JobRepository jobRepository,
+        @Nonnull @Qualifier(BATCH_DATA_SOURCE_TRANSACTION_MANAGER_BEAN_NAME) PlatformTransactionManager platformTransactionManager,
         // Common job resources
-        JobBuilderFactory jobBuilderFactory,
-        StepBuilderFactory stepBuilderFactory,
-        BatchConfiguration batchConfiguration,
-        BatchDataSourcesConfiguration batchDataSourcesConfiguration,
-        DataSourcesFactory dataSourcesFactory,
-        ResourceLoader resourceLoader,
-        DataSetService dataSetService,
-        DataGouvFrDataQuerierService dataGouvFrDataQuerierService,
+        @Nonnull BatchConfiguration batchConfiguration,
+        @Nonnull BatchDataSourcesConfiguration batchDataSourcesConfiguration,
+        @Nonnull DataSourcesFactory dataSourcesFactory,
+        @Nonnull ResourceLoader resourceLoader,
+        @Nonnull DataSetService dataSetService,
+        @Nonnull DataGouvFrDataQuerierService dataGouvFrDataQuerierService,
         // Job-specific
-        AssociationItemReader associationItemReader,
-        AssociationItemMapper associationItemMapper,
-        AssociationItemWriter associationItemWriter) {
+        @Nonnull AssociationItemReader associationItemReader,
+        @Nonnull AssociationItemMapper associationItemMapper,
+        @Nonnull AssociationItemWriter associationItemWriter) {
 
         super(
-            jobBuilderFactory,
-            stepBuilderFactory,
+            jobRepository,
+            platformTransactionManager,
             batchConfiguration,
             batchDataSourcesConfiguration,
             dataSourcesFactory,
@@ -79,7 +81,6 @@ public class JobDefinition extends AbstractApplicationStgJob {
             dataSetService
         );
 
-        this.stepBuilderFactory = stepBuilderFactory;
         this.associationItemReader = associationItemReader;
         this.associationItemMapper = associationItemMapper;
         this.associationItemWriter = associationItemWriter;
@@ -96,7 +97,8 @@ public class JobDefinition extends AbstractApplicationStgJob {
     protected ChunkedStepProvider getChunkedStepProvider() {
 
         return new SimpleChunkedStepProvider<>(
-            stepBuilderFactory,
+            getJobRepository(),
+            getPlatformTransactionManager(),
             associationItemReader,
             associationItemMapper,
             associationItemWriter,

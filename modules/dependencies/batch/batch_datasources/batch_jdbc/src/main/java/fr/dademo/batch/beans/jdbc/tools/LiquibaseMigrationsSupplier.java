@@ -12,6 +12,7 @@
 
 package fr.dademo.batch.beans.jdbc.tools;
 
+import jakarta.validation.constraints.NotEmpty;
 import liquibase.Contexts;
 import liquibase.Liquibase;
 import liquibase.database.DatabaseFactory;
@@ -26,8 +27,6 @@ import org.springframework.core.io.ResourceLoader;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.sql.DataSource;
-
-import jakarta.validation.constraints.NotEmpty;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;

@@ -6,13 +6,12 @@
 
 package fr.dademo.supervision.dependencies.entities;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.annotation.Nonnull;
-import javax.persistence.*;
-
-import jakarta.validation.constraints.Size;
 import java.util.List;
 
 /**

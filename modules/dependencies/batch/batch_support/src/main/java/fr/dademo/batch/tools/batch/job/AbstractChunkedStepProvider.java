@@ -8,18 +8,19 @@ package fr.dademo.batch.tools.batch.job;
 
 import fr.dademo.batch.configuration.BatchConfiguration;
 import fr.dademo.batch.tools.batch.job.listeners.StepThreadPoolListener;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.batch.core.ChunkListener;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.StepExecutionListener;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.annotation.Nonnull;
-
-import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -30,10 +31,15 @@ import static fr.dademo.batch.tools.batch.job.JobSharedValues.MAX_THREAD_POOL_QU
 public abstract class AbstractChunkedStepProvider<I, O> implements ChunkedStepProvider {
 
     @Nonnull
-    private final StepBuilderFactory stepBuilderFactory;
+    private final JobRepository jobRepository;
 
-    protected AbstractChunkedStepProvider(@Nonnull StepBuilderFactory stepBuilderFactory) {
-        this.stepBuilderFactory = stepBuilderFactory;
+    @Nonnull
+    private final PlatformTransactionManager platformTransactionManager;
+
+    protected AbstractChunkedStepProvider(@Nonnull JobRepository jobRepository,
+                                          @Nonnull PlatformTransactionManager platformTransactionManager) {
+        this.jobRepository = jobRepository;
+        this.platformTransactionManager = platformTransactionManager;
     }
 
     @Nonnull
@@ -67,16 +73,17 @@ public abstract class AbstractChunkedStepProvider<I, O> implements ChunkedStepPr
 
         threadPoolTaskExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
 
-        final var jobChunkedStep = stepBuilderFactory
-            .get(jobName)
+        final var jobChunkedStep = new StepBuilder(jobName, jobRepository)
             .<I, O>chunk(
                 Optional.ofNullable(jobConfiguration.getChunkSize())
-                    .orElseGet(BatchConfiguration.JobConfiguration::getDefaultChunkSize))
+                    .orElseGet(BatchConfiguration.JobConfiguration::getDefaultChunkSize),
+                platformTransactionManager
+            )
             .reader(getItemReader())
             .processor(getItemProcessor())
             .writer(getItemWriter())
-            .taskExecutor(threadPoolTaskExecutor)
-            .throttleLimit(poolSize);   // Our thread pool size;
+            .taskExecutor(threadPoolTaskExecutor);
+        // .throttleLimit(poolSize);   // Our thread pool size;
 
         // Adding a listener to start and stop the thread pool and avoid unused threads when finished the batch
         jobChunkedStep.listener(new StepThreadPoolListener(threadPoolTaskExecutor));

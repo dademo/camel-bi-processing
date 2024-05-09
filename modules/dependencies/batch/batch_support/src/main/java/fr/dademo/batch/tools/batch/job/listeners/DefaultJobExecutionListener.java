@@ -21,7 +21,6 @@ import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -54,7 +53,7 @@ public class DefaultJobExecutionListener implements JobExecutionListener {
     public void beforeJob(JobExecution jobExecution) {
 
         final var sbParametersFormat = new StringBuilder();
-        if (jobExecution.getJobParameters().getParameters().size() == 0) {
+        if (jobExecution.getJobParameters().getParameters().isEmpty()) {
             sbParametersFormat.append("without parameters");
         } else {
             sbParametersFormat.append("with parameters:\n");
@@ -101,12 +100,12 @@ public class DefaultJobExecutionListener implements JobExecutionListener {
             Optional.ofNullable(jobExecution.getStartTime()).map(this::formatDate).orElse("-"),
             Optional.ofNullable(jobExecution.getEndTime()).map(this::formatDate).orElse("-"),
             Duration.between(
-                Optional.ofNullable(jobExecution.getStartTime()).orElseGet(Date::new).toInstant(),
-                Optional.ofNullable(jobExecution.getEndTime()).orElseGet(Date::new).toInstant()
+                Optional.ofNullable(jobExecution.getStartTime()).orElseGet(LocalDateTime::now),
+                Optional.ofNullable(jobExecution.getEndTime()).orElseGet(LocalDateTime::now)
             ).toString(),
             jobExecution.getExitStatus().getExitCode(),
             Optional.of(jobExecution.getExitStatus().getExitDescription()).filter(s -> !s.isBlank()).orElse("[-]"),
-            (exceptionStr.length() > 0) ? "\nWith exceptions :\n" + exceptionStr : ""
+            (!exceptionStr.isEmpty()) ? "\nWith exceptions :\n" + exceptionStr : ""
         )));
     }
 
@@ -155,7 +154,7 @@ public class DefaultJobExecutionListener implements JobExecutionListener {
 
                 final var resultStr = s.substring(it * maxLength, Math.min((it + 1) * maxLength, s.length()));
 
-                if (resultStr.length() == 0) {
+                if (resultStr.isEmpty()) {
                     break;
                 } else if (resultStr.length() == maxLength) {
                     result.add(resultStr);
@@ -177,8 +176,7 @@ public class DefaultJobExecutionListener implements JobExecutionListener {
         return sb.toString();
     }
 
-    private String formatDate(Date date) {
-        return DateTimeFormatter.ISO_LOCAL_DATE_TIME
-            .format(LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()));
+    private String formatDate(LocalDateTime date) {
+        return DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(date);
     }
 }

@@ -9,18 +9,16 @@ package fr.dademo.supervision.service.services;
 import fr.dademo.supervision.service.repository.ExtendedDataBackendClusterNodeRepository;
 import fr.dademo.supervision.service.services.dto.DataBackendClusterNodeDto;
 import fr.dademo.supervision.service.services.mappers.DataBackendClusterNodeEntityToDtoMapper;
+import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
-
-import jakarta.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * @author dademo
@@ -42,7 +40,7 @@ public class DataBackendClusterNodeServiceImpl implements DataBackendClusterNode
                 new ArrayList<>()
             ))
             .map(applyLatestStatisticsTimestampCount(size))
-            .collect(Collectors.toList());
+            .toList();
     }
 
     @Override
@@ -55,7 +53,7 @@ public class DataBackendClusterNodeServiceImpl implements DataBackendClusterNode
                 new ArrayList<>()
             ))
             .map(applyStatisticsTimestampBetween(from, to))
-            .collect(Collectors.toList());
+            .toList();
     }
 
     @Override
@@ -67,7 +65,7 @@ public class DataBackendClusterNodeServiceImpl implements DataBackendClusterNode
                 entity,
                 new ArrayList<>()
             ))
-            .collect(Collectors.toList());
+            .toList();
     }
 
     private Function<DataBackendClusterNodeDto, DataBackendClusterNodeDto> applyStatisticsTimestampBetween(@Nonnull Date from, @Nonnull Date to) {

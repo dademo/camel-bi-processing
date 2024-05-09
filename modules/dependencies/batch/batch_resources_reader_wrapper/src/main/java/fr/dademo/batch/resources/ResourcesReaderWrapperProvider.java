@@ -7,7 +7,8 @@
 package fr.dademo.batch.resources;
 
 import de.siegmar.fastcsv.reader.CsvReader;
-import de.siegmar.fastcsv.reader.NamedCsvReader;
+import de.siegmar.fastcsv.reader.CsvRecord;
+import de.siegmar.fastcsv.reader.NamedCsvRecord;
 import fr.dademo.batch.resources.backends.apache_commons_csv.ApacheCommonsCsvResourcesReaderWrapper;
 import fr.dademo.batch.resources.backends.fast_csv.FastCsvResourcesReaderWrapper;
 import fr.dademo.batch.resources.backends.named_fast_csv.NamedFastCsvResourcesReaderWrapper;
@@ -30,19 +31,19 @@ public final class ResourcesReaderWrapperProvider {
         return new ApacheCommonsCsvResourcesReaderWrapper(delegate, closeDelegate);
     }
 
-    public static ResourcesReaderWrapper of(@Nonnull CsvReader delegate, boolean hasHeader) {
+    public static ResourcesReaderWrapper of(@Nonnull CsvReader<CsvRecord> delegate, boolean hasHeader) {
         return new FastCsvResourcesReaderWrapper(delegate, hasHeader, DEFAULT_CLOSE_DELEGATE);
     }
 
-    public static ResourcesReaderWrapper of(@Nonnull CsvReader delegate, boolean hasHeader, boolean closeDelegate) {
+    public static ResourcesReaderWrapper of(@Nonnull CsvReader<CsvRecord> delegate, boolean hasHeader, boolean closeDelegate) {
         return new FastCsvResourcesReaderWrapper(delegate, hasHeader, closeDelegate);
     }
 
-    public static ResourcesReaderWrapper of(@Nonnull NamedCsvReader delegate) {
+    public static ResourcesReaderWrapper ofNamed(@Nonnull CsvReader<NamedCsvRecord> delegate) {
         return new NamedFastCsvResourcesReaderWrapper(delegate, DEFAULT_CLOSE_DELEGATE);
     }
 
-    public static ResourcesReaderWrapper of(@Nonnull NamedCsvReader delegate, boolean closeDelegate) {
+    public static ResourcesReaderWrapper ofNamed(@Nonnull CsvReader<NamedCsvRecord> delegate, boolean closeDelegate) {
         return new NamedFastCsvResourcesReaderWrapper(delegate, closeDelegate);
     }
 }

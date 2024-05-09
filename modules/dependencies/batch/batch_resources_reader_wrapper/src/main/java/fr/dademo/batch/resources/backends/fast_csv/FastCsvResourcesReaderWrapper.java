@@ -7,7 +7,7 @@
 package fr.dademo.batch.resources.backends.fast_csv;
 
 import de.siegmar.fastcsv.reader.CsvReader;
-import de.siegmar.fastcsv.reader.CsvRow;
+import de.siegmar.fastcsv.reader.CsvRecord;
 import fr.dademo.batch.resources.ResourcesReaderWrapper;
 import fr.dademo.batch.resources.WrappedRowResource;
 
@@ -23,7 +23,7 @@ import java.util.stream.StreamSupport;
 public class FastCsvResourcesReaderWrapper implements ResourcesReaderWrapper {
 
     @Nonnull
-    private final CsvReader delegate;
+    private final CsvReader<CsvRecord> delegate;
 
     private final boolean closeDelegate;
 
@@ -33,7 +33,7 @@ public class FastCsvResourcesReaderWrapper implements ResourcesReaderWrapper {
     @Nullable
     private final Map<String, Integer> columnsIndexMapping;
 
-    public FastCsvResourcesReaderWrapper(@Nonnull CsvReader delegate, boolean hasHeader, boolean closeDelegate) {
+    public FastCsvResourcesReaderWrapper(@Nonnull CsvReader<CsvRecord> delegate, boolean hasHeader, boolean closeDelegate) {
 
         this.delegate = delegate;
         this.closeDelegate = closeDelegate;
@@ -61,16 +61,17 @@ public class FastCsvResourcesReaderWrapper implements ResourcesReaderWrapper {
         }
     }
 
+    @Nonnull
     @Override
     public Iterator<WrappedRowResource> iterator() {
         return iterator;
     }
 
-    private WrappedRowResource toWrappedResource(CsvRow csvRow) {
-        return new FastCsvWrappedRowResource(csvRow, columnsIndexMapping);
+    private WrappedRowResource toWrappedResource(CsvRecord csvRecord) {
+        return new FastCsvWrappedRecordResource(csvRecord, columnsIndexMapping);
     }
 
-    private Map<String, Integer> mapToColumnsIndexMapping(CsvRow row) {
+    private Map<String, Integer> mapToColumnsIndexMapping(CsvRecord row) {
 
         return IntStream.rangeClosed(1, row.getFieldCount())
             .boxed()

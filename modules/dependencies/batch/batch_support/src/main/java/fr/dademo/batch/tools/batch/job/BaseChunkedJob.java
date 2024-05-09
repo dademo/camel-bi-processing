@@ -14,24 +14,23 @@ import fr.dademo.batch.tools.batch.job.exceptions.MissingJdbcDataSource;
 import fr.dademo.batch.tools.batch.job.exceptions.MissingMigrationFolder;
 import fr.dademo.batch.tools.batch.job.tasklets.LiquibaseMigrationTasklet;
 import fr.dademo.batch.tools.batch.job.tasklets.NoActionTasklet;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.jooq.DSLContext;
 import org.springframework.batch.core.ChunkListener;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import jakarta.validation.constraints.NotBlank;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -41,7 +40,11 @@ import java.util.stream.Stream;
 @Getter(AccessLevel.PROTECTED)
 public abstract class BaseChunkedJob extends BaseSteppedJob {
 
-    private final StepBuilderFactory stepBuilderFactory;
+    @Nonnull
+    private final JobRepository jobRepository;
+
+    @Nonnull
+    private final PlatformTransactionManager platformTransactionManager;
 
     private final BatchConfiguration batchConfiguration;
 
@@ -51,15 +54,16 @@ public abstract class BaseChunkedJob extends BaseSteppedJob {
 
     private final ResourceLoader resourceLoader;
 
-    protected BaseChunkedJob(JobBuilderFactory jobBuilderFactory,
-                             StepBuilderFactory stepBuilderFactory,
+    protected BaseChunkedJob(@Nonnull JobRepository jobRepository,
+                             @Nonnull PlatformTransactionManager platformTransactionManager,
                              BatchConfiguration batchConfiguration,
                              BatchDataSourcesConfiguration batchDataSourcesConfiguration,
                              DataSourcesFactory dataSourcesFactory,
                              ResourceLoader resourceLoader) {
 
-        super(jobBuilderFactory);
-        this.stepBuilderFactory = stepBuilderFactory;
+        super(jobRepository);
+        this.jobRepository = jobRepository;
+        this.platformTransactionManager = platformTransactionManager;
         this.batchConfiguration = batchConfiguration;
         this.batchDataSourcesConfiguration = batchDataSourcesConfiguration;
         this.dataSourcesFactory = dataSourcesFactory;
@@ -156,7 +160,7 @@ public abstract class BaseChunkedJob extends BaseSteppedJob {
                     tasks.get(stepIndex),
                     String.format("%s-init-%d", jobName, stepIndex + 1))
                 )
-                .collect(Collectors.toList());
+                .toList();
         } else {
             return Collections.emptyList();
         }
@@ -171,7 +175,7 @@ public abstract class BaseChunkedJob extends BaseSteppedJob {
                     tasks.get(stepIndex),
                     String.format("%s-closing-%d", jobName, stepIndex + 1))
                 )
-                .collect(Collectors.toList());
+                .toList();
         } else {
             return Collections.emptyList();
         }
@@ -192,7 +196,7 @@ public abstract class BaseChunkedJob extends BaseSteppedJob {
                 Stream.of(getChunkedStepProvider().getStep(jobName, getJobConfiguration(), getChunkListeners()))
             ),
             getClosingSteps(jobName).stream()
-        ).collect(Collectors.toList());
+        ).toList();
     }
 
     protected Tasklet getJobExecutionGuardTasklet() {
@@ -227,11 +231,10 @@ public abstract class BaseChunkedJob extends BaseSteppedJob {
 
     protected Step getStandardStep(Tasklet tasklet, String name) {
 
-        final var stepBuilder = stepBuilderFactory
-            .get(name)
-            .tasklet(tasklet)
-            .startLimit(1)
-            .throttleLimit(1);
+        final var stepBuilder = new StepBuilder(name, jobRepository)
+            .tasklet(tasklet, platformTransactionManager)
+            .startLimit(1);
+        // .throttleLimit(1);
         getStepExecutionListeners().forEach(stepBuilder::listener);
         return stepBuilder.build();
     }

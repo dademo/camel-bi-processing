@@ -18,10 +18,10 @@ import fr.dademo.bi.companies.shared.AbstractApplicationJdbcWriter;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.BatchBindStep;
 import org.jooq.Insert;
+import org.springframework.batch.item.Chunk;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 import static fr.dademo.batch.beans.BeanValues.*;
@@ -61,13 +61,12 @@ public class CompanyInheritanceJdbcItemWriterImpl extends AbstractApplicationJdb
     }
 
     @Override
-    public void write(List<? extends CompanyInheritance> items) {
+    public void write(Chunk<? extends CompanyInheritance> items) {
 
         log.info("Writing {} company inheritance documents", items.size());
         performBulkWrite(items);
     }
 
-    @SuppressWarnings("resource")
     @Override
     protected Insert<CompanyInheritanceRecord> getInsertStatement() {
 

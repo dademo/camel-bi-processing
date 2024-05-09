@@ -45,7 +45,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 /**
@@ -119,7 +118,7 @@ public class DatabaseBackendMappingServiceImpl extends AbstractGenericDataBacken
                     dataBackendDescription,
                     dataBackendStateExecution
                 ))
-                .collect(Collectors.toList())
+                .toList()
         );
 
         dataBackendDescription.getDatabaseConnections().addAll(
@@ -129,7 +128,7 @@ public class DatabaseBackendMappingServiceImpl extends AbstractGenericDataBacken
                     dataBackendDescription,
                     dataBackendStateExecution
                 ))
-                .collect(Collectors.toList())
+                .toList()
         );
 
         dataBackendDescription.getDatabaseReplicationPeers().addAll(
@@ -139,7 +138,7 @@ public class DatabaseBackendMappingServiceImpl extends AbstractGenericDataBacken
                     dataBackendDescription,
                     dataBackendStateExecution
                 ))
-                .collect(Collectors.toList())
+                .toList()
         );
     }
 
@@ -171,7 +170,7 @@ public class DatabaseBackendMappingServiceImpl extends AbstractGenericDataBacken
         finalDatabaseDescriptionEntity.setSchemas(
             StreamSupport.stream(databaseDescription.getDatabaseSchemas().spliterator(), false)
                 .map(databaseSchema -> mapToDataBackendDatabaseSchemaEntity(databaseSchema, finalDatabaseDescriptionEntity, dataBackendStateExecution))
-                .collect(Collectors.toList())
+                .toList()
         );
 
         return finalDatabaseDescriptionEntity;
@@ -243,7 +242,7 @@ public class DatabaseBackendMappingServiceImpl extends AbstractGenericDataBacken
                     finalDatabaseSchemaEntity,
                     dataBackendStateExecution
                 ))
-                .collect(Collectors.toList())
+                .toList()
         );
         finalDatabaseSchemaEntity.setViews(
             StreamSupport.stream(databaseSchema.getViews().spliterator(), false)
@@ -252,7 +251,7 @@ public class DatabaseBackendMappingServiceImpl extends AbstractGenericDataBacken
                     finalDatabaseSchemaEntity,
                     dataBackendStateExecution
                 ))
-                .collect(Collectors.toList())
+                .toList()
         );
         finalDatabaseSchemaEntity.setIndexes(
             StreamSupport.stream(databaseSchema.getIndexes().spliterator(), false)
@@ -261,7 +260,7 @@ public class DatabaseBackendMappingServiceImpl extends AbstractGenericDataBacken
                     finalDatabaseSchemaEntity,
                     dataBackendStateExecution
                 ))
-                .collect(Collectors.toList())
+                .toList()
         );
 
         return finalDatabaseSchemaEntity;
@@ -369,7 +368,7 @@ public class DatabaseBackendMappingServiceImpl extends AbstractGenericDataBacken
         dataBackendStateExecution.getDataBackendDescription().setDataBackendClusterNodes(
             StreamSupport.stream(globalDatabaseDescription.getBackendNodes().spliterator(), false)
                 .map(backendNode -> mapToDataBackendClusterNodeEntity(backendNode, dataBackendStateExecution))
-                .collect(Collectors.toList())
+                .toList()
         );
     }
 

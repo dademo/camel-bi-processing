@@ -14,14 +14,17 @@ import fr.dademo.batch.tools.batch.job.ChunkedStepProvider;
 import lombok.Builder;
 import lombok.Getter;
 import org.mockito.Mockito;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.annotation.Nonnull;
+
+import static fr.dademo.batch.beans.BeanValues.BATCH_DATA_SOURCE_TRANSACTION_MANAGER_BEAN_NAME;
 
 /**
  * @author dademo
@@ -44,15 +47,15 @@ public class MockedChunkJob<I, O> extends BaseChunkedJob {
 
     @Builder
     public MockedChunkJob(
-        JobBuilderFactory jobBuilderFactory,
-        StepBuilderFactory stepBuilderFactory,
+        @Nonnull JobRepository jobRepository,
+        @Nonnull @Qualifier(BATCH_DATA_SOURCE_TRANSACTION_MANAGER_BEAN_NAME) PlatformTransactionManager platformTransactionManager,
         BatchConfiguration batchConfiguration,
         BatchDataSourcesConfiguration batchDataSourcesConfiguration,
         DataSourcesFactory dataSourcesFactory,
         ResourceLoader resourceLoader) {
         super(
-            jobBuilderFactory,
-            stepBuilderFactory,
+            jobRepository,
+            platformTransactionManager,
             batchConfiguration,
             batchDataSourcesConfiguration,
             dataSourcesFactory,

@@ -13,19 +13,17 @@ import fr.dademo.batch.repository.datamodel.DataSetRecord;
 import fr.dademo.batch.repository.datamodel.DataSetTable;
 import fr.dademo.batch.repository.datamodel.exceptions.DataSetEntityNotFoundException;
 import fr.dademo.batch.repository.exceptions.NotAnNumericIdentifierException;
-import org.jooq.*;
+import jakarta.validation.constraints.NotBlank;
 import org.jooq.Record;
+import org.jooq.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Nonnull;
-
-import jakarta.validation.constraints.NotBlank;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static fr.dademo.batch.beans.BeanValues.BATCH_DATA_SOURCE_NAME;
@@ -52,28 +50,22 @@ public class DataSetRepositoryJdbcImpl implements DataSetRepository {
     @Override
     public Optional<DataSetEntity> findById(@Nonnull @NotBlank String id) {
 
-        try (final var query = getBaseQuery()) {
-
-            return queryExecutorWrapper(query.where(dataSetTable.FIELD_DATA_SET_ID.eq(toLong(id))))
-                .findFirst();
-        }
+        return queryExecutorWrapper(
+            getBaseQuery().where(dataSetTable.FIELD_DATA_SET_ID.eq(toLong(id)))
+        ).findFirst();
     }
 
     @Override
     public boolean existsById(@Nonnull @NotBlank String id) {
 
-        try (final var query = batchDSLContext.selectCount()) {
-
-            final var finalQuery = query.from(dataSetTable)
-                .where(dataSetTable.FIELD_DATA_SET_ID.eq(toLong(id)));
-
-            return finalQuery
-                .fetch()
-                .stream()
-                .map(Record1::value1)
-                .mapToInt(Integer::intValue)
-                .sum() > 0;
-        }
+        return batchDSLContext.selectCount()
+            .from(dataSetTable)
+            .where(dataSetTable.FIELD_DATA_SET_ID.eq(toLong(id)))
+            .fetch()
+            .stream()
+            .map(Record1::value1)
+            .mapToInt(Integer::intValue)
+            .sum() > 0;
     }
 
     @Override
@@ -89,59 +81,52 @@ public class DataSetRepositoryJdbcImpl implements DataSetRepository {
     @Override
     public void delete(DataSetEntity entity) {
 
-        try (final var deleteStatement = batchDSLContext.deleteFrom(dataSetTable)) {
-
-            deleteStatement
-                .where(dataSetTable.FIELD_DATA_SET_ID.eq(toLong(entity.getId())))
-                .execute();
-        }
+        batchDSLContext.deleteFrom(dataSetTable)
+            .where(dataSetTable.FIELD_DATA_SET_ID.eq(toLong(entity.getId())))
+            .execute();
     }
 
     @Override
     public Optional<DataSetEntity> findFirstByNameOrderByTimestampDesc(@Nonnull String name) {
 
-        try (final var query = getBaseQuery()) {
-
-            return queryExecutorWrapper(query
+        return queryExecutorWrapper(
+            getBaseQuery()
                 .where(dataSetTable.FIELD_DATA_SET_NAME.eq(name))
                 .orderBy(dataSetTable.FIELD_DATA_SET_TIMESTAMP.desc())
-            ).findFirst();
-        }
+        ).findFirst();
     }
 
     @Override
     public List<DataSetEntity> findByName(@Nonnull String name) {
 
-        try (final var query = getBaseQuery()) {
-
-            return queryExecutorWrapper(query.where(dataSetTable.FIELD_DATA_SET_NAME.eq(name)))
-                .collect(Collectors.toList());
-        }
+        return queryExecutorWrapper(
+            getBaseQuery().where(dataSetTable.FIELD_DATA_SET_NAME.eq(name))
+        ).toList();
     }
 
     @Override
     public Optional<DataSetEntity> findFirstByNameAndParentOrderByTimestampDesc(@Nonnull String name, @Nonnull @NotBlank String parent) {
 
-        try (final var query = getBaseQuery()) {
-
-            return queryExecutorWrapper(query.where(
-                dataSetTable.FIELD_DATA_SET_NAME.eq(name),
-                dataSetTable.FIELD_DATA_SET_PARENT.eq(toLong(parent))
-            )).findFirst();
-        }
+        return queryExecutorWrapper(
+            getBaseQuery()
+                .where(
+                    dataSetTable.FIELD_DATA_SET_NAME.eq(name),
+                    dataSetTable.FIELD_DATA_SET_PARENT.eq(toLong(parent))
+                )
+        ).findFirst();
     }
 
     @Override
     public Optional<DataSetEntity> findFirstByNameAndSourceAndSourceSubOrderByTimestampDesc(@Nonnull String name, String source, String sourceSub) {
 
-        try (final var query = getBaseQuery()) {
-
-            return queryExecutorWrapper(query.where(
-                dataSetTable.FIELD_DATA_SET_NAME.eq(name),
-                dataSetTable.FIELD_DATA_SET_SOURCE.eq(source),
-                dataSetTable.FIELD_DATA_SET_SOURCE_SUB.eq(sourceSub)
-            )).findFirst();
-        }
+        return queryExecutorWrapper(
+            getBaseQuery()
+                .where(
+                    dataSetTable.FIELD_DATA_SET_NAME.eq(name),
+                    dataSetTable.FIELD_DATA_SET_SOURCE.eq(source),
+                    dataSetTable.FIELD_DATA_SET_SOURCE_SUB.eq(sourceSub)
+                )
+        ).findFirst();
     }
 
     private SelectWhereStep<Record> getBaseQuery() {
@@ -164,29 +149,32 @@ public class DataSetRepositoryJdbcImpl implements DataSetRepository {
 
     private DataSetEntity saveWithId(DataSetEntity entity) {
 
-        try (final var insertStatement = batchDSLContext
-            .insertInto(dataSetTable, dataSetTable.getFieldsList())
-            .values(dataSetEntityValuesWithId(entity))) {
-            return handleSaveOnDuplicateUpdateStatement(insertStatement, entity);
-        }
+        return handleSaveOnDuplicateUpdateStatement(
+            batchDSLContext
+                .insertInto(dataSetTable, dataSetTable.getFieldsList())
+                .values(dataSetEntityValuesWithId(entity)),
+            entity
+        );
     }
 
     private DataSetEntity saveWithoutId(DataSetEntity entity) {
 
-        try (final var insertStatement = batchDSLContext
-            .insertInto(dataSetTable, dataSetTable.getFieldsListWithoutId())
-            .values(dataSetEntityValuesWithoutId(entity))) {
-            return handleSaveOnDuplicateUpdateStatement(insertStatement, entity);
-        }
+        return handleSaveOnDuplicateUpdateStatement(
+            batchDSLContext
+                .insertInto(dataSetTable, dataSetTable.getFieldsListWithoutId())
+                .values(dataSetEntityValuesWithoutId(entity)),
+            entity
+        );
     }
 
     private DataSetEntity handleSaveOnDuplicateUpdateStatement(InsertValuesStepN<DataSetRecord> insertStatement, DataSetEntity entity) {
 
-        try (final var onDuplicateUpdateStatement = handleDuplicationOptions(insertStatement, entity)) {
-            return queryExecutorWrapper(onDuplicateUpdateStatement.returning(dataSetTable.getFieldsList()))
-                .findFirst()
-                .orElseThrow(DataSetEntityNotFoundException::new);
-        }
+        return queryExecutorWrapper(
+            handleDuplicationOptions(insertStatement, entity)
+                .returning(dataSetTable.getFieldsList())
+        )
+            .findFirst()
+            .orElseThrow(DataSetEntityNotFoundException::new);
     }
 
     private Object[] dataSetEntityValuesWithoutId(DataSetEntity dataSetEntity) {
@@ -208,7 +196,6 @@ public class DataSetRepositoryJdbcImpl implements DataSetRepository {
         ).toArray();
     }
 
-    @SuppressWarnings("resource")
     private InsertOnDuplicateSetMoreStep<DataSetRecord> handleDuplicationOptions(InsertValuesStepN<DataSetRecord> insertStatement, DataSetEntity entity) {
 
         return insertStatement

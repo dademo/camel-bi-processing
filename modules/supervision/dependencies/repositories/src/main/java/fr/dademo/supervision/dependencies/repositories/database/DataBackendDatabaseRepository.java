@@ -7,6 +7,8 @@
 package fr.dademo.supervision.dependencies.repositories.database;
 
 import fr.dademo.supervision.dependencies.entities.database.database.DataBackendDatabaseEntity;
+import jakarta.persistence.QueryHint;
+import org.hibernate.jpa.HibernateHints;
 import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,7 +16,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.QueryHints;
 
 import javax.annotation.Nonnull;
-import javax.persistence.QueryHint;
 import java.util.Optional;
 
 /**
@@ -26,11 +27,11 @@ public interface DataBackendDatabaseRepository extends
 
     @Nonnull
     @Override
-    @QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
+    @QueryHints(@QueryHint(name = HibernateHints.HINT_CACHEABLE, value = "true"))
     <S extends DataBackendDatabaseEntity> Optional<S> findOne(@Nonnull Example<S> example);
 
     @Nonnull
     @Override
-    @QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
+    @QueryHints(@QueryHint(name = HibernateHints.HINT_CACHEABLE, value = "true"))
     Optional<DataBackendDatabaseEntity> findOne(Specification<DataBackendDatabaseEntity> spec);
 }

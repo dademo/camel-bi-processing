@@ -6,25 +6,25 @@
 
 package fr.dademo.batch.resources.backends.named_fast_csv;
 
-import de.siegmar.fastcsv.reader.NamedCsvRow;
+import de.siegmar.fastcsv.reader.CsvRecord;
+import de.siegmar.fastcsv.reader.NamedCsvRecord;
 import fr.dademo.batch.resources.BaseWrappedRowResource;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class NamedFastCsvWrappedRowResource extends BaseWrappedRowResource {
+public class NamedFastCsvWrappedRecordResource extends BaseWrappedRowResource {
 
     @Nonnull
-    private final NamedCsvRow delegate;
+    private final CsvRecord delegate;
 
-    public NamedFastCsvWrappedRowResource(@Nonnull NamedCsvRow delegate) {
+    public NamedFastCsvWrappedRecordResource(@Nonnull NamedCsvRecord delegate) {
         this.delegate = delegate;
     }
 
     @Nullable
     @Override
     public String getString(@Nonnull String columnLabel) {
-
-        return delegate.getField(columnLabel);
+        return delegate.getField(delegate.getFields().indexOf(columnLabel));
     }
 }

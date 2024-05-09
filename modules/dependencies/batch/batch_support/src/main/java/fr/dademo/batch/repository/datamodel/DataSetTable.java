@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.jooq.impl.DSL.*;
@@ -77,7 +76,7 @@ public class DataSetTable extends CustomTable<DataSetRecord> {
         return Stream.concat(
             Stream.of(FIELD_DATA_SET_ID),
             getFieldsListWithoutId().stream()
-        ).collect(Collectors.toList());
+        ).toList();
     }
 
     @AllArgsConstructor

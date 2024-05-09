@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -144,7 +143,7 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
             .map(new DatabaseStatisticsToBuilderValueMapper())
             .map(v -> v.databaseSchemas(new ArrayList<>(getSchemas(getRowsCount))))
             .map(DatabaseDescriptionDefaultImpl.DatabaseDescriptionDefaultImplBuilder::build)
-            .collect(Collectors.toList());
+            .toList();
     }
 
     private List<DatabaseConnection> getAllDatabasesConnections() {
@@ -152,7 +151,7 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
         return databasesConnectionsQueryRepository.getDatabasesConnections()
             .stream()
             .map(new DatabaseConnectionValueMapper())
-            .collect(Collectors.toList());
+            .toList();
     }
 
 
@@ -171,7 +170,7 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
                 databaseReplicationPeerQueryRepository.getDatabaseClientReplicationInformations().stream()
             )
             .map(new DatabaseReplicationPeerValueMapper())
-            .collect(Collectors.toList());
+            .toList();
 
         objectBuilder
             .backendNodes(
@@ -181,7 +180,7 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
                     replicationHosts.stream()
                         .map(DatabaseReplicationPeer::getPeerHostName)
                         .map(backendNodeBuilder(false))
-                ).collect(Collectors.toList()))
+                ).toList())
             .clusterSize(replicationHosts.size() + 1)
             .primaryCount(1)
             .replicaCount(replicationHosts.size())
@@ -199,7 +198,7 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
             .sorted()
             .distinct()
             .map(new DatabaseSchemaValueMapper())
-            .collect(Collectors.toList());
+            .toList();
 
         databaseSchemas.forEach(mergeWithDatabaseTablesAndIndexes(databaseTableEntities, databaseIndexEntities, getRowsCount));
 
@@ -217,20 +216,20 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
                 .filter(e -> e.getSchema().equals(databaseSchema.getName()))
                 .filter(e -> e.getType().toUpperCase().contains("TABLE"))
                 .map(new DatabaseTableValueMapper())
-                .collect(Collectors.toList());
+                .toList();
 
             final var views = databaseTableEntities
                 .stream()
                 .filter(e -> e.getSchema().equals(databaseSchema.getName()))
                 .filter(e -> e.getType().toUpperCase().contains("VIEW"))
                 .map(new DatabaseViewValueMapper())
-                .collect(Collectors.toList());
+                .toList();
 
             final var indexes = databaseIndexEntities
                 .stream()
                 .filter(e -> e.getSchema().equals(databaseSchema.getName()))
                 .map(new DatabaseIndexValueMapper())
-                .collect(Collectors.toList());
+                .toList();
 
             if (getRowsCount) {
                 tables.forEach(tableRowsCountSetterForSchema(databaseSchema));

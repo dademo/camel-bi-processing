@@ -12,7 +12,6 @@ import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
 
 import java.time.Duration;
-import java.util.Date;
 import java.util.Optional;
 
 @Slf4j
@@ -30,8 +29,11 @@ public class DefaultStepExecutionListener implements StepExecutionListener {
             stepExecution.getStepName(),
             stepExecution.getExitStatus().getExitCode(),
             Optional.ofNullable(stepExecution.getEndTime())
-                .map(Date::toInstant)
-                .map(endInstant -> Duration.between(stepExecution.getStartTime().toInstant(), endInstant))
+                .map(endDateTime ->
+                    Optional.ofNullable(stepExecution.getStartTime())
+                        .map(startDateTime -> Duration.between(startDateTime, endDateTime))
+                        .orElse(Duration.ZERO)
+                )
                 .orElse(Duration.ZERO),
             stepExecution.getSummary()
         );

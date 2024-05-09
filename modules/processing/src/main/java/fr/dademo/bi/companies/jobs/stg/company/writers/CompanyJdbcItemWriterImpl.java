@@ -19,10 +19,10 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.BatchBindStep;
 import org.jooq.Insert;
+import org.springframework.batch.item.Chunk;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 import static fr.dademo.batch.beans.BeanValues.*;
@@ -63,13 +63,12 @@ public class CompanyJdbcItemWriterImpl extends AbstractApplicationJdbcWriter<Com
 
     @SneakyThrows
     @Override
-    public void write(List<? extends Company> items) {
+    public void write(Chunk<? extends Company> items) {
 
         log.info("Writing {} company documents", items.size());
         performBulkWrite(items);
     }
 
-    @SuppressWarnings("resource")
     @Override
     protected Insert<CompanyRecord> getInsertStatement() {
 

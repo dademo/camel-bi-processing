@@ -6,8 +6,8 @@
 
 package fr.dademo.batch.resources.backends.named_fast_csv;
 
-import de.siegmar.fastcsv.reader.NamedCsvReader;
-import de.siegmar.fastcsv.reader.NamedCsvRow;
+import de.siegmar.fastcsv.reader.CsvReader;
+import de.siegmar.fastcsv.reader.NamedCsvRecord;
 import fr.dademo.batch.resources.ResourcesReaderWrapper;
 import fr.dademo.batch.resources.WrappedRowResource;
 
@@ -17,12 +17,12 @@ import java.util.Iterator;
 public class NamedFastCsvResourcesReaderWrapper implements ResourcesReaderWrapper {
 
     @Nonnull
-    private final NamedCsvReader delegate;
+    private final CsvReader<NamedCsvRecord> delegate;
 
     private final boolean closeDelegate;
 
 
-    public NamedFastCsvResourcesReaderWrapper(@Nonnull NamedCsvReader delegate, boolean closeDelegate) {
+    public NamedFastCsvResourcesReaderWrapper(@Nonnull CsvReader<NamedCsvRecord> delegate, boolean closeDelegate) {
 
         this.delegate = delegate;
         this.closeDelegate = closeDelegate;
@@ -36,6 +36,7 @@ public class NamedFastCsvResourcesReaderWrapper implements ResourcesReaderWrappe
         }
     }
 
+    @Nonnull
     @Override
     public Iterator<WrappedRowResource> iterator() {
         return delegate.stream()
@@ -43,7 +44,7 @@ public class NamedFastCsvResourcesReaderWrapper implements ResourcesReaderWrappe
             .iterator();
     }
 
-    private WrappedRowResource toWrappedResource(NamedCsvRow namedCsvRow) {
-        return new NamedFastCsvWrappedRowResource(namedCsvRow);
+    private WrappedRowResource toWrappedResource(NamedCsvRecord namedCsvRecord) {
+        return new NamedFastCsvWrappedRecordResource(namedCsvRecord);
     }
 }

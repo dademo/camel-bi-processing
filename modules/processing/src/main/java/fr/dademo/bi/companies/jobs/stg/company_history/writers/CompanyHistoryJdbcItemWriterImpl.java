@@ -18,10 +18,10 @@ import fr.dademo.bi.companies.shared.AbstractApplicationJdbcWriter;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.BatchBindStep;
 import org.jooq.Insert;
+import org.springframework.batch.item.Chunk;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 import static fr.dademo.batch.beans.BeanValues.*;
@@ -61,13 +61,12 @@ public class CompanyHistoryJdbcItemWriterImpl extends AbstractApplicationJdbcWri
     }
 
     @Override
-    public void write(List<? extends CompanyHistory> items) {
+    public void write(Chunk<? extends CompanyHistory> items) {
 
         log.info("Writing {} company history documents", items.size());
         performBulkWrite(items);
     }
 
-    @SuppressWarnings("resource")
     @Override
     protected Insert<CompanyHistoryRecord> getInsertStatement() {
 

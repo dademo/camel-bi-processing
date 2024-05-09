@@ -45,9 +45,10 @@ public class JooqTruncateTasklet<R extends TableRecord<R>> implements Tasklet {
         log.info("Truncating the target table {}", databaseTable);
         dslContext.transaction(configuration -> {
 
-            try (final var statement = dslContext.truncate(databaseTable)) {
-
-                final var batchResult = statement.execute();
+            try {
+                final var batchResult = dslContext
+                    .truncate(databaseTable)
+                    .execute();
                 log.info("{} rows affected", batchResult);
             } catch (DataAccessException ex) {
                 log.error("An error occurred while truncating the table", ex);

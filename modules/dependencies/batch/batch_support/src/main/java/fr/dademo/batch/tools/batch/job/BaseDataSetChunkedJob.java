@@ -12,15 +12,14 @@ import fr.dademo.batch.configuration.BatchDataSourcesConfiguration;
 import fr.dademo.batch.services.DataSetService;
 import fr.dademo.batch.tools.batch.job.listeners.DataSetBatchStatusUpdateJobExecutionListener;
 import org.springframework.batch.core.JobExecutionListener;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -30,16 +29,17 @@ public abstract class BaseDataSetChunkedJob extends BaseChunkedJob {
 
     private final DataSetService dataSetService;
 
-    protected BaseDataSetChunkedJob(JobBuilderFactory jobBuilderFactory,
-                                    StepBuilderFactory stepBuilderFactory,
-                                    BatchConfiguration batchConfiguration,
-                                    BatchDataSourcesConfiguration batchDataSourcesConfiguration,
-                                    DataSourcesFactory dataSourcesFactory,
-                                    ResourceLoader resourceLoader,
-                                    DataSetService dataSetService) {
+    protected BaseDataSetChunkedJob(
+        @Nonnull JobRepository jobRepository,
+        @Nonnull PlatformTransactionManager platformTransactionManager,
+        @Nonnull BatchConfiguration batchConfiguration,
+        @Nonnull BatchDataSourcesConfiguration batchDataSourcesConfiguration,
+        @Nonnull DataSourcesFactory dataSourcesFactory,
+        @Nonnull ResourceLoader resourceLoader,
+        @Nonnull DataSetService dataSetService) {
         super(
-            jobBuilderFactory,
-            stepBuilderFactory,
+            jobRepository,
+            platformTransactionManager,
             batchConfiguration,
             batchDataSourcesConfiguration,
             dataSourcesFactory,
@@ -66,6 +66,6 @@ public abstract class BaseDataSetChunkedJob extends BaseChunkedJob {
         return Stream.concat(
             super.getJobExecutionListeners().stream(),
             Stream.of(new DataSetBatchStatusUpdateJobExecutionListener(dataSetService))
-        ).collect(Collectors.toList());
+        ).toList();
     }
 }

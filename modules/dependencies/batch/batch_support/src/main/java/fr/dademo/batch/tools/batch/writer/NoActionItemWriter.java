@@ -7,10 +7,10 @@
 package fr.dademo.batch.tools.batch.writer;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 
 /**
  * @author dademo
@@ -29,7 +29,7 @@ public class NoActionItemWriter<T> implements ItemWriter<T> {
     }
 
     @Override
-    public void write(@Nonnull List<? extends T> items) {
+    public void write(@Nonnull Chunk<? extends T> items) {
 
         if (printWrite) {
             log.info("Writing {} items", items.size());

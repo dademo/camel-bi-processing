@@ -20,7 +20,6 @@ import javax.annotation.Nonnull;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * @author dademo
@@ -50,7 +49,7 @@ public class DatabaseReplicationPeerServiceImpl implements DatabaseReplicationPe
 
         return repository.findDatabaseReplicationPeerStatisticsBetweenDates(id, from, to)
             .stream().map(DataBackendDatabaseReplicationPeerStatisticsEntityToDtoMapper.INSTANCE::viewToDto)
-            .collect(Collectors.toList());
+            .toList();
     }
 
     @Override

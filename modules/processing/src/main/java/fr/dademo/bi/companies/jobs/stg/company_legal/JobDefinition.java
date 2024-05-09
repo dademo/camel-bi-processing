@@ -21,16 +21,19 @@ import fr.dademo.data.helpers.data_gouv_fr.helpers.DataGouvFrFilterHelpers;
 import fr.dademo.data.helpers.data_gouv_fr.repository.DataGouvFrDataQuerierService;
 import fr.dademo.data.helpers.data_gouv_fr.repository.exception.ResourceNotFoundException;
 import lombok.SneakyThrows;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Comparator;
+
+import static fr.dademo.batch.beans.BeanValues.BATCH_DATA_SOURCE_TRANSACTION_MANAGER_BEAN_NAME;
 
 /**
  * @author dademo
@@ -48,7 +51,6 @@ public class JobDefinition extends AbstractApplicationStgJob {
     private static final String DATA_TITLE_PREFIX = "Sirene : Fichier StockUniteLegale ";
 
 
-    private final StepBuilderFactory stepBuilderFactory;
     private final CompanyLegalItemReader companyLegalItemReader;
     private final CompanyLegalItemMapper companyLegalItemMapper;
     private final CompanyLegalItemWriter companyLegalItemWriter;
@@ -56,8 +58,8 @@ public class JobDefinition extends AbstractApplicationStgJob {
 
     public JobDefinition(
         // Common job resources
-        JobBuilderFactory jobBuilderFactory,
-        StepBuilderFactory stepBuilderFactory,
+        @Nonnull JobRepository jobRepository,
+        @Nonnull @Qualifier(BATCH_DATA_SOURCE_TRANSACTION_MANAGER_BEAN_NAME) PlatformTransactionManager platformTransactionManager,
         BatchConfiguration batchConfiguration,
         BatchDataSourcesConfiguration batchDataSourcesConfiguration,
         DataSourcesFactory dataSourcesFactory,
@@ -70,8 +72,8 @@ public class JobDefinition extends AbstractApplicationStgJob {
         CompanyLegalItemWriter companyLegalItemWriter) {
 
         super(
-            jobBuilderFactory,
-            stepBuilderFactory,
+            jobRepository,
+            platformTransactionManager,
             batchConfiguration,
             batchDataSourcesConfiguration,
             dataSourcesFactory,
@@ -79,7 +81,6 @@ public class JobDefinition extends AbstractApplicationStgJob {
             dataSetService
         );
 
-        this.stepBuilderFactory = stepBuilderFactory;
         this.companyLegalItemReader = companyLegalItemReader;
         this.companyLegalItemMapper = companyLegalItemMapper;
         this.companyLegalItemWriter = companyLegalItemWriter;
@@ -96,7 +97,8 @@ public class JobDefinition extends AbstractApplicationStgJob {
     protected ChunkedStepProvider getChunkedStepProvider() {
 
         return new SimpleChunkedStepProvider<>(
-            stepBuilderFactory,
+            getJobRepository(),
+            getPlatformTransactionManager(),
             companyLegalItemReader,
             companyLegalItemMapper,
             companyLegalItemWriter,

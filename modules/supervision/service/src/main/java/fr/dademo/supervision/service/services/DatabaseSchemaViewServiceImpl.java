@@ -20,7 +20,6 @@ import javax.annotation.Nonnull;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * @author dademo
@@ -55,7 +54,7 @@ public class DatabaseSchemaViewServiceImpl implements DatabaseSchemaViewService 
             .findDatabaseSchemaViewStatisticsBetweenDates(id, from, to)
             .stream()
             .map(DataBackendDatabaseSchemaViewStatisticsEntityToDtoMapper.INSTANCE::viewToDto)
-            .collect(Collectors.toList());
+            .toList();
     }
 
     @Override

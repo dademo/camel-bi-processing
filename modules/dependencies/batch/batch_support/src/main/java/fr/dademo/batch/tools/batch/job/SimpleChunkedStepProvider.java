@@ -9,10 +9,11 @@ package fr.dademo.batch.tools.batch.job;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.springframework.batch.core.StepExecutionListener;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -28,12 +29,13 @@ public class SimpleChunkedStepProvider<I, O> extends AbstractChunkedStepProvider
     private final ItemWriter<O> itemWriter;
     private final List<StepExecutionListener> stepExecutionListeners;
 
-    public SimpleChunkedStepProvider(@Nonnull StepBuilderFactory stepBuilderFactory,
+    public SimpleChunkedStepProvider(@Nonnull JobRepository jobRepository,
+                                     @Nonnull PlatformTransactionManager platformTransactionManager,
                                      @Nonnull ItemReader<I> itemReader,
                                      @Nonnull ItemProcessor<I, O> itemProcessor,
                                      @Nonnull ItemWriter<O> itemWriter,
                                      @Nonnull List<StepExecutionListener> stepExecutionListeners) {
-        super(stepBuilderFactory);
+        super(jobRepository, platformTransactionManager);
         this.itemReader = itemReader;
         this.itemProcessor = itemProcessor;
         this.itemWriter = itemWriter;

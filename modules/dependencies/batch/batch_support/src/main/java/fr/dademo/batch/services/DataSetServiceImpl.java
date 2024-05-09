@@ -15,6 +15,7 @@ import fr.dademo.batch.repository.datamodel.DataSetEntity;
 import fr.dademo.batch.services.dto.DataSetDto;
 import fr.dademo.batch.services.exceptions.MissingDataSetException;
 import fr.dademo.batch.services.mappers.DataSetMapper;
+import jakarta.validation.constraints.NotBlank;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ResourceLoader;
@@ -22,14 +23,11 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
 import javax.sql.DataSource;
-
-import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static fr.dademo.batch.beans.BeanValues.BATCH_DATA_SOURCE_BEAN_NAME;
 import static fr.dademo.batch.beans.BeanValues.BATCH_DATA_SOURCE_NAME;
@@ -59,7 +57,7 @@ public class DataSetServiceImpl implements DataSetService {
 
         return dataSetRepository.findByName(name).stream()
             .map(this::mapToDto)
-            .collect(Collectors.toList());
+            .toList();
     }
 
     @Override

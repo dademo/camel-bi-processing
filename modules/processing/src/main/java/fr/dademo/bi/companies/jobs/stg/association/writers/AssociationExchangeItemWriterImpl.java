@@ -17,11 +17,11 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
+import org.springframework.batch.item.Chunk;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 
 import static fr.dademo.batch.beans.BeanValues.*;
 import static fr.dademo.bi.companies.jobs.stg.association.JobDefinition.ASSOCIATION_CONFIG_JOB_NAME;
@@ -55,11 +55,11 @@ public class AssociationExchangeItemWriterImpl extends AbstractApplicationAmqpWr
 
     @SneakyThrows
     @Override
-    public void write(List<? extends Association> items) {
+    public void write(Chunk<? extends Association> items) {
 
         log.info("Writing {} association documents", items.size());
 
-        items.stream()
+        items.getItems().stream()
             .map(this::toMessage)
             .forEach(this::sendMessage);
 
