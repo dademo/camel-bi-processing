@@ -13,14 +13,14 @@ archivesBaseName = 'dademo-dependencies-tools-liquibase'
 version '1.0.0-SNAPSHOT'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 dependencies {
 
     implementation "org.liquibase:liquibase-core:${liquibaseVersion}"
 
-    testImplementation "org.junit.jupiter:junit-jupiter:${junitJupyterVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter:${junitJupiterVersion}"
     testImplementation "org.assertj:assertj-core:${assertJVersion}"
 }

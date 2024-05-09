@@ -14,7 +14,8 @@ import lombok.NoArgsConstructor;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.validation.constraints.Size;
+
+import jakarta.validation.constraints.Size;
 
 /**
  * @author dademo

@@ -14,7 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
-import javax.validation.constraints.Min;
+
+import jakarta.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

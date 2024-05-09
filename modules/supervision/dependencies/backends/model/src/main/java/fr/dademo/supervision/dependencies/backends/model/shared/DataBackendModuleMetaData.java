@@ -9,7 +9,8 @@ package fr.dademo.supervision.dependencies.backends.model.shared;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.annotation.Nonnull;
-import javax.validation.constraints.Size;
+
+import jakarta.validation.constraints.Size;
 
 /**
  * Data backend module meta data.

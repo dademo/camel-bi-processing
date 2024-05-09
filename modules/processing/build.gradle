@@ -15,8 +15,8 @@ group 'fr.dademo.bi'
 version '1.0.0-SNAPSHOT'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 bootRun {
@@ -57,7 +57,7 @@ dependencies {
 
     runtimeOnly 'io.micrometer:micrometer-registry-influx'
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
-    runtimeOnly "org.xerial:sqlite-jdbc:${sqlite_jdbc_version}"
+    runtimeOnly "org.xerial:sqlite-jdbc:${sqliteJdbcVersion}"
     runtimeOnly "org.postgresql:postgresql:${postgresqlVersion}"
 
     // Other libraries

@@ -10,7 +10,8 @@ import fr.dademo.batch.resources.exceptions.MissingColumnException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.validation.constraints.Min;
+
+import jakarta.validation.constraints.Min;
 import java.sql.Date;
 
 public interface WrappedRowResource {

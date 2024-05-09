@@ -7,7 +7,8 @@
 package fr.dademo.tools.lock.repository.model;
 
 import javax.annotation.Nonnull;
-import javax.validation.constraints.NotBlank;
+
+import jakarta.validation.constraints.NotBlank;
 
 public interface Lock extends AutoCloseable {
 

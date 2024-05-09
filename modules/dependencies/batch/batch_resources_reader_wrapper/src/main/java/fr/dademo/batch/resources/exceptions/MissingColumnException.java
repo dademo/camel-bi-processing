@@ -6,7 +6,7 @@
 
 package fr.dademo.batch.resources.exceptions;
 
-import javax.validation.constraints.Min;
+import jakarta.validation.constraints.Min;
 
 public class MissingColumnException extends ResourceWrapperException {
 

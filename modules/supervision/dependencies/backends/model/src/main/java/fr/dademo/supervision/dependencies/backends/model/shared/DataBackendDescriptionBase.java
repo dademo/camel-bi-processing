@@ -9,7 +9,8 @@ package fr.dademo.supervision.dependencies.backends.model.shared;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.annotation.Nullable;
-import javax.validation.constraints.Min;
+
+import jakarta.validation.constraints.Min;
 
 /**
  * @author dademo

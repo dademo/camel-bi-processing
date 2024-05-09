@@ -12,7 +12,8 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.SystemUtils;
 
 import javax.annotation.Nonnull;
-import javax.validation.constraints.NotBlank;
+
+import jakarta.validation.constraints.NotBlank;
 import java.io.File;
 import java.net.URI;
 import java.util.Optional;

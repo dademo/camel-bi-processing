@@ -14,8 +14,9 @@ import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendDescr
 import lombok.NonNull;
 
 import javax.annotation.Nullable;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
+
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import java.time.Duration;
 import java.util.Date;
 import java.util.List;

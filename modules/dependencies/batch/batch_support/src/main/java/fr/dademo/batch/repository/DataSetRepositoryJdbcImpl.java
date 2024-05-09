@@ -14,11 +14,13 @@ import fr.dademo.batch.repository.datamodel.DataSetTable;
 import fr.dademo.batch.repository.datamodel.exceptions.DataSetEntityNotFoundException;
 import fr.dademo.batch.repository.exceptions.NotAnNumericIdentifierException;
 import org.jooq.*;
+import org.jooq.Record;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Nonnull;
-import javax.validation.constraints.NotBlank;
+
+import jakarta.validation.constraints.NotBlank;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;

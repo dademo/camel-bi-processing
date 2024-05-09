@@ -15,8 +15,8 @@ archivesBaseName = 'dademo-dependencies-tools-cache-backends-vfs-repository'
 version '1.0.0-SNAPSHOT'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
     withJavadocJar()
     withSourcesJar()
 }
@@ -40,7 +40,7 @@ dependencies {
     implementation "org.apache.commons:commons-vfs2-jackrabbit2:${apacheCommonsVFSVersion}"
     implementation "commons-net:commons-net:${apacheComonsNetVersion}"
     implementation "org.apache.httpcomponents.client5:httpclient5:${apacheHttpClientVersion}"
-    implementation "com.jcraft:jsch:${jschVersion}"
+    implementation "com.github.mwiede:jsch:${jschVersion}"
     implementation("org.apache.hadoop:hadoop-common:${hadoopVersion}") {
         exclude group: 'ch.qos.reload4j', module: 'reload4j'
         exclude group: 'org.slf4j', module: 'slf4j-reload4j'

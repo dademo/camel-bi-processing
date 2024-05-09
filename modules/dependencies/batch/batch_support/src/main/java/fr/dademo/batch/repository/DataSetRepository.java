@@ -9,7 +9,8 @@ package fr.dademo.batch.repository;
 import fr.dademo.batch.repository.datamodel.DataSetEntity;
 
 import javax.annotation.Nonnull;
-import javax.validation.constraints.NotBlank;
+
+import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Optional;
 

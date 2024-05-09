@@ -178,7 +178,7 @@ public class BatchRepository {
     @ConditionalOnMissingBean(StepBuilderFactory.class)
     public StepBuilderFactory stepBuilderFactory(JobRepository jobRepository,
                                                  @Qualifier(BATCH_DATA_SOURCE_TRANSACTION_MANAGER_BEAN_NAME) PlatformTransactionManager transactionManager) {
-        return new StepBuilderFactory(jobRepository, transactionManager);
+        return new StepBuilderFactory(jobRepository);
     }
 
     @SuppressWarnings("unused")

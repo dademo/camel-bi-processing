@@ -14,7 +14,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.annotation.Nonnull;
-import javax.validation.constraints.Size;
+
+import jakarta.validation.constraints.Size;
 import java.util.List;
 
 /**

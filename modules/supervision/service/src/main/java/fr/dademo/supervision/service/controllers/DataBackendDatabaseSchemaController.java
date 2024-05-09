@@ -41,7 +41,8 @@ import org.zalando.problem.DefaultProblem;
 import org.zalando.problem.spring.web.advice.ProblemHandling;
 
 import javax.annotation.Nonnull;
-import javax.validation.constraints.Min;
+
+import jakarta.validation.constraints.Min;
 
 /**
  * @author dademo

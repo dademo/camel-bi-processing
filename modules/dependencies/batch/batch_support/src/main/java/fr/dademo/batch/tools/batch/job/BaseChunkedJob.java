@@ -26,7 +26,8 @@ import org.springframework.core.io.ResourceLoader;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.validation.constraints.NotBlank;
+
+import jakarta.validation.constraints.NotBlank;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;

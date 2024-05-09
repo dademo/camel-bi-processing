@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import javax.validation.constraints.Min;
+import jakarta.validation.constraints.Min;
 
 import static fr.dademo.data.generic.stream_definitions.configuration.HttpConfiguration.CONFIGURATION_PREFIX;
 

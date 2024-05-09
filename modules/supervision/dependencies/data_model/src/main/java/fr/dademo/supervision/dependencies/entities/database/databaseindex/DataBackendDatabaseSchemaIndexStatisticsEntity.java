@@ -13,7 +13,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.annotation.Nullable;
 import javax.persistence.*;
-import javax.validation.constraints.Min;
+
+import jakarta.validation.constraints.Min;
 
 /**
  * @author dademo

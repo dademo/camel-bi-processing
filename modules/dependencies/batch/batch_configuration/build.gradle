@@ -15,8 +15,8 @@ archivesBaseName = 'dademo-dependencies-batch-configuration'
 version '1.0.0-SNAPSHOT'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
     withJavadocJar()
     withSourcesJar()
 }
@@ -32,7 +32,7 @@ dependencies {
     // Other libraries
     implementation 'org.mongodb:mongodb-driver-core'
     implementation 'org.springframework.amqp:spring-amqp'
-    implementation "javax.validation:validation-api:${javaxValidationApiVersion}"
+    implementation "jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}"
     implementation "com.google.code.findbugs:jsr305:${findBugsJsr305Version}"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

@@ -9,7 +9,8 @@ package fr.dademo.data.generic.stream_definitions;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.annotation.Nonnull;
-import javax.validation.constraints.NotBlank;
+
+import jakarta.validation.constraints.NotBlank;
 
 @JsonIgnoreProperties({"description", "verboseDescription"})
 public interface Describable {

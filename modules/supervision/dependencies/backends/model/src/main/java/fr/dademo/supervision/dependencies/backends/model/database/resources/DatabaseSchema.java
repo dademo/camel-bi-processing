@@ -10,7 +10,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import javax.annotation.Nonnull;
-import javax.validation.constraints.Size;
+
+import jakarta.validation.constraints.Size;
 import java.util.List;
 
 /**

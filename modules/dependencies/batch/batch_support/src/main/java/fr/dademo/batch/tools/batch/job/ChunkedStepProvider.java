@@ -11,7 +11,8 @@ import org.springframework.batch.core.ChunkListener;
 import org.springframework.batch.core.Step;
 
 import javax.annotation.Nonnull;
-import javax.validation.constraints.NotBlank;
+
+import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
 /**

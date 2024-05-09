@@ -125,9 +125,9 @@ allprojects {
                 'ch.qos.logback:logback-core',
                 'ch.qos.logback:logback-classic',
                 "org.postgresql:postgresql:${postgresqlVersion}",
-                "mysql:mysql-connector-java:${mysqlDriverVersion}",
+                "com.mysql:mysql-connector-j:${mysqlDriverVersion}",
                 'org.springframework.boot:spring-boot-starter-data-jpa',
-                "javax.validation:validation-api:${javaxValidationApiVersion}",
+                "jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}",
             ].each { _runtimeDependency ->
                 project.getDependencies().add('liquibaseRuntime', _runtimeDependency)
             }

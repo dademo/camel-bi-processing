@@ -11,7 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import javax.annotation.Nonnull;
-import javax.validation.constraints.Min;
+
+import jakarta.validation.constraints.Min;
 import java.util.Optional;
 
 /**

@@ -15,7 +15,8 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.validation.constraints.Min;
+
+import jakarta.validation.constraints.Min;
 import java.util.*;
 
 /**
