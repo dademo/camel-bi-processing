@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -137,13 +138,13 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
 
     private List<DatabaseDescription> getAllDatabasesDescriptions(boolean getRowsCount) {
 
-        final var databasesStatistics = databasesStatisticsQueryRepository.getDatabasesStatistics();
-        return databasesStatistics
+        return databasesStatisticsQueryRepository
+            .getDatabasesStatistics()
             .stream()
             .map(new DatabaseStatisticsToBuilderValueMapper())
             .map(v -> v.databaseSchemas(new ArrayList<>(getSchemas(getRowsCount))))
             .map(DatabaseDescriptionDefaultImpl.DatabaseDescriptionDefaultImplBuilder::build)
-            .toList();
+            .collect(Collectors.toList());
     }
 
     private List<DatabaseConnection> getAllDatabasesConnections() {

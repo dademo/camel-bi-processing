@@ -15,7 +15,7 @@ spring:
       default-binder: rabbit
       rabbit:
         bindings:
-          supervision:
+          supervision-in-0:
             consumer:
               autoBindDlq: false
               bindingRoutingKey: '#'

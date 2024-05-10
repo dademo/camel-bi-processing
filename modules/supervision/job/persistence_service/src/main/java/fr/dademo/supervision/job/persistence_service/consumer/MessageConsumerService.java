@@ -14,23 +14,21 @@ import fr.dademo.tools.tools.HashTools;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.compressors.CompressorStreamFactory;
-import org.apache.commons.compress.utils.IOUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.stream.annotation.EnableBinding;
-import org.springframework.cloud.stream.annotation.StreamListener;
+import org.apache.commons.io.IOUtils;
+import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Nonnull;
 import java.io.ByteArrayInputStream;
 import java.util.Date;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * @author dademo
  */
-@SuppressWarnings("deprecation")
 @Slf4j
-@EnableBinding(SupervisionBinding.class)
 @Service
 public class MessageConsumerService {
 
@@ -38,14 +36,22 @@ public class MessageConsumerService {
     public static final String HEADER_MESSAGE_HASH_ALGORITHM = "x-hash-algorithm";
     public static final String HEADER_COMPRESSION_ALGORITHM = "x-compression-algorithm";
 
-    @Autowired
-    private DataBackendPersistenceService dataBackendPersistenceService;
+    private final DataBackendPersistenceService dataBackendPersistenceService;
+    private final ObjectMapper objectMapper;
 
-    @Autowired
-    private ObjectMapper objectMapper;
 
-    @SuppressWarnings("deprecation")
-    @StreamListener(SupervisionBinding.INPUT)
+    public MessageConsumerService(@Nonnull DataBackendPersistenceService dataBackendPersistenceService,
+                                  @Nonnull ObjectMapper objectMapper) {
+        this.dataBackendPersistenceService = dataBackendPersistenceService;
+        this.objectMapper = objectMapper;
+    }
+
+    @Bean
+    Consumer<Message<byte[]>> supervision() {
+        return this::consumeSupervisionMessage;
+    }
+
+    @Bean
     private void consumeSupervisionMessage(Message<byte[]> message) {
 
         DataBackendStateFetchServiceExecutionResult dataBackendStateFetchServiceExecutionResult;
