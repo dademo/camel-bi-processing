@@ -9,7 +9,6 @@ package fr.dademo.supervision.dependencies.backends.postgresql.repository;
 import fr.dademo.supervision.dependencies.backends.postgresql.repository.entities.DatabaseIndexEntity;
 import jakarta.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -25,8 +24,7 @@ import static fr.dademo.supervision.dependencies.backends.postgresql.configurati
 @Repository
 public class DatabaseIndexesStatisticsQueryRepositoryImpl implements DatabaseIndexesStatisticsQueryRepository {
 
-    private static final String QUERY = "" +
-        "SELECT " +
+    private static final String QUERY = "SELECT " +
         "  SCHEMANAME, " +
         "  RELNAME, " +
         "  INDEXRELNAME, " +
@@ -35,9 +33,11 @@ public class DatabaseIndexesStatisticsQueryRepositoryImpl implements DatabaseInd
         "  IDX_TUP_FETCH " +
         "FROM PG_STAT_ALL_INDEXES ";
 
-    @Qualifier(MODULE_JDBC_TEMPLATE_BEAN_NAME)
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
+
+    public DatabaseIndexesStatisticsQueryRepositoryImpl(@Nonnull @Qualifier(MODULE_JDBC_TEMPLATE_BEAN_NAME) JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Nonnull
     @Override

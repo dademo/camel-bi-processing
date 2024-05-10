@@ -6,8 +6,8 @@
 
 package fr.dademo.supervision.dependencies.backends.postgresql.repository;
 
+import jakarta.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -28,9 +28,11 @@ public class DatabaseGlobalStatisticsQueryRepositoryImpl implements DatabaseGlob
 
     private static final String QUERY = "SELECT PG_POSTMASTER_START_TIME()";
 
-    @Qualifier(MODULE_JDBC_TEMPLATE_BEAN_NAME)
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
+
+    public DatabaseGlobalStatisticsQueryRepositoryImpl(@Nonnull @Qualifier(MODULE_JDBC_TEMPLATE_BEAN_NAME) JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
     public Date getDatabaseStartTime() {

@@ -10,7 +10,6 @@ import fr.dademo.supervision.service.repository.ExtendedDataBackendDescriptionRe
 import fr.dademo.supervision.service.services.dto.DataBackendDescriptionDto;
 import fr.dademo.supervision.service.services.mappers.DataBackendDescriptionEntityToDtoMapper;
 import jakarta.annotation.Nonnull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,8 +22,11 @@ import java.util.Optional;
 @Service
 public class DataBackendServiceImpl implements DataBackendService {
 
-    @Autowired
-    private ExtendedDataBackendDescriptionRepository repository;
+    private final ExtendedDataBackendDescriptionRepository repository;
+
+    public DataBackendServiceImpl(@Nonnull ExtendedDataBackendDescriptionRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public Page<DataBackendDescriptionDto> findDataBackends(@Nonnull Pageable pageable) {

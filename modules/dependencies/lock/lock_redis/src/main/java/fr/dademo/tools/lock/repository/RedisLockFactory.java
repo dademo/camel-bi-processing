@@ -10,13 +10,11 @@ import fr.dademo.data.generic.stream_definitions.Cacheable;
 import fr.dademo.tools.lock.configuration.LockConfiguration;
 import fr.dademo.tools.lock.repository.model.Lock;
 import fr.dademo.tools.lock.repository.model.RedisLock;
+import jakarta.annotation.Nonnull;
 import lombok.NonNull;
 import org.redisson.api.RedissonClient;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-
-import jakarta.annotation.Nonnull;
 
 @ConditionalOnProperty(
     name = LockConfiguration.CONFIGURATION_PROPERTY_PREFIX + ".backend",
@@ -25,8 +23,11 @@ import jakarta.annotation.Nonnull;
 @Component
 public class RedisLockFactory implements LockFactory {
 
-    @Autowired
-    private RedissonClient redissonClient;
+    private final RedissonClient redissonClient;
+
+    public RedisLockFactory(@Nonnull RedissonClient redissonClient) {
+        this.redissonClient = redissonClient;
+    }
 
     @Override
     @NonNull

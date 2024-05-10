@@ -13,21 +13,24 @@ import fr.dademo.supervision.dependencies.persistence.PersistenceBeans;
 import fr.dademo.supervision.dependencies.persistence.services.exceptions.InvalidDataBackendDescriptionType;
 import fr.dademo.supervision.dependencies.repositories.DatabaseBackendStateRepository;
 import jakarta.annotation.Nonnull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Service
 public class DataBackendPersistenceServiceImpl implements DataBackendPersistenceService {
 
-    @Autowired
-    private DatabaseBackendMappingService databaseBackendMappingService;
+    private final DatabaseBackendMappingService databaseBackendMappingService;
+    private final DatabaseBackendStateRepository databaseBackendStateRepository;
 
-    @Autowired
-    private DatabaseBackendStateRepository databaseBackendStateRepository;
+    public DataBackendPersistenceServiceImpl(@Nonnull DatabaseBackendMappingService databaseBackendMappingService,
+                                             @Nonnull DatabaseBackendStateRepository databaseBackendStateRepository) {
+        this.databaseBackendMappingService = databaseBackendMappingService;
+        this.databaseBackendStateRepository = databaseBackendStateRepository;
+    }
 
     @Override
     @Transactional(PersistenceBeans.PERSISTENCE_TRANSACTION_MANAGER_BEAN_NAME)

@@ -20,6 +20,7 @@ package fr.dademo.batch.tools.batch.job.tasklets;
 
 import fr.dademo.batch.beans.jdbc.tools.LiquibaseMigrationsSupplier;
 import fr.dademo.batch.configuration.BatchConfiguration;
+import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
@@ -28,8 +29,6 @@ import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.core.io.ResourceLoader;
-
-import jakarta.annotation.Nonnull;
 
 import javax.sql.DataSource;
 import java.util.Optional;

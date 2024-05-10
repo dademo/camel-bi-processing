@@ -8,22 +8,22 @@ package fr.dademo.tools.cache.repository.cache_repository;
 
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 import fr.dademo.tools.cache.beans.CacheMinioEnabledConditional;
+import fr.dademo.tools.cache.configuration.CacheMinioConfiguration;
 import fr.dademo.tools.cache.data_model.CachedInputStreamIdentifier;
 import fr.dademo.tools.cache.repository.cache_index.CacheIndexRepository;
 import fr.dademo.tools.cache.repository.exception.MissingCachedInputStreamException;
 import fr.dademo.tools.cache.repository.support.CachedInputStreamWrapper;
+import fr.dademo.tools.lock.repository.LockFactory;
 import fr.dademo.tools.tools.HashTools;
 import io.minio.*;
 import io.minio.errors.ErrorResponseException;
+import jakarta.annotation.Nonnull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.input.TeeInputStream;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Repository;
-
-import jakarta.annotation.Nonnull;
 
 import java.io.*;
 import java.security.MessageDigest;
@@ -44,12 +44,19 @@ public class MinioCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extend
     private static final String HASH_ALGORITHM = "SHA-512";
     private static final MessageDigest HASH_COMPUTER = HashTools.getHashComputerForAlgorithm(HASH_ALGORITHM);
 
-    @Autowired
-    private CacheIndexRepository<T> cacheIndexRepository;
+    private final CacheIndexRepository<T> cacheIndexRepository;
 
-    @Autowired
-    @Qualifier(MINIO_STREAM_THREAD_POOL_BEAN)
-    private ExecutorService minioStreamsThreadPool;
+    private final ExecutorService minioStreamsThreadPool;
+
+    public MinioCacheRepositoryImpl(@Nonnull LockFactory lockFactory,
+                                    @Nonnull CacheMinioConfiguration cacheMinioConfiguration,
+                                    @Nonnull MinioClient minioClient,
+                                    @Nonnull CacheIndexRepository<T> cacheIndexRepository,
+                                    @Nonnull @Qualifier(MINIO_STREAM_THREAD_POOL_BEAN) ExecutorService minioStreamsThreadPool) {
+        super(lockFactory, cacheMinioConfiguration, minioClient);
+        this.cacheIndexRepository = cacheIndexRepository;
+        this.minioStreamsThreadPool = minioStreamsThreadPool;
+    }
 
     @Nonnull
     @Override

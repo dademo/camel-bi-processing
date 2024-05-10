@@ -12,7 +12,6 @@ import fr.dademo.supervision.service.services.dto.DataBackendDatabaseSchemaIndex
 import fr.dademo.supervision.service.services.mappers.DataBackendDatabaseSchemaIndexEntityToDtoMapper;
 import fr.dademo.supervision.service.services.mappers.DataBackendDatabaseSchemaIndexStatisticsEntityToDtoMapper;
 import jakarta.annotation.Nonnull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,11 +23,15 @@ import java.util.Optional;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Service
 public class DatabaseSchemaIndexServiceImpl implements DatabaseSchemaIndexService {
 
-    @Autowired
-    private ExtendedDataBackendDatabaseSchemaIndexRepository repository;
+    private final ExtendedDataBackendDatabaseSchemaIndexRepository repository;
+
+    public DatabaseSchemaIndexServiceImpl(@Nonnull ExtendedDataBackendDatabaseSchemaIndexRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public Page<DataBackendDatabaseSchemaIndexDto> findIndexesForDatabaseSchema(@Nonnull Long databaseSchemaId, @Nonnull Pageable pageable) {

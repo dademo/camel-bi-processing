@@ -12,16 +12,13 @@ import com.mongodb.MongoCredential;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import fr.dademo.batch.configuration.BatchDataSourcesConfiguration;
+import jakarta.annotation.Nonnull;
+import jakarta.validation.constraints.NotEmpty;
 import org.apache.logging.log4j.util.Strings;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.pojo.PojoCodecProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
-
-import jakarta.annotation.Nonnull;
-
-import jakarta.validation.constraints.NotEmpty;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,8 +31,11 @@ public class MongoTemplateFactory {
 
     private final Map<String, MongoTemplate> cachedMongoTemplates = new HashMap<>();
 
-    @Autowired
-    private BatchDataSourcesConfiguration batchDataSourcesConfiguration;
+    private final BatchDataSourcesConfiguration batchDataSourcesConfiguration;
+
+    public MongoTemplateFactory(@Nonnull BatchDataSourcesConfiguration batchDataSourcesConfiguration) {
+        this.batchDataSourcesConfiguration = batchDataSourcesConfiguration;
+    }
 
     @Nonnull
     public MongoTemplate getTemplateForConnection(@NotEmpty String mongoDBDataSourceName) {

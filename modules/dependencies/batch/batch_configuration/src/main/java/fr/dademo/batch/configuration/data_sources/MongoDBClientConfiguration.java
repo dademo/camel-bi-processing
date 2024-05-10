@@ -9,14 +9,12 @@ package fr.dademo.batch.configuration.data_sources;
 import com.mongodb.ReadConcern;
 import com.mongodb.ReadConcernLevel;
 import com.mongodb.WriteConcern;
-import lombok.*;
-import org.apache.logging.log4j.util.Strings;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import lombok.*;
+import org.apache.logging.log4j.util.Strings;
 
 import java.util.Optional;
 

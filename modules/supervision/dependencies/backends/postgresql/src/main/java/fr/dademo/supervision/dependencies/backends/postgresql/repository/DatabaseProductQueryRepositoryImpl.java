@@ -9,7 +9,6 @@ package fr.dademo.supervision.dependencies.backends.postgresql.repository;
 import fr.dademo.supervision.dependencies.backends.postgresql.repository.entities.DatabaseProductVersionEntity;
 import jakarta.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -25,16 +24,17 @@ import static fr.dademo.supervision.dependencies.backends.postgresql.configurati
 @Repository
 public class DatabaseProductQueryRepositoryImpl implements DatabaseProductQueryRepository {
 
-    private static final String QUERY = "" +
-        "SELECT " +
+    private static final String QUERY = "SELECT " +
         "  VERSION(), " +
         "  SETTING " +
         "FROM PG_CATALOG.PG_SETTINGS " +
         "WHERE name = 'server_version' ";
 
-    @Qualifier(MODULE_JDBC_TEMPLATE_BEAN_NAME)
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
+
+    public DatabaseProductQueryRepositoryImpl(@Nonnull @Qualifier(MODULE_JDBC_TEMPLATE_BEAN_NAME) JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Nonnull
     @Override

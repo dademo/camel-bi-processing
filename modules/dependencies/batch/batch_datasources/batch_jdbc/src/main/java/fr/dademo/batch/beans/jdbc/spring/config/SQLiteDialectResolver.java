@@ -7,13 +7,12 @@
 package fr.dademo.batch.beans.jdbc.spring.config;
 
 import fr.dademo.batch.beans.jdbc.spring.dialect.SQLiteDialect;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.springframework.data.jdbc.repository.config.DialectResolver;
 import org.springframework.data.relational.core.dialect.Dialect;
 import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcOperations;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;

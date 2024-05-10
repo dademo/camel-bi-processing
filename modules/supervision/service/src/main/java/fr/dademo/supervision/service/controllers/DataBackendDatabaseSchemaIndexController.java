@@ -21,7 +21,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.Min;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.CollectionModel;
@@ -47,10 +46,14 @@ import java.util.Date;
 @Tag(name = "data-backend/database")
 public class DataBackendDatabaseSchemaIndexController implements ProblemHandling {
 
-    @Autowired
-    private DatabaseSchemaIndexService databaseSchemaIndexService;
-    @Autowired
-    private PagedResourcesAssembler<DataBackendDatabaseSchemaIndexDto> databaseDescriptionDtoPagedResourcesAssembler;
+    private final DatabaseSchemaIndexService databaseSchemaIndexService;
+    private final PagedResourcesAssembler<DataBackendDatabaseSchemaIndexDto> databaseDescriptionDtoPagedResourcesAssembler;
+
+    public DataBackendDatabaseSchemaIndexController(@Nonnull DatabaseSchemaIndexService databaseSchemaIndexService,
+                                                    @Nonnull PagedResourcesAssembler<DataBackendDatabaseSchemaIndexDto> databaseDescriptionDtoPagedResourcesAssembler) {
+        this.databaseSchemaIndexService = databaseSchemaIndexService;
+        this.databaseDescriptionDtoPagedResourcesAssembler = databaseDescriptionDtoPagedResourcesAssembler;
+    }
 
     @Operation(summary = "Get a data backend database schema index description")
     @ApiResponses(value = {

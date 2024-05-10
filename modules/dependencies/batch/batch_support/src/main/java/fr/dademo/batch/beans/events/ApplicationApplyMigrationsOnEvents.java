@@ -8,8 +8,8 @@ package fr.dademo.batch.beans.events;
 
 import fr.dademo.batch.beans.jdbc.DataSourcesFactory;
 import fr.dademo.batch.beans.jdbc.tools.FlywayMigrationTools;
+import jakarta.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.annotation.Configuration;
@@ -22,8 +22,11 @@ import org.springframework.context.event.EventListener;
 @Configuration
 public class ApplicationApplyMigrationsOnEvents {
 
-    @Autowired
-    private DataSourcesFactory dataSourcesFactory;
+    private final DataSourcesFactory dataSourcesFactory;
+
+    public ApplicationApplyMigrationsOnEvents(@Nonnull DataSourcesFactory dataSourcesFactory) {
+        this.dataSourcesFactory = dataSourcesFactory;
+    }
 
     @EventListener(ApplicationStartedEvent.class)
     @ConditionalOnProperty(value = "flyway.applyMigrations", matchIfMissing = true)

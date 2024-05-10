@@ -10,6 +10,8 @@ import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 import fr.dademo.tools.cache.configuration.CacheVFSConfiguration;
 import fr.dademo.tools.cache.data_model.CachedInputStreamIdentifier;
 import fr.dademo.tools.cache.repository.exception.NotADirectoryException;
+import fr.dademo.tools.lock.repository.LockFactory;
+import jakarta.annotation.Nonnull;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -17,9 +19,6 @@ import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemManager;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import jakarta.annotation.Nonnull;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,14 +36,17 @@ public abstract class VFSCacheRepositoryBeanLifecycle<T extends InputStreamIdent
     protected static final String RESOURCES_DIRECTORY_NAME = "resources";
     private static final String TEMP_PREFIX = normalizedName(VFSCacheRepositoryImpl.class.getName());
     private static final Random random = new Random();
-
+    private final CacheVFSConfiguration cacheVFSConfiguration;
+    private final FileSystemManager fileSystemManager;
     private URI tempDirectoryURI = null;
 
-    @Autowired
-    private CacheVFSConfiguration cacheVFSConfiguration;
-
-    @Autowired
-    private FileSystemManager fileSystemManager;
+    protected VFSCacheRepositoryBeanLifecycle(@Nonnull LockFactory lockFactory,
+                                              @Nonnull CacheVFSConfiguration cacheVFSConfiguration,
+                                              @Nonnull FileSystemManager fileSystemManager) {
+        super(lockFactory);
+        this.cacheVFSConfiguration = cacheVFSConfiguration;
+        this.fileSystemManager = fileSystemManager;
+    }
 
 
     private static String normalizedName(String string) {

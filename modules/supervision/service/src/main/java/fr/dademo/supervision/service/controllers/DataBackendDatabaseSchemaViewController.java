@@ -21,8 +21,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.Min;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -47,10 +45,11 @@ import java.util.Date;
 @Tag(name = "data-backend/database")
 public class DataBackendDatabaseSchemaViewController implements ProblemHandling {
 
-    @Autowired
-    private DatabaseSchemaViewService databaseSchemaViewService;
-    @Autowired
-    private PagedResourcesAssembler<DataBackendDatabaseSchemaViewDto> databaseDescriptionDtoPagedResourcesAssembler;
+    private final DatabaseSchemaViewService databaseSchemaViewService;
+
+    public DataBackendDatabaseSchemaViewController(@Nonnull DatabaseSchemaViewService databaseSchemaViewService) {
+        this.databaseSchemaViewService = databaseSchemaViewService;
+    }
 
     @Operation(summary = "Get a data backend database schema view description")
     @ApiResponses(value = {

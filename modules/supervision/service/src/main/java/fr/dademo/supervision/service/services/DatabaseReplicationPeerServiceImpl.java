@@ -12,7 +12,6 @@ import fr.dademo.supervision.service.services.dto.DataBackendDatabaseReplication
 import fr.dademo.supervision.service.services.mappers.DataBackendDatabaseReplicationPeerEntityToDtoMapper;
 import fr.dademo.supervision.service.services.mappers.DataBackendDatabaseReplicationPeerStatisticsEntityToDtoMapper;
 import jakarta.annotation.Nonnull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,8 +26,11 @@ import java.util.Optional;
 @Service
 public class DatabaseReplicationPeerServiceImpl implements DatabaseReplicationPeerService {
 
-    @Autowired
-    private ExtendedDataBackendDatabaseReplicationPeerRepository repository;
+    private final ExtendedDataBackendDatabaseReplicationPeerRepository repository;
+
+    public DatabaseReplicationPeerServiceImpl(@Nonnull ExtendedDataBackendDatabaseReplicationPeerRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public Page<DataBackendDatabaseReplicationPeerDto> findDatabaseReplicationPeersForDataBackend(@Nonnull Long dataBackendId, @Nonnull Pageable pageable) {

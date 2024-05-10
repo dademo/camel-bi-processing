@@ -6,11 +6,10 @@
 
 package fr.dademo.tools.lock.configuration;
 
+import jakarta.annotation.Nullable;
 import lombok.*;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-
-import jakarta.annotation.Nullable;
 
 @Configuration
 @ConfigurationProperties(prefix = LockConfiguration.CONFIGURATION_PROPERTY_PREFIX)

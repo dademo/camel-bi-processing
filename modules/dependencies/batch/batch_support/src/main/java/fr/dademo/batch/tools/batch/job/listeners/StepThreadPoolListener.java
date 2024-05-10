@@ -6,14 +6,13 @@
 
 package fr.dademo.batch.tools.batch.job.listeners;
 
+import jakarta.annotation.Nonnull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-
-import jakarta.annotation.Nonnull;
 
 @Slf4j
 @AllArgsConstructor

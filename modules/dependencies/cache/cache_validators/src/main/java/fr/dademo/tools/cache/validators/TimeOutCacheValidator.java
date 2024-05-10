@@ -8,10 +8,9 @@ package fr.dademo.tools.cache.validators;
 
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 import fr.dademo.tools.cache.data_model.CachedInputStreamIdentifier;
+import jakarta.annotation.Nonnull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-
-import jakarta.annotation.Nonnull;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

@@ -26,7 +26,6 @@ import lombok.SneakyThrows;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
@@ -133,7 +132,6 @@ public class JobDefinition extends AbstractApplicationStgJob {
             .orElseThrow(() -> new ResourceNotFoundException("*" + DATA_TITLE_PREFIX + "*", dataGouvFrDataSet));
     }
 
-    @Autowired
     protected Tasklet getJooqTruncateTasklet() {
 
         return new JooqTruncateTasklet<>(

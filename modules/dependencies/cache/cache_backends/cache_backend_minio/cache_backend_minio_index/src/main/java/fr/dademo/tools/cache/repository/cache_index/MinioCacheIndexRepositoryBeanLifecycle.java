@@ -8,16 +8,16 @@ package fr.dademo.tools.cache.repository.cache_index;
 
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 import fr.dademo.tools.cache.configuration.CacheMinioConfiguration;
+import fr.dademo.tools.lock.repository.LockFactory;
 import io.minio.ListObjectsArgs;
 import io.minio.MinioClient;
 import io.minio.RemoveObjectArgs;
 import io.minio.Result;
 import io.minio.messages.Item;
+import jakarta.annotation.Nonnull;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.StreamSupport;
@@ -26,19 +26,24 @@ import java.util.stream.StreamSupport;
  * @author dademo
  */
 @Slf4j
-@NoArgsConstructor
 public abstract class MinioCacheIndexRepositoryBeanLifecycle<T extends InputStreamIdentifier<?>> extends BaseCacheIndexRepository<T> {
 
     public static final String LOCK_FILE_NAME = "index.lock";
 
 
     @Getter
-    @Autowired
-    private CacheMinioConfiguration cacheMinioConfiguration;
+    private final CacheMinioConfiguration cacheMinioConfiguration;
 
     @Getter
-    @Autowired
-    private MinioClient minioClient;
+    private final MinioClient minioClient;
+
+    protected MinioCacheIndexRepositoryBeanLifecycle(@Nonnull LockFactory lockFactory,
+                                                     @Nonnull CacheMinioConfiguration cacheMinioConfiguration,
+                                                     @Nonnull MinioClient minioClient) {
+        super(lockFactory);
+        this.cacheMinioConfiguration = cacheMinioConfiguration;
+        this.minioClient = minioClient;
+    }
 
     @SuppressWarnings("java:S3864")
     @SneakyThrows

@@ -9,16 +9,15 @@ package fr.dademo.tools.cache.repository.cache_repository;
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 import fr.dademo.tools.cache.configuration.CacheMinioConfiguration;
 import fr.dademo.tools.cache.data_model.CachedInputStreamIdentifier;
+import fr.dademo.tools.lock.repository.LockFactory;
 import io.minio.*;
 import io.minio.messages.Item;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 import java.io.File;
 import java.io.InputStream;
@@ -41,14 +40,17 @@ public abstract class MinioCacheRepositoryBeanLifecycle<T extends InputStreamIde
 
     private static final String TEMP_PREFIX = normalizedName(MinioCacheRepositoryImpl.class.getName());
     private static final Random random = new Random();
-
+    private final CacheMinioConfiguration cacheMinioConfiguration;
+    private final MinioClient minioClient;
     private String tempDirectoryName = null;
 
-    @Autowired
-    private CacheMinioConfiguration cacheMinioConfiguration;
-
-    @Autowired
-    private MinioClient minioClient;
+    protected MinioCacheRepositoryBeanLifecycle(@Nonnull LockFactory lockFactory,
+                                                @Nonnull CacheMinioConfiguration cacheMinioConfiguration,
+                                                @Nonnull MinioClient minioClient) {
+        super(lockFactory);
+        this.cacheMinioConfiguration = cacheMinioConfiguration;
+        this.minioClient = minioClient;
+    }
 
 
     private static String normalizedName(String string) {

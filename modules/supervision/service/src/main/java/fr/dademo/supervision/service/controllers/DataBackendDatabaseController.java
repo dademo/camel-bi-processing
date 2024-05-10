@@ -26,7 +26,6 @@ import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.Min;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springdoc.core.converters.models.PageableAsQueryParam;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -55,12 +54,17 @@ import java.util.Date;
 @Tag(name = "data-backend/database")
 public class DataBackendDatabaseController implements ProblemHandling {
 
-    @Autowired
-    private DatabaseService databaseService;
-    @Autowired
-    private DatabaseSchemaService databaseSchemaService;
-    @Autowired
-    private PagedResourcesAssembler<DataBackendDatabaseSchemaDto> databaseSchemaDescriptionDtoPagedResourcesAssembler;
+    private final DatabaseService databaseService;
+    private final DatabaseSchemaService databaseSchemaService;
+    private final PagedResourcesAssembler<DataBackendDatabaseSchemaDto> databaseSchemaDescriptionDtoPagedResourcesAssembler;
+
+    public DataBackendDatabaseController(@Nonnull DatabaseService databaseService,
+                                         @Nonnull DatabaseSchemaService databaseSchemaService,
+                                         @Nonnull PagedResourcesAssembler<DataBackendDatabaseSchemaDto> databaseSchemaDescriptionDtoPagedResourcesAssembler) {
+        this.databaseService = databaseService;
+        this.databaseSchemaService = databaseSchemaService;
+        this.databaseSchemaDescriptionDtoPagedResourcesAssembler = databaseSchemaDescriptionDtoPagedResourcesAssembler;
+    }
 
     @Operation(summary = "Get a data backend database description")
     @ApiResponses(value = {

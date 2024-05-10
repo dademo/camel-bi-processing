@@ -9,7 +9,6 @@ package fr.dademo.batch.resources.backends.named_fast_csv;
 import de.siegmar.fastcsv.reader.CsvRecord;
 import de.siegmar.fastcsv.reader.NamedCsvRecord;
 import fr.dademo.batch.resources.BaseWrappedRowResource;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 

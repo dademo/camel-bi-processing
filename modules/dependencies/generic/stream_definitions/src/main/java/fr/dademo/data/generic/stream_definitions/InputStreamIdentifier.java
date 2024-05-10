@@ -7,7 +7,6 @@
 package fr.dademo.data.generic.stream_definitions;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 

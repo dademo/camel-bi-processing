@@ -9,7 +9,6 @@ package fr.dademo.supervision.dependencies.backends.postgresql.repository;
 import fr.dademo.supervision.dependencies.backends.postgresql.repository.entities.DatabaseReplicationPeerEntity;
 import jakarta.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -30,8 +29,7 @@ import static fr.dademo.supervision.dependencies.backends.postgresql.configurati
 @Repository
 public class DatabaseReplicationPeerQueryRepositoryImpl implements DatabaseReplicationPeerQueryRepository {
 
-    private static final String CONTROLLER_QUERY = "" +
-        "SELECT" +
+    private static final String CONTROLLER_QUERY = "SELECT" +
         "   PID, " +
         "   USENAME, " +
         "   APPLICATION_NAME, " +
@@ -47,8 +45,7 @@ public class DatabaseReplicationPeerQueryRepositoryImpl implements DatabaseRepli
         "   PG_WAL_LSN_DIFF(PG_CURRENT_WAL_LSN(), REPLAY_LSN)   AS TOTAL_DELAY_SIZE " +
         "FROM PG_STAT_REPLICATION";
 
-    private static final String CLIENT_QUERY = "" +
-        "SELECT" +
+    private static final String CLIENT_QUERY = "SELECT" +
         "   PID, " +
         "   STATUS, " +
         "   SLOT_NAME, " +
@@ -61,9 +58,11 @@ public class DatabaseReplicationPeerQueryRepositoryImpl implements DatabaseRepli
         "   END AS REPLICATION_DELAY " +
         "FROM PG_STAT_WAL_RECEIVER";
 
-    @Qualifier(MODULE_JDBC_TEMPLATE_BEAN_NAME)
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
+
+    public DatabaseReplicationPeerQueryRepositoryImpl(@Nonnull @Qualifier(MODULE_JDBC_TEMPLATE_BEAN_NAME) JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Nonnull
     @Override

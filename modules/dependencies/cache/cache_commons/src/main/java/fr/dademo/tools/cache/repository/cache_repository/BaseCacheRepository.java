@@ -10,12 +10,14 @@ import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 import fr.dademo.tools.lock.repository.LockFactory;
 import fr.dademo.tools.lock.repository.model.Lock;
 import jakarta.annotation.Nonnull;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class BaseCacheRepository<T extends InputStreamIdentifier<?>> implements CacheRepository<T> {
 
-    @Autowired
-    private LockFactory lockFactory;
+    private final LockFactory lockFactory;
+
+    protected BaseCacheRepository(@Nonnull LockFactory lockFactory) {
+        this.lockFactory = lockFactory;
+    }
 
     @Override
     public Lock acquireCacheLockForIdentifier(@Nonnull T inputStreamIdentifier) {

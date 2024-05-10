@@ -13,12 +13,14 @@ import fr.dademo.tools.lock.repository.model.Lock;
 import jakarta.annotation.Nonnull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class BaseCacheIndexRepository<T extends InputStreamIdentifier<?>> implements CacheIndexRepository<T> {
 
-    @Autowired
-    private LockFactory lockFactory;
+    private final LockFactory lockFactory;
+
+    protected BaseCacheIndexRepository(@Nonnull LockFactory lockFactory) {
+        this.lockFactory = lockFactory;
+    }
 
     @Override
     public Lock acquireLock() {

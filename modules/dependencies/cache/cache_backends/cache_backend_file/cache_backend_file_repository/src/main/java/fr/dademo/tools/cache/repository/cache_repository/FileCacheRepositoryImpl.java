@@ -13,13 +13,13 @@ import fr.dademo.tools.cache.data_model.CachedInputStreamIdentifier;
 import fr.dademo.tools.cache.repository.cache_index.CacheIndexRepository;
 import fr.dademo.tools.cache.repository.exception.MissingCachedInputStreamException;
 import fr.dademo.tools.cache.repository.support.CachedInputStreamWrapper;
+import fr.dademo.tools.lock.repository.LockFactory;
 import fr.dademo.tools.tools.HashTools;
 import jakarta.annotation.Nonnull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.input.TeeInputStream;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Repository;
 
@@ -41,13 +41,12 @@ public class FileCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extends
     private static final MessageDigest HASH_COMPUTER = HashTools.getHashComputerForAlgorithm(HASH_ALGORITHM);
     private static final String TEMP_PREFIX = normalizedName(FileCacheRepositoryImpl.class.getName());
 
-    @Autowired
     private final CacheIndexRepository<T> cacheIndexRepository;
 
-    @Autowired
-    public FileCacheRepositoryImpl(final CacheConfiguration cacheConfiguration,
-                                   final CacheIndexRepository<T> cacheIndexRepository) {
-        super(cacheConfiguration);
+    public FileCacheRepositoryImpl(@Nonnull LockFactory lockFactory,
+                                   @Nonnull CacheConfiguration cacheConfiguration,
+                                   @Nonnull CacheIndexRepository<T> cacheIndexRepository) {
+        super(lockFactory, cacheConfiguration);
         this.cacheIndexRepository = cacheIndexRepository;
     }
 

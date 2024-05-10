@@ -21,7 +21,6 @@ import fr.dademo.supervision.dependencies.backends.postgresql.service.mappers.*;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -47,36 +46,39 @@ public class PostgreSQLBackendStateFetchService implements DataBackendStateFetch
     private static final String ROLE_PRIMARY = "primary";
     private static final String ROLE_REPLICATION = "replication";
 
-    @Autowired
-    private ModuleConfiguration moduleConfiguration;
+    private final ModuleConfiguration moduleConfiguration;
+    private final DataSource dataSource;
+    private final DatabaseProductQueryRepository databaseProductQueryRepository;
+    private final DatabaseReplicationPeerQueryRepository databaseReplicationPeerQueryRepository;
+    private final DatabaseTablesAndViewsStatisticsQueryRepository databaseTablesAndViewsStatisticsQueryRepository;
+    private final DatabaseIndexesStatisticsQueryRepository databaseIndexesStatisticsQueryRepository;
+    private final DatabaseTableRowsCountQueryRepository databaseTableRowsCountQueryRepository;
+    private final DatabaseGlobalStatisticsQueryRepository databaseGlobalStatisticsQueryRepository;
+    private final DatabasesStatisticsQueryRepository databasesStatisticsQueryRepository;
+    private final DatabasesConnectionsQueryRepository databasesConnectionsQueryRepository;
 
-    @Qualifier(ModuleBeans.MODULE_DATA_SOURCE_BEAN_NAME)
-    @Autowired
-    private DataSource dataSource;
 
-    @Autowired
-    private DatabaseProductQueryRepository databaseProductQueryRepository;
-
-    @Autowired
-    private DatabaseReplicationPeerQueryRepository databaseReplicationPeerQueryRepository;
-
-    @Autowired
-    private DatabaseTablesAndViewsStatisticsQueryRepository databaseTablesAndViewsStatisticsQueryRepository;
-
-    @Autowired
-    private DatabaseIndexesStatisticsQueryRepository databaseIndexesStatisticsQueryRepository;
-
-    @Autowired
-    private DatabaseTableRowsCountQueryRepository databaseTableRowsCountQueryRepository;
-
-    @Autowired
-    private DatabaseGlobalStatisticsQueryRepository databaseGlobalStatisticsQueryRepository;
-
-    @Autowired
-    private DatabasesStatisticsQueryRepository databasesStatisticsQueryRepository;
-
-    @Autowired
-    private DatabasesConnectionsQueryRepository databasesConnectionsQueryRepository;
+    public PostgreSQLBackendStateFetchService(@Nonnull ModuleConfiguration moduleConfiguration,
+                                              @Nonnull @Qualifier(ModuleBeans.MODULE_DATA_SOURCE_BEAN_NAME) DataSource dataSource,
+                                              @Nonnull DatabaseProductQueryRepository databaseProductQueryRepository,
+                                              @Nonnull DatabaseReplicationPeerQueryRepository databaseReplicationPeerQueryRepository,
+                                              @Nonnull DatabaseTablesAndViewsStatisticsQueryRepository databaseTablesAndViewsStatisticsQueryRepository,
+                                              @Nonnull DatabaseIndexesStatisticsQueryRepository databaseIndexesStatisticsQueryRepository,
+                                              @Nonnull DatabaseTableRowsCountQueryRepository databaseTableRowsCountQueryRepository,
+                                              @Nonnull DatabaseGlobalStatisticsQueryRepository databaseGlobalStatisticsQueryRepository,
+                                              @Nonnull DatabasesStatisticsQueryRepository databasesStatisticsQueryRepository,
+                                              @Nonnull DatabasesConnectionsQueryRepository databasesConnectionsQueryRepository) {
+        this.moduleConfiguration = moduleConfiguration;
+        this.dataSource = dataSource;
+        this.databaseProductQueryRepository = databaseProductQueryRepository;
+        this.databaseReplicationPeerQueryRepository = databaseReplicationPeerQueryRepository;
+        this.databaseTablesAndViewsStatisticsQueryRepository = databaseTablesAndViewsStatisticsQueryRepository;
+        this.databaseIndexesStatisticsQueryRepository = databaseIndexesStatisticsQueryRepository;
+        this.databaseTableRowsCountQueryRepository = databaseTableRowsCountQueryRepository;
+        this.databaseGlobalStatisticsQueryRepository = databaseGlobalStatisticsQueryRepository;
+        this.databasesStatisticsQueryRepository = databasesStatisticsQueryRepository;
+        this.databasesConnectionsQueryRepository = databasesConnectionsQueryRepository;
+    }
 
     @Nonnull
     @Override

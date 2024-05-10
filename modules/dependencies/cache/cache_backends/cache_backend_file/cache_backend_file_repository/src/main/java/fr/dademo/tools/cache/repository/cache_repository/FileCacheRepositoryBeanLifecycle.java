@@ -10,6 +10,8 @@ import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 import fr.dademo.tools.cache.configuration.CacheConfiguration;
 import fr.dademo.tools.cache.data_model.CachedInputStreamIdentifier;
 import fr.dademo.tools.cache.repository.exception.NotADirectoryException;
+import fr.dademo.tools.lock.repository.LockFactory;
+import jakarta.annotation.Nonnull;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -28,10 +30,13 @@ public abstract class FileCacheRepositoryBeanLifecycle<T extends InputStreamIden
 
     public static final String DIRECTORY_ROOT_URI_SCHEME = "file";
     protected static final String RESOURCES_DIRECTORY_NAME = "resources";
+
     @Getter
     private final CacheConfiguration cacheConfiguration;
 
-    protected FileCacheRepositoryBeanLifecycle(final CacheConfiguration cacheConfiguration) {
+    protected FileCacheRepositoryBeanLifecycle(@Nonnull LockFactory lockFactory,
+                                               @Nonnull CacheConfiguration cacheConfiguration) {
+        super(lockFactory);
         this.cacheConfiguration = cacheConfiguration;
     }
 

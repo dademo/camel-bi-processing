@@ -9,14 +9,13 @@ package fr.dademo.reader.http.validators;
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifierValidator;
 import fr.dademo.reader.http.validators.exception.InputStreamMimeValidationException;
+import jakarta.annotation.Nonnull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.apache.tika.config.TikaConfig;
 import org.apache.tika.io.TikaInputStream;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.mime.MediaType;
-
-import jakarta.annotation.Nonnull;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -9,14 +9,14 @@ package fr.dademo.tools.cache.repository.cache_index;
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 import fr.dademo.tools.cache.configuration.CacheVFSConfiguration;
 import fr.dademo.tools.cache.repository.exception.NotADirectoryException;
+import fr.dademo.tools.lock.repository.LockFactory;
+import jakarta.annotation.Nonnull;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemManager;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -25,7 +25,6 @@ import java.io.UncheckedIOException;
  * @author dademo
  */
 @Slf4j
-@NoArgsConstructor
 public abstract class VFSCacheIndexRepositoryBase<T extends InputStreamIdentifier<?>> extends BaseCacheIndexRepository<T> implements InitializingBean {
 
     public static final String DIRECTORY_ROOT_URI_SCHEME = "file";
@@ -33,12 +32,18 @@ public abstract class VFSCacheIndexRepositoryBase<T extends InputStreamIdentifie
 
 
     @Getter
-    @Autowired
-    private CacheVFSConfiguration cacheVFSConfiguration;
+    private final CacheVFSConfiguration cacheVFSConfiguration;
 
     @Getter
-    @Autowired
-    private FileSystemManager fileSystemManager;
+    private final FileSystemManager fileSystemManager;
+
+    protected VFSCacheIndexRepositoryBase(@Nonnull LockFactory lockFactory,
+                                          @Nonnull CacheVFSConfiguration cacheVFSConfiguration,
+                                          @Nonnull FileSystemManager fileSystemManager) {
+        super(lockFactory);
+        this.cacheVFSConfiguration = cacheVFSConfiguration;
+        this.fileSystemManager = fileSystemManager;
+    }
 
     @Override
     public void afterPropertiesSet() {

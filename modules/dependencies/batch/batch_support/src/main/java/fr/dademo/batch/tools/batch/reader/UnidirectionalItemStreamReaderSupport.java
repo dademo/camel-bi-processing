@@ -6,12 +6,11 @@
 
 package fr.dademo.batch.tools.batch.reader;
 
+import jakarta.annotation.Nonnull;
 import lombok.SneakyThrows;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemStreamException;
 import org.springframework.batch.item.ItemStreamReader;
-
-import jakarta.annotation.Nonnull;
 
 import java.io.InputStream;
 

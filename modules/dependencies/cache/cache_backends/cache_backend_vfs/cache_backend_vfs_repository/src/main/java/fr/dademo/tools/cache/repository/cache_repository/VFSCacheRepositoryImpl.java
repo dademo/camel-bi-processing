@@ -8,25 +8,22 @@ package fr.dademo.tools.cache.repository.cache_repository;
 
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 import fr.dademo.tools.cache.beans.CacheVFSEnabledConditional;
+import fr.dademo.tools.cache.configuration.CacheVFSConfiguration;
 import fr.dademo.tools.cache.data_model.CachedInputStreamIdentifier;
 import fr.dademo.tools.cache.repository.cache_index.CacheIndexRepository;
 import fr.dademo.tools.cache.repository.exception.MissingCachedInputStreamException;
 import fr.dademo.tools.cache.repository.exception.TempFileResolutionError;
 import fr.dademo.tools.cache.repository.support.CachedInputStreamWrapper;
+import fr.dademo.tools.lock.repository.LockFactory;
 import fr.dademo.tools.tools.HashTools;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.input.TeeInputStream;
-import org.apache.commons.vfs2.AllFileSelector;
-import org.apache.commons.vfs2.FileNotFoundException;
-import org.apache.commons.vfs2.FileObject;
-import org.apache.commons.vfs2.FileSystemException;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.commons.vfs2.*;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Repository;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,8 +43,15 @@ public class VFSCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extends 
     private static final String HASH_ALGORITHM = "SHA-512";
     private static final MessageDigest HASH_COMPUTER = HashTools.getHashComputerForAlgorithm(HASH_ALGORITHM);
 
-    @Autowired
-    private CacheIndexRepository<T> cacheIndexRepository;
+    private final CacheIndexRepository<T> cacheIndexRepository;
+
+    public VFSCacheRepositoryImpl(@Nonnull LockFactory lockFactory,
+                                  @Nonnull CacheVFSConfiguration cacheVFSConfiguration,
+                                  @Nonnull FileSystemManager fileSystemManager,
+                                  @Nonnull CacheIndexRepository<T> cacheIndexRepository) {
+        super(lockFactory, cacheVFSConfiguration, fileSystemManager);
+        this.cacheIndexRepository = cacheIndexRepository;
+    }
 
     @Nonnull
     @Override

@@ -11,6 +11,7 @@ import fr.dademo.batch.configuration.BatchConfiguration;
 import fr.dademo.batch.configuration.BatchDataSourcesConfiguration;
 import fr.dademo.batch.tools.batch.job.BaseChunkedJob;
 import fr.dademo.batch.tools.batch.job.ChunkedStepProvider;
+import jakarta.annotation.Nonnull;
 import lombok.Builder;
 import lombok.Getter;
 import org.mockito.Mockito;
@@ -21,8 +22,6 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.transaction.PlatformTransactionManager;
-
-import jakarta.annotation.Nonnull;
 
 import static fr.dademo.batch.beans.BeanValues.BATCH_DATA_SOURCE_TRANSACTION_MANAGER_BEAN_NAME;
 

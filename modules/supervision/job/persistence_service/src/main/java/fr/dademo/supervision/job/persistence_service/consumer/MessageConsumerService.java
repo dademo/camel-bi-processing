@@ -28,6 +28,7 @@ import java.util.function.Consumer;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Slf4j
 @Service
 public class MessageConsumerService {

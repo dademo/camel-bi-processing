@@ -13,7 +13,6 @@ import fr.dademo.tools.lock.repository.model.HazelcastLock;
 import fr.dademo.tools.lock.repository.model.Lock;
 import jakarta.annotation.Nonnull;
 import lombok.NonNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
@@ -24,8 +23,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class HazelcastLockFactory implements LockFactory {
 
-    @Autowired
-    private HazelcastInstance hazelcastInstance;
+    private final HazelcastInstance hazelcastInstance;
+
+    public HazelcastLockFactory(@Nonnull HazelcastInstance hazelcastInstance) {
+        this.hazelcastInstance = hazelcastInstance;
+    }
 
     @Override
     @NonNull

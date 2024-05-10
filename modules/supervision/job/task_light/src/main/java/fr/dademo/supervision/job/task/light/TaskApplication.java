@@ -11,6 +11,7 @@ import fr.dademo.supervision.dependencies.backends.model.DataBackendStateFetchSe
 import fr.dademo.supervision.dependencies.backends.model.DataBackendStateFetchServiceExecutionResult;
 import fr.dademo.supervision.job.task.light.configuration.JobOutputConfiguration;
 import fr.dademo.tools.tools.HashTools;
+import jakarta.annotation.Nonnull;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +19,6 @@ import org.apache.commons.compress.compressors.CompressorStreamFactory;
 import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.MessageBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -44,18 +44,21 @@ public class TaskApplication implements CommandLineRunner {
     public static final int DEFAULT_BUFFER_SIZE = 4096;
     public static final int XZ_USED_PRESET = 9;
 
-    @Autowired
-    private JobOutputConfiguration jobOutputConfiguration;
-
-    @Autowired
-    private DataBackendStateFetchService dataBackendStateFetchService;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
+    private final JobOutputConfiguration jobOutputConfiguration;
+    private final DataBackendStateFetchService dataBackendStateFetchService;
+    private final ObjectMapper objectMapper;
     @Getter
-    private AmqpTemplate amqpTemplate;
+    private final AmqpTemplate amqpTemplate;
+
+    public TaskApplication(@Nonnull JobOutputConfiguration jobOutputConfiguration,
+                           @Nonnull DataBackendStateFetchService dataBackendStateFetchService,
+                           @Nonnull ObjectMapper objectMapper,
+                           @Nonnull AmqpTemplate amqpTemplate) {
+        this.jobOutputConfiguration = jobOutputConfiguration;
+        this.dataBackendStateFetchService = dataBackendStateFetchService;
+        this.objectMapper = objectMapper;
+        this.amqpTemplate = amqpTemplate;
+    }
 
 
     public static void main(String[] args) {

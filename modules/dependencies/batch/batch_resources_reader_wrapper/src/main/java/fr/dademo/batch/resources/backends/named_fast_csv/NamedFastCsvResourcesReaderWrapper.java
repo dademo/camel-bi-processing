@@ -10,7 +10,6 @@ import de.siegmar.fastcsv.reader.CsvReader;
 import de.siegmar.fastcsv.reader.NamedCsvRecord;
 import fr.dademo.batch.resources.ResourcesReaderWrapper;
 import fr.dademo.batch.resources.WrappedRowResource;
-
 import jakarta.annotation.Nonnull;
 
 import java.util.Iterator;

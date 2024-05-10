@@ -6,15 +6,13 @@
 
 package fr.dademo.supervision.dependencies.persistence.configuration;
 
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Min;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-
-import jakarta.validation.constraints.Min;
 
 /**
  * @author dademo

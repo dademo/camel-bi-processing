@@ -6,11 +6,10 @@
 
 package fr.dademo.batch.tools.batch.writer;
 
+import jakarta.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * @author dademo

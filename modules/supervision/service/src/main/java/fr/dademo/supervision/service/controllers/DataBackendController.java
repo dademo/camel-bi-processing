@@ -29,7 +29,6 @@ import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Min;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springdoc.core.converters.models.PageableAsQueryParam;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -60,21 +59,30 @@ public class DataBackendController implements ProblemHandling {
 
     public static final Long DEFAULT_EXECUTIONS_SIZE = 10L;
 
-    @Autowired
-    private DataBackendService dataBackendService;
+    private final DataBackendService dataBackendService;
+    private final DataBackendClusterNodeService dataBackendClusterNodeService;
+    private final DatabaseService databaseService;
+    private final DatabaseReplicationPeerService databaseReplicationPeerService;
+    private final PagedResourcesAssembler<DataBackendDescriptionDto> dataBackendDescriptionDtoPagedResourcesAssembler;
+    private final PagedResourcesAssembler<DataBackendDatabaseDto> databaseDescriptionDtoPagedResourcesAssembler;
+    private final PagedResourcesAssembler<DataBackendDatabaseReplicationPeerDto> databaseReplicationPeerDtoPagedResourcesAssembler;
 
-    @Autowired
-    private DataBackendClusterNodeService dataBackendClusterNodeService;
-    @Autowired
-    private DatabaseService databaseService;
-    @Autowired
-    private DatabaseReplicationPeerService databaseReplicationPeerService;
-    @Autowired
-    private PagedResourcesAssembler<DataBackendDescriptionDto> dataBackendDescriptionDtoPagedResourcesAssembler;
-    @Autowired
-    private PagedResourcesAssembler<DataBackendDatabaseDto> databaseDescriptionDtoPagedResourcesAssembler;
-    @Autowired
-    private PagedResourcesAssembler<DataBackendDatabaseReplicationPeerDto> databaseReplicationPeerDtoPagedResourcesAssembler;
+
+    public DataBackendController(@Nonnull DataBackendService dataBackendService,
+                                 @Nonnull DataBackendClusterNodeService dataBackendClusterNodeService,
+                                 @Nonnull DatabaseService databaseService,
+                                 @Nonnull DatabaseReplicationPeerService databaseReplicationPeerService,
+                                 @Nonnull PagedResourcesAssembler<DataBackendDescriptionDto> dataBackendDescriptionDtoPagedResourcesAssembler,
+                                 @Nonnull PagedResourcesAssembler<DataBackendDatabaseDto> databaseDescriptionDtoPagedResourcesAssembler,
+                                 @Nonnull PagedResourcesAssembler<DataBackendDatabaseReplicationPeerDto> databaseReplicationPeerDtoPagedResourcesAssembler) {
+        this.dataBackendService = dataBackendService;
+        this.dataBackendClusterNodeService = dataBackendClusterNodeService;
+        this.databaseService = databaseService;
+        this.databaseReplicationPeerService = databaseReplicationPeerService;
+        this.dataBackendDescriptionDtoPagedResourcesAssembler = dataBackendDescriptionDtoPagedResourcesAssembler;
+        this.databaseDescriptionDtoPagedResourcesAssembler = databaseDescriptionDtoPagedResourcesAssembler;
+        this.databaseReplicationPeerDtoPagedResourcesAssembler = databaseReplicationPeerDtoPagedResourcesAssembler;
+    }
 
     @PageableAsQueryParam
     @Operation(summary = "Get a list of data backends")

@@ -6,6 +6,7 @@
 
 package fr.dademo.batch.tools.batch.job;
 
+import jakarta.annotation.Nonnull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.springframework.batch.core.StepExecutionListener;
@@ -14,8 +15,6 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.transaction.PlatformTransactionManager;
-
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 

@@ -10,7 +10,6 @@ import fr.dademo.supervision.dependencies.backends.postgresql.repository.entitie
 import fr.dademo.supervision.dependencies.backends.postgresql.repository.exceptions.QueryError;
 import jakarta.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -29,8 +28,7 @@ import static fr.dademo.supervision.dependencies.backends.postgresql.configurati
 @Repository
 public class DatabasesConnectionsQueryRepositoryImpl implements DatabasesConnectionsQueryRepository {
 
-    private static final String QUERY = "" +
-        "SELECT " +
+    private static final String QUERY = "SELECT " +
         "  STATE, " +
         "  PID, " +
         "  DATNAME, " +
@@ -55,9 +53,11 @@ public class DatabasesConnectionsQueryRepositoryImpl implements DatabasesConnect
         "  %s " +
         "FROM PG_CATALOG.PG_STAT_ACTIVITY ";
 
-    @Qualifier(MODULE_JDBC_TEMPLATE_BEAN_NAME)
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
+
+    public DatabasesConnectionsQueryRepositoryImpl(@Nonnull @Qualifier(MODULE_JDBC_TEMPLATE_BEAN_NAME) JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Nonnull
     @Override

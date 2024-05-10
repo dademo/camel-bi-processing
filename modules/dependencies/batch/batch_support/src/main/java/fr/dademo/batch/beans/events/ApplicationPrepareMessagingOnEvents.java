@@ -7,8 +7,8 @@
 package fr.dademo.batch.beans.events;
 
 import fr.dademo.batch.beans.amqp.AmqpFactory;
+import jakarta.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.annotation.Configuration;
@@ -21,8 +21,11 @@ import org.springframework.context.event.EventListener;
 @Configuration
 public class ApplicationPrepareMessagingOnEvents {
 
-    @Autowired
-    AmqpFactory amqpFactory;
+    private final AmqpFactory amqpFactory;
+
+    public ApplicationPrepareMessagingOnEvents(@Nonnull AmqpFactory amqpFactory) {
+        this.amqpFactory = amqpFactory;
+    }
 
     @EventListener(ApplicationStartedEvent.class)
     @ConditionalOnProperty(value = "amqp.createQueues", matchIfMissing = true)

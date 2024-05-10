@@ -6,16 +6,16 @@
 
 package fr.dademo.supervision.dependencies.backends.postgresql.repository;
 
-import fr.dademo.supervision.dependencies.backends.postgresql.configuration.ModuleBeans;
 import fr.dademo.supervision.dependencies.backends.postgresql.repository.entities.DatabaseTableRowsCountEntity;
 import jakarta.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.Objects;
+
+import static fr.dademo.supervision.dependencies.backends.postgresql.configuration.ModuleBeans.MODULE_JDBC_TEMPLATE_BEAN_NAME;
 
 /**
  * @author dademo
@@ -24,12 +24,13 @@ import java.util.Objects;
 @Repository
 public class DatabaseTableRowsCountQueryRepositoryImpl implements DatabaseTableRowsCountQueryRepository {
 
-    private static final String QUERY = "" +
-        "SELECT COUNT(*) FROM \"%s\".\"%s\"";
+    private static final String QUERY = "SELECT COUNT(*) FROM \"%s\".\"%s\"";
 
-    @Qualifier(ModuleBeans.MODULE_JDBC_TEMPLATE_BEAN_NAME)
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
+
+    public DatabaseTableRowsCountQueryRepositoryImpl(@Nonnull @Qualifier(MODULE_JDBC_TEMPLATE_BEAN_NAME) JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Nonnull
     @Override

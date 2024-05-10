@@ -29,7 +29,6 @@ import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.Min;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springdoc.core.converters.models.PageableAsQueryParam;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
@@ -54,22 +53,33 @@ import org.zalando.problem.spring.web.advice.ProblemHandling;
 @Tag(name = "data-backend/database")
 public class DataBackendDatabaseSchemaController implements ProblemHandling {
 
-    @Autowired
-    private DatabaseSchemaService databaseSchemaService;
-    @Autowired
-    private DatabaseSchemaTableService databaseSchemaTableService;
-    @Autowired
-    private DatabaseSchemaIndexService databaseSchemaIndexService;
-    @Autowired
-    private DatabaseSchemaViewService databaseSchemaViewService;
-    @Autowired
-    private PagedResourcesAssembler<DataBackendDatabaseSchemaDto> databaseSchemaDescriptionDtoPagedResourcesAssembler;
-    @Autowired
-    private PagedResourcesAssembler<DataBackendDatabaseSchemaTableDto> databaseSchemaTableDescriptionDtoPagedResourcesAssembler;
-    @Autowired
-    private PagedResourcesAssembler<DataBackendDatabaseSchemaIndexDto> databaseSchemaIndexDescriptionDtoPagedResourcesAssembler;
-    @Autowired
-    private PagedResourcesAssembler<DataBackendDatabaseSchemaViewDto> databaseSchemaViewDescriptionDtoPagedResourcesAssembler;
+    private final DatabaseSchemaService databaseSchemaService;
+    private final DatabaseSchemaTableService databaseSchemaTableService;
+    private final DatabaseSchemaIndexService databaseSchemaIndexService;
+    private final DatabaseSchemaViewService databaseSchemaViewService;
+    private final PagedResourcesAssembler<DataBackendDatabaseSchemaDto> databaseSchemaDescriptionDtoPagedResourcesAssembler;
+    private final PagedResourcesAssembler<DataBackendDatabaseSchemaTableDto> databaseSchemaTableDescriptionDtoPagedResourcesAssembler;
+    private final PagedResourcesAssembler<DataBackendDatabaseSchemaIndexDto> databaseSchemaIndexDescriptionDtoPagedResourcesAssembler;
+    private final PagedResourcesAssembler<DataBackendDatabaseSchemaViewDto> databaseSchemaViewDescriptionDtoPagedResourcesAssembler;
+
+
+    public DataBackendDatabaseSchemaController(@Nonnull DatabaseSchemaService databaseSchemaService,
+                                               @Nonnull DatabaseSchemaTableService databaseSchemaTableService,
+                                               @Nonnull DatabaseSchemaIndexService databaseSchemaIndexService,
+                                               @Nonnull DatabaseSchemaViewService databaseSchemaViewService,
+                                               @Nonnull PagedResourcesAssembler<DataBackendDatabaseSchemaDto> databaseSchemaDescriptionDtoPagedResourcesAssembler,
+                                               @Nonnull PagedResourcesAssembler<DataBackendDatabaseSchemaTableDto> databaseSchemaTableDescriptionDtoPagedResourcesAssembler,
+                                               @Nonnull PagedResourcesAssembler<DataBackendDatabaseSchemaIndexDto> databaseSchemaIndexDescriptionDtoPagedResourcesAssembler,
+                                               @Nonnull PagedResourcesAssembler<DataBackendDatabaseSchemaViewDto> databaseSchemaViewDescriptionDtoPagedResourcesAssembler) {
+        this.databaseSchemaService = databaseSchemaService;
+        this.databaseSchemaTableService = databaseSchemaTableService;
+        this.databaseSchemaIndexService = databaseSchemaIndexService;
+        this.databaseSchemaViewService = databaseSchemaViewService;
+        this.databaseSchemaDescriptionDtoPagedResourcesAssembler = databaseSchemaDescriptionDtoPagedResourcesAssembler;
+        this.databaseSchemaTableDescriptionDtoPagedResourcesAssembler = databaseSchemaTableDescriptionDtoPagedResourcesAssembler;
+        this.databaseSchemaIndexDescriptionDtoPagedResourcesAssembler = databaseSchemaIndexDescriptionDtoPagedResourcesAssembler;
+        this.databaseSchemaViewDescriptionDtoPagedResourcesAssembler = databaseSchemaViewDescriptionDtoPagedResourcesAssembler;
+    }
 
     @Operation(summary = "Get a data backend database schema description")
     @ApiResponses(value = {

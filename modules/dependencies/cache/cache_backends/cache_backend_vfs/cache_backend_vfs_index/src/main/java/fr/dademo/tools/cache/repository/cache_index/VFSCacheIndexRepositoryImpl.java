@@ -11,11 +11,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 import fr.dademo.tools.cache.beans.CacheVFSEnabledConditional;
+import fr.dademo.tools.cache.configuration.CacheVFSConfiguration;
 import fr.dademo.tools.cache.data_model.CachedInputStreamIdentifier;
+import fr.dademo.tools.lock.repository.LockFactory;
+import jakarta.annotation.Nonnull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.vfs2.FileObject;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.commons.vfs2.FileSystemManager;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Repository;
 
@@ -35,8 +38,15 @@ class VFSCacheIndexRepositoryImpl<T extends InputStreamIdentifier<?>> extends VF
 
     public static final String DIRECTORY_ROOT_URI_SCHEME = "file";
 
-    @Autowired
-    private ObjectMapper mapper;
+    private final ObjectMapper mapper;
+
+    public VFSCacheIndexRepositoryImpl(@Nonnull LockFactory lockFactory,
+                                       @Nonnull CacheVFSConfiguration cacheVFSConfiguration,
+                                       @Nonnull FileSystemManager fileSystemManager,
+                                       @Nonnull ObjectMapper mapper) {
+        super(lockFactory, cacheVFSConfiguration, fileSystemManager);
+        this.mapper = mapper;
+    }
 
     @Override
     @SneakyThrows

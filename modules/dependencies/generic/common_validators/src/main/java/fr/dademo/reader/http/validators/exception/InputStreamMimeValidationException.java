@@ -8,9 +8,8 @@ package fr.dademo.reader.http.validators.exception;
 
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 import fr.dademo.data.generic.stream_definitions.exception.InputStreamIdentifierValidationException;
-import lombok.Getter;
-
 import jakarta.annotation.Nonnull;
+import lombok.Getter;
 
 /**
  * @author dademo

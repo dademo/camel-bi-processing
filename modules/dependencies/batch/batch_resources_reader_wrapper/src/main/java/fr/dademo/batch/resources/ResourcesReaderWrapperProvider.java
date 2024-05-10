@@ -12,11 +12,10 @@ import de.siegmar.fastcsv.reader.NamedCsvRecord;
 import fr.dademo.batch.resources.backends.apache_commons_csv.ApacheCommonsCsvResourcesReaderWrapper;
 import fr.dademo.batch.resources.backends.fast_csv.FastCsvResourcesReaderWrapper;
 import fr.dademo.batch.resources.backends.named_fast_csv.NamedFastCsvResourcesReaderWrapper;
+import jakarta.annotation.Nonnull;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.commons.csv.CSVParser;
-
-import jakarta.annotation.Nonnull;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ResourcesReaderWrapperProvider {

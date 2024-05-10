@@ -8,13 +8,12 @@ package fr.dademo.batch.tools.batch.reader;
 
 import fr.dademo.batch.tools.batch.reader.exceptions.MissingContextDataSetResource;
 import fr.dademo.data.definitions.DataSetResource;
+import jakarta.annotation.Nonnull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
-
-import jakarta.annotation.Nonnull;
 
 import java.util.Optional;
 

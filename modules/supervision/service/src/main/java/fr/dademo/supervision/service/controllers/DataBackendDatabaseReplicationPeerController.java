@@ -21,7 +21,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.Min;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.CollectionModel;
@@ -47,10 +46,14 @@ import java.util.Date;
 @Tag(name = "data-backend/database")
 public class DataBackendDatabaseReplicationPeerController implements ProblemHandling {
 
-    @Autowired
-    private DatabaseReplicationPeerService databaseReplicationPeerService;
-    @Autowired
-    private PagedResourcesAssembler<DataBackendDatabaseReplicationPeerStatisticsDto> databaseReplicationPeerStatisticsDtoPagedResourcesAssembler;
+    private final DatabaseReplicationPeerService databaseReplicationPeerService;
+    private final PagedResourcesAssembler<DataBackendDatabaseReplicationPeerStatisticsDto> databaseReplicationPeerStatisticsDtoPagedResourcesAssembler;
+
+    public DataBackendDatabaseReplicationPeerController(@Nonnull DatabaseReplicationPeerService databaseReplicationPeerService,
+                                                        @Nonnull PagedResourcesAssembler<DataBackendDatabaseReplicationPeerStatisticsDto> databaseReplicationPeerStatisticsDtoPagedResourcesAssembler) {
+        this.databaseReplicationPeerService = databaseReplicationPeerService;
+        this.databaseReplicationPeerStatisticsDtoPagedResourcesAssembler = databaseReplicationPeerStatisticsDtoPagedResourcesAssembler;
+    }
 
     @Operation(summary = "Get a data backend database replication peer description")
     @ApiResponses(value = {

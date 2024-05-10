@@ -7,10 +7,10 @@
 package fr.dademo.supervision.job.task.light;
 
 import fr.dademo.supervision.job.task.light.configuration.JobOutputConfiguration;
+import jakarta.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.DirectExchange;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
@@ -22,11 +22,14 @@ import org.springframework.context.event.EventListener;
 @Configuration
 public class ApplicationEvents {
 
-    @Autowired
-    private AmqpAdmin amqpAdmin;
+    private final AmqpAdmin amqpAdmin;
+    private final JobOutputConfiguration jobOutputConfiguration;
 
-    @Autowired
-    private JobOutputConfiguration jobOutputConfiguration;
+    public ApplicationEvents(@Nonnull AmqpAdmin amqpAdmin,
+                             @Nonnull JobOutputConfiguration jobOutputConfiguration) {
+        this.amqpAdmin = amqpAdmin;
+        this.jobOutputConfiguration = jobOutputConfiguration;
+    }
 
     @EventListener(ApplicationReadyEvent.class)
     public void onTaskStarted() {

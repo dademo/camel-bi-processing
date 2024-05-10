@@ -17,7 +17,6 @@ import fr.dademo.supervision.dependencies.repositories.DataBackendDescriptionRep
 import fr.dademo.supervision.dependencies.repositories.DataBackendModuleMetaDataRepository;
 import fr.dademo.supervision.dependencies.repositories.DatabaseBackendStateRepository;
 import jakarta.annotation.Nonnull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 
@@ -29,14 +28,17 @@ import java.util.Date;
  */
 public abstract class AbstractGenericDataBackendMappingService {
 
-    @Autowired
-    private DatabaseBackendStateRepository databaseBackendStateRepository;
+    private final DatabaseBackendStateRepository databaseBackendStateRepository;
+    private final DataBackendModuleMetaDataRepository dataBackendModuleMetaDataRepository;
+    private final DataBackendDescriptionRepository dataBackendDescriptionRepository;
 
-    @Autowired
-    private DataBackendModuleMetaDataRepository dataBackendModuleMetaDataRepository;
-
-    @Autowired
-    private DataBackendDescriptionRepository dataBackendDescriptionRepository;
+    protected AbstractGenericDataBackendMappingService(@Nonnull DatabaseBackendStateRepository databaseBackendStateRepository,
+                                                       @Nonnull DataBackendModuleMetaDataRepository dataBackendModuleMetaDataRepository,
+                                                       @Nonnull DataBackendDescriptionRepository dataBackendDescriptionRepository) {
+        this.databaseBackendStateRepository = databaseBackendStateRepository;
+        this.dataBackendModuleMetaDataRepository = dataBackendModuleMetaDataRepository;
+        this.dataBackendDescriptionRepository = dataBackendDescriptionRepository;
+    }
 
 
     protected DataBackendStateExecutionEntity mapCommonModuleDataToEntity(

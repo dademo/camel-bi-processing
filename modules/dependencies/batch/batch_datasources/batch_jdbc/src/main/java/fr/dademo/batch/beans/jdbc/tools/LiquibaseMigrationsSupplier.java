@@ -12,6 +12,8 @@
 
 package fr.dademo.batch.beans.jdbc.tools;
 
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotEmpty;
 import liquibase.Liquibase;
 import liquibase.database.DatabaseFactory;
@@ -23,9 +25,6 @@ import lombok.Builder;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ResourceLoader;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 import javax.sql.DataSource;
 import java.util.List;

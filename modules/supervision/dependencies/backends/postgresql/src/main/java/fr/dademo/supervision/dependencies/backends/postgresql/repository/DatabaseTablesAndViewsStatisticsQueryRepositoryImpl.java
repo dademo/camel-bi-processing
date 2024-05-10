@@ -9,7 +9,6 @@ package fr.dademo.supervision.dependencies.backends.postgresql.repository;
 import fr.dademo.supervision.dependencies.backends.postgresql.repository.entities.DatabaseTableEntity;
 import jakarta.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -25,8 +24,7 @@ import static fr.dademo.supervision.dependencies.backends.postgresql.configurati
 @Repository
 public class DatabaseTablesAndViewsStatisticsQueryRepositoryImpl implements DatabaseTablesAndViewsStatisticsQueryRepository {
 
-    private static final String QUERY = "" +
-        "SELECT " +
+    private static final String QUERY = "SELECT " +
         "  INFO_TABLES.TABLE_SCHEMA, " +
         "  INFO_TABLES.TABLE_NAME, " +
         "  INFO_TABLES.TABLE_TYPE, " +
@@ -68,9 +66,12 @@ public class DatabaseTablesAndViewsStatisticsQueryRepositoryImpl implements Data
         "  ON STAT_VIEWS.SCHEMANAME = INFO_TABLES.TABLE_SCHEMA " +
         "  AND STAT_VIEWS.VIEWNAME = INFO_TABLES.TABLE_NAME";
 
-    @Qualifier(MODULE_JDBC_TEMPLATE_BEAN_NAME)
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+
+    private final JdbcTemplate jdbcTemplate;
+
+    public DatabaseTablesAndViewsStatisticsQueryRepositoryImpl(@Nonnull @Qualifier(MODULE_JDBC_TEMPLATE_BEAN_NAME) JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Nonnull
     @Override

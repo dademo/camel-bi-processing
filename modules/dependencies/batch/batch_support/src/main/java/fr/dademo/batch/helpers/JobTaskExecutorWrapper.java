@@ -6,12 +6,11 @@
 
 package fr.dademo.batch.helpers;
 
+import jakarta.annotation.Nonnull;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;

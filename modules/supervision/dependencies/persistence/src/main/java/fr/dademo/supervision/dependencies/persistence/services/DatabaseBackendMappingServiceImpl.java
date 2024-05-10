@@ -34,12 +34,9 @@ import fr.dademo.supervision.dependencies.persistence.services.mappers.database.
 import fr.dademo.supervision.dependencies.persistence.services.mappers.database.replicationpeer.DataBackendDatabaseReplicationPeerEntityMapper;
 import fr.dademo.supervision.dependencies.persistence.services.mappers.database.replicationpeer.DataBackendDatabaseReplicationPeerStatisticsEntityMapper;
 import fr.dademo.supervision.dependencies.persistence.services.specialSpecifications.DataBackendDatabaseEntitySpecification;
-import fr.dademo.supervision.dependencies.repositories.DataBackendClusterNodeRepository;
-import fr.dademo.supervision.dependencies.repositories.DataBackendReplicationPeerRepository;
-import fr.dademo.supervision.dependencies.repositories.DatabaseBackendStateRepository;
+import fr.dademo.supervision.dependencies.repositories.*;
 import fr.dademo.supervision.dependencies.repositories.database.*;
 import jakarta.annotation.Nonnull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
@@ -53,29 +50,36 @@ import java.util.stream.StreamSupport;
 @Service
 public class DatabaseBackendMappingServiceImpl extends AbstractGenericDataBackendMappingService implements DatabaseBackendMappingService {
 
-    @Autowired
-    private DatabaseBackendStateRepository databaseBackendStateRepository;
+    private final DatabaseBackendStateRepository databaseBackendStateRepository;
+    private final DataBackendClusterNodeRepository dataBackendClusterNodeRepository;
+    private final DataBackendDatabaseRepository dataBackendDatabaseRepository;
+    private final DataBackendReplicationPeerRepository dataBackendReplicationPeerRepository;
+    private final DataBackendDatabaseSchemaRepository dataBackendDatabaseSchemaRepository;
+    private final DataBackendDatabaseSchemaTableRepository dataBackendDatabaseSchemaTableRepository;
+    private final DataBackendDatabaseSchemaViewRepository dataBackendDatabaseSchemaViewRepository;
+    private final DataBackendDatabaseSchemaIndexRepository dataBackendDatabaseSchemaIndexRepository;
 
-    @Autowired
-    private DataBackendClusterNodeRepository dataBackendClusterNodeRepository;
 
-    @Autowired
-    private DataBackendDatabaseRepository dataBackendDatabaseRepository;
-
-    @Autowired
-    private DataBackendReplicationPeerRepository dataBackendReplicationPeerRepository;
-
-    @Autowired
-    private DataBackendDatabaseSchemaRepository dataBackendDatabaseSchemaRepository;
-
-    @Autowired
-    private DataBackendDatabaseSchemaTableRepository dataBackendDatabaseSchemaTableRepository;
-
-    @Autowired
-    private DataBackendDatabaseSchemaViewRepository dataBackendDatabaseSchemaViewRepository;
-
-    @Autowired
-    private DataBackendDatabaseSchemaIndexRepository dataBackendDatabaseSchemaIndexRepository;
+    public DatabaseBackendMappingServiceImpl(@Nonnull DatabaseBackendStateRepository databaseBackendStateRepository,
+                                             @Nonnull DataBackendModuleMetaDataRepository dataBackendModuleMetaDataRepository,
+                                             @Nonnull DataBackendDescriptionRepository dataBackendDescriptionRepository,
+                                             @Nonnull DataBackendClusterNodeRepository dataBackendClusterNodeRepository,
+                                             @Nonnull DataBackendDatabaseRepository dataBackendDatabaseRepository,
+                                             @Nonnull DataBackendReplicationPeerRepository dataBackendReplicationPeerRepository,
+                                             @Nonnull DataBackendDatabaseSchemaRepository dataBackendDatabaseSchemaRepository,
+                                             @Nonnull DataBackendDatabaseSchemaTableRepository dataBackendDatabaseSchemaTableRepository,
+                                             @Nonnull DataBackendDatabaseSchemaViewRepository dataBackendDatabaseSchemaViewRepository,
+                                             @Nonnull DataBackendDatabaseSchemaIndexRepository dataBackendDatabaseSchemaIndexRepository) {
+        super(databaseBackendStateRepository, dataBackendModuleMetaDataRepository, dataBackendDescriptionRepository);
+        this.databaseBackendStateRepository = databaseBackendStateRepository;
+        this.dataBackendClusterNodeRepository = dataBackendClusterNodeRepository;
+        this.dataBackendDatabaseRepository = dataBackendDatabaseRepository;
+        this.dataBackendReplicationPeerRepository = dataBackendReplicationPeerRepository;
+        this.dataBackendDatabaseSchemaRepository = dataBackendDatabaseSchemaRepository;
+        this.dataBackendDatabaseSchemaTableRepository = dataBackendDatabaseSchemaTableRepository;
+        this.dataBackendDatabaseSchemaViewRepository = dataBackendDatabaseSchemaViewRepository;
+        this.dataBackendDatabaseSchemaIndexRepository = dataBackendDatabaseSchemaIndexRepository;
+    }
 
 
     @Nonnull

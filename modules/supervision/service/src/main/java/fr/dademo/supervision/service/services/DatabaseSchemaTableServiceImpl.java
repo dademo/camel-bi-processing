@@ -12,7 +12,6 @@ import fr.dademo.supervision.service.services.dto.DataBackendDatabaseSchemaTable
 import fr.dademo.supervision.service.services.mappers.DataBackendDatabaseSchemaTableEntityToDtoMapper;
 import fr.dademo.supervision.service.services.mappers.DataBackendDatabaseSchemaTableStatisticsEntityToDtoMapper;
 import jakarta.annotation.Nonnull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,8 +26,11 @@ import java.util.Optional;
 @Service
 public class DatabaseSchemaTableServiceImpl implements DatabaseSchemaTableService {
 
-    @Autowired
-    private ExtendedDataBackendDatabaseSchemaTableRepository repository;
+    private final ExtendedDataBackendDatabaseSchemaTableRepository repository;
+
+    public DatabaseSchemaTableServiceImpl(@Nonnull ExtendedDataBackendDatabaseSchemaTableRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public Page<DataBackendDatabaseSchemaTableDto> findTablesForDatabaseSchema(@Nonnull Long databaseSchemaId, @Nonnull Pageable pageable) {

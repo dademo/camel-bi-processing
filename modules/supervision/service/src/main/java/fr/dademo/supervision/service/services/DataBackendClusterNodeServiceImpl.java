@@ -11,7 +11,6 @@ import fr.dademo.supervision.service.services.dto.DataBackendClusterNodeDto;
 import fr.dademo.supervision.service.services.mappers.DataBackendClusterNodeEntityToDtoMapper;
 import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.Min;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +25,11 @@ import java.util.function.Function;
 @Service
 public class DataBackendClusterNodeServiceImpl implements DataBackendClusterNodeService {
 
-    @Autowired
-    private ExtendedDataBackendClusterNodeRepository repository;
+    private final ExtendedDataBackendClusterNodeRepository repository;
+
+    public DataBackendClusterNodeServiceImpl(@Nonnull ExtendedDataBackendClusterNodeRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public List<DataBackendClusterNodeDto> findDataBackendClusterNodeByDataBackendId(

@@ -6,9 +6,7 @@
 
 package fr.dademo.supervision.job.persistence_service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -18,10 +16,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @Slf4j
 @SpringBootApplication(scanBasePackages = "fr.dademo.supervision")
 public class Application {
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

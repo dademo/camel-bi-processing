@@ -11,14 +11,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 import fr.dademo.tools.cache.beans.CacheMinioEnabledConditional;
+import fr.dademo.tools.cache.configuration.CacheMinioConfiguration;
 import fr.dademo.tools.cache.data_model.CachedInputStreamIdentifier;
+import fr.dademo.tools.lock.repository.LockFactory;
 import io.minio.GetObjectArgs;
+import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.StatObjectArgs;
 import io.minio.errors.ErrorResponseException;
+import jakarta.annotation.Nonnull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Repository;
@@ -44,12 +47,19 @@ class MinioCacheIndexRepositoryImpl<T extends InputStreamIdentifier<?>> extends 
     public static final String CONTENT_TYPE_APPLICATION_JSON = "application/json";
     public static final String DIRECTORY_ROOT_URI_SCHEME = "file";
 
-    @Autowired
-    private ObjectMapper mapper;
+    private final ObjectMapper mapper;
 
-    @Autowired
-    @Qualifier(MINIO_STREAM_THREAD_POOL_BEAN)
-    private ExecutorService minioStreamsThreadPool;
+    private final ExecutorService minioStreamsThreadPool;
+
+    protected MinioCacheIndexRepositoryImpl(@Nonnull LockFactory lockFactory,
+                                            @Nonnull CacheMinioConfiguration cacheMinioConfiguration,
+                                            @Nonnull MinioClient minioClient,
+                                            @Nonnull ObjectMapper mapper,
+                                            @Nonnull @Qualifier(MINIO_STREAM_THREAD_POOL_BEAN) ExecutorService minioStreamsThreadPool) {
+        super(lockFactory, cacheMinioConfiguration, minioClient);
+        this.mapper = mapper;
+        this.minioStreamsThreadPool = minioStreamsThreadPool;
+    }
 
     @Override
     @SneakyThrows

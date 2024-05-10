@@ -7,7 +7,6 @@
 package fr.dademo.tools.lock.repository.model;
 
 import jakarta.annotation.Nonnull;
-
 import jakarta.validation.constraints.NotBlank;
 
 public interface Lock extends AutoCloseable {

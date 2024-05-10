@@ -9,12 +9,12 @@ package fr.dademo.tools.cache.repository.cache_index;
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 import fr.dademo.tools.cache.configuration.CacheConfiguration;
 import fr.dademo.tools.cache.repository.exception.NotADirectoryException;
+import fr.dademo.tools.lock.repository.LockFactory;
+import jakarta.annotation.Nonnull;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,17 +25,20 @@ import java.util.Optional;
  * @author dademo
  */
 @Slf4j
-@NoArgsConstructor
 public abstract class FileCacheIndexRepositoryBeanLifecycle<T extends InputStreamIdentifier<?>> extends BaseCacheIndexRepository<T> implements InitializingBean {
 
     public static final String DIRECTORY_ROOT_URI_SCHEME = "file";
     public static final String LOCK_FILE_NAME = "index.lock";
     public static final String RESOURCES_DIRECTORY_NAME = "resources";
 
-
-    @Autowired
     @Getter
-    private CacheConfiguration cacheConfiguration;
+    private final CacheConfiguration cacheConfiguration;
+
+    protected FileCacheIndexRepositoryBeanLifecycle(@Nonnull LockFactory lockFactory,
+                                                    @Nonnull CacheConfiguration cacheConfiguration) {
+        super(lockFactory);
+        this.cacheConfiguration = cacheConfiguration;
+    }
 
     @Override
     public void afterPropertiesSet() {

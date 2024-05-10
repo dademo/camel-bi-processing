@@ -16,6 +16,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import java.io.Serial;
 import java.util.Date;
 
 /**
@@ -33,6 +34,7 @@ import java.util.Date;
 @Table(name = "data_backend_database_connection")
 public class DataBackendDatabaseConnectionEntity implements BaseEntity {
 
+    @Serial
     private static final long serialVersionUID = -6016932834303708425L;
 
     @Id

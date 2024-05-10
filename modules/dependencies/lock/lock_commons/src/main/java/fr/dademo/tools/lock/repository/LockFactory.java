@@ -8,9 +8,8 @@ package fr.dademo.tools.lock.repository;
 
 import fr.dademo.data.generic.stream_definitions.Cacheable;
 import fr.dademo.tools.lock.repository.model.Lock;
-import lombok.NonNull;
-
 import jakarta.annotation.Nonnull;
+import lombok.NonNull;
 
 public interface LockFactory {
 

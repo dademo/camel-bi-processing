@@ -17,6 +17,8 @@ import fr.dademo.tools.cache.configuration.CacheMinioConfiguration;
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
@@ -40,8 +42,8 @@ public class MinioBeans {
     @SneakyThrows
     @Bean
     @ConditionalOnMissingBean(MinioClient.class)
-    public MinioClient minioClient(CacheMinioConfiguration cacheMinioConfiguration,
-                                   @Autowired(required = false) OkHttpClient okHttpClient) {
+    public MinioClient minioClient(@Nonnull CacheMinioConfiguration cacheMinioConfiguration,
+                                   @Nullable @Autowired(required = false) OkHttpClient okHttpClient) {
 
         final var minioClientBuilder = MinioClient.builder()
             .endpoint(cacheMinioConfiguration.getEndpoint())

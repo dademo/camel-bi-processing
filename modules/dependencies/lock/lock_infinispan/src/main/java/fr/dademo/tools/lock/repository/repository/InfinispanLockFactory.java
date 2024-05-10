@@ -11,13 +11,11 @@ import fr.dademo.tools.lock.configuration.LockConfiguration;
 import fr.dademo.tools.lock.repository.LockFactory;
 import fr.dademo.tools.lock.repository.model.Lock;
 import fr.dademo.tools.lock.repository.repository.model.InfinispanLock;
+import jakarta.annotation.Nonnull;
 import lombok.NonNull;
 import org.infinispan.lock.api.ClusteredLockManager;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-
-import jakarta.annotation.Nonnull;
 
 @ConditionalOnProperty(
     name = LockConfiguration.CONFIGURATION_PROPERTY_PREFIX + ".backend",
@@ -26,8 +24,11 @@ import jakarta.annotation.Nonnull;
 @Component
 public class InfinispanLockFactory implements LockFactory {
 
-    @Autowired
-    private ClusteredLockManager lockManager;
+    private final ClusteredLockManager lockManager;
+
+    public InfinispanLockFactory(@Nonnull ClusteredLockManager lockManager) {
+        this.lockManager = lockManager;
+    }
 
     @Override
     @NonNull

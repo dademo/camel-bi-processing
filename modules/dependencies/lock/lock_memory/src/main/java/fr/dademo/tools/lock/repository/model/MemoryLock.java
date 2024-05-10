@@ -7,9 +7,8 @@
 package fr.dademo.tools.lock.repository.model;
 
 import fr.dademo.data.generic.stream_definitions.Cacheable;
-import lombok.extern.slf4j.Slf4j;
-
 import jakarta.annotation.Nonnull;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.locks.ReentrantLock;
 

@@ -7,7 +7,6 @@
 package fr.dademo.tools.tools.object_mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import jakarta.annotation.Nonnull;
 
 /**

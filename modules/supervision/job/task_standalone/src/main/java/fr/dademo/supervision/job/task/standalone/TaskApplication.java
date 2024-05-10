@@ -8,8 +8,8 @@ package fr.dademo.supervision.job.task.standalone;
 
 import fr.dademo.supervision.dependencies.backends.model.DataBackendStateFetchService;
 import fr.dademo.supervision.dependencies.persistence.services.DataBackendPersistenceService;
+import jakarta.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,11 +23,14 @@ import org.springframework.cloud.task.configuration.EnableTask;
 @SpringBootApplication(scanBasePackages = "fr.dademo.supervision")
 public class TaskApplication implements CommandLineRunner {
 
-    @Autowired
-    private DataBackendStateFetchService dataBackendStateFetchService;
+    private final DataBackendStateFetchService dataBackendStateFetchService;
+    private final DataBackendPersistenceService dataBackendPersistenceService;
 
-    @Autowired
-    private DataBackendPersistenceService dataBackendPersistenceService;
+    public TaskApplication(@Nonnull DataBackendStateFetchService dataBackendStateFetchService,
+                           @Nonnull DataBackendPersistenceService dataBackendPersistenceService) {
+        this.dataBackendStateFetchService = dataBackendStateFetchService;
+        this.dataBackendPersistenceService = dataBackendPersistenceService;
+    }
 
     public static void main(String[] args) {
         System.exit(SpringApplication.exit(SpringApplication.run(TaskApplication.class, args)));
