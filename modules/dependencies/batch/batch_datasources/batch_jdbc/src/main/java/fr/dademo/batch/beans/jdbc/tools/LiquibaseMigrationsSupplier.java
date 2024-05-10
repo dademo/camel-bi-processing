@@ -13,11 +13,11 @@
 package fr.dademo.batch.beans.jdbc.tools;
 
 import jakarta.validation.constraints.NotEmpty;
-import liquibase.Contexts;
 import liquibase.Liquibase;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.DatabaseException;
+import liquibase.integration.spring.SpringLiquibase;
 import liquibase.integration.spring.SpringResourceAccessor;
 import lombok.Builder;
 import lombok.SneakyThrows;
@@ -78,7 +78,12 @@ public class LiquibaseMigrationsSupplier {
                 Optional.ofNullable(databaseCatalog).ifPresent(safeApplyDatabaseOperation(database::setDefaultCatalogName));
 
                 try (final var liquibase = new Liquibase(getChangeLogFile(), new SpringResourceAccessor(resourceLoader), database)) {
-                    liquibase.update(new Contexts(contexts));
+                    // liquibase.update(new Contexts(contexts));
+                    final var springLiquibase = new SpringLiquibase();
+                    springLiquibase.setShouldRun(true);
+                    springLiquibase.setDataSource(dataSource);
+                    springLiquibase.setChangeLog(getChangeLogFile());
+                    springLiquibase.afterPropertiesSet();
                 }
             }
         }
