@@ -7,9 +7,7 @@
 package fr.dademo.supervision.dependencies.backends.model.shared;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import javax.annotation.Nonnull;
-
+import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.Size;
 
 /**

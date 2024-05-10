@@ -8,10 +8,9 @@ package fr.dademo.supervision.dependencies.backends.model.database.resources;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
-import javax.annotation.Nonnull;
-
+import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.Size;
+
 import java.util.List;
 
 /**

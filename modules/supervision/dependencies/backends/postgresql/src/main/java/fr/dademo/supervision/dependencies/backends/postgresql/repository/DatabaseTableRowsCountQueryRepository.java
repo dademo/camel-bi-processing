@@ -7,8 +7,7 @@
 package fr.dademo.supervision.dependencies.backends.postgresql.repository;
 
 import fr.dademo.supervision.dependencies.backends.postgresql.repository.entities.DatabaseTableRowsCountEntity;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author dademo

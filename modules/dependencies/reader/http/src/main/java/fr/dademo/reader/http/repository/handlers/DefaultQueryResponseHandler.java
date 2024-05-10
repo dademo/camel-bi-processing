@@ -10,10 +10,10 @@ import fr.dademo.reader.http.repository.HttpDataQuerierRepository;
 import fr.dademo.reader.http.repository.exception.FailedQueryException;
 import fr.dademo.reader.http.repository.exception.MissingResultBodyException;
 import fr.dademo.reader.http.repository.exception.UnexpectedRedirectResponseException;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
+import jakarta.annotation.Nonnull;
 
 import java.io.InputStream;
+import java.net.http.HttpResponse;
 import java.util.Optional;
 
 /**
@@ -22,17 +22,25 @@ import java.util.Optional;
 public class DefaultQueryResponseHandler implements QueryResponseHandler {
 
     @Override
-    public InputStream handleResponse(Response response, HttpDataQuerierRepository httpDataQuerierRepository) {
+    public InputStream handleResponse(@Nonnull HttpResponse<InputStream> response,
+                                      @Nonnull HttpDataQuerierRepository httpDataQuerierRepository) {
 
-        if (!response.isSuccessful()) {
-            throw new FailedQueryException(response);
-        }
-        if (response.isRedirect()) {
+        if (isRedirectResponse(response)) {
             throw new UnexpectedRedirectResponseException(response);
+        }
+        if (!isSuccessfullResponse(response)) {
+            throw new FailedQueryException(response);
         }
 
         return Optional.ofNullable(response.body())
-            .map(ResponseBody::byteStream)
             .orElseThrow(() -> new MissingResultBodyException(response));
+    }
+
+    private boolean isSuccessfullResponse(HttpResponse<InputStream> response) {
+        return response.statusCode() / 100 == 2;
+    }
+
+    private boolean isRedirectResponse(HttpResponse<InputStream> response) {
+        return response.statusCode() / 100 == 3;
     }
 }

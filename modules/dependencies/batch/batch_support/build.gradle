@@ -45,6 +45,7 @@ dependencies {
     implementation 'org.springframework.amqp:spring-amqp'
     implementation "org.jline:jline:${jlineVersion}"
     implementation "jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}"
+    implementation "jakarta.annotation:jakarta.annotation-api:${jakartaAnnotationApiVersion}"
     implementation "com.google.code.findbugs:jsr305:${findBugsJsr305Version}"
     implementation "org.mapstruct:mapstruct:${mapStructVersion}"
 

@@ -11,6 +11,7 @@ import fr.dademo.supervision.dependencies.backends.model.DataBackendStateFetchSe
 import fr.dademo.supervision.dependencies.persistence.services.DataBackendPersistenceService;
 import fr.dademo.supervision.job.persistence_service.consumer.exception.InconsistentMessageException;
 import fr.dademo.tools.tools.HashTools;
+import jakarta.annotation.Nonnull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.compressors.CompressorStreamFactory;
@@ -19,7 +20,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nonnull;
 import java.io.ByteArrayInputStream;
 import java.util.Date;
 import java.util.Optional;

@@ -20,6 +20,8 @@ import fr.dademo.data.definitions.data_gouv_fr.dimensions.DataGouvFrDataSetResou
 import fr.dademo.data.helpers.data_gouv_fr.helpers.DataGouvFrFilterHelpers;
 import fr.dademo.data.helpers.data_gouv_fr.repository.DataGouvFrDataQuerierService;
 import fr.dademo.data.helpers.data_gouv_fr.repository.exception.ResourceNotFoundException;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import lombok.SneakyThrows;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.tasklet.Tasklet;
@@ -30,8 +32,6 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Comparator;
 
 import static fr.dademo.batch.beans.BeanValues.BATCH_DATA_SOURCE_TRANSACTION_MANAGER_BEAN_NAME;

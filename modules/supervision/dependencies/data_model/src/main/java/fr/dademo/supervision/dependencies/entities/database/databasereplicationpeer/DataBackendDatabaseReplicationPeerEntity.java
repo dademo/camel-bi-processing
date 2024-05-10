@@ -8,13 +8,13 @@ package fr.dademo.supervision.dependencies.entities.database.databasereplication
 
 import fr.dademo.supervision.dependencies.entities.BaseEntity;
 import fr.dademo.supervision.dependencies.entities.DataBackendDescriptionEntity;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
 
 /**

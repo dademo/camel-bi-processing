@@ -7,10 +7,10 @@
 package fr.dademo.bi.companies.shared;
 
 import fr.dademo.batch.configuration.BatchConfiguration;
+import jakarta.annotation.Nonnull;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import javax.annotation.Nonnull;
 import java.util.Optional;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

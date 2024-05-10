@@ -10,6 +10,8 @@ import fr.dademo.batch.beans.amqp.exception.AmqpUnknownBackendException;
 import fr.dademo.batch.configuration.BatchDataSourcesConfiguration;
 import fr.dademo.batch.configuration.helpers.AmqpExchangeBuilder;
 import fr.dademo.batch.configuration.helpers.AmqpQueueBuilder;
+import jakarta.annotation.Nonnull;
+import jakarta.validation.constraints.NotEmpty;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Exchange;
@@ -20,9 +22,6 @@ import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Nonnull;
-
-import jakarta.validation.constraints.NotEmpty;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;

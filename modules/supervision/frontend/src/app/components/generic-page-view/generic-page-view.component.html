@@ -1,19 +1,25 @@
-<div class="page-view-body" fxFlex  fxFlexFill fxLayout="column">
-    <div class="page-view-heading" fxFlex fxFlexFill fxLayout="row">
-        <app-generic-page-view-route [viewRoutes]="viewRoutes"></app-generic-page-view-route>
-        <span fxFlex></span>
-        <mat-button-toggle-group [multiple]="false" [(value)]="displayKind">
-            <mat-button-toggle value="list" aria-label="List display"><mat-icon>view_list</mat-icon></mat-button-toggle>
-            <mat-button-toggle value="card" aria-label="Grid display"><mat-icon>view_comfy</mat-icon></mat-button-toggle>
-        </mat-button-toggle-group>
-    </div>
-    <mat-divider></mat-divider>
-    <div class="page-view-body">
-        <ng-template [ngIf]="displayKind === 'card'" [ngIfElse]="displayList" #displayCard>
-            <app-generic-page-view-display-cards [pagedValuesProvider]="pagedValuesProvider"></app-generic-page-view-display-cards>
-        </ng-template>
-        <ng-template #displayList>
-            <app-generic-page-view-display-list [pagedValuesProvider]="pagedValuesProvider"></app-generic-page-view-display-list>
-        </ng-template>
-    </div>
+<div class="page-view-body" fxFlex fxFlexFill fxLayout="column">
+  <div class="page-view-heading" fxFlex fxFlexFill fxLayout="row">
+    <app-generic-page-view-route [viewRoutes]="viewRoutes"></app-generic-page-view-route>
+    <span fxFlex></span>
+    <mat-button-toggle-group [(value)]="displayKind" [multiple]="false">
+      <mat-button-toggle aria-label="List display" value="list">
+        <mat-icon>view_list</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle aria-label="Grid display" value="card">
+        <mat-icon>view_comfy</mat-icon>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="page-view-body">
+    <ng-template #displayCard [ngIfElse]="displayList" [ngIf]="displayKind === 'card'">
+      <app-generic-page-view-display-cards
+        [pagedValuesProvider]="pagedValuesProvider"></app-generic-page-view-display-cards>
+    </ng-template>
+    <ng-template #displayList>
+      <app-generic-page-view-display-list
+        [pagedValuesProvider]="pagedValuesProvider"></app-generic-page-view-display-list>
+    </ng-template>
+  </div>
 </div>

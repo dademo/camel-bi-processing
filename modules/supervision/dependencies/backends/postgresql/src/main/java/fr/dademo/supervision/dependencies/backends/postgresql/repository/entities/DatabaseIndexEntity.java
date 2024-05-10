@@ -6,12 +6,12 @@
 
 package fr.dademo.supervision.dependencies.backends.postgresql.repository.entities;
 
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import lombok.Builder;
 import lombok.Value;
 import org.springframework.jdbc.core.RowMapper;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 

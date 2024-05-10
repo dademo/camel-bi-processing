@@ -8,13 +8,13 @@ package fr.dademo.supervision.dependencies.backends.postgresql.repository;
 
 import fr.dademo.supervision.dependencies.backends.postgresql.configuration.ModuleBeans;
 import fr.dademo.supervision.dependencies.backends.postgresql.repository.entities.DatabaseTableRowsCountEntity;
+import jakarta.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.Nonnull;
 import java.util.Objects;
 
 /**

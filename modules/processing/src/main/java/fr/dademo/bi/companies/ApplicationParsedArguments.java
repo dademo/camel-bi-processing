@@ -7,6 +7,7 @@
 package fr.dademo.bi.companies;
 
 import fr.dademo.bi.companies.exceptions.ApplicationInitializationError;
+import jakarta.annotation.Nonnull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +15,6 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 

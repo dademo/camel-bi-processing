@@ -6,20 +6,23 @@
 
 package fr.dademo.reader.http.repository.exception;
 
-import okhttp3.Response;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
+import java.io.InputStream;
+import java.io.Serial;
+import java.net.http.HttpResponse;
 
 /**
  * @author dademo
  */
 public class FailedQueryException extends BaseHttpQueryException {
 
+    @Serial
     private static final long serialVersionUID = 7406651192145018752L;
 
-    public FailedQueryException(@Nonnull Response queryResponse) {
+    public FailedQueryException(@Nonnull HttpResponse<InputStream> queryResponse) {
         super(String.format("Query on url [%s] failed (%s)",
-            queryResponse.request().url(),
+            queryResponse.request().uri(),
             queryResponse
         ), queryResponse);
     }

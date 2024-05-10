@@ -8,7 +8,7 @@ package fr.dademo.data.helpers.data_gouv_fr.repository.exception;
 
 import fr.dademo.data.definitions.data_gouv_fr.DataGouvFrDataSet;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author dademo

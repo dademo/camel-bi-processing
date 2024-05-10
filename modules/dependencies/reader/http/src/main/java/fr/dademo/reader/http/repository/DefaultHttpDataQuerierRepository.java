@@ -11,16 +11,16 @@ import fr.dademo.reader.http.data_model.HttpInputStreamIdentifier;
 import fr.dademo.reader.http.repository.context.HttpQueryValidationContextImpl;
 import fr.dademo.reader.http.repository.handlers.DefaultQueryResponseHandler;
 import fr.dademo.reader.http.repository.handlers.QueryResponseHandler;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+import lombok.SneakyThrows;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -28,18 +28,20 @@ import java.util.Optional;
 /**
  * @author dademo
  */
-@NoArgsConstructor
-@AllArgsConstructor
 public class DefaultHttpDataQuerierRepository implements HttpDataQuerierRepository {
 
-    @Autowired
-    private OkHttpClient okHttpClient;
+
+    private final HttpClient httpClient;
+
+    public DefaultHttpDataQuerierRepository(@Nonnull HttpClient httpClient) {
+        this.httpClient = httpClient;
+    }
 
     @Override
     public InputStream basicQuery(@Nonnull HttpInputStreamIdentifier httpInputStreamIdentifier,
                                   @Nonnull List<QueryCustomizer> queryCustomizers,
                                   @Nullable QueryResponseHandler queryResponseHandler,
-                                  @Nonnull List<? extends InputStreamIdentifierValidator<HttpInputStreamIdentifier>> httpStreamValidators) throws IOException {
+                                  @Nonnull List<? extends InputStreamIdentifierValidator<HttpInputStreamIdentifier>> httpStreamValidators) throws IOException, InterruptedException {
 
         return performBasicQuery(httpInputStreamIdentifier,
             queryCustomizers,
@@ -50,7 +52,7 @@ public class DefaultHttpDataQuerierRepository implements HttpDataQuerierReposito
 
     @Override
     public InputStream getInputStream(@Nonnull HttpInputStreamIdentifier inputStreamIdentifier,
-                                      @Nonnull List<? extends InputStreamIdentifierValidator<HttpInputStreamIdentifier>> streamValidators) throws IOException {
+                                      @Nonnull List<? extends InputStreamIdentifierValidator<HttpInputStreamIdentifier>> streamValidators) throws IOException, InterruptedException {
 
         return basicQuery(
             inputStreamIdentifier,
@@ -60,22 +62,27 @@ public class DefaultHttpDataQuerierRepository implements HttpDataQuerierReposito
         );
     }
 
+    @SneakyThrows(URISyntaxException.class)
     protected InputStream performBasicQuery(@Nonnull HttpInputStreamIdentifier httpInputStreamIdentifier,
                                             @Nonnull List<QueryCustomizer> queryCustomizers,
                                             @Nullable QueryResponseHandler queryResponseHandler,
-                                            @Nonnull List<? extends InputStreamIdentifierValidator<HttpInputStreamIdentifier>> httpStreamValidators) throws IOException {
+                                            @Nonnull List<? extends InputStreamIdentifierValidator<HttpInputStreamIdentifier>> httpStreamValidators) throws IOException, InterruptedException {
 
-        var request = new Request.Builder()
-            .url(httpInputStreamIdentifier.getUrl())
-            .method(httpInputStreamIdentifier.getMethod(),
-                httpInputStreamIdentifier.getRequestBody()
+
+        var httpRequest = HttpRequest.newBuilder()
+            .uri(httpInputStreamIdentifier.getUrl().toURI())
+            .method(
+                httpInputStreamIdentifier.getMethod(),
+                httpInputStreamIdentifier.getBodyStream().getBodyPublisher()
             );
 
+        httpInputStreamIdentifier.getUrl().toURI();
+
         for (final var queryCustomizer : queryCustomizers) {
-            request = queryCustomizer.customizeRequest(request);
+            httpRequest = queryCustomizer.customizeRequest(httpRequest);
         }
 
-        final var response = okHttpClient.newCall(request.build()).execute();
+        final var response = httpClient.send(httpRequest.build(), HttpResponse.BodyHandlers.ofInputStream());
 
         final var inputStream = Optional.ofNullable(queryResponseHandler)
             .orElseGet(DefaultQueryResponseHandler::new)

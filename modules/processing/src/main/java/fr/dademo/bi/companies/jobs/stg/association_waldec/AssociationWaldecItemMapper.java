@@ -8,10 +8,9 @@ package fr.dademo.bi.companies.jobs.stg.association_waldec;
 
 import fr.dademo.batch.resources.WrappedRowResource;
 import fr.dademo.bi.companies.jobs.stg.association_waldec.datamodel.AssociationWaldec;
+import jakarta.annotation.Nonnull;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.Nonnull;
 
 import static fr.dademo.batch.tools.batch.mapper.BatchMapperTools.toLocalDate;
 import static fr.dademo.batch.tools.batch.mapper.BatchMapperTools.toLocalDateTimeUsingPattern;

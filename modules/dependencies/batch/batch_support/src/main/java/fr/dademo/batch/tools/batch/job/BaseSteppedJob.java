@@ -8,6 +8,7 @@ package fr.dademo.batch.tools.batch.job;
 
 import fr.dademo.batch.tools.batch.job.listeners.DefaultJobExecutionListener;
 import fr.dademo.batch.tools.batch.job.listeners.DefaultStepExecutionListener;
+import jakarta.annotation.Nonnull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.springframework.batch.core.Job;
@@ -18,7 +19,6 @@ import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 
-import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;

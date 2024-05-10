@@ -7,15 +7,13 @@
 package fr.dademo.supervision.dependencies.backends.model.shared;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import jakarta.validation.constraints.Size;
 
 /**
  * Data backend module meta data.

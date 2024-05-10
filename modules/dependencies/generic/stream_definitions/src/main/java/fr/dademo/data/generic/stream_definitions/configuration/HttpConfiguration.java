@@ -6,13 +6,13 @@
 
 package fr.dademo.data.generic.stream_definitions.configuration;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-
-import jakarta.validation.constraints.Min;
 
 import static fr.dademo.data.generic.stream_definitions.configuration.HttpConfiguration.CONFIGURATION_PREFIX;
 
@@ -27,13 +27,31 @@ import static fr.dademo.data.generic.stream_definitions.configuration.HttpConfig
 public class HttpConfiguration {
 
     public static final String CONFIGURATION_PREFIX = "http";
+    public static final int DEFAULT_CORE_POOL_SIZE = 5;
+    public static final int DEFAULT_MAX_POOL_SIZE = 50;
+    public static final int DEFAULT_KEEP_ALIVE_TIME_SECONDS = 30;
 
     @Min(0)
     private long connectTimeoutSeconds = 0;
 
     @Min(0)
-    private long callReadTimeoutSeconds = 0;
+    private HttpConfigurationExecutor executorConfiguration = null;
 
-    @Min(0)
-    private long callTimeoutSeconds = 0;
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class HttpConfigurationExecutor {
+
+        @Min(0)
+        @Max(Integer.MAX_VALUE)
+        private int corePoolSize = DEFAULT_CORE_POOL_SIZE;
+
+        @Min(1)
+        @Max(Integer.MAX_VALUE)
+        private int maximumPoolSize = DEFAULT_MAX_POOL_SIZE;
+
+        @Min(0)
+        @Max(Integer.MAX_VALUE)
+        private int keepAliveTimeSeconds = DEFAULT_KEEP_ALIVE_TIME_SECONDS;
+    }
 }

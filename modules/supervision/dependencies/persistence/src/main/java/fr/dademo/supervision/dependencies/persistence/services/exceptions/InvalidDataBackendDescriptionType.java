@@ -8,7 +8,7 @@ package fr.dademo.supervision.dependencies.persistence.services.exceptions;
 
 import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendDescription;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author dademo

@@ -6,18 +6,15 @@
 
 package fr.dademo.data.helpers.data_gouv_fr.repository.query;
 
+import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import okhttp3.HttpUrl;
 import org.apache.logging.log4j.util.Strings;
 
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author dademo
@@ -30,45 +27,65 @@ public class DataGouvFrMetadataServiceMetadataQueryOptions {
 
     @Nullable
     String query;
+
     @Nullable
     List<String> facets;
+
     @Nullable
     String tag;
+
     @Nullable
     String badge;
+
     @Nullable
     String organization;
+
     @Nullable
     String owner;
+
     @Nullable
     String license;
+
     @Nullable
     String geozone;
+
     @Nullable
     String granularity;
+
     @Nullable
     String format;
+
     @Nullable
     String schema;
+
     @Nullable
     String schemaVersion;
+
     @Nullable
     String resourceType;
+
     @Nullable
     String reuses;
+
     @Nullable
     String temporalCoverageStart;
+
     @Nullable
     String temporalCoverageEnd;
+
+    @Nullable
     Boolean featured;
+
     @Nullable
     String sort;
+
     @Nullable
     Integer page;
+
     @Nullable
     Integer pageSize;
 
-    public void applyParametersToUrlBuilder(HttpUrl.Builder queryBuilder) {
+    public Map<String, String> getUrlParams() {
 
         var parameters = new HashMap<String, String>();
 
@@ -87,13 +104,16 @@ public class DataGouvFrMetadataServiceMetadataQueryOptions {
         parameters.put("resource_type", resourceType);
         parameters.put("reuses", reuses);
         parameters.put("temporalCoverage", temporalCoverageStart + "-" + temporalCoverageEnd);
-        parameters.put("featured", featured.toString());
+        Optional.ofNullable(featured).ifPresent(f -> parameters.put("featured", f.toString()));
         parameters.put("sort", sort);
         parameters.put("page", Optional.ofNullable(page).map(Object::toString).orElse(""));
         parameters.put("page_size", Optional.ofNullable(pageSize).map(Object::toString).orElse(""));
 
-        parameters.entrySet().stream()
+        return parameters.entrySet().stream()
             .filter(kv -> Strings.isNotEmpty(kv.getValue()))
-            .forEach(kv -> queryBuilder.addQueryParameter(kv.getKey(), kv.getValue()));
+            .collect(Collectors.toMap(
+                Map.Entry::getKey,
+                Map.Entry::getValue
+            ));
     }
 }

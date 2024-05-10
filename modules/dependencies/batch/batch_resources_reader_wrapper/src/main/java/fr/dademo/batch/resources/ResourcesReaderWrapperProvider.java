@@ -16,7 +16,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.commons.csv.CSVParser;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ResourcesReaderWrapperProvider {

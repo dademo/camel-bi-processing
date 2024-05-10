@@ -11,12 +11,12 @@ import fr.dademo.supervision.service.services.dto.DataBackendDatabaseSchemaTable
 import fr.dademo.supervision.service.services.dto.DataBackendDatabaseSchemaTableStatisticsDto;
 import fr.dademo.supervision.service.services.mappers.DataBackendDatabaseSchemaTableEntityToDtoMapper;
 import fr.dademo.supervision.service.services.mappers.DataBackendDatabaseSchemaTableStatisticsEntityToDtoMapper;
+import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nonnull;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;

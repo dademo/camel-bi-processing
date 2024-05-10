@@ -8,14 +8,13 @@ package fr.dademo.supervision.dependencies.backends.model.database.resources;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import jakarta.annotation.Nonnull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.annotation.Nonnull;
-
-import jakarta.validation.constraints.Size;
 import java.util.List;
 
 /**

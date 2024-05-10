@@ -7,10 +7,9 @@
 package fr.dademo.supervision.service.services;
 
 import fr.dademo.supervision.service.services.dto.DataBackendClusterNodeDto;
-
-import javax.annotation.Nonnull;
-
+import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.Min;
+
 import java.util.Date;
 import java.util.List;
 

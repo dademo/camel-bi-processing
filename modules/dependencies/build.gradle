@@ -35,7 +35,6 @@ task generateDependenciesJavadoc(type: Javadoc) {
         'https://docs.spring.io/spring-boot/docs/current/api/',
         'https://javadoc.io/doc/com.zaxxer/HikariCP/latest/',
         'https://www.jooq.org/javadoc/latest/',
-        'https://javadoc.io/doc/com.squareup.okhttp3/okhttp/3.14.9/',
         'https://javadoc.io/doc/org.apache.tika/tika-core/latest/',
         'https://commons.apache.org/proper/commons-lang/apidocs/',
         'https://commons.apache.org/proper/commons-io/apidocs/',

@@ -10,10 +10,10 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifierValidator;
 import fr.dademo.data.generic.stream_definitions.exception.InputStreamIdentifierValidationException;
+import jakarta.annotation.Nonnull;
 import lombok.SneakyThrows;
 import org.apache.commons.io.input.TeeInputStream;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PipedInputStream;

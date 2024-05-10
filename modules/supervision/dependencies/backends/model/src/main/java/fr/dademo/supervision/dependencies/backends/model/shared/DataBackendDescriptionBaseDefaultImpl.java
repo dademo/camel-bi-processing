@@ -6,14 +6,12 @@
 
 package fr.dademo.supervision.dependencies.backends.model.shared;
 
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
-import javax.annotation.Nullable;
-
-import jakarta.validation.constraints.Min;
 
 /**
  * @author dademo

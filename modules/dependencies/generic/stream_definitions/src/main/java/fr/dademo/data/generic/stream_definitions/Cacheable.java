@@ -7,10 +7,9 @@
 package fr.dademo.data.generic.stream_definitions;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import javax.annotation.Nonnull;
-
+import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.NotBlank;
+
 import java.io.Serializable;
 
 @JsonIgnoreProperties({"uniqueIdentifier"})

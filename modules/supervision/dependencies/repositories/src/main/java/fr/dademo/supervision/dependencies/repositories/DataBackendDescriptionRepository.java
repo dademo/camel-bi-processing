@@ -7,12 +7,12 @@
 package fr.dademo.supervision.dependencies.repositories;
 
 import fr.dademo.supervision.dependencies.entities.DataBackendDescriptionEntity;
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.QueryHint;
 import org.hibernate.jpa.HibernateHints;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.QueryHints;
 
-import javax.annotation.Nonnull;
 import java.util.Optional;
 
 /**

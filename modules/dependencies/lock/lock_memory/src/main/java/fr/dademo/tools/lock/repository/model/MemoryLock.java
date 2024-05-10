@@ -9,7 +9,8 @@ package fr.dademo.tools.lock.repository.model;
 import fr.dademo.data.generic.stream_definitions.Cacheable;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
+
 import java.util.concurrent.locks.ReentrantLock;
 
 @SuppressWarnings("java:S2222")

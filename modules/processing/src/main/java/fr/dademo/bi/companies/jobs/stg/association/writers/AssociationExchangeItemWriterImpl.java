@@ -13,6 +13,7 @@ import fr.dademo.batch.configuration.exception.MissingJobDataSourceConfiguration
 import fr.dademo.bi.companies.jobs.stg.association.AssociationItemWriter;
 import fr.dademo.bi.companies.jobs.stg.association.datamodel.Association;
 import fr.dademo.bi.companies.shared.AbstractApplicationAmqpWriter;
+import jakarta.annotation.Nonnull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
@@ -20,8 +21,6 @@ import org.springframework.amqp.core.MessageProperties;
 import org.springframework.batch.item.Chunk;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.Nonnull;
 
 import static fr.dademo.batch.beans.BeanValues.*;
 import static fr.dademo.bi.companies.jobs.stg.association.JobDefinition.ASSOCIATION_CONFIG_JOB_NAME;

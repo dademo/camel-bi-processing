@@ -11,9 +11,9 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 import fr.dademo.tools.cache.data_model.serializer.InputStreamIdentifierDeserializer;
 import fr.dademo.tools.cache.data_model.serializer.InputStreamIdentifierSerializer;
+import jakarta.annotation.Nonnull;
 import lombok.*;
 
-import javax.annotation.Nonnull;
 import java.time.LocalDateTime;
 
 /**

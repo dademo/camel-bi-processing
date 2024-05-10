@@ -11,7 +11,8 @@ import de.siegmar.fastcsv.reader.NamedCsvRecord;
 import fr.dademo.batch.resources.ResourcesReaderWrapper;
 import fr.dademo.batch.resources.WrappedRowResource;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
+
 import java.util.Iterator;
 
 public class NamedFastCsvResourcesReaderWrapper implements ResourcesReaderWrapper {

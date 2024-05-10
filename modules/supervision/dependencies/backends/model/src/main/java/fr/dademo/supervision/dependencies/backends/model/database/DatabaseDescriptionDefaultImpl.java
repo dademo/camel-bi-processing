@@ -11,13 +11,12 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import fr.dademo.supervision.dependencies.backends.model.database.resources.DatabaseSchema;
 import fr.dademo.supervision.dependencies.backends.model.database.resources.DatabaseSchemaDefaultImpl;
 import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendDescriptionBaseDefaultImpl;
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import javax.annotation.Nullable;
-
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Size;
 import java.time.Duration;
 import java.util.Date;
 import java.util.List;

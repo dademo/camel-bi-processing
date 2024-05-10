@@ -10,9 +10,9 @@ import fr.dademo.data.generic.stream_definitions.InputStreamIdentifierValidator;
 import fr.dademo.data.generic.stream_definitions.repository.DataStreamGetter;
 import fr.dademo.reader.http.data_model.HttpInputStreamIdentifier;
 import fr.dademo.reader.http.repository.handlers.QueryResponseHandler;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,10 +27,10 @@ public interface HttpDataQuerierRepository extends DataStreamGetter<HttpInputStr
     InputStream basicQuery(@Nonnull HttpInputStreamIdentifier httpInputStreamIdentifier,
                            @Nonnull List<QueryCustomizer> queryCustomizers,
                            @Nullable QueryResponseHandler queryResponseHandler,
-                           @Nonnull List<? extends InputStreamIdentifierValidator<HttpInputStreamIdentifier>> httpStreamValidators) throws IOException;
+                           @Nonnull List<? extends InputStreamIdentifierValidator<HttpInputStreamIdentifier>> httpStreamValidators) throws IOException, InterruptedException;
 
 
-    default InputStream basicQuery(@Nonnull HttpInputStreamIdentifier fileIdentifier) throws IOException {
+    default InputStream basicQuery(@Nonnull HttpInputStreamIdentifier fileIdentifier) throws IOException, InterruptedException {
         return basicQuery(fileIdentifier, Collections.emptyList(), null, Collections.emptyList());
     }
 
@@ -38,7 +38,7 @@ public interface HttpDataQuerierRepository extends DataStreamGetter<HttpInputStr
         @Nonnull HttpInputStreamIdentifier httpInputStreamIdentifier,
         @Nonnull List<QueryCustomizer> queryCustomizers,
         @Nullable QueryResponseHandler queryResponseHandler,
-        @Nonnull List<? extends InputStreamIdentifierValidator<HttpInputStreamIdentifier>> httpStreamValidators) throws IOException {
+        @Nonnull List<? extends InputStreamIdentifierValidator<HttpInputStreamIdentifier>> httpStreamValidators) throws IOException, InterruptedException {
 
         final var byteArrayBuilder = new ByteArrayOutputStream();
 

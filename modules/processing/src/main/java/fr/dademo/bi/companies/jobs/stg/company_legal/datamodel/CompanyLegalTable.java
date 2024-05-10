@@ -6,11 +6,11 @@
 
 package fr.dademo.bi.companies.jobs.stg.company_legal.datamodel;
 
+import jakarta.annotation.Nonnull;
 import org.jooq.TableField;
 import org.jooq.impl.CustomTable;
 import org.jooq.impl.SQLDataType;
 
-import javax.annotation.Nonnull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 

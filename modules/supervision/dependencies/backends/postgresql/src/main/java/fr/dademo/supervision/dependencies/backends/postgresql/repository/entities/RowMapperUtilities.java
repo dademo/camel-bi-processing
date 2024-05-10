@@ -6,10 +6,10 @@
 
 package fr.dademo.supervision.dependencies.backends.postgresql.repository.entities;
 
+import jakarta.annotation.Nullable;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import javax.annotation.Nullable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 

@@ -8,9 +8,8 @@ package fr.dademo.supervision.dependencies.backends.model;
 
 import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendDescription;
 import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendModuleMetaData;
+import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Nonnull;
 
 /**
  * @author dademo

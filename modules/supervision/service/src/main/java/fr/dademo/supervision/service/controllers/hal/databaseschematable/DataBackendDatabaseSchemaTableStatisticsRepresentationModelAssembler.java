@@ -11,6 +11,7 @@ import fr.dademo.supervision.service.controllers.DataBackendDatabaseSchemaTableC
 import fr.dademo.supervision.service.controllers.hal.AbstractDataBackendStatisticsRepresentationModelAssembler;
 import fr.dademo.supervision.service.controllers.hal.DefaultHalValues;
 import fr.dademo.supervision.service.services.dto.DataBackendDatabaseSchemaTableStatisticsDto;
+import jakarta.annotation.Nonnull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,7 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 
-import javax.annotation.Nonnull;
 import java.util.Date;
 
 /**

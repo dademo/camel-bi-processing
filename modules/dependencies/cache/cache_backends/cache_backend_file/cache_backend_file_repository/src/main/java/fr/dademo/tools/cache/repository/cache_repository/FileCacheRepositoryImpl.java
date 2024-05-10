@@ -14,6 +14,7 @@ import fr.dademo.tools.cache.repository.cache_index.CacheIndexRepository;
 import fr.dademo.tools.cache.repository.exception.MissingCachedInputStreamException;
 import fr.dademo.tools.cache.repository.support.CachedInputStreamWrapper;
 import fr.dademo.tools.tools.HashTools;
+import jakarta.annotation.Nonnull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -22,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.Nonnull;
 import java.io.*;
 import java.nio.file.Files;
 import java.security.MessageDigest;

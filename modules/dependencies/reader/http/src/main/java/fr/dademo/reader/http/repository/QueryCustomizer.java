@@ -6,7 +6,9 @@
 
 package fr.dademo.reader.http.repository;
 
-import okhttp3.Request;
+import jakarta.annotation.Nonnull;
+
+import java.net.http.HttpRequest;
 
 /**
  * @author dademo
@@ -14,5 +16,6 @@ import okhttp3.Request;
 @FunctionalInterface
 public interface QueryCustomizer {
 
-    Request.Builder customizeRequest(Request.Builder request);
+    @Nonnull
+    HttpRequest.Builder customizeRequest(@Nonnull HttpRequest.Builder request);
 }

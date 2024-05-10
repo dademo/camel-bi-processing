@@ -6,7 +6,7 @@
 
 package fr.dademo.data.definitions;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author dademo

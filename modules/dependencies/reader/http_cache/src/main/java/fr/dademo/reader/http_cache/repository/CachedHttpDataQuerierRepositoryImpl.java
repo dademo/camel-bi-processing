@@ -10,24 +10,25 @@ import fr.dademo.data.generic.stream_definitions.InputStreamIdentifierValidator;
 import fr.dademo.reader.http.data_model.HttpInputStreamIdentifier;
 import fr.dademo.reader.http.repository.QueryCustomizer;
 import fr.dademo.reader.http.repository.handlers.QueryResponseHandler;
+import fr.dademo.reader.http_cache.repository.exception.UncheckedInterruptedException;
 import fr.dademo.tools.cache.repository.cache_index.CacheIndexRepository;
 import fr.dademo.tools.cache.repository.cache_repository.CacheRepository;
 import fr.dademo.tools.cache.validators.CacheFlowIgnoreChecker;
 import fr.dademo.tools.cache.validators.CacheValidator;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
+import java.net.http.HttpClient;
 import java.util.List;
 
 /**
  * @author dademo
  */
-@SuppressWarnings("unused")
 @ConditionalOnBean({CacheRepository.class, CacheIndexRepository.class})
 @Repository
 public class CachedHttpDataQuerierRepositoryImpl extends BaseCachedHttpDataQuerierRepository implements CachedHttpDataQuerierRepository {
@@ -37,8 +38,10 @@ public class CachedHttpDataQuerierRepositoryImpl extends BaseCachedHttpDataQueri
     private final List<? extends CacheFlowIgnoreChecker> cacheFlowIgnoreCheckerList;
 
     public CachedHttpDataQuerierRepositoryImpl(
-        CacheRepository<HttpInputStreamIdentifier> cacheRepository,
-        List<? extends CacheFlowIgnoreChecker> cacheFlowIgnoreCheckerList) {
+        @Nonnull HttpClient httpClient,
+        @Nonnull CacheRepository<HttpInputStreamIdentifier> cacheRepository,
+        @Nonnull List<? extends CacheFlowIgnoreChecker> cacheFlowIgnoreCheckerList) {
+        super(httpClient);
         this.cacheRepository = cacheRepository;
         this.cacheFlowIgnoreCheckerList = cacheFlowIgnoreCheckerList;
     }
@@ -50,7 +53,7 @@ public class CachedHttpDataQuerierRepositoryImpl extends BaseCachedHttpDataQueri
                                   @Nonnull List<QueryCustomizer> queryCustomizers,
                                   @Nullable QueryResponseHandler queryResponseHandler,
                                   @Nonnull List<? extends InputStreamIdentifierValidator<HttpInputStreamIdentifier>> httpStreamValidators,
-                                  @Nonnull List<? extends CacheValidator<HttpInputStreamIdentifier>> cacheValidators) throws IOException {
+                                  @Nonnull List<? extends CacheValidator<HttpInputStreamIdentifier>> cacheValidators) throws IOException, InterruptedException {
 
         if (!isFlowAllowedToBeCached(httpInputStreamIdentifier)) {
             return performBasicQuery(
@@ -73,6 +76,7 @@ public class CachedHttpDataQuerierRepositoryImpl extends BaseCachedHttpDataQueri
         }
     }
 
+    @SuppressWarnings("java:S2142")
     private InputStream performUnsafeBasicQuery(@Nonnull HttpInputStreamIdentifier httpInputStreamIdentifier,
                                                 @Nonnull List<QueryCustomizer> queryCustomizers,
                                                 @Nullable QueryResponseHandler queryResponseHandler,
@@ -85,6 +89,8 @@ public class CachedHttpDataQuerierRepositoryImpl extends BaseCachedHttpDataQueri
             );
         } catch (IOException ex) {
             throw new UncheckedIOException(ex);
+        } catch (InterruptedException e) {
+            throw new UncheckedInterruptedException(e);
         }
     }
 

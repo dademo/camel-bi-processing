@@ -1,46 +1,46 @@
 <mat-nav-list>
-    <div mat-subheader>Pages</div>
+  <div mat-subheader>Pages</div>
+  <a
+    mat-list-item
+    routerLink="/home"
+    routerLinkActive="active-route">
+    <mat-icon mat-list-icon>home</mat-icon>
+    <div mat-line>Home</div>
+  </a>
+  <a
+    mat-list-item
+    routerLink="/data-backends"
+    routerLinkActive="active-route">
+    <mat-icon mat-list-icon>explore</mat-icon>
+    <div mat-line>Explore</div>
+  </a>
+  <a
+    mat-list-item
+    routerLink="/dashboards"
+    routerLinkActive="active-route">
+    <mat-icon mat-list-icon>dashboard</mat-icon>
+    <div mat-line>Dashboards</div>
+  </a>
+  <div mat-subheader>Other dashboards</div>
+  <ng-container *ngFor="let menuEntry of (favouriteDashboards | async)">
     <a
-        mat-list-item
-        routerLinkActive="active-route"
-        routerLink="/home">
-        <mat-icon mat-list-icon>home</mat-icon>
-        <div mat-line>Home</div>
+      mat-list-item
+      routerLink="{{ menuEntry.url }}"
+      routerLinkActive="active-route">
+      <!--<mat-icon mat-list-icon>explore</mat-icon>-->
+      <mat-icon mat-list-icon>star</mat-icon>
+      <div mat-line>{{ menuEntry.name || '-' }}</div>
     </a>
+  </ng-container>
+  <div mat-subheader>Favourites</div>
+  <ng-container *ngFor="let menuEntry of (favouriteCharts | async)">
     <a
-        mat-list-item
-        routerLinkActive="active-route"
-        routerLink="/data-backends">
-        <mat-icon mat-list-icon>explore</mat-icon>
-        <div mat-line>Explore</div>
+      mat-list-item
+      routerLink="{{ menuEntry.url }}"
+      routerLinkActive="active-route">
+      <!--<mat-icon mat-list-icon>explore</mat-icon>-->
+      <mat-icon mat-list-icon>star</mat-icon>
+      <div mat-line>{{ menuEntry.name || '-' }}</div>
     </a>
-    <a
-        mat-list-item
-        routerLinkActive="active-route"
-        routerLink="/dashboards">
-        <mat-icon mat-list-icon>dashboard</mat-icon>
-        <div mat-line>Dashboards</div>
-    </a>
-    <div mat-subheader>Other dashboards</div>
-    <ng-container *ngFor="let menuEntry of (favouriteDashboards | async)">
-        <a
-            mat-list-item
-            routerLinkActive="active-route"
-            routerLink="{{ menuEntry.url }}">
-            <!--<mat-icon mat-list-icon>explore</mat-icon>-->
-            <mat-icon mat-list-icon>star</mat-icon>
-            <div mat-line>{{ menuEntry.name || '-' }}</div>
-        </a>
-    </ng-container>
-    <div mat-subheader>Favourites</div>
-    <ng-container *ngFor="let menuEntry of (favouriteCharts | async)">
-        <a
-            mat-list-item
-            routerLinkActive="active-route"
-            routerLink="{{ menuEntry.url }}">
-            <!--<mat-icon mat-list-icon>explore</mat-icon>-->
-            <mat-icon mat-list-icon>star</mat-icon>
-            <div mat-line>{{ menuEntry.name || '-' }}</div>
-        </a>
-    </ng-container>
+  </ng-container>
 </mat-nav-list>

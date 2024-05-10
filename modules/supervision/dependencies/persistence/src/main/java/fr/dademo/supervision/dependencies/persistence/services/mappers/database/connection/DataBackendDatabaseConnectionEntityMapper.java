@@ -10,11 +10,11 @@ import fr.dademo.supervision.dependencies.backends.model.database.resources.Data
 import fr.dademo.supervision.dependencies.entities.DataBackendDescriptionEntity;
 import fr.dademo.supervision.dependencies.entities.DataBackendStateExecutionEntity;
 import fr.dademo.supervision.dependencies.entities.database.connection.DataBackendDatabaseConnectionEntity;
+import jakarta.annotation.Nullable;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-import javax.annotation.Nullable;
 import java.net.InetAddress;
 
 /**

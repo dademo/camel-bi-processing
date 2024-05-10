@@ -29,7 +29,8 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.core.io.ResourceLoader;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
+
 import javax.sql.DataSource;
 import java.util.Optional;
 

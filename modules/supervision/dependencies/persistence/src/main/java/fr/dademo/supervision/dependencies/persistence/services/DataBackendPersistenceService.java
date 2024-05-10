@@ -8,8 +8,7 @@ package fr.dademo.supervision.dependencies.persistence.services;
 
 import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendDescription;
 import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendModuleMetaData;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author dademo

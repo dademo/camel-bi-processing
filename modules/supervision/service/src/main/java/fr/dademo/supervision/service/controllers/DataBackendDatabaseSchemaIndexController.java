@@ -19,6 +19,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Nonnull;
+import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -31,9 +33,6 @@ import org.springframework.web.bind.annotation.*;
 import org.zalando.problem.DefaultProblem;
 import org.zalando.problem.spring.web.advice.ProblemHandling;
 
-import javax.annotation.Nonnull;
-
-import jakarta.validation.constraints.Min;
 import java.util.Date;
 
 /**

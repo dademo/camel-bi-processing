@@ -8,10 +8,10 @@ package fr.dademo.reader.file.data_model;
 
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 import fr.dademo.tools.tools.HashTools;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import lombok.*;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 

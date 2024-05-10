@@ -11,6 +11,7 @@ import fr.dademo.supervision.service.controllers.DataBackendDatabaseSchemaViewCo
 import fr.dademo.supervision.service.controllers.hal.AppLinkedEntityRepresentationModelAssembler;
 import fr.dademo.supervision.service.controllers.hal.DefaultHalValues;
 import fr.dademo.supervision.service.services.dto.DataBackendDatabaseSchemaViewDto;
+import jakarta.annotation.Nonnull;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +19,6 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 
-import javax.annotation.Nonnull;
 import java.time.Duration;
 import java.time.temporal.TemporalAmount;
 

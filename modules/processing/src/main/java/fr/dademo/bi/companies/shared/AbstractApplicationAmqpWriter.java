@@ -6,12 +6,11 @@
 
 package fr.dademo.bi.companies.shared;
 
+import jakarta.annotation.Nonnull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Message;
-
-import javax.annotation.Nonnull;
 
 public abstract class AbstractApplicationAmqpWriter extends BaseJobWriter {
 

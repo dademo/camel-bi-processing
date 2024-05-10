@@ -16,28 +16,28 @@ import fr.dademo.data.helpers.data_gouv_fr.repository.query.DataGouvFrMetadataSe
 import fr.dademo.reader.http.data_model.HttpInputStreamIdentifier;
 import fr.dademo.reader.http.repository.HttpDataQuerierRepository;
 import fr.dademo.reader.http.repository.exception.FailedQueryException;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import lombok.SneakyThrows;
-import okhttp3.HttpUrl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static fr.dademo.reader.http.helpers.URIHelper.updateURIWithParameters;
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 
 /**
  * @author dademo
  */
-@SuppressWarnings("java:S1075")
 @Service
 public class DataGouvFrDataQuerierServiceImpl extends BaseDataGouvFrDataQuerierServiceImpl implements DataGouvFrDataQuerierService {
 
@@ -45,15 +45,18 @@ public class DataGouvFrDataQuerierServiceImpl extends BaseDataGouvFrDataQuerierS
     private static final String DATA_SET_URL_HOST = "www.data.gouv.fr";
     private static final String DATA_SET_URL_PATH = "api/1/datasets/";
 
-    @Autowired
-    private HttpDataQuerierRepository httpDataQuerierRepository;
+    private final HttpDataQuerierRepository httpDataQuerierRepository;
+    private final ObjectMapper mapper;
 
-    @Autowired
-    private ObjectMapper mapper;
+    public DataGouvFrDataQuerierServiceImpl(@Nonnull HttpDataQuerierRepository httpDataQuerierRepository,
+                                            @Nonnull ObjectMapper mapper) {
+        this.httpDataQuerierRepository = httpDataQuerierRepository;
+        this.mapper = mapper;
+    }
 
     @Override
     @Nonnull
-    public DataGouvFrDataSetPage listDataSets(@Nullable DataGouvFrMetadataServiceMetadataQueryOptions queryOptions) throws IOException {
+    public DataGouvFrDataSetPage listDataSets(@Nullable DataGouvFrMetadataServiceMetadataQueryOptions queryOptions) throws IOException, InterruptedException {
 
         return mapper.readValue(
             httpDataQuerierRepository.basicQuery(getInputStreamIdentifierForDataSetQuery(queryOptions)),
@@ -63,7 +66,7 @@ public class DataGouvFrDataQuerierServiceImpl extends BaseDataGouvFrDataQuerierS
 
     @Override
     @Nonnull
-    public DataGouvFrDataSet getDataSet(@Nonnull String dataSetTitle) throws IOException {
+    public DataGouvFrDataSet getDataSet(@Nonnull String dataSetTitle) throws IOException, InterruptedException {
 
         try {
             return mapper.readValue(
@@ -71,7 +74,7 @@ public class DataGouvFrDataQuerierServiceImpl extends BaseDataGouvFrDataQuerierS
                 DataGouvFrDataSet.class
             );
         } catch (FailedQueryException e) {
-            if (e.getQueryResponse().code() == HTTP_NOT_FOUND) {
+            if (e.getQueryResponse().statusCode() == HTTP_NOT_FOUND) {
                 throw new DataSetNotFoundException(dataSetTitle, e);
             } else {
                 throw e;
@@ -82,7 +85,7 @@ public class DataGouvFrDataQuerierServiceImpl extends BaseDataGouvFrDataQuerierS
     @Nonnull
     @Override
     public InputStream queryForStream(@Nonnull DataGouvFrDataSetResource dataGouvFrDataSetResource,
-                                      @Nonnull List<? extends DataGouvFrInputStreamValidator> inputStreamIdentifierValidators) throws IOException {
+                                      @Nonnull List<? extends DataGouvFrInputStreamValidator> inputStreamIdentifierValidators) throws IOException, InterruptedException {
 
         return httpDataQuerierRepository.basicQuery(
             getInputStreamIdentifierForDataSetResource(dataGouvFrDataSetResource),
@@ -96,30 +99,25 @@ public class DataGouvFrDataQuerierServiceImpl extends BaseDataGouvFrDataQuerierS
     }
 
     @Nonnull
-    @SneakyThrows
+    @SneakyThrows({URISyntaxException.class, MalformedURLException.class})
     protected URL buildQueryUsingOptions(@Nullable DataGouvFrMetadataServiceMetadataQueryOptions queryOptions) {
 
-        final var urlBuilder = new HttpUrl.Builder()
-            .scheme(DATA_SET_URL_SCHEME)
-            .host(DATA_SET_URL_HOST)
-            .addPathSegment(DATA_SET_URL_PATH);
-
-        Optional.ofNullable(queryOptions).ifPresent(options -> options.applyParametersToUrlBuilder(urlBuilder));
-
-        return urlBuilder.build().url();
+        final var baseURI = new URI(DATA_SET_URL_SCHEME, DATA_SET_URL_HOST, DATA_SET_URL_PATH, "");
+        return Optional.ofNullable(queryOptions)
+            .map(opts -> updateURIWithParameters(baseURI, opts.getUrlParams()))
+            .orElse(baseURI)
+            .toURL();
     }
 
     @Nonnull
-    @SneakyThrows
+    @SneakyThrows({URISyntaxException.class, MalformedURLException.class})
     protected URL buildQueryForDataSet(@Nonnull String dataSetTitle) {
-
-        return new HttpUrl.Builder()
-            .scheme(DATA_SET_URL_SCHEME)
-            .host(DATA_SET_URL_HOST)
-            .addPathSegments(DATA_SET_URL_PATH)
-            .addPathSegment(dataSetTitle)
-            .build()
-            .url();
+        return new URI(
+            DATA_SET_URL_SCHEME,
+            DATA_SET_URL_HOST,
+            DATA_SET_URL_PATH + dataSetTitle,
+            ""
+        ).toURL();
     }
 
     @Nonnull

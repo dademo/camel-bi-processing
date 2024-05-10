@@ -6,14 +6,13 @@
 
 package fr.dademo.tools.cache.configuration;
 
+import jakarta.annotation.Nonnull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.SystemUtils;
 
-import javax.annotation.Nonnull;
-
-import jakarta.validation.constraints.NotBlank;
 import java.io.File;
 import java.net.URI;
 import java.util.Optional;

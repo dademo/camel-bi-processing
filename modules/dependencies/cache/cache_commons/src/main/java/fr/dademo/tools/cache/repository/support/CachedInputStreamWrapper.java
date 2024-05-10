@@ -6,10 +6,10 @@
 
 package fr.dademo.tools.cache.repository.support;
 
+import jakarta.annotation.Nonnull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.io.InputStream;
 

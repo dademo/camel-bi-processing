@@ -7,6 +7,7 @@
 package fr.dademo.supervision.dependencies.persistence.services.specialSpecifications;
 
 import fr.dademo.supervision.dependencies.entities.database.database.DataBackendDatabaseEntity;
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
@@ -14,7 +15,6 @@ import jakarta.persistence.criteria.Root;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.annotation.Nonnull;
 import java.util.Optional;
 
 /**

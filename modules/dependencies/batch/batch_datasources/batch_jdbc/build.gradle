@@ -39,6 +39,7 @@ dependencies {
     implementation "org.jooq:jooq:${jooqVersion}"
     implementation "jakarta.xml.bind:jakarta.xml.bind-api:${jakartaBindApiVersion}" // To avoid Jooq warnings
     implementation "jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}"
+    implementation "jakarta.annotation:jakarta.annotation-api:${jakartaAnnotationApiVersion}"
     implementation "com.google.code.findbugs:jsr305:${findBugsJsr305Version}"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

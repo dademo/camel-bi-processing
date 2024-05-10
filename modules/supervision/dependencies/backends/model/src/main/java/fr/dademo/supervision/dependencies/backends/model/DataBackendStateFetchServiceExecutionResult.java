@@ -13,12 +13,11 @@ import fr.dademo.supervision.dependencies.backends.model.database.GlobalDatabase
 import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendDescription;
 import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendModuleMetaData;
 import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendModuleMetaDataDefaultImpl;
+import jakarta.annotation.Nonnull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.annotation.Nonnull;
 
 /**
  * @author dademo

@@ -9,13 +9,17 @@ package fr.dademo.reader.http.beans;
 import fr.dademo.data.generic.stream_definitions.configuration.HttpConfiguration;
 import fr.dademo.reader.http.repository.DefaultHttpDataQuerierRepository;
 import fr.dademo.reader.http.repository.HttpDataQuerierRepository;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.net.http.HttpClient;
 import java.time.Duration;
+import java.util.concurrent.Executor;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author dademo
@@ -23,24 +27,36 @@ import java.time.Duration;
 @Configuration
 public class DefaultHttpReaderBeans {
 
+    public static final String HTTP_CLIENT_EXECUTOR_BEAN_NAME = "httpClientExecutor";
+
+    @Bean(HTTP_CLIENT_EXECUTOR_BEAN_NAME)
+    @ConditionalOnMissingBean(value = Executor.class, name = HTTP_CLIENT_EXECUTOR_BEAN_NAME)
+    public Executor httpClientExecutor(HttpConfiguration httpConfiguration) {
+
+        return new ThreadPoolExecutor(
+            httpConfiguration.getExecutorConfiguration().getCorePoolSize(),
+            httpConfiguration.getExecutorConfiguration().getMaximumPoolSize(),
+            httpConfiguration.getExecutorConfiguration().getKeepAliveTimeSeconds(),
+            TimeUnit.SECONDS,
+            new LinkedBlockingQueue<>()
+        );
+    }
+
     @Bean
-    @ConditionalOnMissingBean(OkHttpClient.class)
-    public OkHttpClient defaultOkHttpClient(HttpConfiguration httpConfiguration) {
+    @ConditionalOnMissingBean(HttpClient.class)
+    public HttpClient defaultHttpClient(HttpConfiguration httpConfiguration,
+                                        @Qualifier(HTTP_CLIENT_EXECUTOR_BEAN_NAME) Executor httpClientExecutor) {
 
-        final var loggingInterceptor = new HttpLoggingInterceptor();
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
-
-        return new OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor)
+        return HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(httpConfiguration.getConnectTimeoutSeconds()))
-            .readTimeout(Duration.ofSeconds(httpConfiguration.getCallReadTimeoutSeconds()))
-            .callTimeout(Duration.ofSeconds(httpConfiguration.getCallTimeoutSeconds()))
+            .followRedirects(HttpClient.Redirect.NORMAL)
+            .executor(httpClientExecutor)
             .build();
     }
 
     @Bean
     @ConditionalOnMissingBean(HttpDataQuerierRepository.class)
-    public HttpDataQuerierRepository defaultHttpDataQuerierRepository(OkHttpClient okHttpClient) {
-        return new DefaultHttpDataQuerierRepository(okHttpClient);
+    public HttpDataQuerierRepository defaultHttpDataQuerierRepository(HttpClient httpClient) {
+        return new DefaultHttpDataQuerierRepository(httpClient);
     }
 }

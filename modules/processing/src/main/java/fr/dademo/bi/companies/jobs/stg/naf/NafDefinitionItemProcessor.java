@@ -8,10 +8,9 @@ package fr.dademo.bi.companies.jobs.stg.naf;
 
 import fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinition;
 import fr.dademo.bi.companies.jobs.stg.naf.datamodel.NafDefinitionContainer;
+import jakarta.annotation.Nonnull;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.Nonnull;
 
 /**
  * @author dademo

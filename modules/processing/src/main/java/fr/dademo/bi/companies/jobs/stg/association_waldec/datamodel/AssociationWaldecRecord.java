@@ -6,9 +6,8 @@
 
 package fr.dademo.bi.companies.jobs.stg.association_waldec.datamodel;
 
+import jakarta.annotation.Nonnull;
 import org.jooq.impl.CustomRecord;
-
-import javax.annotation.Nonnull;
 
 /**
  * @author dademo

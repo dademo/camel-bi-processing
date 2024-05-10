@@ -6,9 +6,8 @@
 
 package fr.dademo.batch.repository.datamodel;
 
+import jakarta.annotation.Nonnull;
 import org.jooq.impl.CustomRecord;
-
-import javax.annotation.Nonnull;
 
 /**
  * @author dademo

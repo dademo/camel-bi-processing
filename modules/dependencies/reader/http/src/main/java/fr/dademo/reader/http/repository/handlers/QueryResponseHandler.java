@@ -7,9 +7,10 @@
 package fr.dademo.reader.http.repository.handlers;
 
 import fr.dademo.reader.http.repository.HttpDataQuerierRepository;
-import okhttp3.Response;
+import jakarta.annotation.Nonnull;
 
 import java.io.InputStream;
+import java.net.http.HttpResponse;
 
 /**
  * @author dademo
@@ -17,5 +18,7 @@ import java.io.InputStream;
 @FunctionalInterface
 public interface QueryResponseHandler {
 
-    InputStream handleResponse(Response response, HttpDataQuerierRepository httpDataQuerierRepository);
+    InputStream handleResponse(@Nonnull HttpResponse<InputStream> response,
+                               @Nonnull HttpDataQuerierRepository httpDataQuerierRepository);
+
 }

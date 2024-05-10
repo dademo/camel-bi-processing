@@ -16,6 +16,7 @@ import fr.dademo.batch.beans.BeanValues;
 import fr.dademo.batch.services.DataSetService;
 import fr.dademo.batch.services.dto.DataSetDto;
 import fr.dademo.data.definitions.DataSetResource;
+import jakarta.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.ExitStatus;
@@ -24,7 +25,6 @@ import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 
-import javax.annotation.Nonnull;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;

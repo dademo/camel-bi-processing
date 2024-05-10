@@ -11,6 +11,7 @@ import fr.dademo.batch.resources.WrappedRowResource;
 import fr.dademo.batch.tools.batch.reader.StgJobItemReader;
 import fr.dademo.data.definitions.data_gouv_fr.dimensions.DataGouvFrDataSetResource;
 import fr.dademo.data.helpers.data_gouv_fr.repository.DataGouvFrDataQuerierService;
+import jakarta.annotation.Nonnull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.archivers.ArchiveEntry;
@@ -19,7 +20,6 @@ import org.apache.commons.csv.CSVFormat;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Nonnull;
 import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.Iterator;

@@ -6,12 +6,12 @@
 
 package fr.dademo.supervision.service.controllers.exceptions;
 
+import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import org.zalando.problem.Status;
 import org.zalando.problem.StatusType;
 import org.zalando.problem.ThrowableProblem;
 
-import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Map;
 

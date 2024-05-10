@@ -18,13 +18,13 @@ import fr.dademo.supervision.dependencies.backends.postgresql.repository.*;
 import fr.dademo.supervision.dependencies.backends.postgresql.repository.entities.DatabaseIndexEntity;
 import fr.dademo.supervision.dependencies.backends.postgresql.repository.entities.DatabaseTableEntity;
 import fr.dademo.supervision.dependencies.backends.postgresql.service.mappers.*;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.ArrayList;

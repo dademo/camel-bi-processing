@@ -6,16 +6,19 @@
 
 package fr.dademo.reader.http.repository.exception;
 
-import okhttp3.Response;
+import java.io.InputStream;
+import java.io.Serial;
+import java.net.http.HttpResponse;
 
 /**
  * @author dademo
  */
 public class UnexpectedRedirectResponseException extends BaseHttpQueryException {
 
+    @Serial
     private static final long serialVersionUID = 4537658660276565516L;
 
-    public UnexpectedRedirectResponseException(Response queryResponse) {
+    public UnexpectedRedirectResponseException(HttpResponse<InputStream> queryResponse) {
         super("Unexpected redirection answer", queryResponse);
     }
 }

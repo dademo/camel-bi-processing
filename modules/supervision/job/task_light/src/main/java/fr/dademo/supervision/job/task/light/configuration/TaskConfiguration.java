@@ -6,12 +6,11 @@
 
 package fr.dademo.supervision.job.task.light.configuration;
 
+import jakarta.annotation.Nonnull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-
-import javax.annotation.Nonnull;
 
 /**
  * @author dademo

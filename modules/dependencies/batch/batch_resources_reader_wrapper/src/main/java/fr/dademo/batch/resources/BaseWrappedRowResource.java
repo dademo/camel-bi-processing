@@ -7,13 +7,12 @@
 package fr.dademo.batch.resources;
 
 import fr.dademo.batch.resources.exceptions.MissingColumnException;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Min;
 import lombok.AccessLevel;
 import lombok.Setter;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import jakarta.validation.constraints.Min;
 import java.sql.Date;
 import java.util.Map;
 import java.util.Optional;

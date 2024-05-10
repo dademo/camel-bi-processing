@@ -12,11 +12,10 @@ import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendModul
 import fr.dademo.supervision.dependencies.persistence.PersistenceBeans;
 import fr.dademo.supervision.dependencies.persistence.services.exceptions.InvalidDataBackendDescriptionType;
 import fr.dademo.supervision.dependencies.repositories.DatabaseBackendStateRepository;
+import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.Nonnull;
 
 /**
  * @author dademo

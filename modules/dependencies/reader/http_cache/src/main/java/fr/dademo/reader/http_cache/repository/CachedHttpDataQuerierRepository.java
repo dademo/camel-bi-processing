@@ -12,9 +12,9 @@ import fr.dademo.reader.http.repository.HttpDataQuerierRepository;
 import fr.dademo.reader.http.repository.QueryCustomizer;
 import fr.dademo.reader.http.repository.handlers.QueryResponseHandler;
 import fr.dademo.tools.cache.validators.CacheValidator;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -28,5 +28,5 @@ public interface CachedHttpDataQuerierRepository extends HttpDataQuerierReposito
                            @Nonnull List<QueryCustomizer> queryCustomizers,
                            @Nullable QueryResponseHandler queryResponseHandler,
                            @Nonnull List<? extends InputStreamIdentifierValidator<HttpInputStreamIdentifier>> httpStreamValidators,
-                           @Nonnull List<? extends CacheValidator<HttpInputStreamIdentifier>> cacheValidators) throws IOException;
+                           @Nonnull List<? extends CacheValidator<HttpInputStreamIdentifier>> cacheValidators) throws IOException, InterruptedException;
 }

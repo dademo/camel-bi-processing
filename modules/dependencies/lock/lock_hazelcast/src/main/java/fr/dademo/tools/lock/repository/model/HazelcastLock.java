@@ -9,9 +9,8 @@ package fr.dademo.tools.lock.repository.model;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
 import fr.dademo.data.generic.stream_definitions.Cacheable;
+import jakarta.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
-
-import javax.annotation.Nonnull;
 
 @Slf4j
 public class HazelcastLock implements Lock {

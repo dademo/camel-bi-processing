@@ -11,7 +11,8 @@ import fr.dademo.tools.cache.data_model.CachedInputStreamIdentifier;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 

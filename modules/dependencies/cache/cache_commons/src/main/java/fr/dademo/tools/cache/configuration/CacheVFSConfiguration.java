@@ -6,14 +6,14 @@
 
 package fr.dademo.tools.cache.configuration;
 
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import lombok.Data;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.SystemUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.File;
 import java.net.URI;
 import java.nio.file.Files;

@@ -8,8 +8,8 @@ package fr.dademo.data.generic.stream_definitions.repository;
 
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifierValidator;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
@@ -21,9 +21,9 @@ import java.util.List;
 public interface DataStreamGetter<T extends InputStreamIdentifier<?>> {
 
     InputStream getInputStream(@Nonnull T inputStreamIdentifier,
-                               @Nonnull List<? extends InputStreamIdentifierValidator<T>> streamValidators) throws IOException;
+                               @Nonnull List<? extends InputStreamIdentifierValidator<T>> streamValidators) throws IOException, InterruptedException;
 
-    default InputStream getInputStream(@Nonnull T inputStreamIdentifier) throws IOException {
+    default InputStream getInputStream(@Nonnull T inputStreamIdentifier) throws IOException, InterruptedException {
         return getInputStream(inputStreamIdentifier, Collections.emptyList());
     }
 }

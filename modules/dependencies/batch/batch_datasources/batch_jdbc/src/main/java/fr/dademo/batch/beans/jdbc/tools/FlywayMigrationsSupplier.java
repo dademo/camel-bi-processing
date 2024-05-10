@@ -8,6 +8,8 @@ package fr.dademo.batch.beans.jdbc.tools;
 
 import fr.dademo.batch.beans.jdbc.tools.exception.MissingMigrationPathException;
 import fr.dademo.batch.configuration.FlywayMigrationsConfiguration;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.flywaydb.core.Flyway;
@@ -15,8 +17,6 @@ import org.flywaydb.core.api.MigrationVersion;
 import org.flywaydb.core.api.configuration.FluentConfiguration;
 import org.jooq.SQLDialect;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.sql.DataSource;
 import java.util.List;
 import java.util.Optional;

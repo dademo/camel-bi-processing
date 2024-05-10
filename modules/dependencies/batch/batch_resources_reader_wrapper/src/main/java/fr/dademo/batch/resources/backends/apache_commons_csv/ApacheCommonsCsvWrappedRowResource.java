@@ -7,10 +7,9 @@
 package fr.dademo.batch.resources.backends.apache_commons_csv;
 
 import fr.dademo.batch.resources.BaseWrappedRowResource;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.apache.commons.csv.CSVRecord;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class ApacheCommonsCsvWrappedRowResource extends BaseWrappedRowResource {
 

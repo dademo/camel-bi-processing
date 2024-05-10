@@ -1,41 +1,43 @@
 <div class="values-list">
-    <mat-accordion multi>
-        <ng-container *ngFor="let it of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]">
-            <mat-expansion-panel *ngFor="let dataRepresentation of dataRepresentations | async">
-                <mat-expansion-panel-header>
-                    <mat-panel-title>
-                        {{ dataRepresentation.name }}
-                    </mat-panel-title>
-                    <mat-panel-description>
-                        {{ dataRepresentation.description }}
-                    </mat-panel-description>
-                    <ng-template [ngIf]="dataRepresentation.statisticsLink">
-                        <mat-chip [routerLink]="dataRepresentation.statisticsLink" (click)="$event.stopPropagation()">
-                            <mat-chip-avatar>
-                                <mat-icon>analytics</mat-icon>
-                            </mat-chip-avatar>
-                            Statistics
-                        </mat-chip>
-                        <span class="panel-header-blank"></span>
-                    </ng-template>
-                </mat-expansion-panel-header>
+  <mat-accordion multi>
+    <ng-container *ngFor="let it of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]">
+      <mat-expansion-panel *ngFor="let dataRepresentation of dataRepresentations | async">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ dataRepresentation.name }}
+          </mat-panel-title>
+          <mat-panel-description>
+            {{ dataRepresentation.description }}
+          </mat-panel-description>
+          <ng-template [ngIf]="dataRepresentation.statisticsLink">
+            <mat-chip (click)="$event.stopPropagation()" [routerLink]="dataRepresentation.statisticsLink">
+              <mat-chip-avatar>
+                <mat-icon>analytics</mat-icon>
+              </mat-chip-avatar>
+              Statistics
+            </mat-chip>
+            <span class="panel-header-blank"></span>
+          </ng-template>
+        </mat-expansion-panel-header>
 
-                <mat-chip-list class="link-chips">
-                    <mat-chip *ngFor="let link of [ dataRepresentation.mainLink, dataRepresentation.fullPageDisplayLink ].concat(dataRepresentation.otherLinks)" [routerLink]="link.displayName">
-                        <mat-chip-avatar>
-                            <mat-icon>{{ link.icon || 'link' }}</mat-icon>
-                        </mat-chip-avatar>
-                        {{ link.displayName }}
-                    </mat-chip>
-                </mat-chip-list>
-            </mat-expansion-panel>
-        </ng-container>
-    </mat-accordion>
+        <mat-chip-list class="link-chips">
+          <mat-chip
+            *ngFor="let link of [ dataRepresentation.mainLink, dataRepresentation.fullPageDisplayLink ].concat(dataRepresentation.otherLinks)"
+            [routerLink]="link.displayName">
+            <mat-chip-avatar>
+              <mat-icon>{{ link.icon || 'link' }}</mat-icon>
+            </mat-chip-avatar>
+            {{ link.displayName }}
+          </mat-chip>
+        </mat-chip-list>
+      </mat-expansion-panel>
+    </ng-container>
+  </mat-accordion>
 </div>
-<mat-paginator [length]="totalElements"
-                [pageIndex]="pageIndex"
-                [pageSize]="pageSize"
-                [pageSizeOptions]="pageSizeOptions"
-                (page)="onPageChange($event)"
-                aria-label="Select page">
+<mat-paginator (page)="onPageChange($event)"
+               [length]="totalElements"
+               [pageIndex]="pageIndex"
+               [pageSizeOptions]="pageSizeOptions"
+               [pageSize]="pageSize"
+               aria-label="Select page">
 </mat-paginator>

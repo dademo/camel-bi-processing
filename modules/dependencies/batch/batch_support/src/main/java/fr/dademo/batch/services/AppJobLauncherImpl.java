@@ -9,6 +9,7 @@ package fr.dademo.batch.services;
 import fr.dademo.batch.beans.BeanValues;
 import fr.dademo.batch.helpers.JobTaskExecutorWrapper;
 import fr.dademo.batch.tools.batch.job.JobProvider;
+import jakarta.annotation.Nonnull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.SneakyThrows;
@@ -18,7 +19,6 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Stream;
 

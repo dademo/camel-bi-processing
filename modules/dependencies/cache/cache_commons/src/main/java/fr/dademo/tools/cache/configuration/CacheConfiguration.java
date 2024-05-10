@@ -6,11 +6,11 @@
 
 package fr.dademo.tools.cache.configuration;
 
+import jakarta.annotation.Nullable;
 import lombok.*;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.Nullable;
 import java.util.Optional;
 
 /**

@@ -8,11 +8,11 @@ package fr.dademo.data.definitions.data_gouv_fr.dimensions;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import jakarta.annotation.Nonnull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.annotation.Nonnull;
 import java.time.LocalDate;
 
 /**

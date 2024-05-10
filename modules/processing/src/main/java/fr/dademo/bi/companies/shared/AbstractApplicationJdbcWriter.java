@@ -9,6 +9,7 @@ package fr.dademo.bi.companies.shared;
 import fr.dademo.batch.configuration.BatchConfiguration;
 import fr.dademo.batch.configuration.BatchDataSourcesConfiguration;
 import fr.dademo.batch.configuration.data_sources.JDBCDataSourceConfiguration;
+import jakarta.annotation.Nonnull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -19,7 +20,6 @@ import org.jooq.Insert;
 import org.jooq.impl.CustomRecord;
 import org.springframework.batch.item.Chunk;
 
-import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Consumer;

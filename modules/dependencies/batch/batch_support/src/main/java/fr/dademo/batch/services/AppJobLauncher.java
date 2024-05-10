@@ -6,7 +6,8 @@
 
 package fr.dademo.batch.services;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
+
 import java.util.List;
 
 /**

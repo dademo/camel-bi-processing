@@ -8,10 +8,10 @@ package fr.dademo.batch.resources.backends.apache_commons_csv;
 
 import fr.dademo.batch.resources.ResourcesReaderWrapper;
 import fr.dademo.batch.resources.WrappedRowResource;
+import jakarta.annotation.Nonnull;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
-import javax.annotation.Nonnull;
 import java.util.Iterator;
 
 public class ApacheCommonsCsvResourcesReaderWrapper implements ResourcesReaderWrapper {

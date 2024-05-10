@@ -7,13 +7,13 @@
 package fr.dademo.supervision.dependencies.backends.postgresql.repository;
 
 import fr.dademo.supervision.dependencies.backends.postgresql.repository.entities.DatabaseProductVersionEntity;
+import jakarta.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.Nonnull;
 import java.util.Objects;
 
 import static fr.dademo.supervision.dependencies.backends.postgresql.configuration.ModuleBeans.MODULE_JDBC_TEMPLATE_BEAN_NAME;

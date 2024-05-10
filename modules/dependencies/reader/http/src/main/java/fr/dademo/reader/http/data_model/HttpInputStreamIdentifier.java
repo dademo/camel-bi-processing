@@ -8,13 +8,13 @@ package fr.dademo.reader.http.data_model;
 
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 import fr.dademo.tools.tools.HashTools;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import lombok.*;
-import okhttp3.RequestBody;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import java.io.Serial;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
@@ -28,6 +28,7 @@ import java.nio.charset.StandardCharsets;
 @Builder
 public class HttpInputStreamIdentifier implements InputStreamIdentifier<URL> {
 
+    @Serial
     private static final long serialVersionUID = 4345017808760161411L;
 
     @Nonnull
@@ -37,8 +38,8 @@ public class HttpInputStreamIdentifier implements InputStreamIdentifier<URL> {
     @Builder.Default
     private String method = "GET";
 
-    @Nullable
-    private transient RequestBody requestBody;
+    @Nonnull
+    private transient HttpInputStreamBodySupplier bodyStream;
 
     @Nullable
     private String contentType;
@@ -65,7 +66,7 @@ public class HttpInputStreamIdentifier implements InputStreamIdentifier<URL> {
         return new HashCodeBuilder(17, 41)
             .append(url)
             .append(method)
-            .append(requestBody)
+            .append(bodyStream)
             .hashCode();
     }
 
@@ -86,7 +87,7 @@ public class HttpInputStreamIdentifier implements InputStreamIdentifier<URL> {
         return new EqualsBuilder()
             .append(url, compared.getUrl())
             .append(method, compared.getMethod())
-            .append(requestBody, compared.getRequestBody())
+            .append(bodyStream, compared.getBodyStream())
             .isEquals();
     }
 
@@ -95,7 +96,7 @@ public class HttpInputStreamIdentifier implements InputStreamIdentifier<URL> {
     public String getUniqueIdentifier() {
         return HashTools.computeHashString(
             HashTools.getHashComputerForAlgorithm("SHA256"),
-            (url + method + requestBody).getBytes(StandardCharsets.UTF_8)
+            (url + method + bodyStream).getBytes(StandardCharsets.UTF_8)
         );
     }
 }

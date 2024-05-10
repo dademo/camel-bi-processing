@@ -10,8 +10,8 @@ import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 import fr.dademo.tools.cache.data_model.CachedInputStreamIdentifier;
 import fr.dademo.tools.cache.validators.CacheValidator;
 import fr.dademo.tools.lock.repository.model.Lock;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;

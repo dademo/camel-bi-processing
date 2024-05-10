@@ -10,8 +10,8 @@ import de.siegmar.fastcsv.reader.CsvRecord;
 import de.siegmar.fastcsv.reader.NamedCsvRecord;
 import fr.dademo.batch.resources.BaseWrappedRowResource;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class NamedFastCsvWrappedRecordResource extends BaseWrappedRowResource {
 

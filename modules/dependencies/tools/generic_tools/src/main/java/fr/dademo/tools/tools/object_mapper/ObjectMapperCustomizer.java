@@ -8,7 +8,7 @@ package fr.dademo.tools.tools.object_mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author dademo

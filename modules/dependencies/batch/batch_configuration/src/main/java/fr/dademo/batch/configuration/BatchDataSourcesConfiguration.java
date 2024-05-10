@@ -10,13 +10,13 @@ import fr.dademo.batch.configuration.data_sources.AmqpConfiguration;
 import fr.dademo.batch.configuration.data_sources.JDBCDataSourceConfiguration;
 import fr.dademo.batch.configuration.data_sources.MongoDBClientConfiguration;
 import fr.dademo.batch.configuration.exception.MissingDataSourceConfigurationException;
+import jakarta.annotation.Nonnull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;

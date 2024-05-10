@@ -7,11 +7,11 @@
 package fr.dademo.batch.tools.batch.job;
 
 import fr.dademo.batch.configuration.BatchConfiguration;
+import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.batch.core.ChunkListener;
 import org.springframework.batch.core.Step;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
 /**

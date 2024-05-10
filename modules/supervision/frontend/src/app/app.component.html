@@ -1,10 +1,10 @@
-<div class="app" [class]="(themeClass | async) || 'theme-deep-purple-amber'" [class.theme-dark]="isDarkTheme | async">
-  <ng-template [ngIf]="isStarting | async" [ngIfElse]="app_guard">
+<div [class.theme-dark]="isDarkTheme | async" [class]="(themeClass | async) || 'theme-deep-purple-amber'" class="app">
+  <ng-template [ngIfElse]="app_guard" [ngIf]="isStarting | async">
     <app-guard></app-guard>
   </ng-template>
-  
+
   <ng-template #app_guard>
-    <ng-template [ngIf]="isApplicationError" [ngIfElse]="app">
+    <ng-template [ngIfElse]="app" [ngIf]="isApplicationError">
       ERROR, TODO
     </ng-template>
     <ng-template #app>

@@ -9,8 +9,7 @@ package fr.dademo.supervision.dependencies.persistence.services;
 import fr.dademo.supervision.dependencies.backends.model.database.GlobalDatabaseDescription;
 import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendModuleMetaData;
 import fr.dademo.supervision.dependencies.entities.DataBackendStateExecutionEntity;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author dademo

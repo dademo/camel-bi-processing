@@ -6,12 +6,12 @@
 
 package fr.dademo.batch.repository.datamodel;
 
+import jakarta.annotation.Nonnull;
 import lombok.AllArgsConstructor;
 import org.jooq.*;
 import org.jooq.impl.CustomTable;
 import org.jooq.impl.SQLDataType;
 
-import javax.annotation.Nonnull;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;

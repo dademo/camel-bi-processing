@@ -11,11 +11,12 @@ import fr.dademo.reader.http.data_model.HttpInputStreamIdentifier;
 import fr.dademo.reader.http.repository.DefaultHttpDataQuerierRepository;
 import fr.dademo.reader.http.repository.QueryCustomizer;
 import fr.dademo.reader.http.repository.handlers.QueryResponseHandler;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.http.HttpClient;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,11 +25,15 @@ import java.util.List;
  */
 public abstract class BaseCachedHttpDataQuerierRepository extends DefaultHttpDataQuerierRepository implements CachedHttpDataQuerierRepository {
 
+    protected BaseCachedHttpDataQuerierRepository(@Nonnull HttpClient httpClient) {
+        super(httpClient);
+    }
+
     @Override
     public InputStream basicQuery(@Nonnull HttpInputStreamIdentifier httpInputStreamIdentifier,
                                   @Nonnull List<QueryCustomizer> queryCustomizers,
                                   @Nullable QueryResponseHandler queryResponseHandler,
-                                  @Nonnull List<? extends InputStreamIdentifierValidator<HttpInputStreamIdentifier>> httpStreamValidators) throws IOException {
+                                  @Nonnull List<? extends InputStreamIdentifierValidator<HttpInputStreamIdentifier>> httpStreamValidators) throws IOException, InterruptedException {
 
         return basicQuery(
             httpInputStreamIdentifier,

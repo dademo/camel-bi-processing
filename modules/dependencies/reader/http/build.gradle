@@ -33,9 +33,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
 
     // Other libraries
-    implementation "com.squareup.okhttp3:okhttp:${okHttpVersion}"
-    implementation "com.squareup.okhttp3:logging-interceptor:${okHttpVersion}"
     implementation "org.apache.commons:commons-lang3:${apacheCommonsLang3Version}"
+    implementation "jakarta.annotation:jakarta.annotation-api:${jakartaAnnotationApiVersion}"
     implementation "com.google.code.findbugs:jsr305:${findBugsJsr305Version}"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

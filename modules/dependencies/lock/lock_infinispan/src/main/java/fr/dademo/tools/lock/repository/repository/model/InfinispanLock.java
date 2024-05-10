@@ -8,11 +8,10 @@ package fr.dademo.tools.lock.repository.repository.model;
 
 import fr.dademo.data.generic.stream_definitions.Cacheable;
 import fr.dademo.tools.lock.repository.model.Lock;
+import jakarta.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
 import org.infinispan.lock.api.ClusteredLock;
 import org.infinispan.lock.api.ClusteredLockManager;
-
-import javax.annotation.Nonnull;
 
 @Slf4j
 public class InfinispanLock implements Lock {

@@ -6,16 +6,19 @@
 
 package fr.dademo.reader.http.repository.exception;
 
-import okhttp3.Response;
+import java.io.InputStream;
+import java.io.Serial;
+import java.net.http.HttpResponse;
 
 /**
  * @author dademo
  */
 public class MissingResultBodyException extends BaseHttpQueryException {
 
+    @Serial
     private static final long serialVersionUID = -3412548216284615256L;
 
-    public MissingResultBodyException(Response queryResponse) {
+    public MissingResultBodyException(HttpResponse<InputStream> queryResponse) {
         super("Endpoint did provided any answer", queryResponse);
     }
 }

@@ -10,10 +10,10 @@ import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifierValidator;
 import fr.dademo.reader.http.validators.exception.InputStreamHashValidationException;
 import fr.dademo.tools.tools.HashTools;
+import jakarta.annotation.Nonnull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;

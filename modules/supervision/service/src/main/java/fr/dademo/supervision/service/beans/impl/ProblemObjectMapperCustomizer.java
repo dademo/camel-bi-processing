@@ -8,10 +8,10 @@ package fr.dademo.supervision.service.beans.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.dademo.tools.tools.object_mapper.ObjectMapperCustomizer;
+import jakarta.annotation.Nonnull;
 import org.zalando.problem.jackson.ProblemModule;
 import org.zalando.problem.violations.ConstraintViolationProblemModule;
 
-import javax.annotation.Nonnull;
 import java.util.stream.Stream;
 
 /**

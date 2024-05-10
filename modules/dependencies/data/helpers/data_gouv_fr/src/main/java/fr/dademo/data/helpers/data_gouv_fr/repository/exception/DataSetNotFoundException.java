@@ -7,8 +7,7 @@
 package fr.dademo.data.helpers.data_gouv_fr.repository.exception;
 
 import fr.dademo.reader.http.repository.exception.BaseHttpQueryException;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author dademo
@@ -20,7 +19,7 @@ public class DataSetNotFoundException extends BaseHttpQueryException {
     public DataSetNotFoundException(@Nonnull String dataSetTitle, @Nonnull BaseHttpQueryException cause) {
         super(
             String.format("DataSet `%s` not found using query `%s`",
-                dataSetTitle, cause.getQueryResponse().request().url()),
+                dataSetTitle, cause.getQueryResponse().request().uri()),
             cause
         );
     }

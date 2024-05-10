@@ -9,11 +9,11 @@ package fr.dademo.bi.companies.jobs.stg.association;
 import fr.dademo.batch.resources.WrappedRowResource;
 import fr.dademo.batch.tools.batch.mapper.BatchMapperTools;
 import fr.dademo.bi.companies.jobs.stg.association.datamodel.Association;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.time.LocalDate;
 import java.util.Optional;
 

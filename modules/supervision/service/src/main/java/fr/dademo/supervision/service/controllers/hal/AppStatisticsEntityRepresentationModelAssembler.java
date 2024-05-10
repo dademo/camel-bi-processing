@@ -6,11 +6,10 @@
 
 package fr.dademo.supervision.service.controllers.hal;
 
+import jakarta.annotation.Nonnull;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
-
-import javax.annotation.Nonnull;
 
 /**
  * @author dademo

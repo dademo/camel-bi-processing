@@ -7,11 +7,11 @@
 package fr.dademo.batch.repository.datamodel;
 
 import fr.dademo.batch.repository.datamodel.exceptions.DataSetEntityRecordMapperInvalidStateValue;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.jooq.RecordMapper;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Optional;
 
 @RequiredArgsConstructor

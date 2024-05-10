@@ -35,6 +35,7 @@ dependencies {
     implementation "org.apache.commons:commons-lang3:${apacheCommonsLang3Version}"
 
     implementation "commons-io:commons-io:${apacheCommonsIOVersion}"
+    implementation "jakarta.annotation:jakarta.annotation-api:${jakartaAnnotationApiVersion}"
     implementation "com.google.code.findbugs:jsr305:${findBugsJsr305Version}"
 
 

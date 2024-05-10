@@ -7,8 +7,8 @@
 package fr.dademo.supervision.dependencies.backends.postgresql.repository;
 
 import fr.dademo.supervision.dependencies.backends.postgresql.repository.entities.DatabaseIndexEntity;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
 /**

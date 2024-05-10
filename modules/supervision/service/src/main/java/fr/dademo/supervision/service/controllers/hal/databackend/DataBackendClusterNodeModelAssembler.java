@@ -8,10 +8,9 @@ package fr.dademo.supervision.service.controllers.hal.databackend;
 
 import fr.dademo.supervision.service.controllers.hal.AppStatisticsEntityRepresentationModelAssembler;
 import fr.dademo.supervision.service.services.dto.DataBackendClusterNodeDto;
+import jakarta.annotation.Nonnull;
 import lombok.AllArgsConstructor;
 import org.springframework.hateoas.Link;
-
-import javax.annotation.Nonnull;
 
 /**
  * @author dademo

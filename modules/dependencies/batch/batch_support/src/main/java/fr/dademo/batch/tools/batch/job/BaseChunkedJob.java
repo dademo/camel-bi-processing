@@ -14,6 +14,8 @@ import fr.dademo.batch.tools.batch.job.exceptions.MissingJdbcDataSource;
 import fr.dademo.batch.tools.batch.job.exceptions.MissingMigrationFolder;
 import fr.dademo.batch.tools.batch.job.tasklets.LiquibaseMigrationTasklet;
 import fr.dademo.batch.tools.batch.job.tasklets.NoActionTasklet;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -26,8 +28,6 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;

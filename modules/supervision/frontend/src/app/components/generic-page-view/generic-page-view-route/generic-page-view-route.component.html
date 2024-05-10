@@ -1,4 +1,4 @@
-<span fxFlex fxFlexFill fxLayout="row" class="current-path">
+<span class="current-path" fxFlex fxFlexFill fxLayout="row">
     <a routerLink="/">Home</a>
     <ng-container *ngFor="let viewRoute of viewRoutes">
         <mat-icon>chevron_right</mat-icon> <a [routerLink]="viewRoute.applicationRoute">{{ viewRoute.displayName }}</a>

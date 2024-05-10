@@ -13,6 +13,8 @@ import fr.dademo.batch.configuration.BatchConfiguration;
 import fr.dademo.batch.configuration.BatchDataSourcesConfiguration;
 import fr.dademo.batch.configuration.FlywayMigrationsConfiguration;
 import fr.dademo.batch.configuration.exception.MissingJobDataSourceConfigurationException;
+import jakarta.annotation.Nonnull;
+import jakarta.validation.constraints.NotEmpty;
 import org.flywaydb.core.Flyway;
 import org.jooq.DSLContext;
 import org.jooq.conf.Settings;
@@ -21,10 +23,7 @@ import org.jooq.conf.ThrowExceptions;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Nonnull;
 import javax.sql.DataSource;
-
-import jakarta.validation.constraints.NotEmpty;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;

@@ -24,6 +24,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Min;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,10 +44,6 @@ import org.springframework.web.bind.annotation.*;
 import org.zalando.problem.DefaultProblem;
 import org.zalando.problem.spring.web.advice.ProblemHandling;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import jakarta.validation.constraints.Min;
 import java.util.Optional;
 
 /**

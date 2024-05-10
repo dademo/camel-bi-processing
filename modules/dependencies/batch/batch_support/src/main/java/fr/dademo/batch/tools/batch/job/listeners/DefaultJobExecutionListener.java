@@ -12,12 +12,12 @@
 
 package fr.dademo.batch.tools.batch.job.listeners;
 
+import jakarta.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
 import org.jline.terminal.TerminalBuilder;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionListener;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;

@@ -15,13 +15,13 @@ import fr.dademo.supervision.dependencies.backends.model.database.resources.Data
 import fr.dademo.supervision.dependencies.backends.model.database.resources.DatabaseReplicationPeerDefaultImpl;
 import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendDescriptionDefaultImpl;
 import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendKind;
+import jakarta.annotation.Nonnull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
 /**

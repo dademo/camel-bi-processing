@@ -32,6 +32,7 @@ dependencies {
     // Other libraries
     implementation "org.apache.tika:tika-core:${apacheTikaVersion}"
     implementation "commons-io:commons-io:${apacheCommonsIOVersion}"
+    implementation "jakarta.annotation:jakarta.annotation-api:${jakartaAnnotationApiVersion}"
     implementation "com.google.code.findbugs:jsr305:${findBugsJsr305Version}"
 }
 

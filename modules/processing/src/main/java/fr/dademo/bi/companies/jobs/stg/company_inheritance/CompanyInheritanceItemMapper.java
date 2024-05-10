@@ -8,10 +8,9 @@ package fr.dademo.bi.companies.jobs.stg.company_inheritance;
 
 import fr.dademo.batch.resources.WrappedRowResource;
 import fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel.CompanyInheritance;
+import jakarta.annotation.Nonnull;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.Nonnull;
 
 import static fr.dademo.batch.tools.batch.mapper.BatchMapperTools.*;
 import static fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel.CompanyInheritance.*;

@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @Slf4j
 public class RedisLock implements Lock {

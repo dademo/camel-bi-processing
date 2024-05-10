@@ -6,28 +6,31 @@
 
 package fr.dademo.reader.http.repository.exception;
 
+import jakarta.annotation.Nonnull;
 import lombok.Getter;
-import okhttp3.Response;
 
-import javax.annotation.Nonnull;
+import java.io.InputStream;
+import java.io.Serial;
+import java.net.http.HttpResponse;
 
 /**
  * @author dademo
  */
-@SuppressWarnings("java:S1948")
 public abstract class BaseHttpQueryException extends RuntimeException {
 
+    @Serial
     private static final long serialVersionUID = 5481320755074086222L;
+
     @Nonnull
     @Getter
-    private final Response queryResponse;
+    private final HttpResponse<InputStream> queryResponse;
 
-    protected BaseHttpQueryException(@Nonnull Response queryResponse) {
+    protected BaseHttpQueryException(@Nonnull HttpResponse<InputStream> queryResponse) {
         super();
         this.queryResponse = queryResponse;
     }
 
-    protected BaseHttpQueryException(String message, @Nonnull Response queryResponse) {
+    protected BaseHttpQueryException(String message, @Nonnull HttpResponse<InputStream> queryResponse) {
         super(message);
         this.queryResponse = queryResponse;
     }
@@ -37,12 +40,12 @@ public abstract class BaseHttpQueryException extends RuntimeException {
         this.queryResponse = cause.getQueryResponse();
     }
 
-    protected BaseHttpQueryException(String message, Throwable cause, @Nonnull Response queryResponse) {
+    protected BaseHttpQueryException(String message, Throwable cause, @Nonnull HttpResponse<InputStream> queryResponse) {
         super(message, cause);
         this.queryResponse = queryResponse;
     }
 
-    protected BaseHttpQueryException(Throwable cause, @Nonnull Response queryResponse) {
+    protected BaseHttpQueryException(Throwable cause, @Nonnull HttpResponse<InputStream> queryResponse) {
         super(cause);
         this.queryResponse = queryResponse;
     }

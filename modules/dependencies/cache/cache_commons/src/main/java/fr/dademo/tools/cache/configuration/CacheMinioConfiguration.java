@@ -6,13 +6,11 @@
 
 package fr.dademo.tools.cache.configuration;
 
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-
-import javax.annotation.Nullable;
-
-import jakarta.validation.constraints.NotBlank;
 
 @Configuration
 @ConfigurationProperties(prefix = "cache.minio")

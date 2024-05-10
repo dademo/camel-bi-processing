@@ -12,11 +12,12 @@ import com.mongodb.WriteConcern;
 import lombok.*;
 import org.apache.logging.log4j.util.Strings;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+
 import java.util.Optional;
 
 /**

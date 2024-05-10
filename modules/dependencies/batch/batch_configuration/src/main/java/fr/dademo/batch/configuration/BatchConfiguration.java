@@ -7,16 +7,15 @@
 package fr.dademo.batch.configuration;
 
 import fr.dademo.batch.configuration.exception.MissingJobConfigurationException;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import jakarta.validation.constraints.Min;
 import java.util.*;
 
 /**

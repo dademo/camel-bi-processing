@@ -11,12 +11,11 @@ import fr.dademo.data.generic.stream_definitions.Cacheable;
 import fr.dademo.tools.lock.configuration.LockConfiguration;
 import fr.dademo.tools.lock.repository.model.HazelcastLock;
 import fr.dademo.tools.lock.repository.model.Lock;
+import jakarta.annotation.Nonnull;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.Nonnull;
 
 @ConditionalOnProperty(
     name = LockConfiguration.CONFIGURATION_PROPERTY_PREFIX + ".backend",

@@ -8,14 +8,13 @@ package fr.dademo.batch.configuration.data_sources;
 
 import fr.dademo.batch.configuration.data_sources.exception.MissingExchangeConfigurationException;
 import fr.dademo.batch.configuration.data_sources.exception.MissingQueueConfigurationException;
+import jakarta.annotation.Nonnull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.annotation.Nonnull;
-
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import java.net.URI;
 import java.util.Map;
 import java.util.Optional;

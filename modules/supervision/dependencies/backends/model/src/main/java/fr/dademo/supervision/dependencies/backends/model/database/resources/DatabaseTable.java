@@ -7,12 +7,11 @@
 package fr.dademo.supervision.dependencies.backends.model.database.resources;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
+
 import java.util.Date;
 
 /**

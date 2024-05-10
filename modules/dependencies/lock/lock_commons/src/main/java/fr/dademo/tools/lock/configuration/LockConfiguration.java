@@ -10,7 +10,7 @@ import lombok.*;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 @Configuration
 @ConfigurationProperties(prefix = LockConfiguration.CONFIGURATION_PROPERTY_PREFIX)

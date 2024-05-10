@@ -8,9 +8,9 @@ package fr.dademo.batch.resources.backends.fast_csv;
 
 import de.siegmar.fastcsv.reader.CsvRecord;
 import fr.dademo.batch.resources.BaseWrappedRowResource;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Map;
 
 public class FastCsvWrappedRecordResource extends BaseWrappedRowResource {

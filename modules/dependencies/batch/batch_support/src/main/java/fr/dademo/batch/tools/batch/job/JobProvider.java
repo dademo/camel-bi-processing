@@ -8,7 +8,7 @@ package fr.dademo.batch.tools.batch.job;
 
 import org.springframework.batch.core.Job;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author dademo

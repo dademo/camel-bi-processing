@@ -6,12 +6,11 @@
 
 package fr.dademo.batch.services.dto;
 
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 @Builder
 @Data

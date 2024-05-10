@@ -26,8 +26,6 @@ logging:
     'org.jooq.Constants': WARN
     #'com.zaxxer.hikari': DEBUG
     'com.zaxxer.hikari': INFO
-    #'okhttp3': DEBUG
-    'okhttp3': INFO
 
 lock:
   backend: memory

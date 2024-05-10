@@ -8,6 +8,7 @@ package fr.dademo.batch.tools.batch.job;
 
 import fr.dademo.batch.configuration.BatchConfiguration;
 import fr.dademo.batch.tools.batch.job.listeners.StepThreadPoolListener;
+import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.batch.core.ChunkListener;
 import org.springframework.batch.core.Step;
@@ -20,7 +21,6 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadPoolExecutor;
