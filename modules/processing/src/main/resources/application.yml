@@ -65,8 +65,8 @@ datasources:
       url: jdbc:postgresql://localhost:5432/bi
       minimum-idle: 5
       maximum-pool-size: 20
-      username: bi_rw
-      password: bi_rw
+      username: bi
+      password: bi
     stg:
       enabled: true
       url: jdbc:postgresql://localhost:5432/bi
@@ -96,6 +96,14 @@ datasources:
           autoDelete: false
           delayed: false
           internal: false
+
+http:
+  connectTimeoutSeconds: 5
+  executor:
+    corePoolSize: 5
+    maximumPoolSize: 500
+    keepAliveTimeSeconds: 5
+
 
 batch:
   executor-thread-pool-size: 1

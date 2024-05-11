@@ -34,8 +34,7 @@ public class HttpConfiguration {
     @Min(0)
     private long connectTimeoutSeconds = 0;
 
-    @Min(0)
-    private HttpConfigurationExecutor executorConfiguration = null;
+    private HttpConfigurationExecutor executor = new HttpConfigurationExecutor();
 
     @Data
     @NoArgsConstructor

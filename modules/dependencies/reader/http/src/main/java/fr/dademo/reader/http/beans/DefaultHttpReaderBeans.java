@@ -9,6 +9,7 @@ package fr.dademo.reader.http.beans;
 import fr.dademo.data.generic.stream_definitions.configuration.HttpConfiguration;
 import fr.dademo.reader.http.repository.DefaultHttpDataQuerierRepository;
 import fr.dademo.reader.http.repository.HttpDataQuerierRepository;
+import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -24,19 +25,20 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Configuration
 public class DefaultHttpReaderBeans {
 
     public static final String HTTP_CLIENT_EXECUTOR_BEAN_NAME = "httpClientExecutor";
 
     @Bean(HTTP_CLIENT_EXECUTOR_BEAN_NAME)
-    @ConditionalOnMissingBean(value = Executor.class, name = HTTP_CLIENT_EXECUTOR_BEAN_NAME)
-    public Executor httpClientExecutor(HttpConfiguration httpConfiguration) {
+    @ConditionalOnMissingBean(name = HTTP_CLIENT_EXECUTOR_BEAN_NAME)
+    public Executor httpClientExecutor(@Nonnull HttpConfiguration httpConfiguration) {
 
         return new ThreadPoolExecutor(
-            httpConfiguration.getExecutorConfiguration().getCorePoolSize(),
-            httpConfiguration.getExecutorConfiguration().getMaximumPoolSize(),
-            httpConfiguration.getExecutorConfiguration().getKeepAliveTimeSeconds(),
+            httpConfiguration.getExecutor().getCorePoolSize(),
+            httpConfiguration.getExecutor().getMaximumPoolSize(),
+            httpConfiguration.getExecutor().getKeepAliveTimeSeconds(),
             TimeUnit.SECONDS,
             new LinkedBlockingQueue<>()
         );
@@ -44,8 +46,8 @@ public class DefaultHttpReaderBeans {
 
     @Bean
     @ConditionalOnMissingBean(HttpClient.class)
-    public HttpClient defaultHttpClient(HttpConfiguration httpConfiguration,
-                                        @Qualifier(HTTP_CLIENT_EXECUTOR_BEAN_NAME) Executor httpClientExecutor) {
+    public HttpClient defaultHttpClient(@Nonnull HttpConfiguration httpConfiguration,
+                                        @Nonnull @Qualifier(HTTP_CLIENT_EXECUTOR_BEAN_NAME) Executor httpClientExecutor) {
 
         return HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(httpConfiguration.getConnectTimeoutSeconds()))

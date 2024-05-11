@@ -93,6 +93,7 @@ public class BatchRepository {
         factory.setMaxVarCharLength(1000);
 
         factory.setSerializer(executionContextSerializer);
+        factory.afterPropertiesSet();
 
         return factory.getObject();
     }
@@ -102,13 +103,15 @@ public class BatchRepository {
     @ConditionalOnMissingBean(JobExplorer.class)
     @SneakyThrows
     public JobExplorer jobExplorer(@Qualifier(BATCH_DATA_SOURCE_BEAN_NAME) DataSource jobRepositoryDataSource,
-                                   ExecutionContextSerializer executionContextSerializer) {
+                                   ExecutionContextSerializer executionContextSerializer,
+                                   PlatformTransactionManager platformTransactionManager) {
 
         initializeSpringBatchSchema(jobRepositoryDataSource);
 
         JobExplorerFactoryBean factoryBean = new JobExplorerFactoryBean();
         factoryBean.setDataSource(jobRepositoryDataSource);
         factoryBean.setSerializer(executionContextSerializer);
+        factoryBean.setTransactionManager(platformTransactionManager);
         factoryBean.afterPropertiesSet();
 
         return factoryBean.getObject();
@@ -174,7 +177,7 @@ public class BatchRepository {
         try (final var jdbcConnection = jobRepositoryDataSource.getConnection()) {
             jdbcConnection.setAutoCommit(false);
             try (final var statement = jdbcConnection.createStatement()) {
-                statement.execute("SELECT * FROM public.BATCH_JOB_INSTANCE");
+                statement.execute("SELECT COUNT(*) FROM public.BATCH_JOB_INSTANCE");
                 isInitialized = true;
             } catch (SQLException ex) {
                 log.debug("An error occurred when checking for existing schema", ex);

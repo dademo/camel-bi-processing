@@ -25,6 +25,8 @@ import org.springframework.boot.autoconfigure.sql.init.SqlInitializationAutoConf
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories;
 
+import java.util.stream.Collectors;
+
 /**
  * @author dademo
  */
@@ -42,6 +44,7 @@ import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories;
     LiquibaseAutoConfiguration.class,
 })
 @ImportAutoConfiguration
+//@EnableAutoConfiguration
 @EnableJdbcRepositories
 //@EnableBatchProcessing
 public class Application implements ApplicationRunner, ExitCodeGenerator {
@@ -95,7 +98,15 @@ public class Application implements ApplicationRunner, ExitCodeGenerator {
     }
 
     private void listJobs() {
-        log.info(String.join("\n", appJobLauncher.getAllAvailableJobs()));
+
+        final var foundJobs = appJobLauncher.getAllAvailableJobs();
+
+        log.info("Found {} jobs :\n{}",
+            foundJobs.size(),
+            foundJobs.stream()
+                .map("  - %s"::formatted)
+                .collect(Collectors.joining("\n"))
+        );
     }
 
     @Override
