@@ -1,7 +1,7 @@
 version: '3.0'
 services:
   postgresql:
-    image: 'docker.io/library/postgres:14.2'
+    image: 'docker.io/library/postgres:16.3'
     restart: always
     ports:
       - '5432:5432'
@@ -15,7 +15,7 @@ services:
       - '-c'
       - log_statement=all
   mongodb:
-    image: 'docker.io/library/mongo:5.0.6'
+    image: 'docker.io/library/mongo:7.0.9'
     restart: always
     ports:
       - 27017:27017
@@ -26,7 +26,7 @@ services:
       - 'mongodb:/data/db:rw'
 
   mongo-express:
-    image: 'docker.io/library/mongo-express'
+    image: 'docker.io/library/mongo-express:1.0.2-20'
     restart: always
     ports:
       - 8081:8081
@@ -39,7 +39,7 @@ services:
       ME_CONFIG_MONGODB_URL: mongodb://root:root@mongodb:27017/
 
   rabbitmq:
-    image: 'docker.io/library/rabbitmq:3.9.13-management'
+    image: 'docker.io/library/rabbitmq:3.13.2-management'
     restart: always
     ports:
       - 5672:5672
