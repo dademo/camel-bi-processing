@@ -72,7 +72,7 @@ public class DefaultHttpDataQuerierRepository implements HttpDataQuerierReposito
         var httpRequest = HttpRequest.newBuilder()
             .uri(httpInputStreamIdentifier.getUrl().toURI())
             .method(
-                httpInputStreamIdentifier.getMethod(),
+                httpInputStreamIdentifier.getMethod().toString(),
                 httpInputStreamIdentifier.getBodyStream().getBodyPublisher()
             );
 

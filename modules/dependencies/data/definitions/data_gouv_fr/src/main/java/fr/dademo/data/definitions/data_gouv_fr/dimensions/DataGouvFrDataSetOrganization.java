@@ -9,7 +9,9 @@ package fr.dademo.data.definitions.data_gouv_fr.dimensions;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import fr.dademo.data.definitions.data_gouv_fr.serializer.ApifrDatesDeserializer;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
@@ -29,12 +31,15 @@ import java.util.List;
 public class DataGouvFrDataSetOrganization {
 
     @Nonnull
+    @JsonDeserialize(using = ApifrDatesDeserializer.class)
     LocalDateTime createdAt;
 
     @Nullable
+    @JsonDeserialize(using = ApifrDatesDeserializer.class)
     LocalDateTime deleted;
 
     @Nullable
+    @JsonDeserialize(using = ApifrDatesDeserializer.class)
     LocalDateTime lastModified;
 
     @Nonnull
@@ -95,7 +100,7 @@ public class DataGouvFrDataSetOrganization {
             EDITOR("editor"),
             ADMIN("admin");
 
-            private String value;
+            private final String value;
 
             @JsonValue
             public String getValue() {

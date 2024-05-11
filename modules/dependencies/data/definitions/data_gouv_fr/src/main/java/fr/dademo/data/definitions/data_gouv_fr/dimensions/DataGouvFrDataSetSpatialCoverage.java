@@ -38,6 +38,7 @@ public class DataGouvFrDataSetSpatialCoverage {
     @Data
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class Geometry {
+
         @Nullable
         private String description;
 

@@ -119,7 +119,7 @@ batch:
       chunk-size: 1000
       max-threads: null
     company:
-      enabled: true
+      enabled: false
       #inputDataSource: null
       outputDataSource:
         name: stg
@@ -127,7 +127,7 @@ batch:
       chunk-size: 10000
       max-threads: null
     company-history:
-      enabled: true
+      enabled: false
       #inputDataSource: null
       outputDataSource:
         name: stg
@@ -135,7 +135,7 @@ batch:
       chunk-size: 10000
       max-threads: null
     company-inheritance:
-      enabled: true
+      enabled: false
       #inputDataSource: null
       outputDataSource:
         name: stg
@@ -143,7 +143,7 @@ batch:
       chunk-size: 10000
       max-threads: null
     company-legal:
-      enabled: true
+      enabled: false
       #inputDataSource: null
       outputDataSource:
         name: stg
@@ -151,7 +151,7 @@ batch:
       chunk-size: 10000
       max-threads: null
     company-legal-history:
-      enabled: true
+      enabled: false
       #inputDataSource: null
       outputDataSource:
         name: stg
@@ -159,7 +159,7 @@ batch:
       chunk-size: 10000
       max-threads: null
     association:
-      enabled: true
+      enabled: false
       #enabled: false
       #inputDataSource: null
       outputDataSource:
@@ -168,7 +168,7 @@ batch:
       chunk-size: 10000
       max-threads: null
     association-waldec:
-      enabled: true
+      enabled: false
       #inputDataSource: null
       outputDataSource:
         name: stg

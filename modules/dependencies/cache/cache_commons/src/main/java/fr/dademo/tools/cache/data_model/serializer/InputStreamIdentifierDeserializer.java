@@ -14,6 +14,7 @@ import fr.dademo.tools.tools.DefaultToolBeans;
 import lombok.SneakyThrows;
 
 import java.io.IOException;
+import java.io.Serial;
 
 import static fr.dademo.tools.cache.data_model.serializer.Constants.FIELD_SERIALIZED_CLASS;
 import static fr.dademo.tools.cache.data_model.serializer.Constants.FIELD_SERIALIZED_VALUE;
@@ -22,9 +23,10 @@ import static fr.dademo.tools.tools.DefaultToolBeans.DEFAULT_OBJECT_MAPPER_CUSTO
 /**
  * @author dademo
  */
-@SuppressWarnings("java:S2055")
+@SuppressWarnings("unused")
 public class InputStreamIdentifierDeserializer extends StdDeserializer<InputStreamIdentifier<?>> {
 
+    @Serial
     private static final long serialVersionUID = 8861351643710440585L;
 
     public InputStreamIdentifierDeserializer() {

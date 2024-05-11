@@ -6,7 +6,9 @@
 
 package fr.dademo.data.definitions.data_gouv_fr.dimensions;
 
-import jakarta.annotation.Nonnull;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,8 +19,18 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DataGouvFrDataSetBadge {
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+public class DataGouvFrDataSetSchema {
 
-    @Nonnull
-    private String kind;
+    @Nullable
+    private String name;
+
+    @Nullable
+    private String description;
+
+    @Nullable
+    private String url;
+
+    @Nullable
+    private String version;
 }

@@ -11,9 +11,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import fr.dademo.data.definitions.DataSetResource;
 import fr.dademo.data.definitions.data_gouv_fr.DataGouvFrDataSet;
+import fr.dademo.data.definitions.data_gouv_fr.serializer.ApifrDatesDeserializer;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
@@ -33,43 +35,68 @@ import java.util.stream.Stream;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@JsonIgnoreProperties({"extras", "schema"})
+@JsonIgnoreProperties({"extras", "internal"})
 public class DataGouvFrDataSetResource implements DataSetResource {
 
     @Nullable
     private String id;
+
     @Nullable
     private String description;
+
     @Nonnull
     private String title;
+
     @Nonnull
     private String url;
+
     @Nonnull
     private ResourceType type;
+
     @Nullable
     private DataGouvFrDataSetResourceChecksum checksum;
+
     @Nonnull
+    @JsonDeserialize(using = ApifrDatesDeserializer.class)
     private LocalDateTime createdAt;
+
     @Nullable
+    @JsonDeserialize(using = ApifrDatesDeserializer.class)
     private LocalDateTime published;
+
     @Nullable
+    @JsonDeserialize(using = ApifrDatesDeserializer.class)
     private LocalDateTime lastModified;
+
     @Nullable
     @JsonProperty("filesize")
     private Integer fileSize;
+
     @Nonnull
     @JsonProperty("filetype")
     private String fileType;
+
     @Nonnull
     private String format;
+
+    @Nullable
+    private DataGouvFrDataSetResourceHarvest harvest;
+
     @Nullable
     private String latest;
+
     @Nullable
     private Map<String, Integer> metrics;
+
     @Nullable
     private String mime;
+
     @Nullable
     private String previewUrl;
+
+    @Nullable
+    private DataGouvFrDataSetSchema schema;
+
     @JsonBackReference
     private DataGouvFrDataSet dataSet;
 

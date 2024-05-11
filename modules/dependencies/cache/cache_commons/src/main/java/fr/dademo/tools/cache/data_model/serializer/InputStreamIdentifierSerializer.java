@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 
 import java.io.IOException;
+import java.io.Serial;
 
 import static fr.dademo.tools.cache.data_model.serializer.Constants.FIELD_SERIALIZED_CLASS;
 import static fr.dademo.tools.cache.data_model.serializer.Constants.FIELD_SERIALIZED_VALUE;
@@ -19,9 +20,10 @@ import static fr.dademo.tools.cache.data_model.serializer.Constants.FIELD_SERIAL
 /**
  * @author dademo
  */
-@SuppressWarnings({"java:S2055", "rawtypes"})
+@SuppressWarnings({"java:S2055", "rawtypes", "unused"})
 public class InputStreamIdentifierSerializer extends StdSerializer<InputStreamIdentifier> {
 
+    @Serial
     private static final long serialVersionUID = 1796264361835867369L;
 
     public InputStreamIdentifierSerializer() {

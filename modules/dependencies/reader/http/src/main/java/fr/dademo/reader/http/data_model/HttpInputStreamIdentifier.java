@@ -17,6 +17,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import java.io.Serial;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author dademo
@@ -36,10 +38,11 @@ public class HttpInputStreamIdentifier implements InputStreamIdentifier<URL> {
 
     @Nonnull
     @Builder.Default
-    private String method = "GET";
+    private RequestMethod method = RequestMethod.GET;
 
     @Nonnull
-    private transient HttpInputStreamBodySupplier bodyStream;
+    @Builder.Default
+    private transient HttpInputStreamBodySupplier bodyStream = HttpInputStreamBodySupplier.noBody();
 
     @Nullable
     private String contentType;
@@ -96,7 +99,26 @@ public class HttpInputStreamIdentifier implements InputStreamIdentifier<URL> {
     public String getUniqueIdentifier() {
         return HashTools.computeHashString(
             HashTools.getHashComputerForAlgorithm("SHA256"),
-            (url + method + bodyStream).getBytes(StandardCharsets.UTF_8)
+            Stream.of(url, method, bodyStream)
+                .map(String::valueOf)
+                .collect(Collectors.joining(""))
+                .getBytes(StandardCharsets.UTF_8)
         );
+    }
+
+    public enum RequestMethod {
+        GET,
+        POST,
+        PUT,
+        DELETE,
+        HEAD,
+        OPTIONS,
+        PATCH;
+
+
+        @Override
+        public String toString() {
+            return name();
+        }
     }
 }

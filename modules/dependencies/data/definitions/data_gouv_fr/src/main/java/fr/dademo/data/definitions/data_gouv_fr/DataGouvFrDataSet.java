@@ -10,9 +10,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import fr.dademo.data.definitions.DataSet;
 import fr.dademo.data.definitions.data_gouv_fr.dimensions.*;
+import fr.dademo.data.definitions.data_gouv_fr.serializer.ApifrDatesDeserializer;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
@@ -30,8 +32,11 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@JsonIgnoreProperties({"owner", "quality", "extras"})
+@JsonIgnoreProperties({"owner", "quality", "extras", "contact_point", "harvest", "internal"})
 public class DataGouvFrDataSet implements DataSet {
+
+    public static final String DATE_FORMAT_WITH_MICROSECONDS = "yyyy-MM-dd'T'HH:mm:ss.nnnnnnZZZZZ";
+    public static final String DATE_FORMAT_SIMPLE = "yyyy-MM-dd'T'HH:mm:ssZZZZZ";
 
     @Nullable
     private String id;
@@ -49,23 +54,36 @@ public class DataGouvFrDataSet implements DataSet {
     private String description;
 
     @Nonnull
+    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT_WITH_MICROSECONDS)
+    @JsonDeserialize(using = ApifrDatesDeserializer.class)
     private LocalDateTime createdAt;
 
     @Nullable
+    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT_WITH_MICROSECONDS)
+    @JsonDeserialize(using = ApifrDatesDeserializer.class)
     private LocalDateTime deleted;
 
     @Nullable
+    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT_WITH_MICROSECONDS)
+    @JsonDeserialize(using = ApifrDatesDeserializer.class)
     private LocalDateTime archived;
 
     @Nonnull
+    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT_WITH_MICROSECONDS)
+    @JsonDeserialize(using = ApifrDatesDeserializer.class)
     private LocalDateTime lastModified;
 
     @Nonnull
+    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT_SIMPLE)
+    @JsonDeserialize(using = ApifrDatesDeserializer.class)
     private LocalDateTime lastUpdate;
 
     @Nonnull
     @JsonManagedReference
     private List<DataGouvFrDataSetResource> resources;
+
+    @Nullable
+    private DataGouvFrDataSetSchema schema;
 
     @Nonnull
     private List<DataGouvFrDataSetResource> communityResources;
@@ -80,6 +98,8 @@ public class DataGouvFrDataSet implements DataSet {
     private DataGouvFrDataSetFrequency frequency;
 
     @Nullable
+    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT_WITH_MICROSECONDS)
+    @JsonDeserialize(using = ApifrDatesDeserializer.class)
     private LocalDateTime frequencyDate;
 
     @Nullable

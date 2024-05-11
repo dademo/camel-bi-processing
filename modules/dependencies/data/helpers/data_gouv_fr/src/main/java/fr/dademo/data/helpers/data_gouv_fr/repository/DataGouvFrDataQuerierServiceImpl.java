@@ -38,12 +38,13 @@ import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 /**
  * @author dademo
  */
+@SuppressWarnings({"java:S1075", "unused"})
 @Service
 public class DataGouvFrDataQuerierServiceImpl extends BaseDataGouvFrDataQuerierServiceImpl implements DataGouvFrDataQuerierService {
 
     private static final String DATA_SET_URL_SCHEME = "https";
     private static final String DATA_SET_URL_HOST = "www.data.gouv.fr";
-    private static final String DATA_SET_URL_PATH = "api/1/datasets/";
+    private static final String DATA_SET_URL_PATH = "/api/1/datasets/";
 
     private final HttpDataQuerierRepository httpDataQuerierRepository;
     private final ObjectMapper mapper;
@@ -125,7 +126,7 @@ public class DataGouvFrDataQuerierServiceImpl extends BaseDataGouvFrDataQuerierS
 
         return HttpInputStreamIdentifier.builder()
             .url(buildQueryUsingOptions(queryOptions))
-            .method("GET")
+            .method(HttpInputStreamIdentifier.RequestMethod.GET)
             .build();
     }
 
@@ -134,7 +135,7 @@ public class DataGouvFrDataQuerierServiceImpl extends BaseDataGouvFrDataQuerierS
 
         return HttpInputStreamIdentifier.builder()
             .url(buildQueryForDataSet(dataSetTitle))
-            .method("GET")
+            .method(HttpInputStreamIdentifier.RequestMethod.GET)
             .build();
     }
 
@@ -145,7 +146,7 @@ public class DataGouvFrDataQuerierServiceImpl extends BaseDataGouvFrDataQuerierS
         return HttpInputStreamIdentifier.builder()
             .url(new URI(dataGouvFrDataSetResource.getUrl()).toURL())
             .contentType(dataGouvFrDataSetResource.getMime())
-            .method("GET")
+            .method(HttpInputStreamIdentifier.RequestMethod.GET)
             .build();
     }
 }
