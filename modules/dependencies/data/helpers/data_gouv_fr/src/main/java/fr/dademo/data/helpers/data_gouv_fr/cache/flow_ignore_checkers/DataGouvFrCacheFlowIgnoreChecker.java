@@ -24,8 +24,8 @@ public class DataGouvFrCacheFlowIgnoreChecker implements CacheFlowIgnoreChecker 
     @Override
     public boolean isFlowAllowedToBeCached(InputStreamIdentifier<?> inputStreamIdentifier) {
 
-        if (inputStreamIdentifier instanceof HttpInputStreamIdentifier) {
-            return validate((HttpInputStreamIdentifier) inputStreamIdentifier);
+        if (inputStreamIdentifier instanceof HttpInputStreamIdentifier inputStreamIdentifier1) {
+            return validate(inputStreamIdentifier1);
         } else {
             // We don't handle this flow, so we don't disallow it
             return true;

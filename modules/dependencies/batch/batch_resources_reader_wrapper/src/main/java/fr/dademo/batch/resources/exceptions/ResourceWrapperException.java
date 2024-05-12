@@ -6,8 +6,11 @@
 
 package fr.dademo.batch.resources.exceptions;
 
+import java.io.Serial;
+
 public abstract class ResourceWrapperException extends RuntimeException {
 
+    @Serial
     private static final long serialVersionUID = -7218270755909144932L;
 
     protected ResourceWrapperException(String message) {

@@ -6,11 +6,14 @@
 
 package fr.dademo.supervision.dependencies.backends.postgresql.repository.exceptions;
 
+import java.io.Serial;
+
 /**
  * @author dademo
  */
 public class QueryError extends RuntimeException {
 
+    @Serial
     private static final long serialVersionUID = 2441792896539953973L;
 
     public QueryError() {

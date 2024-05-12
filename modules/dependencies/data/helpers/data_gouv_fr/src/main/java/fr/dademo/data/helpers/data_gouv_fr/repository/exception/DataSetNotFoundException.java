@@ -9,11 +9,14 @@ package fr.dademo.data.helpers.data_gouv_fr.repository.exception;
 import fr.dademo.reader.http.repository.exception.BaseHttpQueryException;
 import jakarta.annotation.Nonnull;
 
+import java.io.Serial;
+
 /**
  * @author dademo
  */
 public class DataSetNotFoundException extends BaseHttpQueryException {
 
+    @Serial
     private static final long serialVersionUID = -2396308059854053152L;
 
     public DataSetNotFoundException(@Nonnull String dataSetTitle, @Nonnull BaseHttpQueryException cause) {

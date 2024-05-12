@@ -11,12 +11,15 @@ import fr.dademo.data.generic.stream_definitions.exception.InputStreamIdentifier
 import jakarta.annotation.Nonnull;
 import lombok.Getter;
 
+import java.io.Serial;
+
 /**
  * @author dademo
  */
 @Getter
 public class InputStreamHashValidationException extends InputStreamIdentifierValidationException {
 
+    @Serial
     private static final long serialVersionUID = -1046499253110187995L;
 
     @Nonnull

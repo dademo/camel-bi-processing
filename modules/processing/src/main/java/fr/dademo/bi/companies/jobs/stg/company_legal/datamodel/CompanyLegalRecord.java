@@ -9,12 +9,15 @@ package fr.dademo.bi.companies.jobs.stg.company_legal.datamodel;
 import jakarta.annotation.Nonnull;
 import org.jooq.impl.CustomRecord;
 
+import java.io.Serial;
+
 /**
  * @author dademo
  */
 @SuppressWarnings("java:S110")
 public class CompanyLegalRecord extends CustomRecord<CompanyLegalRecord> {
 
+    @Serial
     private static final long serialVersionUID = 2527877930137449653L;
 
     public CompanyLegalRecord(@Nonnull CompanyLegalTable table) {

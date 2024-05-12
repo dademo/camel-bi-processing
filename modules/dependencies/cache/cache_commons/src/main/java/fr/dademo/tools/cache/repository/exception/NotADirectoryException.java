@@ -6,6 +6,7 @@
 
 package fr.dademo.tools.cache.repository.exception;
 
+import java.io.Serial;
 import java.net.URI;
 
 /**
@@ -13,6 +14,7 @@ import java.net.URI;
  */
 public class NotADirectoryException extends RuntimeException {
 
+    @Serial
     private static final long serialVersionUID = -1347099597070844462L;
 
     public NotADirectoryException(URI uri) {

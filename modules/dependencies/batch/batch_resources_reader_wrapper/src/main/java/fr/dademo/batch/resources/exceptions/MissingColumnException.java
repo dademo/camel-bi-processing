@@ -8,8 +8,11 @@ package fr.dademo.batch.resources.exceptions;
 
 import jakarta.validation.constraints.Min;
 
+import java.io.Serial;
+
 public class MissingColumnException extends ResourceWrapperException {
 
+    @Serial
     private static final long serialVersionUID = -2966385346119596618L;
 
 

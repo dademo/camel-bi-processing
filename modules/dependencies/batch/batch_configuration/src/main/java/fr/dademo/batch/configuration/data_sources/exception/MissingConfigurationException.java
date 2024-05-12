@@ -6,11 +6,14 @@
 
 package fr.dademo.batch.configuration.data_sources.exception;
 
+import java.io.Serial;
+
 /**
  * @author dademo
  */
 public abstract class MissingConfigurationException extends RuntimeException {
 
+    @Serial
     private static final long serialVersionUID = -3189249394504823141L;
 
     protected MissingConfigurationException(String elementName, String missingKey) {

@@ -6,6 +6,7 @@
 
 package fr.dademo.batch.beans.jdbc.tools.exception;
 
+import java.io.Serial;
 import java.util.function.Supplier;
 
 /**
@@ -13,6 +14,7 @@ import java.util.function.Supplier;
  */
 public class MissingMigrationPathException extends RuntimeException {
 
+    @Serial
     private static final long serialVersionUID = 8477372149460991444L;
 
     public MissingMigrationPathException(String dataSourceName) {

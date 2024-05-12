@@ -14,8 +14,11 @@ package fr.dademo.batch.tools.batch.job.exceptions;
 
 import fr.dademo.batch.tools.batch.job.BaseChunkedJob;
 
+import java.io.Serial;
+
 public class MissingJdbcDataSource extends RuntimeException {
 
+    @Serial
     private static final long serialVersionUID = 3943516555210855477L;
 
     private MissingJdbcDataSource(String refName, Class<? extends BaseChunkedJob> clazz) {

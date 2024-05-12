@@ -9,12 +9,16 @@ package fr.dademo.supervision.dependencies.persistence.services.exceptions;
 import fr.dademo.supervision.dependencies.backends.model.shared.DataBackendDescription;
 import jakarta.annotation.Nonnull;
 
+import java.io.Serial;
+
 /**
  * @author dademo
  */
 public class InvalidDataBackendDescriptionType extends RuntimeException {
 
+    @Serial
     private static final long serialVersionUID = 3998704389580793384L;
+
     private static final String EXCEPTION_TEXT_TEMPLATE = "You provided an instance of <%s> while an instance of <%s> was expected based on the [backendKind] value";
 
     public InvalidDataBackendDescriptionType(@Nonnull Class<? extends DataBackendDescription> expectedClass,

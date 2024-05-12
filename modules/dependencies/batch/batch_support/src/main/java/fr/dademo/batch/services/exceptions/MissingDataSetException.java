@@ -6,8 +6,11 @@
 
 package fr.dademo.batch.services.exceptions;
 
+import java.io.Serial;
+
 public class MissingDataSetException extends RuntimeException {
 
+    @Serial
     private static final long serialVersionUID = 9070873284360395744L;
 
     private MissingDataSetException(String message) {

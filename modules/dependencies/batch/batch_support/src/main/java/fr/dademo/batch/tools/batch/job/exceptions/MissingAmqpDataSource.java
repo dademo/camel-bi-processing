@@ -14,8 +14,11 @@ package fr.dademo.batch.tools.batch.job.exceptions;
 
 import fr.dademo.batch.tools.batch.job.BaseChunkedJob;
 
+import java.io.Serial;
+
 public class MissingAmqpDataSource extends RuntimeException {
 
+    @Serial
     private static final long serialVersionUID = 2362583254535190022L;
 
     private MissingAmqpDataSource(String refName, Class<? extends BaseChunkedJob> clazz) {

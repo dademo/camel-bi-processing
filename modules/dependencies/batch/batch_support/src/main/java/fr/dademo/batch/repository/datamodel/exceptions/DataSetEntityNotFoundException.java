@@ -6,8 +6,11 @@
 
 package fr.dademo.batch.repository.datamodel.exceptions;
 
+import java.io.Serial;
+
 public class DataSetEntityNotFoundException extends RuntimeException {
 
+    @Serial
     private static final long serialVersionUID = -1203957383446069332L;
 
     public DataSetEntityNotFoundException() {

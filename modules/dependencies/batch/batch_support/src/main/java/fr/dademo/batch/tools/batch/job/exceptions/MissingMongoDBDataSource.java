@@ -14,8 +14,11 @@ package fr.dademo.batch.tools.batch.job.exceptions;
 
 import fr.dademo.batch.tools.batch.job.BaseChunkedJob;
 
+import java.io.Serial;
+
 public class MissingMongoDBDataSource extends RuntimeException {
 
+    @Serial
     private static final long serialVersionUID = 877723797788251132L;
 
     private MissingMongoDBDataSource(String refName, Class<? extends BaseChunkedJob> clazz) {

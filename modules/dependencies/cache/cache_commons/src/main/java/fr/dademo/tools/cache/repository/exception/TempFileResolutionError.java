@@ -6,10 +6,12 @@
 
 package fr.dademo.tools.cache.repository.exception;
 
+import java.io.Serial;
 import java.net.URI;
 
 public class TempFileResolutionError extends RuntimeException {
 
+    @Serial
     private static final long serialVersionUID = -1193765382704971792L;
 
     public TempFileResolutionError(URI fileUri) {

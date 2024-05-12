@@ -6,8 +6,11 @@
 
 package fr.dademo.batch.repository.datamodel.exceptions;
 
+import java.io.Serial;
+
 public class DataSetEntityRecordMapperInvalidStateValue extends RuntimeException {
 
+    @Serial
     private static final long serialVersionUID = 7580056720820655108L;
 
     public DataSetEntityRecordMapperInvalidStateValue(String value) {

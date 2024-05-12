@@ -6,11 +6,14 @@
 
 package fr.dademo.batch.configuration.helpers.exception;
 
+import java.io.Serial;
+
 /**
  * @author dademo
  */
 public class UnsupportedExchangeTypeException extends RuntimeException {
 
+    @Serial
     private static final long serialVersionUID = 6931826922384183235L;
 
     public UnsupportedExchangeTypeException(String exchangeType) {

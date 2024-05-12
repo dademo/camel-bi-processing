@@ -11,6 +11,7 @@ import org.jooq.TableField;
 import org.jooq.impl.CustomTable;
 import org.jooq.impl.SQLDataType;
 
+import java.io.Serial;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -26,7 +27,10 @@ public class AssociationWaldecTable extends CustomTable<AssociationWaldecRecord>
     public static final String TABLE_NAME = "association_waldec";
     public static final String DEFAULT_TABLE_SCHEMA = "stg";
     public static final AssociationWaldecTable DEFAULT_ASSOCIATION_WALDEC_TABLE = new AssociationWaldecTable(DEFAULT_TABLE_SCHEMA);
+
+    @Serial
     private static final long serialVersionUID = -3509123209084990428L;
+
     public final TableField<AssociationWaldecRecord, String> FIELD_ASSOCIATION_ID = createField(name("id"), SQLDataType.VARCHAR(14), this);
     public final TableField<AssociationWaldecRecord, String> FIELD_ASSOCIATION_ID_EX = createField(name("id_ex"), SQLDataType.VARCHAR(10), this);
     public final TableField<AssociationWaldecRecord, String> FIELD_ASSOCIATION_SIRET = createField(name("siret"), SQLDataType.VARCHAR(14), this);

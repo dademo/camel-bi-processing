@@ -14,11 +14,14 @@ package fr.dademo.batch.tools.batch.job.exceptions;
 
 import fr.dademo.batch.tools.batch.job.tasklets.DataSetResourceQueryTasklet;
 
+import java.io.Serial;
+
 /**
  * @author dademo
  */
 public class MissingContextDataSetResource extends RuntimeException {
 
+    @Serial
     private static final long serialVersionUID = 4769326201545858667L;
 
     public MissingContextDataSetResource() {

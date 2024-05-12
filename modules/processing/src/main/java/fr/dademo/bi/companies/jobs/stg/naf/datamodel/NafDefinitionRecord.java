@@ -9,12 +9,15 @@ package fr.dademo.bi.companies.jobs.stg.naf.datamodel;
 import jakarta.annotation.Nonnull;
 import org.jooq.impl.CustomRecord;
 
+import java.io.Serial;
+
 /**
  * @author dademo
  */
 @SuppressWarnings("java:S110")
 public class NafDefinitionRecord extends CustomRecord<NafDefinitionRecord> {
 
+    @Serial
     private static final long serialVersionUID = -3661300836662672014L;
 
     public NafDefinitionRecord(@Nonnull NafDefinitionTable table) {

@@ -40,6 +40,7 @@ public class ApifrDatesDeserializer extends StdDeserializer<LocalDateTime> {
 
     public static final DateTimeFormatter DATE_FORMAT_WITH_MICROSECONDS = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnZZZZZ");
     public static final DateTimeFormatter DATE_FORMAT_SIMPLE = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZZZZZ");
+
     @Serial
     private static final long serialVersionUID = 4036858873660699102L;
 

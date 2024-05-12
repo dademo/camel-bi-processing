@@ -11,6 +11,7 @@ import org.jooq.TableField;
 import org.jooq.impl.CustomTable;
 import org.jooq.impl.SQLDataType;
 
+import java.io.Serial;
 import java.time.LocalDate;
 
 import static org.jooq.impl.DSL.name;
@@ -25,7 +26,10 @@ public class CompanyLegalHistoryTable extends CustomTable<CompanyLegalHistoryRec
     public static final String TABLE_NAME = "company_legal_unit_history";
     public static final String DEFAULT_TABLE_SCHEMA = "stg";
     public static final CompanyLegalHistoryTable DEFAULT_COMPANY_LEGAL_HISTORY_TABLE = new CompanyLegalHistoryTable(DEFAULT_TABLE_SCHEMA);
+
+    @Serial
     private static final long serialVersionUID = 4298493080112132399L;
+
     public final TableField<CompanyLegalHistoryRecord, String> FIELD_COMPANY_LEGAL_HISTORY_SIREN = createField(name("siren"), SQLDataType.VARCHAR(9), this);
     public final TableField<CompanyLegalHistoryRecord, LocalDate> FIELD_COMPANY_LEGAL_HISTORY_END_DATE = createField(name("end_date"), SQLDataType.LOCALDATE, this);
     public final TableField<CompanyLegalHistoryRecord, LocalDate> FIELD_COMPANY_LEGAL_HISTORY_BEGIN_DATE = createField(name("begin_date"), SQLDataType.LOCALDATE, this);

@@ -14,6 +14,8 @@ import jakarta.annotation.Nonnull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
+import java.io.Serial;
+
 public abstract class BaseCacheIndexRepository<T extends InputStreamIdentifier<?>> implements CacheIndexRepository<T> {
 
     private final LockFactory lockFactory;
@@ -30,6 +32,7 @@ public abstract class BaseCacheIndexRepository<T extends InputStreamIdentifier<?
     @AllArgsConstructor(access = AccessLevel.PRIVATE, staticName = "of")
     private static final class IndexLock implements Cacheable {
 
+        @Serial
         private static final long serialVersionUID = -6523259374758503225L;
 
         private final transient BaseCacheIndexRepository<?> parentRef;

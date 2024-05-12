@@ -10,6 +10,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import java.io.Serial;
 import java.util.Date;
 
 /**
@@ -27,6 +28,7 @@ import java.util.Date;
 @Table(name = "data_backend_state_execution")
 public class DataBackendStateExecutionEntity implements BaseEntity {
 
+    @Serial
     private static final long serialVersionUID = -4433439263893655592L;
 
     @Id

@@ -6,11 +6,14 @@
 
 package fr.dademo.supervision.job.persistence_service.consumer.exception;
 
+import java.io.Serial;
+
 /**
  * @author dademo
  */
 public class InconsistentMessageException extends RuntimeException {
 
+    @Serial
     private static final long serialVersionUID = 2998580592176883783L;
 
     private InconsistentMessageException(String message) {

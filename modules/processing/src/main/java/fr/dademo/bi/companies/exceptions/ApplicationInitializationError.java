@@ -6,8 +6,11 @@
 
 package fr.dademo.bi.companies.exceptions;
 
+import java.io.Serial;
+
 public class ApplicationInitializationError extends RuntimeException {
 
+    @Serial
     private static final long serialVersionUID = -883358055237652570L;
 
     public ApplicationInitializationError(String message) {

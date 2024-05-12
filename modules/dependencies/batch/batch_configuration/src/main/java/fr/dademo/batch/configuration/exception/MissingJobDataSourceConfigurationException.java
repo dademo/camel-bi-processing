@@ -6,10 +6,12 @@
 
 package fr.dademo.batch.configuration.exception;
 
+import java.io.Serial;
 import java.util.function.Supplier;
 
 public class MissingJobDataSourceConfigurationException extends RuntimeException {
 
+    @Serial
     private static final long serialVersionUID = 7833511717249569579L;
 
     public MissingJobDataSourceConfigurationException(String jobName) {

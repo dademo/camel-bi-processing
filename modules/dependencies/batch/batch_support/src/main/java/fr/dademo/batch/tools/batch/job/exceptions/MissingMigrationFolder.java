@@ -14,8 +14,11 @@ package fr.dademo.batch.tools.batch.job.exceptions;
 
 import fr.dademo.batch.tools.batch.job.BaseChunkedJob;
 
+import java.io.Serial;
+
 public class MissingMigrationFolder extends RuntimeException {
 
+    @Serial
     private static final long serialVersionUID = -6694725778419195945L;
 
     public MissingMigrationFolder(Class<? extends BaseChunkedJob> clazz) {

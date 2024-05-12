@@ -13,6 +13,7 @@ import jakarta.annotation.Nullable;
 import lombok.*;
 
 import java.io.File;
+import java.io.Serial;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -26,6 +27,7 @@ import java.nio.charset.StandardCharsets;
 @Builder
 public class FileInputStreamIdentifier implements InputStreamIdentifier<File> {
 
+    @Serial
     private static final long serialVersionUID = 6946849889586524778L;
 
     @Nonnull

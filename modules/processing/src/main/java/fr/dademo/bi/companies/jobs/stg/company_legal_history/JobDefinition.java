@@ -34,6 +34,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import java.util.Comparator;
 
 import static fr.dademo.batch.beans.BeanValues.BATCH_DATA_SOURCE_TRANSACTION_MANAGER_BEAN_NAME;
+import static fr.dademo.batch.beans.BeanValues.STG_DATA_SOURCE_NAME;
 
 /**
  * @author dademo
@@ -43,8 +44,8 @@ import static fr.dademo.batch.beans.BeanValues.BATCH_DATA_SOURCE_TRANSACTION_MAN
 public class JobDefinition extends AbstractApplicationStgJob {
 
     public static final String COMPANY_LEGAL_HISTORY_CONFIG_JOB_NAME = "company-legal-history";
-    public static final String COMPANY_LEGAL_HISTORY_NORMALIZED_CONFIG_JOB_NAME = "company_legal_history";
-    public static final String COMPANY_LEGAL_HISTORY_JOB_NAME = "stg_" + COMPANY_LEGAL_HISTORY_NORMALIZED_CONFIG_JOB_NAME;
+    public static final String COMPANY_LEGAL_HISTORY_NORMALIZED_CONFIG_JOB_NAME = "CompanyLegalHistory";
+    public static final String COMPANY_LEGAL_HISTORY_JOB_NAME = STG_DATA_SOURCE_NAME + COMPANY_LEGAL_HISTORY_NORMALIZED_CONFIG_JOB_NAME;
     public static final String COMPANY_LEGAL_HISTORY_MIGRATION_FOLDER = "stg/company_legal_history";
 
     private static final String DATA_TITLE_PREFIX = "Sirene : Fichier StockUniteLegaleHistorique ";

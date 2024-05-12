@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public final class CacheBeanConstants {
 
     public static final String DEFAULT_TEMP_BUCKET_NAME = "dev-temp";
-    public static final String MINIO_STREAM_THREAD_POOL_BEAN = "MINIO_STREAM_THREAD_POOL_BEAN";
+    public static final String MINIO_STREAM_THREAD_POOL_BEAN = "minioStreamThreadPool";
     public static final int MINIO_STREAM_THREAD_POOL_SIZE = 10;
     public static final String MINIO_STREAM_THREADS_NAME_FORMAT = "minio-stream-%d";
 

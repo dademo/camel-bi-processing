@@ -43,6 +43,7 @@ public class AssociationWaldecItemReader extends StgJobItemReader<WrappedRowReso
         this.dataGouvFrDataQuerierService = dataGouvFrDataQuerierService;
     }
 
+    @Override
     @SneakyThrows
     public void open(@Nonnull ExecutionContext executionContext) {
 

@@ -14,6 +14,7 @@ import jakarta.validation.constraints.Min;
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import java.io.Serial;
 import java.util.Date;
 
 /**
@@ -39,6 +40,7 @@ import java.util.Date;
 )
 public class DataBackendDatabaseSchemaTableStatisticsEntity implements BaseEntity {
 
+    @Serial
     private static final long serialVersionUID = 5917195842212780744L;
 
     @Id

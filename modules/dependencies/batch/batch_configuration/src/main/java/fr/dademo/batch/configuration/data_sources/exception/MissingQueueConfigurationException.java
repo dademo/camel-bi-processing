@@ -6,6 +6,7 @@
 
 package fr.dademo.batch.configuration.data_sources.exception;
 
+import java.io.Serial;
 import java.util.function.Supplier;
 
 /**
@@ -13,6 +14,7 @@ import java.util.function.Supplier;
  */
 public class MissingQueueConfigurationException extends MissingConfigurationException {
 
+    @Serial
     private static final long serialVersionUID = 611587544600988566L;
 
     private static final String ELEMENT_NAME = "queue";

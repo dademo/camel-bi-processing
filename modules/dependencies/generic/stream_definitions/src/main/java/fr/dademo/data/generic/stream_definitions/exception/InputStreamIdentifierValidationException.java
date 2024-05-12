@@ -7,12 +7,14 @@
 package fr.dademo.data.generic.stream_definitions.exception;
 
 import java.io.IOException;
+import java.io.Serial;
 
 /**
  * @author dademo
  */
 public abstract class InputStreamIdentifierValidationException extends IOException {
 
+    @Serial
     private static final long serialVersionUID = -3976056791520761440L;
 
     protected InputStreamIdentifierValidationException() {

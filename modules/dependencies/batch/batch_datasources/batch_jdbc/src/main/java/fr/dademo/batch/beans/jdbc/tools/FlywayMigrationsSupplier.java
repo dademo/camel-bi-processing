@@ -72,17 +72,13 @@ public class FlywayMigrationsSupplier {
     @Nullable
     private static String mapSqlDialectToResource(@Nonnull SQLDialect sqlDialect) {
 
-        switch (sqlDialect) {
-            case POSTGRES:
-                return "postgresql";
-            case MARIADB:
-            case MYSQL:
-                return "mysql";
-            case SQLITE:
-                return "sqlite";
-            default:
+        return switch (sqlDialect) {
+            case POSTGRES -> "postgresql";
+            case MARIADB, MYSQL -> "mysql";
+            case SQLITE -> "sqlite";
+            default ->
                 // We don't support any other kind of database
-                return null;
-        }
+                null;
+        };
     }
 }

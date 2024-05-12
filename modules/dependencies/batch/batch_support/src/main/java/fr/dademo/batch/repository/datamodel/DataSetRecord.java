@@ -9,12 +9,15 @@ package fr.dademo.batch.repository.datamodel;
 import jakarta.annotation.Nonnull;
 import org.jooq.impl.CustomRecord;
 
+import java.io.Serial;
+
 /**
  * @author dademo
  */
 @SuppressWarnings("java:S110")
 public class DataSetRecord extends CustomRecord<DataSetRecord> {
 
+    @Serial
     private static final long serialVersionUID = -7439817703000207620L;
 
     @SuppressWarnings("unused") // Required by Jooq

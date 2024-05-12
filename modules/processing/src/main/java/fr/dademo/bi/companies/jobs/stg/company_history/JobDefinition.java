@@ -34,6 +34,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import java.util.Comparator;
 
 import static fr.dademo.batch.beans.BeanValues.BATCH_DATA_SOURCE_TRANSACTION_MANAGER_BEAN_NAME;
+import static fr.dademo.batch.beans.BeanValues.STG_DATA_SOURCE_NAME;
 
 /**
  * @author dademo
@@ -43,8 +44,8 @@ import static fr.dademo.batch.beans.BeanValues.BATCH_DATA_SOURCE_TRANSACTION_MAN
 public class JobDefinition extends AbstractApplicationStgJob {
 
     public static final String COMPANY_HISTORY_CONFIG_JOB_NAME = "company-history";
-    public static final String COMPANY_HISTORY_NORMALIZED_CONFIG_JOB_NAME = "company_history";
-    public static final String COMPANY_HISTORY_JOB_NAME = "stg_" + COMPANY_HISTORY_NORMALIZED_CONFIG_JOB_NAME;
+    public static final String COMPANY_HISTORY_NORMALIZED_CONFIG_JOB_NAME = "CompanyHistory";
+    public static final String COMPANY_HISTORY_JOB_NAME = STG_DATA_SOURCE_NAME + COMPANY_HISTORY_NORMALIZED_CONFIG_JOB_NAME;
     public static final String COMPANY_HISTORY_MIGRATION_FOLDER = "stg/company_history";
 
     private static final String DATASET_TITLE = "base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret";

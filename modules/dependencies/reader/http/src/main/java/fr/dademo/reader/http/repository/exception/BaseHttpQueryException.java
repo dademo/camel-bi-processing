@@ -16,14 +16,14 @@ import java.net.http.HttpResponse;
 /**
  * @author dademo
  */
+@Getter
 public abstract class BaseHttpQueryException extends RuntimeException {
 
     @Serial
     private static final long serialVersionUID = 5481320755074086222L;
 
     @Nonnull
-    @Getter
-    private final HttpResponse<InputStream> queryResponse;
+    private final transient HttpResponse<InputStream> queryResponse;
 
     protected BaseHttpQueryException(@Nonnull HttpResponse<InputStream> queryResponse) {
         super();

@@ -8,11 +8,14 @@ package fr.dademo.batch.repository.exceptions;
 
 import fr.dademo.batch.repository.DataSetRepository;
 
+import java.io.Serial;
+
 /**
  * @author dademo
  */
 public class NotAnNumericIdentifierException extends RuntimeException {
 
+    @Serial
     private static final long serialVersionUID = -7618898969980265203L;
 
     private static final String MESSAGE_TEMPLATE = "This repository can only work with numeric identifiers and you provided the value [%s]. Please fix it or use another implementation of the [%s] interface.";

@@ -9,12 +9,15 @@ package fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel;
 import jakarta.annotation.Nonnull;
 import org.jooq.impl.CustomRecord;
 
+import java.io.Serial;
+
 /**
  * @author dademo
  */
 @SuppressWarnings("java:S110")
 public class CompanyInheritanceRecord extends CustomRecord<CompanyInheritanceRecord> {
 
+    @Serial
     private static final long serialVersionUID = -2596429405037105257L;
 
     public CompanyInheritanceRecord(@Nonnull CompanyInheritanceTable table) {

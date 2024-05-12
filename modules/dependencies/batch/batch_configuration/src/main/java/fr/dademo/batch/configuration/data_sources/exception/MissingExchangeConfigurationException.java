@@ -6,6 +6,7 @@
 
 package fr.dademo.batch.configuration.data_sources.exception;
 
+import java.io.Serial;
 import java.util.function.Supplier;
 
 /**
@@ -13,6 +14,7 @@ import java.util.function.Supplier;
  */
 public class MissingExchangeConfigurationException extends MissingConfigurationException {
 
+    @Serial
     private static final long serialVersionUID = -7649089570511038630L;
 
     private static final String ELEMENT_NAME = "exchange";

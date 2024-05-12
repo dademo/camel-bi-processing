@@ -13,6 +13,7 @@ import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
 import org.springframework.jdbc.support.SQLExceptionTranslator;
 import org.springframework.stereotype.Component;
 
+import java.io.Serial;
 import java.util.Objects;
 
 /**
@@ -21,6 +22,7 @@ import java.util.Objects;
 @Component
 public class JooqExceptionTranslator extends DefaultExecuteListener {
 
+    @Serial
     private static final long serialVersionUID = 2496937225729975461L;
 
     @Override

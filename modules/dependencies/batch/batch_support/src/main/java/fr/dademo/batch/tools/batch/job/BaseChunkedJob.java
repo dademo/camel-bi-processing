@@ -234,7 +234,6 @@ public abstract class BaseChunkedJob extends BaseSteppedJob {
         final var stepBuilder = new StepBuilder(name, jobRepository)
             .tasklet(tasklet, platformTransactionManager)
             .startLimit(1);
-        // .throttleLimit(1);
         getStepExecutionListeners().forEach(stepBuilder::listener);
         return stepBuilder.build();
     }

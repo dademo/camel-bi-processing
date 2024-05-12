@@ -9,12 +9,15 @@ package fr.dademo.bi.companies.jobs.stg.association.datamodel;
 import jakarta.annotation.Nonnull;
 import org.jooq.impl.CustomRecord;
 
+import java.io.Serial;
+
 /**
  * @author dademo
  */
 @SuppressWarnings("java:S110")
 public class AssociationRecord extends CustomRecord<AssociationRecord> {
 
+    @Serial
     private static final long serialVersionUID = 3007869680725243588L;
 
     public AssociationRecord(@Nonnull AssociationTable table) {

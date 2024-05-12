@@ -91,8 +91,8 @@ public abstract class BaseValidationContext<T extends InputStreamIdentifier<?>> 
                 try {
                     validatorTask.get();
                 } catch (ExecutionException e) {
-                    if (e.getCause() instanceof InputStreamIdentifierValidationException) {
-                        throw (InputStreamIdentifierValidationException) e.getCause();
+                    if (e.getCause() instanceof InputStreamIdentifierValidationException e1) {
+                        throw e1;
                     } else {
                         throw e;
                     }

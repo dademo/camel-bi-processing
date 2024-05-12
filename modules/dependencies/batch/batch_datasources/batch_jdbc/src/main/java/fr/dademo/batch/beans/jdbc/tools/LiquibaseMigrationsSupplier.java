@@ -78,7 +78,6 @@ public class LiquibaseMigrationsSupplier {
                 Optional.ofNullable(databaseCatalog).ifPresent(safeApplyDatabaseOperation(database::setDefaultCatalogName));
 
                 try (final var liquibase = new Liquibase(getChangeLogFile(), new SpringResourceAccessor(resourceLoader), database)) {
-                    // liquibase.update(new Contexts(contexts));
                     final var springLiquibase = new SpringLiquibase();
                     springLiquibase.setShouldRun(true);
                     springLiquibase.setDataSource(dataSource);

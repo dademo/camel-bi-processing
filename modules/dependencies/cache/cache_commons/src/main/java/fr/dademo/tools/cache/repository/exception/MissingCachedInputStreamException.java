@@ -8,11 +8,14 @@ package fr.dademo.tools.cache.repository.exception;
 
 import fr.dademo.data.generic.stream_definitions.InputStreamIdentifier;
 
+import java.io.Serial;
+
 /**
  * @author dademo
  */
 public class MissingCachedInputStreamException extends RuntimeException {
 
+    @Serial
     private static final long serialVersionUID = -1347099597070844462L;
 
     public MissingCachedInputStreamException(InputStreamIdentifier<?> inputStreamIdentifier) {

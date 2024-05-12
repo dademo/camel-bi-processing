@@ -9,12 +9,15 @@ package fr.dademo.bi.companies.jobs.stg.company_history.datamodel;
 import jakarta.annotation.Nonnull;
 import org.jooq.impl.CustomRecord;
 
+import java.io.Serial;
+
 /**
  * @author dademo
  */
 @SuppressWarnings("java:S110")
 public class CompanyHistoryRecord extends CustomRecord<CompanyHistoryRecord> {
 
+    @Serial
     private static final long serialVersionUID = 5054020186151448725L;
 
     public CompanyHistoryRecord(@Nonnull CompanyHistoryTable table) {

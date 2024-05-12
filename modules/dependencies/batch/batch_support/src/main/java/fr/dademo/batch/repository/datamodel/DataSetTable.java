@@ -12,6 +12,7 @@ import org.jooq.*;
 import org.jooq.impl.CustomTable;
 import org.jooq.impl.SQLDataType;
 
+import java.io.Serial;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
@@ -29,7 +30,10 @@ public class DataSetTable extends CustomTable<DataSetRecord> {
     public static final String TABLE_NAME = "dataset";
     public static final String DEFAULT_TABLE_SCHEMA = "public";
     public static final DataSetTable DEFAULT_DATA_SET_TABLE = new DataSetTable(DEFAULT_TABLE_SCHEMA);
+
+    @Serial
     private static final long serialVersionUID = -5796048724824317298L;
+
     public final TableField<DataSetRecord, Long> FIELD_DATA_SET_ID = createField(name("id"), SQLDataType.BIGINT, this);
     public final TableField<DataSetRecord, String> FIELD_DATA_SET_NAME = createField(name("name"), SQLDataType.VARCHAR(255), this);
     public final TableField<DataSetRecord, Long> FIELD_DATA_SET_PARENT = createField(name("parent"), SQLDataType.BIGINT, this);
@@ -82,6 +86,7 @@ public class DataSetTable extends CustomTable<DataSetRecord> {
     @AllArgsConstructor
     private static class DataSetTablePrimaryKey implements UniqueKey<DataSetRecord> {
 
+        @Serial
         private static final long serialVersionUID = -3461312454111219047L;
         private static final String NAME = "id";
 

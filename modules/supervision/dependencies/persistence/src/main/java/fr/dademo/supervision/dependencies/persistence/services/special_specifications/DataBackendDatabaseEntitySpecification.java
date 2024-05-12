@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package fr.dademo.supervision.dependencies.persistence.services.specialSpecifications;
+package fr.dademo.supervision.dependencies.persistence.services.special_specifications;
 
 import fr.dademo.supervision.dependencies.entities.database.database.DataBackendDatabaseEntity;
 import jakarta.annotation.Nonnull;
@@ -15,6 +15,7 @@ import jakarta.persistence.criteria.Root;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.io.Serial;
 import java.util.Optional;
 
 /**
@@ -23,6 +24,7 @@ import java.util.Optional;
 @AllArgsConstructor(staticName = "forEntity")
 public class DataBackendDatabaseEntitySpecification implements Specification<DataBackendDatabaseEntity> {
 
+    @Serial
     private static final long serialVersionUID = -2747709588535048910L;
 
     private static final String FIELD_NAME = "name";

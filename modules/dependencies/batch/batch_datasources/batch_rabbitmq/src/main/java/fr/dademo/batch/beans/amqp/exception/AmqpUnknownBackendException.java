@@ -6,8 +6,11 @@
 
 package fr.dademo.batch.beans.amqp.exception;
 
+import java.io.Serial;
+
 public class AmqpUnknownBackendException extends RuntimeException {
 
+    @Serial
     private static final long serialVersionUID = 3956233356285015351L;
 
     public AmqpUnknownBackendException(String backendName) {

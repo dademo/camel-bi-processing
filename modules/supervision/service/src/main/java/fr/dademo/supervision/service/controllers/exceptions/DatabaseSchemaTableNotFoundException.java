@@ -12,6 +12,7 @@ import org.zalando.problem.Status;
 import org.zalando.problem.StatusType;
 import org.zalando.problem.ThrowableProblem;
 
+import java.io.Serial;
 import java.text.MessageFormat;
 import java.util.Map;
 
@@ -21,6 +22,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class DatabaseSchemaTableNotFoundException extends ThrowableProblem {
 
+    @Serial
     private static final long serialVersionUID = 2207706126538012379L;
 
     @Nonnull

@@ -33,7 +33,7 @@ import fr.dademo.supervision.dependencies.persistence.services.mappers.database.
 import fr.dademo.supervision.dependencies.persistence.services.mappers.database.databaseview.DataBackendDatabaseSchemaViewEntityStatisticsMapper;
 import fr.dademo.supervision.dependencies.persistence.services.mappers.database.replicationpeer.DataBackendDatabaseReplicationPeerEntityMapper;
 import fr.dademo.supervision.dependencies.persistence.services.mappers.database.replicationpeer.DataBackendDatabaseReplicationPeerStatisticsEntityMapper;
-import fr.dademo.supervision.dependencies.persistence.services.specialSpecifications.DataBackendDatabaseEntitySpecification;
+import fr.dademo.supervision.dependencies.persistence.services.special_specifications.DataBackendDatabaseEntitySpecification;
 import fr.dademo.supervision.dependencies.repositories.*;
 import fr.dademo.supervision.dependencies.repositories.database.*;
 import jakarta.annotation.Nonnull;
@@ -47,6 +47,7 @@ import java.util.stream.StreamSupport;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Service
 public class DatabaseBackendMappingServiceImpl extends AbstractGenericDataBackendMappingService implements DatabaseBackendMappingService {
 

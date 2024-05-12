@@ -34,6 +34,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import java.util.Comparator;
 
 import static fr.dademo.batch.beans.BeanValues.BATCH_DATA_SOURCE_TRANSACTION_MANAGER_BEAN_NAME;
+import static fr.dademo.batch.beans.BeanValues.STG_DATA_SOURCE_NAME;
 
 /**
  * @author dademo
@@ -43,8 +44,8 @@ import static fr.dademo.batch.beans.BeanValues.BATCH_DATA_SOURCE_TRANSACTION_MAN
 public class JobDefinition extends AbstractApplicationStgJob {
 
     public static final String NAF_CONFIG_JOB_NAME = "naf";
-    public static final String NAF_NORMALIZED_CONFIG_JOB_NAME = "naf";
-    public static final String NAF_JOB_NAME = "stg_" + NAF_NORMALIZED_CONFIG_JOB_NAME;
+    public static final String NAF_NORMALIZED_CONFIG_JOB_NAME = "Naf";
+    public static final String NAF_JOB_NAME = STG_DATA_SOURCE_NAME + NAF_NORMALIZED_CONFIG_JOB_NAME;
     public static final String NAF_MIGRATION_FOLDER = "stg/naf";
 
     private static final String DATASET_TITLE = "nomenclature-dactivites-francaise-naf-rev-2-code-ape";

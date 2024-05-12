@@ -43,6 +43,7 @@ public class CompanyHistoryItemReader extends StgJobItemReader<WrappedRowResourc
         this.dataGouvFrDataQuerierService = dataGouvFrDataQuerierService;
     }
 
+    @Override
     @SneakyThrows
     public void open(@Nonnull ExecutionContext executionContext) {
 
