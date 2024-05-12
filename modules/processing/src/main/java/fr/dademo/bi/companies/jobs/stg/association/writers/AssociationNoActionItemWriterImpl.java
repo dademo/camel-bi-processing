@@ -18,6 +18,7 @@ import static fr.dademo.bi.companies.jobs.stg.association.JobDefinition.ASSOCIAT
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Component
 @ConditionalOnProperty(
     value = CONFIG_JOBS_BASE + "." + ASSOCIATION_CONFIG_JOB_NAME + "." + CONFIG_JOB_OUTPUT_DATA_SOURCE + "." + CONFIG_WRITER_TYPE,

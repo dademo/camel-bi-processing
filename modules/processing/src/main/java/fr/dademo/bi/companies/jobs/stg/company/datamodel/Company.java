@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -27,7 +28,7 @@ public class Company {
     public static final String CSV_FIELD_COMPANY_SIREN = "siren";
     public static final String CSV_FIELD_COMPANY_NIC = "nic";
     public static final String CSV_FIELD_COMPANY_SIRET = "siret";
-    public static final String CSV_FIELD_COMPANY_COMPANY_DIFFUSION_STATUT = "statutDiffusionEtablissement";
+    public static final String CSV_FIELD_COMPANY_COMPANY_DIFFUSION_STATUS = "statutDiffusionEtablissement";
     public static final String CSV_FIELD_COMPANY_COMPANY_CREATION_DATE = "dateCreationEtablissement";
     public static final String CSV_FIELD_COMPANY_COMPANY_STAFF_NUMBER_RANGE = "trancheEffectifsEtablissement";
     public static final String CSV_FIELD_COMPANY_COMPANY_STAFF_NUMBER_YEAR = "anneeEffectifsEtablissement";
@@ -82,7 +83,7 @@ public class Company {
         CSV_FIELD_COMPANY_SIREN,
         CSV_FIELD_COMPANY_NIC,
         CSV_FIELD_COMPANY_SIRET,
-        CSV_FIELD_COMPANY_COMPANY_DIFFUSION_STATUT,
+        CSV_FIELD_COMPANY_COMPANY_DIFFUSION_STATUS,
         CSV_FIELD_COMPANY_COMPANY_CREATION_DATE,
         CSV_FIELD_COMPANY_COMPANY_STAFF_NUMBER_RANGE,
         CSV_FIELD_COMPANY_COMPANY_STAFF_NUMBER_YEAR,
@@ -195,6 +196,7 @@ public class Company {
     private String companyPrincipalActivityName;
     private String companyIsEmployer;
 
+    @SuppressWarnings("unused")
     @AllArgsConstructor
     @Getter
     @Builder

@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -130,6 +131,7 @@ public class CompanyLegal {
     private String isSocialAndSolidarityEconomy;
     private String isEmployer;
 
+    @SuppressWarnings("unused")
     @AllArgsConstructor
     @Getter
     @Builder

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Component
 public class NafDefinitionItemProcessor implements ItemProcessor<NafDefinitionContainer, NafDefinition> {
 

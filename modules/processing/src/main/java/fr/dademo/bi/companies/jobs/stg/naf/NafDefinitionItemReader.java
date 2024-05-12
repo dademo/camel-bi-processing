@@ -25,6 +25,7 @@ import java.util.List;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Slf4j
 @Component
 public class NafDefinitionItemReader extends StgJobItemReader<NafDefinitionContainer> {

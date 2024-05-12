@@ -19,6 +19,7 @@ import static fr.dademo.bi.companies.jobs.stg.association_waldec.datamodel.Assoc
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Component
 public class AssociationWaldecItemMapper implements ItemProcessor<WrappedRowResource, AssociationWaldec> {
 

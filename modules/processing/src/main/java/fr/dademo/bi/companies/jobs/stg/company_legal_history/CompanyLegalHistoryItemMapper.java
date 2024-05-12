@@ -19,6 +19,7 @@ import static fr.dademo.bi.companies.jobs.stg.company_legal_history.datamodel.Co
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Component
 public class CompanyLegalHistoryItemMapper implements ItemProcessor<WrappedRowResource, CompanyLegalHistory> {
 

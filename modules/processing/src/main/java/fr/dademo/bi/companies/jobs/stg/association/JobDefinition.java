@@ -39,7 +39,7 @@ import static fr.dademo.batch.beans.BeanValues.STG_DATA_SOURCE_NAME;
 /**
  * @author dademo
  */
-@SuppressWarnings({"java:S107", "java:S110"})
+@SuppressWarnings({"java:S107", "java:S110", "unused"})
 @Component(JobDefinition.ASSOCIATION_JOB_NAME)
 public class JobDefinition extends AbstractApplicationStgJob {
 

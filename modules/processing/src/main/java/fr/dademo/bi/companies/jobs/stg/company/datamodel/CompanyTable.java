@@ -34,7 +34,7 @@ public class CompanyTable extends CustomTable<CompanyRecord> {
     public final TableField<CompanyRecord, String> FIELD_SIREN = createField(name("siren"), SQLDataType.VARCHAR(9), this);
     public final TableField<CompanyRecord, String> FIELD_NIC = createField(name("nic"), SQLDataType.VARCHAR(5), this);
     public final TableField<CompanyRecord, String> FIELD_SIRET = createField(name("siret"), SQLDataType.VARCHAR(14), this);
-    public final TableField<CompanyRecord, String> FIELD_COMPANY_DIFFUSION_STATUT = createField(name("company_diffusion_statut"), SQLDataType.VARCHAR(1), this);
+    public final TableField<CompanyRecord, String> FIELD_COMPANY_DIFFUSION_STATUS = createField(name("company_diffusion_statut"), SQLDataType.VARCHAR(1), this);
     public final TableField<CompanyRecord, LocalDate> FIELD_COMPANY_CREATION_DATE = createField(name("company_creation_date"), SQLDataType.LOCALDATE, this);
     public final TableField<CompanyRecord, String> FIELD_COMPANY_STAFF_NUMBER_RANGE = createField(name("company_staff_number_range"), SQLDataType.VARCHAR(2), this);
     public final TableField<CompanyRecord, Integer> FIELD_COMPANY_STAFF_NUMBER_YEAR = createField(name("company_staff_number_year"), SQLDataType.INTEGER, this);

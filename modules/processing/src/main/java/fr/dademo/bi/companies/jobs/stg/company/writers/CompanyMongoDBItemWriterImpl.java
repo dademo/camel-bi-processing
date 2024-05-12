@@ -12,6 +12,7 @@ import fr.dademo.batch.configuration.exception.MissingJobDataSourceConfiguration
 import fr.dademo.bi.companies.jobs.stg.company.CompanyItemWriter;
 import fr.dademo.bi.companies.jobs.stg.company.datamodel.Company;
 import fr.dademo.bi.companies.shared.BaseJobWriter;
+import jakarta.annotation.Nonnull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.Chunk;
@@ -26,6 +27,7 @@ import static fr.dademo.bi.companies.jobs.stg.company.JobDefinition.COMPANY_JOB_
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Slf4j
 @Component
 @ConditionalOnProperty(
@@ -38,8 +40,8 @@ public class CompanyMongoDBItemWriterImpl extends BaseJobWriter implements Compa
 
     private final MongoTemplate mongoTemplate;
 
-    public CompanyMongoDBItemWriterImpl(MongoTemplateFactory mongoTemplateFactory,
-                                        BatchConfiguration batchConfiguration) {
+    public CompanyMongoDBItemWriterImpl(@Nonnull MongoTemplateFactory mongoTemplateFactory,
+                                        @Nonnull BatchConfiguration batchConfiguration) {
 
         this.mongoTemplate = mongoTemplateFactory.getTemplateForConnection(
             getJobOutputDataSourceName(COMPANY_CONFIG_JOB_NAME, batchConfiguration)

@@ -30,7 +30,7 @@ public class ApplicationParsedArguments {
     private List<String> only;
 
     public static void help(@Nonnull String messagePre) {
-        log.info(messagePre + "\n" + help());
+        log.info("{}\n{}", messagePre, help());
     }
 
     public static String help() {

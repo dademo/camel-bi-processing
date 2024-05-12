@@ -18,6 +18,7 @@ import static fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel.Comp
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Component
 public class CompanyInheritanceItemMapper implements ItemProcessor<WrappedRowResource, CompanyInheritance> {
 

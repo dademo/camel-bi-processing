@@ -65,9 +65,9 @@ public class AssociationWaldecTable extends CustomTable<AssociationWaldecRecord>
     public final TableField<AssociationWaldecRecord, String> FIELD_ASSOCIATION_GESTION_FORWARD = createField(name("gestion_forward"), SQLDataType.VARCHAR(32), this);
     public final TableField<AssociationWaldecRecord, String> FIELD_ASSOCIATION_GESTION_COUNTRY = createField(name("gestion_country"), SQLDataType.VARCHAR(38), this);
     public final TableField<AssociationWaldecRecord, String> FIELD_ASSOCIATION_LEADER_CIVILITY = createField(name("leader_civility"), SQLDataType.VARCHAR(2), this);
-    public final TableField<AssociationWaldecRecord, String> FIELD_ASSOCIATION_PHONE = createField(name("phone"), SQLDataType.VARCHAR(10), this);
+    // public final TableField<AssociationWaldecRecord, String> FIELD_ASSOCIATION_PHONE = createField(name("phone"), SQLDataType.VARCHAR(10), this);
     public final TableField<AssociationWaldecRecord, String> FIELD_ASSOCIATION_WEBSITE = createField(name("website"), SQLDataType.VARCHAR(64), this);
-    public final TableField<AssociationWaldecRecord, String> FIELD_ASSOCIATION_EMAIL = createField(name("email"), SQLDataType.VARCHAR(64), this);
+    // public final TableField<AssociationWaldecRecord, String> FIELD_ASSOCIATION_EMAIL = createField(name("email"), SQLDataType.VARCHAR(64), this);
     public final TableField<AssociationWaldecRecord, String> FIELD_ASSOCIATION_PUBLIC_WEBSITE = createField(name("public_website"), SQLDataType.VARCHAR(1), this);
     public final TableField<AssociationWaldecRecord, String> FIELD_ASSOCIATION_OBSERVATION = createField(name("observation"), SQLDataType.VARCHAR(255), this);
     public final TableField<AssociationWaldecRecord, String> FIELD_ASSOCIATION_POSITION = createField(name("position"), SQLDataType.VARCHAR(1), this);

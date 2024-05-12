@@ -32,6 +32,7 @@ import static fr.dademo.bi.companies.jobs.stg.association.datamodel.AssociationT
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Slf4j
 @Component
 @ConditionalOnProperty(

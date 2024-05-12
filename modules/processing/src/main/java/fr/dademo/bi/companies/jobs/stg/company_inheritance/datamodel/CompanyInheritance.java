@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -44,6 +45,7 @@ public class CompanyInheritance {
     private Boolean companyEconomicalContinuity;
     private LocalDateTime companyProcessingTimestamp;
 
+    @SuppressWarnings("unused")
     @AllArgsConstructor
     @Getter
     @Builder

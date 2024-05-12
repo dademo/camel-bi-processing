@@ -18,6 +18,7 @@ import static fr.dademo.bi.companies.jobs.stg.company.datamodel.Company.*;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Component
 public class CompanyItemMapper implements ItemProcessor<WrappedRowResource, Company> {
 
@@ -97,7 +98,7 @@ public class CompanyItemMapper implements ItemProcessor<WrappedRowResource, Comp
             .sirenField(item.getColumnIndexByName(CSV_FIELD_COMPANY_SIREN))
             .nicField(item.getColumnIndexByName(CSV_FIELD_COMPANY_NIC))
             .siretField(item.getColumnIndexByName(CSV_FIELD_COMPANY_SIRET))
-            .companyDiffusionStatutField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_DIFFUSION_STATUT))
+            .companyDiffusionStatutField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_DIFFUSION_STATUS))
             .companyCreationDateField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_CREATION_DATE))
             .companyStaffNumberRangeField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_STAFF_NUMBER_RANGE))
             .companyStaffNumberYearField(item.getColumnIndexByName(CSV_FIELD_COMPANY_COMPANY_STAFF_NUMBER_YEAR))

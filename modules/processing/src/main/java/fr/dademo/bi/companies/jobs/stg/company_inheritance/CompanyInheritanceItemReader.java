@@ -30,6 +30,7 @@ import static fr.dademo.bi.companies.jobs.stg.company_inheritance.datamodel.Comp
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Slf4j
 @Component
 public class CompanyInheritanceItemReader extends StgJobItemReader<WrappedRowResource> {
@@ -39,7 +40,7 @@ public class CompanyInheritanceItemReader extends StgJobItemReader<WrappedRowRes
     private ZipArchiveInputStream archiveInputStream = null;
     private Iterator<WrappedRowResource> iterator = Collections.emptyIterator();
 
-    public CompanyInheritanceItemReader(DataGouvFrDataQuerierService dataGouvFrDataQuerierService) {
+    public CompanyInheritanceItemReader(@Nonnull DataGouvFrDataQuerierService dataGouvFrDataQuerierService) {
         this.dataGouvFrDataQuerierService = dataGouvFrDataQuerierService;
     }
 

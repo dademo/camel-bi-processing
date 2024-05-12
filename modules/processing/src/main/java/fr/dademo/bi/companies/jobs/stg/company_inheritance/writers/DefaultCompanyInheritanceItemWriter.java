@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Configuration
 public class DefaultCompanyInheritanceItemWriter {
 

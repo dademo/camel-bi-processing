@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Optional;
 
+@SuppressWarnings("unused")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class BaseJobWriter {
 

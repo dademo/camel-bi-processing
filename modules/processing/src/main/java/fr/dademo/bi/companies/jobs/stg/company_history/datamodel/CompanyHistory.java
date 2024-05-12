@@ -16,6 +16,7 @@ import java.time.LocalDate;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -90,6 +91,7 @@ public class CompanyHistory {
     private String institutionEmployerNature;
     private Boolean institutionEmployerNatureChange;
 
+    @SuppressWarnings("unused")
     @AllArgsConstructor
     @Getter
     @Builder

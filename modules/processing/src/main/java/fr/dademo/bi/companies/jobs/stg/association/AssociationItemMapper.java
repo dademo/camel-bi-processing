@@ -23,6 +23,7 @@ import static fr.dademo.bi.companies.jobs.stg.association.datamodel.Association.
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Component
 public class AssociationItemMapper implements ItemProcessor<WrappedRowResource, Association> {
 

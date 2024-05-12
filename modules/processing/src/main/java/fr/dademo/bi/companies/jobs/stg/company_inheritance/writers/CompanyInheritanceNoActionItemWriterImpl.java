@@ -18,6 +18,7 @@ import static fr.dademo.bi.companies.jobs.stg.company_inheritance.JobDefinition.
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Component
 @ConditionalOnProperty(
     value = CONFIG_JOBS_BASE + "." + COMPANY_INHERITANCE_CONFIG_JOB_NAME + "." + CONFIG_JOB_OUTPUT_DATA_SOURCE + "." + CONFIG_WRITER_TYPE,

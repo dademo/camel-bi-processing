@@ -39,7 +39,7 @@ import static fr.dademo.batch.beans.BeanValues.STG_DATA_SOURCE_NAME;
 /**
  * @author dademo
  */
-@SuppressWarnings({"java:S107", "java:S110"})
+@SuppressWarnings({"java:S107", "java:S110", "unused"})
 @Component(JobDefinition.ASSOCIATION_WALDEC_JOB_NAME)
 public class JobDefinition extends AbstractApplicationStgJob {
 
@@ -60,16 +60,16 @@ public class JobDefinition extends AbstractApplicationStgJob {
         // Common job resources
         @Nonnull JobRepository jobRepository,
         @Nonnull @Qualifier(BATCH_DATA_SOURCE_TRANSACTION_MANAGER_BEAN_NAME) PlatformTransactionManager platformTransactionManager,
-        BatchConfiguration batchConfiguration,
-        BatchDataSourcesConfiguration batchDataSourcesConfiguration,
-        DataSourcesFactory dataSourcesFactory,
-        ResourceLoader resourceLoader,
-        DataSetService dataSetService,
-        DataGouvFrDataQuerierService dataGouvFrDataQuerierService,
+        @Nonnull BatchConfiguration batchConfiguration,
+        @Nonnull BatchDataSourcesConfiguration batchDataSourcesConfiguration,
+        @Nonnull DataSourcesFactory dataSourcesFactory,
+        @Nonnull ResourceLoader resourceLoader,
+        @Nonnull DataSetService dataSetService,
+        @Nonnull DataGouvFrDataQuerierService dataGouvFrDataQuerierService,
         // Job-specific
-        AssociationWaldecItemReader associationWaldecItemReader,
-        AssociationWaldecItemMapper associationWaldecItemMapper,
-        AssociationWaldecItemWriter associationWaldecItemWriter) {
+        @Nonnull AssociationWaldecItemReader associationWaldecItemReader,
+        @Nonnull AssociationWaldecItemMapper associationWaldecItemMapper,
+        @Nonnull AssociationWaldecItemWriter associationWaldecItemWriter) {
 
         super(
             jobRepository,

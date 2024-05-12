@@ -30,6 +30,7 @@ import static fr.dademo.bi.companies.jobs.stg.association.datamodel.Association.
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Slf4j
 @Component
 public class AssociationItemReader extends StgJobItemReader<WrappedRowResource> {
@@ -39,7 +40,7 @@ public class AssociationItemReader extends StgJobItemReader<WrappedRowResource> 
     private ZipArchiveInputStream archiveInputStream = null;
     private Iterator<WrappedRowResource> iterator = Collections.emptyIterator();
 
-    public AssociationItemReader(DataGouvFrDataQuerierService dataGouvFrDataQuerierService) {
+    public AssociationItemReader(@Nonnull DataGouvFrDataQuerierService dataGouvFrDataQuerierService) {
         this.dataGouvFrDataQuerierService = dataGouvFrDataQuerierService;
     }
 

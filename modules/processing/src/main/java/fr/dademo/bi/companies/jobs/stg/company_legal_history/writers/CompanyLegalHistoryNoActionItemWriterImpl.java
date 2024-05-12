@@ -18,6 +18,7 @@ import static fr.dademo.bi.companies.jobs.stg.company_legal_history.JobDefinitio
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Component
 @ConditionalOnProperty(
     value = CONFIG_JOBS_BASE + "." + COMPANY_LEGAL_HISTORY_CONFIG_JOB_NAME + "." + CONFIG_JOB_OUTPUT_DATA_SOURCE + "." + CONFIG_WRITER_TYPE,
