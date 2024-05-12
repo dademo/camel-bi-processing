@@ -38,6 +38,8 @@ public class Company {
     public static final String CSV_FIELD_COMPANY_COMPANY_ADDRESS_COMPLEMENT = "complementAdresseEtablissement";
     public static final String CSV_FIELD_COMPANY_COMPANY_ADDRESS_STREET_NUMBER = "numeroVoieEtablissement";
     public static final String CSV_FIELD_COMPANY_COMPANY_ADDRESS_STREET_NUMBER_REPETITION = "indiceRepetitionEtablissement";
+    public static final String CSV_FIELD_COMPANY_COMPANY_LAST_STREET_NUMBER = "dernierNumeroVoieEtablissement";
+    public static final String CSV_FIELD_COMPANY_COMPANY_INDEX_REPETITION_LAST_STREET_NUMBER = "indiceRepetitionDernierNumeroVoieEtablissement";
     public static final String CSV_FIELD_COMPANY_COMPANY_ADDRESS_STREET_TYPE = "typeVoieEtablissement";
     public static final String CSV_FIELD_COMPANY_COMPANY_ADDRESS_STREET_NAME = "libelleVoieEtablissement";
     public static final String CSV_FIELD_COMPANY_COMPANY_ADDRESS_POSTAL_CODE = "codePostalEtablissement";
@@ -49,6 +51,9 @@ public class Company {
     public static final String CSV_FIELD_COMPANY_COMPANY_ADDRESS_CEDEX_NAME = "libelleCedexEtablissement";
     public static final String CSV_FIELD_COMPANY_COMPANY_FOREIGN_ADDRESS_COUNTRY_CODE = "codePaysEtrangerEtablissement";
     public static final String CSV_FIELD_COMPANY_COMPANY_FOREIGN_ADDRESS_COUNTRY_NAME = "libellePaysEtrangerEtablissement";
+    public static final String CSV_FIELD_COMPANY_COMPANY_ADDRESS_IDENTIFIER = "identifiantAdresseEtablissement";
+    public static final String CSV_FIELD_COMPANY_COMPANY_COORDINATES_LAMBERT_ABSCISSA = "coordonneeLambertAbscisseEtablissement";
+    public static final String CSV_FIELD_COMPANY_COMPANY_COORDINATES_LAMBERT_ORDINATE = "coordonneeLambertOrdonneeEtablissement";
     public static final String CSV_FIELD_COMPANY_COMPANY_ADDRESS_COMPLEMENT_2 = "complementAdresse2Etablissement";
     public static final String CSV_FIELD_COMPANY_COMPANY_ADDRESS_STREET_NUMBER_2 = "numeroVoie2Etablissement";
     public static final String CSV_FIELD_COMPANY_COMPANY_ADDRESS_STREET_NUMBER_REPETITION_2 = "indiceRepetition2Etablissement";
@@ -72,6 +77,7 @@ public class Company {
     public static final String CSV_FIELD_COMPANY_COMPANY_ACTIVITY = "activitePrincipaleEtablissement";
     public static final String CSV_FIELD_COMPANY_COMPANY_PRINCIPAL_ACTIVITY_NAME = "nomenclatureActivitePrincipaleEtablissement";
     public static final String CSV_FIELD_COMPANY_COMPANY_IS_EMPLOYER = "caractereEmployeurEtablissement";
+
     public static final String[] CSV_HEADER_COMPANY = new String[]{ // NOSONAR
         CSV_FIELD_COMPANY_SIREN,
         CSV_FIELD_COMPANY_NIC,
@@ -87,6 +93,8 @@ public class Company {
         CSV_FIELD_COMPANY_COMPANY_ADDRESS_COMPLEMENT,
         CSV_FIELD_COMPANY_COMPANY_ADDRESS_STREET_NUMBER,
         CSV_FIELD_COMPANY_COMPANY_ADDRESS_STREET_NUMBER_REPETITION,
+        CSV_FIELD_COMPANY_COMPANY_LAST_STREET_NUMBER,
+        CSV_FIELD_COMPANY_COMPANY_INDEX_REPETITION_LAST_STREET_NUMBER,
         CSV_FIELD_COMPANY_COMPANY_ADDRESS_STREET_TYPE,
         CSV_FIELD_COMPANY_COMPANY_ADDRESS_STREET_NAME,
         CSV_FIELD_COMPANY_COMPANY_ADDRESS_POSTAL_CODE,
@@ -98,6 +106,9 @@ public class Company {
         CSV_FIELD_COMPANY_COMPANY_ADDRESS_CEDEX_NAME,
         CSV_FIELD_COMPANY_COMPANY_FOREIGN_ADDRESS_COUNTRY_CODE,
         CSV_FIELD_COMPANY_COMPANY_FOREIGN_ADDRESS_COUNTRY_NAME,
+        CSV_FIELD_COMPANY_COMPANY_ADDRESS_IDENTIFIER,
+        CSV_FIELD_COMPANY_COMPANY_COORDINATES_LAMBERT_ABSCISSA,
+        CSV_FIELD_COMPANY_COMPANY_COORDINATES_LAMBERT_ORDINATE,
         CSV_FIELD_COMPANY_COMPANY_ADDRESS_COMPLEMENT_2,
         CSV_FIELD_COMPANY_COMPANY_ADDRESS_STREET_NUMBER_2,
         CSV_FIELD_COMPANY_COMPANY_ADDRESS_STREET_NUMBER_REPETITION_2,
@@ -144,6 +155,8 @@ public class Company {
     private String companyAddressComplement;
     private String companyAddressStreetNumber;
     private String companyAddressStreetNumberRepetition;
+    private String companyCompanyLastStreetNumber;
+    private String companyIndexRepetitionLastStreetNumber;
     private String companyAddressStreetType;
     private String companyAddressStreetName;
     private String companyAddressPostalCode;
@@ -155,6 +168,9 @@ public class Company {
     private String companyAddressCedexName;
     private String companyForeignAddressCountryCode;
     private String companyForeignAddressCountryName;
+    private String companyAddressIdentifier;
+    private String companyCoordinatesLambertAbscissa;
+    private String companyCoordinatesLambertOrdinate;
     private String companyAddressComplement2;
     private String companyAddressStreetNumber2;
     private String companyAddressStreetNumberRepetition2;
@@ -199,6 +215,8 @@ public class Company {
         int companyAddressComplementField;
         int companyAddressStreetNumberField;
         int companyAddressStreetNumberRepetitionField;
+        int companyCompanyLastStreetNumberField;
+        int companyIndexRepetitionLastStreetNumberField;
         int companyAddressStreetTypeField;
         int companyAddressStreetNameField;
         int companyAddressPostalCodeField;
@@ -210,6 +228,9 @@ public class Company {
         int companyAddressCedexNameField;
         int companyForeignAddressCountryCodeField;
         int companyForeignAddressCountryNameField;
+        int companyAddressIdentifierField;
+        int companyCoordinatesLambertAbscissaField;
+        int companyCoordinatesLambertOrdinateField;
         int companyAddressComplement2Field;
         int companyAddressStreetNumber2Field;
         int companyAddressStreetNumberRepetition2Field;

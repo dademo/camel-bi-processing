@@ -87,6 +87,8 @@ public class CompanyJdbcItemWriterImpl extends AbstractApplicationJdbcWriter<Com
             DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_COMPLEMENT,
             DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_STREET_NUMBER,
             DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_STREET_NUMBER_REPETITION,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_LAST_STREET_NUMBER,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_INDEX_REPETITION_LAST_STREET_NUMBER,
             DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_STREET_TYPE,
             DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_STREET_NAME,
             DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_POSTAL_CODE,
@@ -98,6 +100,9 @@ public class CompanyJdbcItemWriterImpl extends AbstractApplicationJdbcWriter<Com
             DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_CEDEX_NAME,
             DEFAULT_COMPANY_TABLE.FIELD_COMPANY_FOREIGN_ADDRESS_COUNTRY_CODE,
             DEFAULT_COMPANY_TABLE.FIELD_COMPANY_FOREIGN_ADDRESS_COUNTRY_NAME,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_IDENTIFIER,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_COORDINATES_LAMBERT_ABSCISSA,
+            DEFAULT_COMPANY_TABLE.FIELD_COMPANY_COORDINATES_LAMBERT_ORDINATE,
             DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_COMPLEMENT_2,
             DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_STREET_NUMBER_2,
             DEFAULT_COMPANY_TABLE.FIELD_COMPANY_ADDRESS_STREET_NUMBER_REPETITION_2,
@@ -123,7 +128,8 @@ public class CompanyJdbcItemWriterImpl extends AbstractApplicationJdbcWriter<Com
             DEFAULT_COMPANY_TABLE.FIELD_COMPANY_IS_EMPLOYER
         ).values((String) null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
             null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-            null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null
+            null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+            null, null, null, null, null
         );
     }
 
@@ -145,6 +151,8 @@ public class CompanyJdbcItemWriterImpl extends AbstractApplicationJdbcWriter<Com
             company.getCompanyAddressComplement(),
             company.getCompanyAddressStreetNumber(),
             company.getCompanyAddressStreetNumberRepetition(),
+            company.getCompanyCompanyLastStreetNumber(),
+            company.getCompanyIndexRepetitionLastStreetNumber(),
             company.getCompanyAddressStreetType(),
             company.getCompanyAddressStreetName(),
             company.getCompanyAddressPostalCode(),
@@ -156,6 +164,9 @@ public class CompanyJdbcItemWriterImpl extends AbstractApplicationJdbcWriter<Com
             company.getCompanyAddressCedexName(),
             company.getCompanyForeignAddressCountryCode(),
             company.getCompanyForeignAddressCountryName(),
+            company.getCompanyAddressIdentifier(),
+            company.getCompanyCoordinatesLambertAbscissa(),
+            company.getCompanyCoordinatesLambertOrdinate(),
             company.getCompanyAddressComplement2(),
             company.getCompanyAddressStreetNumberRepetition2(),
             company.getCompanyAddressStreetNumberRepetition2(),

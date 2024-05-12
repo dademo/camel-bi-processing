@@ -32,7 +32,7 @@
             <column name="address_complement" type="VARCHAR(76)"/>
             <column name="address_street_number" type="VARCHAR(10)"/>
             <column name="address_repetition" type="VARCHAR(1)"/>
-            <column name="address_street_type" type="VARCHAR(5)"/>
+            <column name="address_street_type" type="VARCHAR(10)"/>
             <column name="address_street_libelle" type="VARCHAR(42)"/>
             <column name="address_distribution" type="VARCHAR(38)"/>
             <column name="address_postal_code" type="VARCHAR(5)"/>

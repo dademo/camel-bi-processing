@@ -24,32 +24,37 @@
             <column name="company_last_processing_date" type="DATETIME"/>
             <column name="company_is_headquarters" type="BOOLEAN"/>
             <column name="company_period_count" type="INTEGER"/>
-            <column name="company_address_complement" type="VARCHAR(38)"/>
-            <column name="company_address_street_number" type="VARCHAR(4)"/>
-            <column name="company_address_street_number_repetition" type="VARCHAR(1)"/>
-            <column name="company_address_street_type" type="VARCHAR(4)"/>
+            <column name="company_address_complement" type="VARCHAR(100)"/>
+            <column name="company_address_street_number" type="VARCHAR(9)"/>
+            <column name="company_address_street_number_repetition" type="VARCHAR(4)"/>
+            <column name="company_last_street_number" type="VARCHAR(9)"/>
+            <column name="company_index_repetition_last_street_number" type="VARCHAR(4)"/>
+            <column name="company_address_street_type" type="VARCHAR(30)"/>
             <column name="company_address_street_name" type="VARCHAR(100)"/>
-            <column name="company_address_postal_code" type="VARCHAR(5)"/>
+            <column name="company_address_postal_code" type="VARCHAR(9)"/>
             <column name="company_address_city" type="VARCHAR(100)"/>
             <column name="company_foreign_address_city" type="VARCHAR(100)"/>
-            <column name="company_address_special_distribution" type="VARCHAR(26)"/>
+            <column name="company_address_special_distribution" type="VARCHAR(4)"/>
             <column name="company_address_city_code" type="VARCHAR(5)"/>
-            <column name="company_address_cedex_code" type="VARCHAR(9)"/>
-            <column name="company_address_cedex_name" type="VARCHAR(100)"/>
+            <column name="company_address_cedex_code" type="VARCHAR(4)"/>
+            <column name="company_address_cedex_name" type="VARCHAR(4)"/>
             <column name="company_foreign_address_country_code" type="VARCHAR(5)"/>
             <column name="company_foreign_address_country_name" type="VARCHAR(100)"/>
-            <column name="company_address_complement_2" type="VARCHAR(38)"/>
-            <column name="company_address_street_number_2" type="VARCHAR(4)"/>
-            <column name="company_address_street_number_repetition_2" type="VARCHAR(1)"/>
-            <column name="company_address_street_type_2" type="VARCHAR(4)"/>
+            <column name="company_address_identifier" type="VARCHAR(15)"/>
+            <column name="company_coordinates_lambert_abscissa" type="VARCHAR(10)"/>
+            <column name="company_coordinates_lambert_ordinate" type="VARCHAR(10)"/>
+            <column name="company_address_complement_2" type="VARCHAR(100)"/>
+            <column name="company_address_street_number_2" type="VARCHAR(9)"/>
+            <column name="company_address_street_number_repetition_2" type="VARCHAR(4)"/>
+            <column name="company_address_street_type_2" type="VARCHAR(30)"/>
             <column name="company_address_street_name_2" type="VARCHAR(100)"/>
-            <column name="company_address_postal_code_2" type="VARCHAR(5)"/>
+            <column name="company_address_postal_code_2" type="VARCHAR(9)"/>
             <column name="company_address_city_2" type="VARCHAR(100)"/>
             <column name="company_foreign_address_city_2" type="VARCHAR(100)"/>
-            <column name="company_address_special_distribution_2" type="VARCHAR(26)"/>
+            <column name="company_address_special_distribution_2" type="VARCHAR(4)"/>
             <column name="company_address_city_code_2" type="VARCHAR(5)"/>
-            <column name="company_address_cedex_code_2" type="VARCHAR(9)"/>
-            <column name="company_address_cedex_name_2" type="VARCHAR(100)"/>
+            <column name="company_address_cedex_code_2" type="VARCHAR(4)"/>
+            <column name="company_address_cedex_name_2" type="VARCHAR(4)"/>
             <column name="company_foreign_address_country_code_2" type="VARCHAR(5)"/>
             <column name="company_foreign_address_country_name_2" type="VARCHAR(100)"/>
             <column name="begin_date" type="DATE"/>

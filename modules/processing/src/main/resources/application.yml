@@ -111,7 +111,7 @@ batch:
     enabled: true
   jobs:
     naf:
-      enabled: true
+      enabled: false
       #inputDataSource: null
       outputDataSource:
         name: stg
@@ -119,7 +119,7 @@ batch:
       chunk-size: 1000
       max-threads: null
     company:
-      enabled: false
+      enabled: true
       #inputDataSource: null
       outputDataSource:
         name: stg
@@ -168,7 +168,7 @@ batch:
       chunk-size: 10000
       max-threads: null
     association-waldec:
-      enabled: false
+      enabled: true
       #inputDataSource: null
       outputDataSource:
         name: stg
