@@ -23,6 +23,7 @@ import java.io.InputStream;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class MimeValidator<T extends InputStreamIdentifier<?>> implements InputStreamIdentifierValidator<T> {
 

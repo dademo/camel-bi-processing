@@ -22,6 +22,7 @@ import java.net.URI;
 import java.util.Optional;
 import java.util.function.Function;
 
+@SuppressWarnings("unused")
 @Configuration
 @ConditionalOnBean(CacheVFSEnabledConditional.class)
 public class VFSBeans {

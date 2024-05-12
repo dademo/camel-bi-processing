@@ -36,6 +36,7 @@ import static fr.dademo.tools.cache.beans.CacheBeanConstants.MINIO_STREAM_THREAD
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Slf4j
 @Repository
 @ConditionalOnBean(CacheMinioEnabledConditional.class)
@@ -60,7 +61,7 @@ public class MinioCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extend
 
     @Nonnull
     @Override
-    public Optional<CachedInputStreamIdentifier<T>> getCachedInputStreamIdentifierOf(InputStreamIdentifier<?> inputStreamIdentifier) {
+    public Optional<CachedInputStreamIdentifier<T>> getCachedInputStreamIdentifierOf(InputStreamIdentifier<?> inputStreamIdentifier) throws IOException {
 
         return cacheIndexRepository.readIndex().stream()
             .filter(cachedInputStreamIdentifier -> cachedInputStreamIdentifier.getCachedIdentifier().equals(inputStreamIdentifier))
@@ -121,7 +122,7 @@ public class MinioCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extend
 
     @SneakyThrows
     @Override
-    public void deleteFromCache(@Nonnull T inputStreamIdentifier) {
+    public void deleteFromCache(@Nonnull T inputStreamIdentifier) throws IOException {
 
         log.info("Removing stream {}", inputStreamIdentifier);
         try (final var lock = acquireCacheLockForIdentifier(inputStreamIdentifier)) {

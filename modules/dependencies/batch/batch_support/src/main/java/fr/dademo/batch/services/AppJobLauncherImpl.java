@@ -27,6 +27,7 @@ import static fr.dademo.batch.beans.BeanValues.TASK_EXECUTOR_BEAN_NAME;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Slf4j
 @Service
 public class AppJobLauncherImpl implements AppJobLauncher {

@@ -16,6 +16,7 @@ import lombok.NonNull;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
+@SuppressWarnings("unused")
 @ConditionalOnProperty(
     name = LockConfiguration.CONFIGURATION_PROPERTY_PREFIX + ".backend",
     havingValue = LockConfiguration.LockBackend.LOCK_BACKEND_HAZELCAST

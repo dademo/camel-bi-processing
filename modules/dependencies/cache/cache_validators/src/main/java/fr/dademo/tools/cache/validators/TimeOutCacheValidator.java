@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class TimeOutCacheValidator<T extends InputStreamIdentifier<?>> implements CacheValidator<T> {
 

@@ -14,6 +14,7 @@ import jakarta.annotation.Nonnull;
 
 import java.util.Iterator;
 
+@SuppressWarnings("unused")
 public class NamedFastCsvResourcesReaderWrapper implements ResourcesReaderWrapper {
 
     @Nonnull

@@ -25,17 +25,15 @@ import java.util.stream.StreamSupport;
 /**
  * @author dademo
  */
+@Getter
 @Slf4j
 public abstract class MinioCacheIndexRepositoryBeanLifecycle<T extends InputStreamIdentifier<?>> extends BaseCacheIndexRepository<T> {
 
     public static final String LOCK_FILE_NAME = "index.lock";
 
-
-    @Getter
     private final CacheMinioConfiguration cacheMinioConfiguration;
-
-    @Getter
     private final MinioClient minioClient;
+
 
     protected MinioCacheIndexRepositoryBeanLifecycle(@Nonnull LockFactory lockFactory,
                                                      @Nonnull CacheMinioConfiguration cacheMinioConfiguration,

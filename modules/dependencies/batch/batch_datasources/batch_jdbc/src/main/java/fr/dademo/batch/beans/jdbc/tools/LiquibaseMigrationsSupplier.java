@@ -27,10 +27,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ResourceLoader;
 
 import javax.sql.DataSource;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+@SuppressWarnings("unused")
 @Slf4j
 public class LiquibaseMigrationsSupplier {
 
@@ -45,7 +45,7 @@ public class LiquibaseMigrationsSupplier {
     @Nullable
     private final String databaseCatalog;
     @Nonnull
-    private final List<String> contexts;
+    private final String contexts;
     @Nonnull
     private final DataSource dataSource;
     @Nonnull
@@ -54,7 +54,7 @@ public class LiquibaseMigrationsSupplier {
     @Builder
     public LiquibaseMigrationsSupplier(@NotEmpty String migrationFolder, @NotEmpty String changeLogFileName,
                                        @Nullable String databaseCatalog, @Nullable String databaseSchema,
-                                       @Nonnull List<String> contexts, @Nonnull DataSource dataSource,
+                                       @Nonnull String contexts, @Nonnull DataSource dataSource,
                                        @Nonnull ResourceLoader resourceLoader) {
 
         this.migrationFolder = migrationFolder;
@@ -82,6 +82,7 @@ public class LiquibaseMigrationsSupplier {
                     springLiquibase.setShouldRun(true);
                     springLiquibase.setDataSource(dataSource);
                     springLiquibase.setChangeLog(getChangeLogFile());
+                    springLiquibase.setContexts(contexts);
                     springLiquibase.afterPropertiesSet();
                 }
             }

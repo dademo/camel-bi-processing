@@ -17,6 +17,7 @@ import java.io.File;
 import java.net.URI;
 import java.util.Optional;
 
+@SuppressWarnings("unused")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

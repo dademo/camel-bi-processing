@@ -11,6 +11,7 @@ import jakarta.annotation.Nonnull;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 public interface DataSetResourceChecksum {
 
     @Nonnull

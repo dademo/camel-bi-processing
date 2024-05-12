@@ -21,12 +21,13 @@ import java.util.stream.Stream;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 public interface CacheRepository<T extends InputStreamIdentifier<?>> {
 
-    Lock acquireCacheLockForIdentifier(@Nonnull T inputStreamIdentifier);
+    Lock acquireCacheLockForIdentifier(@Nonnull T inputStreamIdentifier) throws IOException;
 
     @Nonnull
-    Optional<CachedInputStreamIdentifier<T>> getCachedInputStreamIdentifierOf(InputStreamIdentifier<?> inputStreamIdentifier);
+    Optional<CachedInputStreamIdentifier<T>> getCachedInputStreamIdentifierOf(InputStreamIdentifier<?> inputStreamIdentifier) throws IOException;
 
     @Nonnull
     InputStream readFromCachedInputStream(@Nonnull CachedInputStreamIdentifier<T> cachedInputStreamIdentifier) throws IOException;
@@ -57,7 +58,7 @@ public interface CacheRepository<T extends InputStreamIdentifier<?>> {
         return cacheInputStream(onMissingInputStreamSupplier.get(), inputStreamIdentifier);
     }
 
-    default boolean hasCachedInputStream(@Nonnull T inputStreamIdentifier) {
+    default boolean hasCachedInputStream(@Nonnull T inputStreamIdentifier) throws IOException {
         return getCachedInputStreamIdentifierOf(inputStreamIdentifier).isPresent();
     }
 }

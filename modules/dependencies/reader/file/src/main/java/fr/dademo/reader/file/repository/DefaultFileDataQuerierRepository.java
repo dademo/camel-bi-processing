@@ -19,6 +19,7 @@ import java.util.List;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 public class DefaultFileDataQuerierRepository implements FileDataQuerierRepository {
 
     @Override

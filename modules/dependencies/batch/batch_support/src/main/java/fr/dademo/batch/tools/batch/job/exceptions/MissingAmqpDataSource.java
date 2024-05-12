@@ -16,6 +16,7 @@ import fr.dademo.batch.tools.batch.job.BaseChunkedJob;
 
 import java.io.Serial;
 
+@SuppressWarnings("unused")
 public class MissingAmqpDataSource extends RuntimeException {
 
     @Serial

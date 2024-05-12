@@ -16,11 +16,12 @@ import java.util.List;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 public interface CacheIndexRepository<T extends InputStreamIdentifier<?>> {
 
-    Lock acquireLock();
+    Lock acquireLock() throws IOException, InterruptedException;
 
-    List<CachedInputStreamIdentifier<T>> readIndex();
+    List<CachedInputStreamIdentifier<T>> readIndex() throws IOException;
 
     void persistIndex(List<CachedInputStreamIdentifier<T>> indexContent) throws IOException;
 }

@@ -34,6 +34,7 @@ import java.util.concurrent.Executors;
 
 import static fr.dademo.tools.cache.beans.CacheBeanConstants.*;
 
+@SuppressWarnings("unused")
 @Slf4j
 @Configuration
 @ConditionalOnBean(CacheMinioEnabledConditional.class)

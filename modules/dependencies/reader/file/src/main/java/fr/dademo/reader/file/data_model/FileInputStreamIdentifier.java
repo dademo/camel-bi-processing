@@ -19,6 +19,7 @@ import java.nio.charset.StandardCharsets;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

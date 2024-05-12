@@ -33,6 +33,7 @@ import org.springframework.core.io.ResourceLoader;
 import javax.sql.DataSource;
 import java.util.Optional;
 
+@SuppressWarnings("unused")
 @Slf4j
 public class LiquibaseMigrationTasklet implements Tasklet {
 

@@ -7,6 +7,7 @@
 package fr.dademo.tools.lock.repository.beans;
 
 import fr.dademo.tools.lock.configuration.LockConfiguration;
+import fr.dademo.tools.lock.repository.beans.exception.MissingInfinispanConfiguration;
 import lombok.SneakyThrows;
 import org.infinispan.configuration.cache.CacheMode;
 import org.infinispan.configuration.global.GlobalConfiguration;
@@ -24,6 +25,7 @@ import org.springframework.context.annotation.Configuration;
 import java.net.InetAddress;
 import java.util.Optional;
 
+@SuppressWarnings("unused")
 @ConditionalOnProperty(
     name = LockConfiguration.CONFIGURATION_PROPERTY_PREFIX + ".backend",
     havingValue = LockConfiguration.LockBackend.LOCK_BACKEND_INFINISPAN
@@ -48,16 +50,19 @@ public class InfinispanBeans {
     @ConditionalOnMissingBean(ConfigurationBuilderHolder.class)
     public ConfigurationBuilderHolder infinispanCacheManagerConfiguration(LockConfiguration lockConfiguration, GlobalConfiguration infinispanGlobalConfiguration) {
 
-        final var clusterName = Optional.ofNullable(lockConfiguration.getInfinispan().getClusterName()).orElse(DEFAULT_CLUSTER_NAME);
-        final var cacheName = Optional.ofNullable(lockConfiguration.getInfinispan().getCacheName()).orElse(DEFAULT_CACHE_NAME);
+        final var infinispanConfiguration = Optional.ofNullable(lockConfiguration.getInfinispan())
+            .orElseThrow(MissingInfinispanConfiguration::new);
+
+        final var clusterName = Optional.ofNullable(infinispanConfiguration.getClusterName()).orElse(DEFAULT_CLUSTER_NAME);
+        final var cacheName = Optional.ofNullable(infinispanConfiguration.getCacheName()).orElse(DEFAULT_CACHE_NAME);
         final var configurationBuilderHolder = new ConfigurationBuilderHolder();
 
         configurationBuilderHolder.getGlobalConfigurationBuilder().clusteredDefault();
         configurationBuilderHolder.getGlobalConfigurationBuilder().transport()
             .clusterName(clusterName)
             .initialClusterSize(1)
-            .nodeName(Optional.ofNullable(lockConfiguration.getInfinispan().getNodeName()).orElse(InetAddress.getLocalHost().getHostName()))
-            .addProperty("configurationFile", Optional.ofNullable(lockConfiguration.getInfinispan().getClusterName()).orElse(DEFAULT_JGROUPS));
+            .nodeName(Optional.ofNullable(infinispanConfiguration.getNodeName()).orElse(InetAddress.getLocalHost().getHostName()))
+            .addProperty("configurationFile", Optional.ofNullable(infinispanConfiguration.getClusterName()).orElse(DEFAULT_JGROUPS));
         configurationBuilderHolder.getGlobalConfigurationBuilder().defaultCacheName(cacheName);
         configurationBuilderHolder.newConfigurationBuilder(cacheName).clustering().cacheMode(CacheMode.DIST_SYNC);
 

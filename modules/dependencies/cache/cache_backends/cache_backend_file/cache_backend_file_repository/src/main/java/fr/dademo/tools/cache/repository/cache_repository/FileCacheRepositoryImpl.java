@@ -32,6 +32,7 @@ import java.util.Optional;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Slf4j
 @Repository
 @ConditionalOnBean(CacheFileEnabledConditional.class)
@@ -56,7 +57,7 @@ public class FileCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extends
 
     @Nonnull
     @Override
-    public Optional<CachedInputStreamIdentifier<T>> getCachedInputStreamIdentifierOf(InputStreamIdentifier<?> inputStreamIdentifier) {
+    public Optional<CachedInputStreamIdentifier<T>> getCachedInputStreamIdentifierOf(InputStreamIdentifier<?> inputStreamIdentifier) throws IOException {
 
         return cacheIndexRepository.readIndex().stream()
             .filter(cachedInputStreamIdentifier -> cachedInputStreamIdentifier.getCachedIdentifier().equals(inputStreamIdentifier))
@@ -104,7 +105,7 @@ public class FileCacheRepositoryImpl<T extends InputStreamIdentifier<?>> extends
 
     @SneakyThrows
     @Override
-    public void deleteFromCache(@Nonnull T inputStreamIdentifier) {
+    public void deleteFromCache(@Nonnull T inputStreamIdentifier) throws IOException {
 
         log.info("Removing stream {}", inputStreamIdentifier);
         try (final var lock = acquireCacheLockForIdentifier(inputStreamIdentifier)) {

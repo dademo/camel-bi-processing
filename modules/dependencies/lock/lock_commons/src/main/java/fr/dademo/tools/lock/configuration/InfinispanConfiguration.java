@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 import java.util.Collections;
 import java.util.List;
 
+@SuppressWarnings("unused")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

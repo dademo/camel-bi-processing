@@ -24,6 +24,7 @@ import java.util.List;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

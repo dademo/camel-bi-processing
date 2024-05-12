@@ -20,6 +20,7 @@ import java.util.stream.Stream;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class URIHelper {
 

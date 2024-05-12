@@ -15,6 +15,7 @@ import java.net.http.HttpResponse;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @FunctionalInterface
 public interface QueryResponseHandler {
 

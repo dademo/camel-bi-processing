@@ -23,6 +23,7 @@ import static fr.dademo.batch.tools.batch.job.BatchSharedValues.KEY_BATCH_EXECUT
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Slf4j
 @AllArgsConstructor
 public class DataSetBatchStatusUpdateJobExecutionListener implements JobExecutionListener {

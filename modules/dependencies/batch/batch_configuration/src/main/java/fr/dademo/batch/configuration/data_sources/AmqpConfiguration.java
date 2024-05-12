@@ -22,6 +22,7 @@ import java.util.Optional;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -57,6 +58,7 @@ public class AmqpConfiguration {
         return Optional.ofNullable(exchanges.get(queueName)).orElseThrow(MissingExchangeConfigurationException.of(queueName));
     }
 
+    @SuppressWarnings("unused")
     @Data
     public static class AmqpQueueConfiguration {
 
@@ -72,6 +74,7 @@ public class AmqpConfiguration {
         private Map<String, Object> arguments;
     }
 
+    @SuppressWarnings("unused")
     @Data
     public static class AmqpExchangeConfiguration {
 

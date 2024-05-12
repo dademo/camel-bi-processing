@@ -19,6 +19,7 @@ import static fr.dademo.batch.tools.batch.job.BatchSharedValues.KEY_BATCH_EXECUT
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 public abstract class BaseDataSetTasklet {
 
     protected DataSetResource getDataSetResourceFromContext(StepContribution stepContribution) {

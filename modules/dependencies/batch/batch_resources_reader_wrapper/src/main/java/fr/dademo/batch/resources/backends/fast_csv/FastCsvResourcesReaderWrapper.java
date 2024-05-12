@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.StreamSupport;
 
+@SuppressWarnings("unused")
 public class FastCsvResourcesReaderWrapper implements ResourcesReaderWrapper {
 
     @Nonnull

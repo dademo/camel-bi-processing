@@ -28,7 +28,7 @@ import static fr.dademo.batch.beans.BeanValues.BATCH_DATA_SOURCE_TRANSACTION_MAN
 /**
  * @author dademo
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "unused"})
 @Getter
 public class MockedChunkJob<I, O> extends BaseChunkedJob {
 

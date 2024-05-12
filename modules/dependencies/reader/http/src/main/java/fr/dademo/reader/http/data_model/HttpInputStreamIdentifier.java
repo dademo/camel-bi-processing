@@ -23,6 +23,7 @@ import java.util.stream.Stream;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

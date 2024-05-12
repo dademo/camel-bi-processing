@@ -20,45 +20,37 @@ public final class AmqpExchangeBuilder {
 
     public static Exchange getExchangeFor(AmqpConfiguration.AmqpExchangeConfiguration exchangeConfiguration) {
 
-        AbstractExchange exchange;
-        switch (exchangeConfiguration.getType().toLowerCase()) {
-            case "direct":
-                exchange = new DirectExchange(
-                    exchangeConfiguration.getName(),
-                    exchangeConfiguration.isDurable(),
-                    exchangeConfiguration.isAutoDelete(),
-                    exchangeConfiguration.getArguments()
-                );
-                break;
-            case "fanout":
-                exchange = new FanoutExchange(
-                    exchangeConfiguration.getName(),
-                    exchangeConfiguration.isDurable(),
-                    exchangeConfiguration.isAutoDelete(),
-                    exchangeConfiguration.getArguments()
-                );
-                break;
-            case "headers":
-                exchange = new HeadersExchange(
-                    exchangeConfiguration.getName(),
-                    exchangeConfiguration.isDurable(),
-                    exchangeConfiguration.isAutoDelete(),
-                    exchangeConfiguration.getArguments()
-                );
-                break;
-            case "topic":
-                exchange = new TopicExchange(
-                    exchangeConfiguration.getName(),
-                    exchangeConfiguration.isDurable(),
-                    exchangeConfiguration.isAutoDelete(),
-                    exchangeConfiguration.getArguments()
-                );
-                break;
-            default:
-                throw new UnsupportedExchangeTypeException(exchangeConfiguration.getType());
-        }
+        var exchange = switch (exchangeConfiguration.getType().toLowerCase()) {
+            case "direct" -> new DirectExchange(
+                exchangeConfiguration.getName(),
+                exchangeConfiguration.isDurable(),
+                exchangeConfiguration.isAutoDelete(),
+                exchangeConfiguration.getArguments()
+            );
+            case "fanout" -> new FanoutExchange(
+                exchangeConfiguration.getName(),
+                exchangeConfiguration.isDurable(),
+                exchangeConfiguration.isAutoDelete(),
+                exchangeConfiguration.getArguments()
+            );
+            case "headers" -> new HeadersExchange(
+                exchangeConfiguration.getName(),
+                exchangeConfiguration.isDurable(),
+                exchangeConfiguration.isAutoDelete(),
+                exchangeConfiguration.getArguments()
+            );
+            case "topic" -> new TopicExchange(
+                exchangeConfiguration.getName(),
+                exchangeConfiguration.isDurable(),
+                exchangeConfiguration.isAutoDelete(),
+                exchangeConfiguration.getArguments()
+            );
+            default -> throw new UnsupportedExchangeTypeException(exchangeConfiguration.getType());
+        };
+
         exchange.setDelayed(exchangeConfiguration.isDelayed());
         exchange.setInternal(exchangeConfiguration.isInternal());
+
         return exchange;
     }
 }

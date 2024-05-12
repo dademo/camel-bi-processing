@@ -19,6 +19,7 @@ import java.util.Objects;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Component
 public class JooqExceptionTranslator extends DefaultExecuteListener {
 

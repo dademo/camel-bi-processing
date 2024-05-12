@@ -11,6 +11,8 @@ import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import fr.dademo.tools.lock.beans.exception.MissingHazelcastConfiguration;
+import fr.dademo.tools.lock.configuration.HazelcastConfiguration;
 import fr.dademo.tools.lock.configuration.LockConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -19,6 +21,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.Optional;
 
+@SuppressWarnings("unused")
 @ConditionalOnProperty(
     name = LockConfiguration.CONFIGURATION_PROPERTY_PREFIX + ".backend",
     havingValue = LockConfiguration.LockBackend.LOCK_BACKEND_HAZELCAST
@@ -32,7 +35,7 @@ public class HazelcastBeans {
     @ConditionalOnMissingBean(HazelcastInstance.class)
     public HazelcastInstance hazelcastInstance(LockConfiguration lockConfiguration) {
 
-        if (lockConfiguration.getHazelcast().isLocalInstance()) {
+        if (getHazelcastConfiguration(lockConfiguration).isLocalInstance()) {
             return getLocalHazelcastInstance(lockConfiguration);
         } else {
             return getRemoteHazelcastInstance(lockConfiguration);
@@ -47,7 +50,9 @@ public class HazelcastBeans {
         final var multicastConfig = networkConfig.getJoin().getMulticastConfig();
 
         config.setClusterName(
-            Optional.ofNullable(lockConfiguration.getHazelcast().getClusterName())
+            Optional
+                .ofNullable(lockConfiguration.getHazelcast())
+                .map(HazelcastConfiguration::getClusterName)
                 .orElse(DEFAULT_CLUSTER_NAME)
         );
         Optional.ofNullable(lockConfiguration.getHazelcast().getCpMembersCount()).ifPresent(config.getCPSubsystemConfig()::setCPMemberCount);
@@ -63,11 +68,19 @@ public class HazelcastBeans {
 
         final var clientConfig = new ClientConfig();
         clientConfig.setClusterName(
-            Optional.ofNullable(lockConfiguration.getHazelcast().getClusterName())
+            Optional
+                .ofNullable(lockConfiguration.getHazelcast())
+                .map(HazelcastConfiguration::getClusterName)
                 .orElse(DEFAULT_CLUSTER_NAME)
         );
         lockConfiguration.getHazelcast().getPeers().forEach(clientConfig.getNetworkConfig()::addAddress);
 
         return HazelcastClient.newHazelcastClient(clientConfig);
+    }
+
+    private HazelcastConfiguration getHazelcastConfiguration(LockConfiguration lockConfiguration) {
+        return Optional
+            .ofNullable(lockConfiguration.getHazelcast())
+            .orElseThrow(MissingHazelcastConfiguration::new);
     }
 }

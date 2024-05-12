@@ -16,6 +16,7 @@ import java.util.function.Predicate;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DataGouvFrFilterHelpers {
 

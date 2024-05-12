@@ -29,6 +29,7 @@ import java.util.List;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @ConditionalOnBean({CacheRepository.class, CacheIndexRepository.class})
 @Repository
 public class CachedHttpDataQuerierRepositoryImpl extends BaseCachedHttpDataQuerierRepository implements CachedHttpDataQuerierRepository {

@@ -33,11 +33,16 @@ public abstract class VFSCacheRepositoryBeanLifecycle<T extends InputStreamIdent
 
     public static final int TEMP_DIRECTORY_RANDOM_LENGTH = 16;
     public static final int TEMP_FILE_RANDOM_LENGTH = 32;
+    public static final String TEMP_FILE_SEPARATOR = "-";
+
     protected static final String RESOURCES_DIRECTORY_NAME = "resources";
+
     private static final String TEMP_PREFIX = normalizedName(VFSCacheRepositoryImpl.class.getName());
     private static final Random random = new Random();
+
     private final CacheVFSConfiguration cacheVFSConfiguration;
     private final FileSystemManager fileSystemManager;
+
     private URI tempDirectoryURI = null;
 
     protected VFSCacheRepositoryBeanLifecycle(@Nonnull LockFactory lockFactory,
@@ -87,9 +92,10 @@ public abstract class VFSCacheRepositoryBeanLifecycle<T extends InputStreamIdent
 
     @SneakyThrows
     protected FileObject getTempFile(@Nonnull String baseName) {
+
         final var file = getTempDirectoryResourcePath()
             .resolveFile(
-                ((baseName.length() > 0) ? "-" + baseName : "") +
+                ((!baseName.isEmpty()) ? TEMP_FILE_SEPARATOR + baseName : "") +
                     getBase64Random(TEMP_FILE_RANDOM_LENGTH)
             );
         // We ensure the file exists

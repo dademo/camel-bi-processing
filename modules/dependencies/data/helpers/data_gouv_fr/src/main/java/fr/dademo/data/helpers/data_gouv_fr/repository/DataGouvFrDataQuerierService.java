@@ -21,6 +21,7 @@ import java.util.List;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 public interface DataGouvFrDataQuerierService {
 
     @Nonnull

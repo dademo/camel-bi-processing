@@ -26,6 +26,7 @@ import java.util.Map;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Component
 public class MongoTemplateFactory {
 

@@ -21,6 +21,7 @@ import java.security.MessageDigest;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class HashValidator<T extends InputStreamIdentifier<?>> implements InputStreamIdentifierValidator<T> {
 

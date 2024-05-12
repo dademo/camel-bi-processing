@@ -25,6 +25,7 @@ import java.lang.annotation.Target;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@SuppressWarnings("unused")
 @Builder
 @Getter
 @Setter
@@ -54,6 +55,7 @@ public class DataSetEntity {
     private LocalDateTime timestamp;
 
 
+    @SuppressWarnings("unused")
     public enum DataSetState {
         READY,
         FAILED,
@@ -73,6 +75,7 @@ public class DataSetEntity {
         Class<? extends Payload>[] payload() default {};
     }
 
+    @SuppressWarnings("unused")
     public static class DataSetParentConstraintValidator implements ConstraintValidator<DataSetParentConstraint, DataSetEntity> {
 
         @Override

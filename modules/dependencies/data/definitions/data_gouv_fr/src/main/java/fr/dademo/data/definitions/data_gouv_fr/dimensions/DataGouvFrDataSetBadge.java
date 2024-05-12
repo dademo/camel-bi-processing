@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -24,18 +24,17 @@ import java.io.UncheckedIOException;
 /**
  * @author dademo
  */
+@Getter
+@SuppressWarnings("unused")
 @Slf4j
 public abstract class VFSCacheIndexRepositoryBase<T extends InputStreamIdentifier<?>> extends BaseCacheIndexRepository<T> implements InitializingBean {
 
     public static final String DIRECTORY_ROOT_URI_SCHEME = "file";
     public static final String LOCK_FILE_NAME = "index.lock";
 
-
-    @Getter
     private final CacheVFSConfiguration cacheVFSConfiguration;
-
-    @Getter
     private final FileSystemManager fileSystemManager;
+
 
     protected VFSCacheIndexRepositoryBase(@Nonnull LockFactory lockFactory,
                                           @Nonnull CacheVFSConfiguration cacheVFSConfiguration,

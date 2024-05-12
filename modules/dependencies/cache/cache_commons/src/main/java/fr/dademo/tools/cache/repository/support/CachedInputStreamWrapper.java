@@ -16,6 +16,7 @@ import java.io.InputStream;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class CachedInputStreamWrapper extends InputStream {
 

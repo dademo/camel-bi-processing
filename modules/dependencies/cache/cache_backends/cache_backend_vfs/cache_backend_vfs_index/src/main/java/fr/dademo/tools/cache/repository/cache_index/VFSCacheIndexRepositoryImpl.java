@@ -31,6 +31,7 @@ import java.util.List;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Slf4j
 @Repository
 @ConditionalOnBean(CacheVFSEnabledConditional.class)

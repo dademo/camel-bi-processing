@@ -15,6 +15,7 @@ import java.util.function.Supplier;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @FunctionalInterface
 public interface HttpInputStreamBodySupplier {
 

@@ -16,6 +16,7 @@ import java.io.Serial;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Getter
 public class InputStreamHashValidationException extends InputStreamIdentifierValidationException {
 

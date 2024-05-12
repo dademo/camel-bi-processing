@@ -12,6 +12,7 @@ import java.io.Serial;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 public abstract class InputStreamIdentifierValidationException extends IOException {
 
     @Serial

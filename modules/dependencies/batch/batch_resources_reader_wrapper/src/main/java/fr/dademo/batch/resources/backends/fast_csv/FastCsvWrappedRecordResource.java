@@ -13,6 +13,7 @@ import jakarta.annotation.Nullable;
 
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class FastCsvWrappedRecordResource extends BaseWrappedRowResource {
 
     @Nonnull

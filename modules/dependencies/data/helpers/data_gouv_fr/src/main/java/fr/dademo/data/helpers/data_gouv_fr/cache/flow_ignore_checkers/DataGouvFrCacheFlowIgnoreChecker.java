@@ -16,7 +16,7 @@ import fr.dademo.tools.cache.validators.CacheFlowIgnoreChecker;
  *
  * @author dademo
  */
-@SuppressWarnings("java:S1075")
+@SuppressWarnings({"java:S1075", "unused"})
 public class DataGouvFrCacheFlowIgnoreChecker implements CacheFlowIgnoreChecker {
 
     private static final String IGNORE_PATH = "/api/1/datasets/";

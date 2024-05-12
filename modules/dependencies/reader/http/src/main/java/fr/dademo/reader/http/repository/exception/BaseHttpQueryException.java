@@ -16,6 +16,7 @@ import java.net.http.HttpResponse;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Getter
 public abstract class BaseHttpQueryException extends RuntimeException {
 

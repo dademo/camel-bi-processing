@@ -14,6 +14,7 @@ import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+@SuppressWarnings("unused")
 @Slf4j
 @AllArgsConstructor
 public class StepThreadPoolListener implements StepExecutionListener {

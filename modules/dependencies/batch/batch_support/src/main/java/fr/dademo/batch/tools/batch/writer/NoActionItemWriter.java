@@ -17,7 +17,7 @@ import org.springframework.batch.item.ItemWriter;
 @Slf4j
 public class NoActionItemWriter<T> implements ItemWriter<T> {
 
-    boolean printWrite;
+    private final boolean printWrite;
 
     public NoActionItemWriter() {
         this(false);

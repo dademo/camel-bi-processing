@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import static fr.dademo.tools.cache.configuration.CacheConfiguration.CONFIG_CACHE_BACKEND;
 
+@SuppressWarnings("unused")
 @Component
 @ConditionalOnProperty(
     value = CacheConfiguration.CONFIGURATION_PREFIX + "." + CONFIG_CACHE_BACKEND,

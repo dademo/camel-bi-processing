@@ -16,7 +16,7 @@ import java.io.Serializable;
 public interface Cacheable extends Serializable {
 
     /**
-     * Get an unique identifier that should not change in order to cache the value and retrieve it easily.
+     * Get a unique identifier that should not change in order to cache the value and retrieve it easily.
      *
      * @return An unique identifier to identify this object.
      */

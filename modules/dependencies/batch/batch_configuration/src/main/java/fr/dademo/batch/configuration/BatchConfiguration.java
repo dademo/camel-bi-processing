@@ -16,7 +16,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author dademo
@@ -110,6 +112,6 @@ public class BatchConfiguration {
         private String changeLogFileName;
 
         @Nonnull
-        private List<String> migrationContexts = Collections.emptyList();
+        private String migrationContexts = "";
     }
 }

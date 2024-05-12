@@ -12,6 +12,7 @@ import fr.dademo.batch.resources.BaseWrappedRowResource;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
+@SuppressWarnings("unused")
 public class NamedFastCsvWrappedRecordResource extends BaseWrappedRowResource {
 
     @Nonnull

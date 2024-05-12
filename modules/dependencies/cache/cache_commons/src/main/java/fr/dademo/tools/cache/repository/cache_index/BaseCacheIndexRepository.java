@@ -16,6 +16,7 @@ import lombok.AllArgsConstructor;
 
 import java.io.Serial;
 
+@SuppressWarnings("unused")
 public abstract class BaseCacheIndexRepository<T extends InputStreamIdentifier<?>> implements CacheIndexRepository<T> {
 
     private final LockFactory lockFactory;
@@ -29,6 +30,7 @@ public abstract class BaseCacheIndexRepository<T extends InputStreamIdentifier<?
         return lockFactory.createLock(IndexLock.of(this));
     }
 
+    @SuppressWarnings("unused")
     @AllArgsConstructor(access = AccessLevel.PRIVATE, staticName = "of")
     private static final class IndexLock implements Cacheable {
 

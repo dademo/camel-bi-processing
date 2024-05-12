@@ -18,6 +18,7 @@ import java.time.LocalDate;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

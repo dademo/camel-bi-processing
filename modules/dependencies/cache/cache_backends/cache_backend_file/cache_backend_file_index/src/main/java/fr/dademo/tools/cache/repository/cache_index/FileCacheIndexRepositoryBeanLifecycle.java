@@ -24,6 +24,7 @@ import java.util.Optional;
 /**
  * @author dademo
  */
+@Getter
 @Slf4j
 public abstract class FileCacheIndexRepositoryBeanLifecycle<T extends InputStreamIdentifier<?>> extends BaseCacheIndexRepository<T> implements InitializingBean {
 
@@ -31,7 +32,6 @@ public abstract class FileCacheIndexRepositoryBeanLifecycle<T extends InputStrea
     public static final String LOCK_FILE_NAME = "index.lock";
     public static final String RESOURCES_DIRECTORY_NAME = "resources";
 
-    @Getter
     private final CacheConfiguration cacheConfiguration;
 
     protected FileCacheIndexRepositoryBeanLifecycle(@Nonnull LockFactory lockFactory,

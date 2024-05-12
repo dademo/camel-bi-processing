@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -158,7 +157,7 @@ public class DataSetServiceImpl implements DataSetService {
             .changeLogFileName(BatchConfiguration.JobConfiguration.DEFAULT_CHANGELOG_FILE)
             .databaseCatalog(dataSourceConfiguration.getCatalog())
             .databaseSchema(dataSourceConfiguration.getSchema())
-            .contexts(Collections.emptyList())
+            .contexts("")
             .dataSource(dataSource)
             .resourceLoader(resourceLoader)
             .build();

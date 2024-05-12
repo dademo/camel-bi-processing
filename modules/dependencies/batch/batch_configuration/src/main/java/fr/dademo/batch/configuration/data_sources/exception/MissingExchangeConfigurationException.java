@@ -12,6 +12,7 @@ import java.util.function.Supplier;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 public class MissingExchangeConfigurationException extends MissingConfigurationException {
 
     @Serial

@@ -21,6 +21,7 @@ import java.util.Optional;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

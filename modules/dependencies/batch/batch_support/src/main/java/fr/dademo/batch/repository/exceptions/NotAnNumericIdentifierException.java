@@ -13,6 +13,7 @@ import java.io.Serial;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 public class NotAnNumericIdentifierException extends RuntimeException {
 
     @Serial

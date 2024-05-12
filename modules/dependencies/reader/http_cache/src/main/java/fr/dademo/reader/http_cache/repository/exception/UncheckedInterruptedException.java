@@ -11,6 +11,7 @@ import java.io.Serial;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 public class UncheckedInterruptedException extends RuntimeException {
 
     @Serial

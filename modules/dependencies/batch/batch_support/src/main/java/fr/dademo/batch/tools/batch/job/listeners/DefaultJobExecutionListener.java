@@ -29,6 +29,7 @@ import java.util.stream.IntStream;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Slf4j
 public class DefaultJobExecutionListener implements JobExecutionListener {
 

@@ -29,6 +29,7 @@ import java.util.stream.Stream;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Component
 public class AmqpFactory {
 

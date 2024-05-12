@@ -22,6 +22,7 @@ import java.util.List;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 public interface HttpDataQuerierRepository extends DataStreamGetter<HttpInputStreamIdentifier> {
 
     InputStream basicQuery(@Nonnull HttpInputStreamIdentifier httpInputStreamIdentifier,
@@ -42,11 +43,14 @@ public interface HttpDataQuerierRepository extends DataStreamGetter<HttpInputStr
 
         final var byteArrayBuilder = new ByteArrayOutputStream();
 
-        basicQuery(httpInputStreamIdentifier,
+        try (final var query = basicQuery(
+            httpInputStreamIdentifier,
             queryCustomizers,
             queryResponseHandler,
             httpStreamValidators
-        ).transferTo(byteArrayBuilder);
+        )) {
+            query.transferTo(byteArrayBuilder);
+        }
 
         return byteArrayBuilder.toByteArray();
     }

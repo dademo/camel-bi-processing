@@ -58,7 +58,7 @@ public abstract class MinioCacheRepositoryBeanLifecycle<T extends InputStreamIde
     }
 
     @Override
-    public void destroy() throws Exception {
+    public void destroy() {
 
         // Removing the temporary folder
         Optional.ofNullable(tempDirectoryName)

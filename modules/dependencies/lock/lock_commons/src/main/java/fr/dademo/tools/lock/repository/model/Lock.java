@@ -9,6 +9,7 @@ package fr.dademo.tools.lock.repository.model;
 import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.NotBlank;
 
+@SuppressWarnings("unused")
 public interface Lock extends AutoCloseable {
 
     @Nonnull

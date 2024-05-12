@@ -9,6 +9,7 @@ package fr.dademo.tools.cache.repository.exception;
 import java.io.Serial;
 import java.net.URI;
 
+@SuppressWarnings("unused")
 public class TempFileResolutionError extends RuntimeException {
 
     @Serial

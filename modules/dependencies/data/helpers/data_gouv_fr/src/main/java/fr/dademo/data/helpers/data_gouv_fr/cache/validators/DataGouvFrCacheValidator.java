@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @AllArgsConstructor(staticName = "of")
 public class DataGouvFrCacheValidator implements CacheValidator<HttpInputStreamIdentifier> {
 

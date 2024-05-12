@@ -17,6 +17,7 @@ import static org.mockito.BDDMockito.given;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class MockedBatchJobProviderHelper {
 

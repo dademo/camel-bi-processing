@@ -18,6 +18,7 @@ import java.util.List;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 public interface DataStreamGetter<T extends InputStreamIdentifier<?>> {
 
     InputStream getInputStream(@Nonnull T inputStreamIdentifier,

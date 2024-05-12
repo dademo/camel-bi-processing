@@ -19,6 +19,7 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.util.Optional;
 
+@SuppressWarnings("unused")
 @Configuration
 @ConfigurationProperties(prefix = "cache.vfs")
 @Data
@@ -77,6 +78,7 @@ public class CacheVFSConfiguration {
         );
     }
 
+    @SuppressWarnings("unused")
     @Data
     public static class VFSAuthenticationConfiguration {
 

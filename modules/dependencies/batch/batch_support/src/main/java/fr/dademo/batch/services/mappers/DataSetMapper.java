@@ -14,6 +14,7 @@ import org.mapstruct.factory.Mappers;
 
 import java.time.LocalDateTime;
 
+@SuppressWarnings("unused")
 @Mapper
 public interface DataSetMapper {
 

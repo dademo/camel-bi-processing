@@ -18,6 +18,7 @@ import java.util.List;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Configuration
 public class DefaultToolBeans {
 

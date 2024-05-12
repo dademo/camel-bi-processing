@@ -28,6 +28,7 @@ public class ApacheCommonsCsvResourcesReaderWrapper implements ResourcesReaderWr
         this.closeDelegate = closeDelegate;
     }
 
+    @Nonnull
     @Override
     public Iterator<WrappedRowResource> iterator() {
 

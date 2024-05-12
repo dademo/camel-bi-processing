@@ -25,14 +25,16 @@ import java.util.Optional;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
+@Getter
 @Slf4j
 public abstract class FileCacheRepositoryBeanLifecycle<T extends InputStreamIdentifier<?>> extends BaseCacheRepository<T> implements InitializingBean {
 
     public static final String DIRECTORY_ROOT_URI_SCHEME = "file";
     protected static final String RESOURCES_DIRECTORY_NAME = "resources";
 
-    @Getter
     private final CacheConfiguration cacheConfiguration;
+
 
     protected FileCacheRepositoryBeanLifecycle(@Nonnull LockFactory lockFactory,
                                                @Nonnull CacheConfiguration cacheConfiguration) {

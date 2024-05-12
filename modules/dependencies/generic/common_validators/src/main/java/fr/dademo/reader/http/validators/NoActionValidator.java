@@ -15,6 +15,7 @@ import java.io.InputStream;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 public class NoActionValidator<T extends InputStreamIdentifier<?>> implements InputStreamIdentifierValidator<T> {
 
     @Override

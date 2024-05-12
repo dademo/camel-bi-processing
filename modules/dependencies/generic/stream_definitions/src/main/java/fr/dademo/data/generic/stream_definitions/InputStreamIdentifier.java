@@ -13,6 +13,7 @@ import jakarta.annotation.Nullable;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @JsonIgnoreProperties({"uniqueIdentifier", "description", "verboseDescription", "contentType"})
 public interface InputStreamIdentifier<T> extends Describable, Cacheable {
 

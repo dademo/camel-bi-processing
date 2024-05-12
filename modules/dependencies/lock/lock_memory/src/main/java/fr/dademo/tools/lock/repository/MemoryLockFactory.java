@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.locks.ReentrantLock;
 
+@SuppressWarnings("unused")
 @ConditionalOnProperty(
     name = LockConfiguration.CONFIGURATION_PROPERTY_PREFIX + ".backend",
     havingValue = LockConfiguration.LockBackend.LOCK_BACKEND_MEMORY,

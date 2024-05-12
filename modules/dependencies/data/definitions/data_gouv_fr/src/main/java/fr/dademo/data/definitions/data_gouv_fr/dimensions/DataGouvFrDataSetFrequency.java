@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @AllArgsConstructor
 public enum DataGouvFrDataSetFrequency {
     UNKNOWN("unknown"),

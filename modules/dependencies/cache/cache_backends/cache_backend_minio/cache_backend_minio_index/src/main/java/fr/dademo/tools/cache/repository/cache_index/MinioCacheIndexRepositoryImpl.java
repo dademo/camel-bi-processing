@@ -39,6 +39,7 @@ import static fr.dademo.tools.cache.beans.CacheBeanConstants.MINIO_STREAM_THREAD
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Slf4j
 @Repository
 @ConditionalOnBean(CacheMinioEnabledConditional.class)

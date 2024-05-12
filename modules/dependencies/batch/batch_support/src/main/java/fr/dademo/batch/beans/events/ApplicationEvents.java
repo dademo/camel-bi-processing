@@ -15,6 +15,7 @@ import org.springframework.context.event.EventListener;
 /**
  * @author dademo
  */
+@SuppressWarnings("unused")
 @Slf4j
 @Configuration
 public class ApplicationEvents {

@@ -6,6 +6,7 @@
 
 package fr.dademo.tools.lock.beans;
 
+import fr.dademo.tools.lock.beans.exception.MissingRedisConfiguration;
 import fr.dademo.tools.lock.configuration.LockConfiguration;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
@@ -20,6 +21,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 
 import java.util.Optional;
 
+@SuppressWarnings("unused")
 @ConditionalOnProperty(
     name = LockConfiguration.CONFIGURATION_PROPERTY_PREFIX + ".backend",
     havingValue = LockConfiguration.LockBackend.LOCK_BACKEND_REDIS
@@ -31,24 +33,27 @@ public class RedisBeans {
     @ConditionalOnMissingBean(Config.class)
     public Config redissonConfiguration(LockConfiguration lockConfiguration) {
 
+        final var redisConfiguration = Optional.ofNullable(lockConfiguration.getRedis())
+            .orElseThrow(MissingRedisConfiguration::new);
+        
         final var redissonConfiguration = new Config();
-        switch (lockConfiguration.getRedis().getClusterMembers().size()) {
+        switch (redisConfiguration.getClusterMembers().size()) {
             case 0:
                 throw new BeanCreationException("No address provided for Redis configuration");
             case 1:
                 final var singleServerConfiguration = redissonConfiguration.useSingleServer();
-                singleServerConfiguration.setAddress(lockConfiguration.getRedis().getClusterMembers().get(0));
+                singleServerConfiguration.setAddress(redisConfiguration.getClusterMembers().getFirst());
 
-                Optional.ofNullable(lockConfiguration.getRedis().getUserName()).ifPresent(singleServerConfiguration::setUsername);
-                Optional.ofNullable(lockConfiguration.getRedis().getPassword()).ifPresent(singleServerConfiguration::setPassword);
+                Optional.ofNullable(redisConfiguration.getUserName()).ifPresent(singleServerConfiguration::setUsername);
+                Optional.ofNullable(redisConfiguration.getPassword()).ifPresent(singleServerConfiguration::setPassword);
 
                 break;
             default:
                 final var clusterServerConfiguration = redissonConfiguration.useClusterServers();
-                clusterServerConfiguration.setNodeAddresses(lockConfiguration.getRedis().getClusterMembers());
+                clusterServerConfiguration.setNodeAddresses(redisConfiguration.getClusterMembers());
 
-                Optional.ofNullable(lockConfiguration.getRedis().getUserName()).ifPresent(clusterServerConfiguration::setUsername);
-                Optional.ofNullable(lockConfiguration.getRedis().getPassword()).ifPresent(clusterServerConfiguration::setPassword);
+                Optional.ofNullable(redisConfiguration.getUserName()).ifPresent(clusterServerConfiguration::setUsername);
+                Optional.ofNullable(redisConfiguration.getPassword()).ifPresent(clusterServerConfiguration::setPassword);
 
                 break;
         }

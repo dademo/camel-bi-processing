@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Min;
 
 import java.io.Serial;
 
+@SuppressWarnings("unused")
 public class MissingColumnException extends ResourceWrapperException {
 
     @Serial

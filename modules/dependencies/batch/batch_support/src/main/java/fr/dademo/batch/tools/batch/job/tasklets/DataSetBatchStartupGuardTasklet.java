@@ -43,7 +43,7 @@ public class DataSetBatchStartupGuardTasklet extends BaseDataSetTasklet implemen
 
     @Override
     public RepeatStatus execute(@Nonnull StepContribution contribution,
-                                @Nonnull ChunkContext chunkContext) throws Exception {
+                                @Nonnull ChunkContext chunkContext) {
 
         DataSetDto dataSetDto;
         final var dataSetResource = getDataSetResourceFromContext(contribution);
